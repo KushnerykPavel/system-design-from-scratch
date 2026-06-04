@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why are runbooks valuable during incidents?",
+      "options": [
+        "They reduce reliance on memory and guide responders toward safe, repeatable first actions.",
+        "They guarantee no incident will need escalation.",
+        "They make observability unnecessary.",
+        "They replace the need for ownership or paging."
+      ],
+      "correct": 0,
+      "explanation": "Runbooks turn partial knowledge into a repeatable response workflow."
+    },
+    {
+      "stage": "pre",
+      "question": "What is a common weakness in many runbooks?",
+      "options": [
+        "They are too long, stale, or vague to use under stress.",
+        "They contain links to dashboards.",
+        "They separate safe and dangerous actions.",
+        "They mention an owner team."
+      ],
+      "correct": 0,
+      "explanation": "If a runbook is not concise and current, responders will ignore it."
+    },
+    {
+      "stage": "post",
+      "question": "What should the first section of a practical incident runbook usually help with?",
+      "options": [
+        "Assessing immediate user impact and orienting the responder before deeper diagnosis.",
+        "Explaining the full history of the team since the service was created.",
+        "Listing every possible command alphabetically.",
+        "Describing the company org chart in detail."
+      ],
+      "correct": 0,
+      "explanation": "The responder first needs to know whether users are harmed and how serious it is."
+    },
+    {
+      "stage": "post",
+      "question": "Why explicitly mark some mitigations as dangerous or expert-only?",
+      "options": [
+        "To prevent responders from taking irreversible actions without the right context or approval.",
+        "To discourage anyone from ever using the runbook.",
+        "To eliminate the need for communication during incidents.",
+        "To ensure all incidents last longer and gather more evidence."
+      ],
+      "correct": 0,
+      "explanation": "Clear boundaries reduce accidental blast radius during stressful events."
+    },
+    {
+      "stage": "post",
+      "question": "What is a strong escalation rule in a runbook?",
+      "options": [
+        "Escalate when severity, duration, or failed mitigations cross explicit thresholds.",
+        "Escalate only when the responder feels tired.",
+        "Never escalate because that shows weak ownership.",
+        "Escalate only after the incident is fully resolved."
+      ],
+      "correct": 0,
+      "explanation": "Explicit conditions prevent both late escalation and unnecessary chaos."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off comes with making a runbook extremely comprehensive?",
+      "options": [
+        "It may contain more detail, but can become too slow to use during the first-response window.",
+        "It automatically becomes safer and shorter.",
+        "It removes the need for dashboards or alerts.",
+        "It guarantees every responder will read the whole document before acting."
+      ],
+      "correct": 0,
+      "explanation": "First-response docs need speed and clarity more than encyclopedic completeness."
+    },
+    {
+      "stage": "post",
+      "question": "What is a strong sign a runbook is stale?",
+      "options": [
+        "Dashboard links, commands, or mitigation steps no longer match the current service behavior.",
+        "The runbook includes a short title.",
+        "It mentions safe rollback.",
+        "It contains a communication template."
+      ],
+      "correct": 0,
+      "explanation": "Broken or outdated operational steps make a runbook actively harmful."
+    },
+    {
+      "stage": "post",
+      "question": "What is the strongest answer to 'How do you keep runbooks useful?'",
+      "options": [
+        "Review them after incidents and architectural changes, and keep the first-response path short and tested.",
+        "Avoid editing them so responders see stable text for years.",
+        "Hide them from new engineers until after their first outage.",
+        "Replace them entirely with verbal knowledge transfer."
+      ],
+      "correct": 0,
+      "explanation": "Runbooks improve when they are exercised and refreshed from real incidents."
+    }
+  ]
+}

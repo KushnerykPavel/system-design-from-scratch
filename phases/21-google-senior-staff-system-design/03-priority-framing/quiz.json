@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why is requirement ranking necessary in a senior design interview?",
+      "options": [
+        "Because most real systems cannot optimize every important goal equally, so architecture must reflect priorities.",
+        "Because interviewers mainly care about whether requirements are written in the right order.",
+        "Because ranking requirements removes the need for trade-off discussion.",
+        "Because only low-latency systems need prioritization."
+      ],
+      "correct": 0,
+      "explanation": "Requirement ranking is how the candidate makes design trade-offs visible and defensible."
+    },
+    {
+      "stage": "pre",
+      "question": "What is a sign of weak prioritization?",
+      "options": [
+        "Stating that every requirement is critical and leaving the architecture to resolve the conflict implicitly.",
+        "Choosing two top priorities and deferring some secondary goals.",
+        "Explaining which requirement wins if availability and consistency conflict.",
+        "Changing the ranking when a business constraint changes."
+      ],
+      "correct": 0,
+      "explanation": "If everything is critical, nothing is truly prioritized."
+    },
+    {
+      "stage": "post",
+      "question": "Which design statement shows real priority framing?",
+      "options": [
+        "Because freshness matters more than read latency here, I will keep cache TTLs short and accept more origin load.",
+        "I will optimize for scale, reliability, consistency, and low cost at the same time.",
+        "I prefer queues in most systems, so I will add one here too.",
+        "We can settle priorities after the architecture is complete."
+      ],
+      "correct": 0,
+      "explanation": "A good statement links a ranked requirement directly to an architectural consequence."
+    },
+    {
+      "stage": "post",
+      "question": "What is the main trade-off risk when low latency becomes the top goal?",
+      "options": [
+        "Freshness, write complexity, or cost may worsen depending on how latency is achieved.",
+        "The system can no longer use APIs at all.",
+        "Observability stops mattering because user experience becomes fast.",
+        "Multi-region failover becomes free."
+      ],
+      "correct": 0,
+      "explanation": "Latency optimization usually introduces real costs elsewhere."
+    },
+    {
+      "stage": "post",
+      "question": "Why should deferred requirements be named explicitly?",
+      "options": [
+        "Because they show scope control and prevent the design from pretending to solve everything now.",
+        "Because deferred requirements can never become important later.",
+        "Because interviewers subtract points for every omitted optional feature.",
+        "Because deferral eliminates the need for future rollout planning."
+      ],
+      "correct": 0,
+      "explanation": "Explicit deferral is often more senior than hidden omission."
+    },
+    {
+      "stage": "post",
+      "question": "Which observability signal would best reveal whether the chosen priority is being met?",
+      "options": [
+        "A metric tied directly to the winning requirement, such as freshness lag for a freshness-first design.",
+        "Only the total line count of the implementation.",
+        "The number of architecture boxes in the diagram.",
+        "A generic dashboard with no breakdown by workload or failure mode."
+      ],
+      "correct": 0,
+      "explanation": "Observability should align with the system's most important objective."
+    },
+    {
+      "stage": "post",
+      "question": "If compliance suddenly becomes a top priority, what should happen first?",
+      "options": [
+        "The requirement ranking should change and any affected data retention, audit, or deletion decisions should be revisited.",
+        "The original architecture should remain untouched to preserve consistency of explanation.",
+        "Only the UI layer needs to change.",
+        "Trade-offs no longer matter once compliance is involved."
+      ],
+      "correct": 0,
+      "explanation": "A changed priority should lead to concrete design updates, not a cosmetic acknowledgment."
+    },
+    {
+      "stage": "post",
+      "question": "What most strongly distinguishes prioritization from mere requirement listing?",
+      "options": [
+        "Prioritization explains which goal wins in a conflict and what design consequence follows from that choice.",
+        "Prioritization simply means listing functional requirements before non-functional ones.",
+        "Prioritization avoids discussing any costs so the design stays optimistic.",
+        "Prioritization is only relevant for storage and caching topics."
+      ],
+      "correct": 0,
+      "explanation": "The value of prioritization is in conflict resolution and the decisions it forces."
+    }
+  ]
+}

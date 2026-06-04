@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What is the main purpose of prompt reframing at the start of a system design interview?",
+      "options": [
+        "To replace the original prompt with an easier unrelated problem.",
+        "To turn an ambiguous request into a crisp, designable v1 with explicit scope, priorities, assumptions, and workload shape.",
+        "To avoid discussing requirements until after the diagram is drawn.",
+        "To produce a final architecture summary before clarification."
+      ],
+      "correct": 1,
+      "explanation": "Reframing creates the contract for the design conversation."
+    },
+    {
+      "stage": "pre",
+      "question": "Which ingredient is most likely missing if a reframing sounds polished but still does not guide architecture?",
+      "options": [
+        "An explicit priority or workload-shape statement.",
+        "A second paragraph about implementation details.",
+        "A long list of possible future features.",
+        "A full observability dashboard plan."
+      ],
+      "correct": 0,
+      "explanation": "Without priorities or workload shape, the opening may still be too vague to drive design."
+    },
+    {
+      "stage": "post",
+      "question": "Why should reframing preserve the identity of the original prompt?",
+      "options": [
+        "Because narrowing the problem is useful only if the interviewer still recognizes the system being designed.",
+        "Because every prompt must remain feature-complete from the start.",
+        "Because the architecture cannot change after the opening statement.",
+        "Because interviewers only score exact keyword matches."
+      ],
+      "correct": 0,
+      "explanation": "A good reframing clarifies the prompt rather than replacing it."
+    },
+    {
+      "stage": "post",
+      "question": "What is the clearest sign that a reframing is just repetition instead of clarification?",
+      "options": [
+        "It restates the prompt but adds no scope boundary, assumptions, priority order, or workload signal.",
+        "It mentions one deferred feature.",
+        "It describes the main user workflow first.",
+        "It leaves room for follow-up redesign."
+      ],
+      "correct": 0,
+      "explanation": "Reframing must add decision-making structure, not just paraphrase."
+    },
+    {
+      "stage": "post",
+      "question": "Why is it helpful to leave one branch explicit and flexible during reframing?",
+      "options": [
+        "It creates a clean path for follow-up redesign questions instead of pretending everything is already fixed.",
+        "It lets you avoid making any assumptions at all.",
+        "It guarantees the first design is optimal.",
+        "It removes the need for trade-off discussion."
+      ],
+      "correct": 0,
+      "explanation": "Senior answers are strong because they are grounded and adaptable at the same time."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric best indicates that prompt reframing is working well in practice?",
+      "options": [
+        "The number of databases eventually chosen.",
+        "How often the reframed opening contains scope, priorities, assumptions, and workload shape and leads smoothly into sizing.",
+        "The total number of words used in the opening.",
+        "Whether the learner memorized one fixed template exactly."
+      ],
+      "correct": 1,
+      "explanation": "The test is whether the reframing reliably improves the next design step."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off comes with using a compact reframing template?",
+      "options": [
+        "It is fast and repeatable under pressure, but some nuance must be saved for later exploration.",
+        "It prevents any honest scoping choice.",
+        "It forces the same architecture for every system.",
+        "It only works for consumer products."
+      ],
+      "correct": 0,
+      "explanation": "Templates create speed and consistency, but deeper nuance still belongs in later stages."
+    },
+    {
+      "stage": "post",
+      "question": "If the interviewer changes the goal after your reframing, what should happen next?",
+      "options": [
+        "Pretend the original reframing still applies so the answer stays smooth.",
+        "Update the reframing contract briefly, then explain how the changed priorities or assumptions alter the design path.",
+        "Throw away the entire answer and refuse to continue until a new prompt is written.",
+        "Skip directly to low-level components."
+      ],
+      "correct": 1,
+      "explanation": "A reframing is a living contract that should adapt when the prompt changes."
+    }
+  ]
+}

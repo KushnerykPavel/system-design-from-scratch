@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What problem usually pushes a system from plain queues toward a workflow engine?",
+      "options": [
+        "The business process needs durable long-running state, timers, callbacks, and visible progress.",
+        "The service needs to resize one image after upload.",
+        "The team wants to avoid storing any status in a database.",
+        "The product no longer cares about failures."
+      ],
+      "correct": 0,
+      "explanation": "Workflow engines exist for stateful orchestration, not just async execution."
+    },
+    {
+      "stage": "pre",
+      "question": "Why are timers first-class in workflow design?",
+      "options": [
+        "Because waits, deadlines, backoff, and escalation often matter as much as step execution.",
+        "Because timers guarantee external side effects are reversible.",
+        "Because queues do not allow retries.",
+        "Because timers remove the need for activity workers."
+      ],
+      "correct": 0,
+      "explanation": "Long-running workflows are often dominated by waiting and timeout behavior."
+    },
+    {
+      "stage": "post",
+      "question": "Which answer sounds weakest in a workflow interview?",
+      "options": [
+        "We will expose workflow status from durable state and define compensation for partial failure.",
+        "We will model callbacks and approvals as signals into a workflow instance.",
+        "We will keep the state scattered across retries, cron jobs, and operator intuition because the queue already tracks attempts.",
+        "We will separate deterministic orchestration from side-effecting activities."
+      ],
+      "correct": 2,
+      "explanation": "Hidden orchestration state is exactly what workflow engines are meant to avoid."
+    },
+    {
+      "stage": "post",
+      "question": "What metric most directly shows workflows are getting stuck?",
+      "options": [
+        "Oldest active workflow age or oldest step age by workflow type.",
+        "Only producer host disk size.",
+        "The number of headings in the runbook.",
+        "Average commit message length."
+      ],
+      "correct": 0,
+      "explanation": "Aging workflow state reveals stuck progress better than total counts alone."
+    },
+    {
+      "stage": "post",
+      "question": "Why is compensation different from ordinary retry?",
+      "options": [
+        "Compensation handles a later-step failure after earlier side effects already happened and must be unwound or reconciled.",
+        "Compensation is just a second immediate retry of the same request.",
+        "Compensation removes the need for status APIs.",
+        "Compensation is only for database replication lag."
+      ],
+      "correct": 0,
+      "explanation": "Compensation is about reversing or reconciling partial progress, not just reattempting work."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off often comes with workflow engines?",
+      "options": [
+        "You gain durable orchestration and debuggable status, but you pay with more metadata, platform complexity, and step modeling effort.",
+        "You gain exactly-once side effects across all external providers for free.",
+        "You remove the need for idempotent activities.",
+        "You make short-lived stateless jobs cheaper than queues."
+      ],
+      "correct": 0,
+      "explanation": "Workflow engines are powerful but operationally heavier."
+    },
+    {
+      "stage": "post",
+      "question": "What is the hidden risk of using cron and tables as a substitute for workflow state?",
+      "options": [
+        "The real orchestration logic becomes implicit, brittle, and difficult to debug under partial failures.",
+        "The system automatically preserves all compensation rules.",
+        "The queue can no longer redeliver messages.",
+        "The product loses the ability to send emails."
+      ],
+      "correct": 0,
+      "explanation": "Implicit orchestration tends to fragment ownership and observability."
+    },
+    {
+      "stage": "post",
+      "question": "Which question matters most before committing to a workflow engine?",
+      "options": [
+        "Whether the process truly has long-running state, timers, and externally visible progress worth modeling explicitly.",
+        "Whether the team prefers blue dashboards to green ones.",
+        "Whether payloads are compressed with gzip.",
+        "Whether every task can fit into one partition."
+      ],
+      "correct": 0,
+      "explanation": "That question determines whether the orchestration overhead is justified."
+    }
+  ]
+}

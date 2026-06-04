@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What is the main goal of rough cost modeling in a system design interview?",
+      "options": [
+        "To identify which design choice becomes expensive first and compare alternatives directionally.",
+        "To reproduce exact cloud bills down to the cent.",
+        "To avoid discussing performance trade-offs.",
+        "To prove that the cheapest design is always best."
+      ],
+      "correct": 0,
+      "explanation": "Interview cost modeling is about decision support, not accounting perfection."
+    },
+    {
+      "stage": "pre",
+      "question": "Why is it useful to break cost into a few major buckets?",
+      "options": [
+        "Because dominant spend drivers become visible and easier to reason about.",
+        "Because it guarantees the architecture is correct.",
+        "Because it removes the need for workload estimates.",
+        "Because all cost buckets scale linearly in the same way."
+      ],
+      "correct": 0,
+      "explanation": "A bucketed model surfaces where optimization is most valuable."
+    },
+    {
+      "stage": "post",
+      "question": "Which bucket most often dominates internet-facing high-throughput systems?",
+      "options": [
+        "Egress or bandwidth-related transfer costs",
+        "The number of architecture diagrams",
+        "The cost of code review tools",
+        "The count of API methods"
+      ],
+      "correct": 0,
+      "explanation": "For byte-heavy systems, transfer cost can dominate monthly spend."
+    },
+    {
+      "stage": "post",
+      "question": "What is the risk of false precision in cost discussions?",
+      "options": [
+        "It consumes time without improving the architectural decision much.",
+        "It makes the storage layer strongly consistent.",
+        "It reduces egress cost automatically.",
+        "It removes the need for sensitivity analysis."
+      ],
+      "correct": 0,
+      "explanation": "Overly detailed pricing can distract from the actual design trade-off."
+    },
+    {
+      "stage": "post",
+      "question": "Which follow-up best demonstrates senior-level cost reasoning?",
+      "options": [
+        "Pointing out which assumption swings the total most and how you would validate it.",
+        "Memorizing one provider's exact pricing page.",
+        "Ignoring cost until the final minute.",
+        "Always rejecting managed services as too expensive."
+      ],
+      "correct": 0,
+      "explanation": "Sensitivity analysis is more useful than memorized price trivia."
+    },
+    {
+      "stage": "post",
+      "question": "Which observability view best supports ongoing cost discipline?",
+      "options": [
+        "Spend by service and bucket, tied to real workload metrics",
+        "Number of team chat messages",
+        "Count of repositories in the organization",
+        "Average code comment length"
+      ],
+      "correct": 0,
+      "explanation": "You need cost signals connected to usage drivers."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off often justifies paying more for a managed system?",
+      "options": [
+        "Higher direct spend in exchange for lower operational complexity and risk.",
+        "Higher latency in exchange for lower consistency.",
+        "Lower egress in exchange for higher retention.",
+        "More retries in exchange for cheaper storage."
+      ],
+      "correct": 0,
+      "explanation": "The right answer is often about total operational cost, not only infra line items."
+    },
+    {
+      "stage": "post",
+      "question": "When should a candidate compare two cost variants instead of quoting one total?",
+      "options": [
+        "When the architecture decision is between meaningfully different operating models or scaling levers.",
+        "Only when the interviewer asks for a spreadsheet.",
+        "Never, because one number is always clearer.",
+        "Only when storage is the dominant line item."
+      ],
+      "correct": 0,
+      "explanation": "Variants reveal trade-offs that a single total often hides."
+    }
+  ]
+}

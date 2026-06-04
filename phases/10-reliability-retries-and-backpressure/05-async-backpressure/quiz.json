@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why is a queue not automatically a safe answer to bursty traffic?",
+      "options": [
+        "Because backlog can grow beyond useful limits unless pressure is fed back to producers or low-value work is dropped.",
+        "Because queues cannot be used with retries of any kind.",
+        "Because consumers always process messages faster than producers create them.",
+        "Because queue depth alone guarantees freshness."
+      ],
+      "correct": 0,
+      "explanation": "A queue only moves pressure in time unless the rest of the system reacts to it."
+    },
+    {
+      "stage": "pre",
+      "question": "What is the goal of backpressure in an async system?",
+      "options": [
+        "To make producers, brokers, and consumers coordinate around bounded work and useful freshness.",
+        "To keep brokers full so hardware stays utilized.",
+        "To make all workloads best-effort by default.",
+        "To remove the need for message prioritization."
+      ],
+      "correct": 0,
+      "explanation": "Backpressure is about bounded, coordinated throughput rather than silent backlog growth."
+    },
+    {
+      "stage": "post",
+      "question": "Which signal is often more meaningful than queue depth alone?",
+      "options": [
+        "Queue age, because it exposes whether messages are becoming stale or the pipeline is falling behind materially.",
+        "The number of database tables in the application schema.",
+        "Average pull request length in lines.",
+        "The total count of consumer instances ever launched."
+      ],
+      "correct": 0,
+      "explanation": "Queue age captures the freshness cost of delay, not just the amount of backlog."
+    },
+    {
+      "stage": "post",
+      "question": "What is the main trade-off of rejecting or throttling producers when consumers lag?",
+      "options": [
+        "You protect the shared pipeline, but some producers see explicit backoff or dropped work sooner.",
+        "You eliminate the need for all broker storage.",
+        "You guarantee no messages ever expire.",
+        "You make retry accounting unnecessary."
+      ],
+      "correct": 0,
+      "explanation": "Strong pressure propagation improves system health at the cost of earlier visible rejection."
+    },
+    {
+      "stage": "post",
+      "question": "Why can retry workers be dangerous in an async pipeline?",
+      "options": [
+        "They can quietly multiply load and backlog if they re-enqueue work faster than the system is recovering.",
+        "They always reduce latency because they keep workers busy.",
+        "They make queue age irrelevant.",
+        "They prevent any need for dead-letter handling."
+      ],
+      "correct": 0,
+      "explanation": "Async retries are still extra work, so they must respect the same pressure accounting."
+    },
+    {
+      "stage": "post",
+      "question": "Which design best protects high-value work from a noisy low-value topic?",
+      "options": [
+        "Separate classes, quotas, or isolated topics so one backlog does not starve the other.",
+        "A single shared queue with no message metadata.",
+        "Disabling expiration so old messages stay until eventually processed.",
+        "Removing consumer-level metrics to reduce noise."
+      ],
+      "correct": 0,
+      "explanation": "Isolation by class or topic is often necessary to preserve valuable traffic."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric best reveals that consumers are losing the race against producers?",
+      "options": [
+        "Backlog growth delta where ingress persistently exceeds consume rate and queue age keeps rising.",
+        "The number of README files in the repository.",
+        "The count of canary releases in the past month.",
+        "Median CPU on an unrelated analytics cluster."
+      ],
+      "correct": 0,
+      "explanation": "Sustained positive backlog growth plus aging messages shows real pressure, not a brief burst."
+    },
+    {
+      "stage": "post",
+      "question": "What weakens an interview answer about async backpressure most?",
+      "options": [
+        "Treating the broker as infinite storage and never explaining who slows down or what work expires.",
+        "Distinguishing lossless from droppable traffic.",
+        "Using queue age to reason about freshness.",
+        "Explaining how producer throttling and consumer isolation fit together."
+      ],
+      "correct": 0,
+      "explanation": "The hard question is where pressure goes and how useful work is preserved."
+    }
+  ]
+}

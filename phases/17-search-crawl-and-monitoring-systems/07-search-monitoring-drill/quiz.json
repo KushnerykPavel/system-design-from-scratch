@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What is the strongest reason to clarify before drawing architecture in a design interview?",
+      "options": [
+        "Different scope and priorities can change the entire system choice.",
+        "Clarification is only useful for junior candidates.",
+        "Architecture is always the same regardless of constraints.",
+        "Capacity math is impossible after any clarification."
+      ],
+      "correct": 0,
+      "explanation": "Scope and priorities determine design direction."
+    },
+    {
+      "stage": "pre",
+      "question": "Why is rough sizing expected before the deep dive?",
+      "options": [
+        "It anchors decisions about storage, throughput, and bottlenecks.",
+        "It makes trade-offs unnecessary.",
+        "It guarantees the interviewer agrees with every assumption.",
+        "It replaces the need for system diagrams."
+      ],
+      "correct": 0,
+      "explanation": "Sizing grounds the design."
+    },
+    {
+      "stage": "post",
+      "question": "Which behavior best signals senior judgment during a drill?",
+      "options": [
+        "Choosing one high-value deep dive and defending it clearly.",
+        "Listing every component ever used in similar systems.",
+        "Avoiding trade-offs to keep the answer short.",
+        "Waiting silently for the interviewer to define every assumption."
+      ],
+      "correct": 0,
+      "explanation": "Depth selection is a core senior signal."
+    },
+    {
+      "stage": "post",
+      "question": "What is the better way to discuss a failure mode in an interview?",
+      "options": [
+        "Name how you detect it and what mitigation changes the outcome.",
+        "Say 'add monitoring' and move on immediately.",
+        "Avoid failures so the design sounds confident.",
+        "Only mention failures after the interviewer insists twice."
+      ],
+      "correct": 0,
+      "explanation": "Detection and mitigation make failure analysis concrete."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off is created by spending time on one deep dive?",
+      "options": [
+        "You gain credibility in one critical area but have less time for broad coverage elsewhere.",
+        "You eliminate the need for clarification.",
+        "You guarantee a perfect final answer.",
+        "You no longer need to discuss observability."
+      ],
+      "correct": 0,
+      "explanation": "Time spent on depth is time not spent elsewhere."
+    },
+    {
+      "stage": "post",
+      "question": "Which signal best shows a redesign answer is real rather than superficial?",
+      "options": [
+        "A specific component, policy, or data path changes because the constraint changed.",
+        "The candidate repeats the same architecture more loudly.",
+        "The candidate says the system already handles everything.",
+        "The candidate adds a cache without explaining why."
+      ],
+      "correct": 0,
+      "explanation": "A real redesign has concrete consequences."
+    },
+    {
+      "stage": "post",
+      "question": "Why should assumptions be stated even when the prompt is ambiguous?",
+      "options": [
+        "They keep the design moving and give the interviewer a chance to correct important scope choices.",
+        "They guarantee all assumptions are correct.",
+        "They remove the need for requirements prioritization.",
+        "They make capacity math optional."
+      ],
+      "correct": 0,
+      "explanation": "Explicit assumptions create alignment and momentum."
+    },
+    {
+      "stage": "post",
+      "question": "What is the strongest close-out move after the main design is presented?",
+      "options": [
+        "Summarize key trade-offs, failure modes, and what changes under a new constraint.",
+        "Restate every component name in the diagram.",
+        "Switch to implementation details with no product relevance.",
+        "End immediately so no weaknesses are exposed."
+      ],
+      "correct": 0,
+      "explanation": "Strong wrap-ups demonstrate judgment and adaptability."
+    }
+  ]
+}

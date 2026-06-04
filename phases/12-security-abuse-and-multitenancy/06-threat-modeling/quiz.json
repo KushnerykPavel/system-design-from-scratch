@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What makes threat modeling useful in a system design interview?",
+      "options": [
+        "It prioritizes realistic risks and changes the design instead of listing buzzwords.",
+        "It replaces the need for architecture discussion.",
+        "It only matters for banking systems.",
+        "It guarantees every attack can be prevented."
+      ],
+      "correct": 0,
+      "explanation": "Threat modeling is useful when it sharpens the design and trade-offs."
+    },
+    {
+      "stage": "pre",
+      "question": "Why should threat models start with assets and boundaries?",
+      "options": [
+        "Because risk depends on what is valuable and where trust changes.",
+        "Because attackers always target only databases.",
+        "Because observability is impossible without them.",
+        "Because quotas are a form of encryption."
+      ],
+      "correct": 0,
+      "explanation": "Assets and trust boundaries anchor which threats are worth discussing."
+    },
+    {
+      "stage": "post",
+      "question": "What is the clearest sign that a threat model improved the design answer?",
+      "options": [
+        "It led to concrete changes like stronger authz boundaries, quotas, or audit controls.",
+        "It added five more acronyms.",
+        "It removed all trade-offs from the answer.",
+        "It replaced the capacity model entirely."
+      ],
+      "correct": 0,
+      "explanation": "Useful threat modeling changes architecture and operations, not just vocabulary."
+    },
+    {
+      "stage": "post",
+      "question": "Why is an exhaustive attack catalog often a weak interview move?",
+      "options": [
+        "It consumes time while hiding whether you can prioritize realistic, high-impact threats.",
+        "It proves the candidate is too senior.",
+        "It is only a problem in frontend interviews.",
+        "It guarantees the system is already secure."
+      ],
+      "correct": 0,
+      "explanation": "Interview signal comes from prioritization and architectural consequences."
+    },
+    {
+      "stage": "post",
+      "question": "Which threat actor is often missed in system design answers?",
+      "options": [
+        "Buggy or over-privileged internal services and operator workflows.",
+        "Only anonymous internet users.",
+        "DNS resolvers.",
+        "Markdown formatters."
+      ],
+      "correct": 0,
+      "explanation": "Internal misuse paths matter, especially in multitenant and admin-heavy systems."
+    },
+    {
+      "stage": "post",
+      "question": "What should accompany a security mitigation in a strong answer?",
+      "options": [
+        "A metric, audit trail, or other way to tell whether the control is working.",
+        "A promise that incidents will never happen.",
+        "A requirement to avoid any trade-offs discussion.",
+        "An assumption that logs are unnecessary."
+      ],
+      "correct": 0,
+      "explanation": "Controls without observability are difficult to trust or debug."
+    },
+    {
+      "stage": "post",
+      "question": "What is the best use of the limited time budget for threat modeling in an interview?",
+      "options": [
+        "Pick the highest-value assets and top attacker paths, then tie them to 2 to 4 concrete mitigations.",
+        "Name every OWASP item in alphabetical order.",
+        "Skip architecture and focus only on policies.",
+        "Discuss encryption without saying what it protects."
+      ],
+      "correct": 0,
+      "explanation": "Compact prioritization creates the strongest signal under time pressure."
+    },
+    {
+      "stage": "post",
+      "question": "Why is accepted risk worth mentioning?",
+      "options": [
+        "Because senior answers acknowledge that not every mitigation is worth the cost immediately.",
+        "Because it avoids all future redesign work.",
+        "Because accepted risk does not need monitoring.",
+        "Because users prefer undefined security posture."
+      ],
+      "correct": 0,
+      "explanation": "Trade-offs and consciously accepted risk are part of realistic design."
+    }
+  ]
+}

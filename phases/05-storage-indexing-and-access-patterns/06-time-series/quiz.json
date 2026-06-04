@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why are time-series systems often modeled around time-bounded queries instead of arbitrary filtering?",
+      "options": [
+        "Because the main reads usually ask for a metric over a defined recent or historical time window.",
+        "Because time-series systems never support retention policies.",
+        "Because appends remove the need for partitioning.",
+        "Because dashboard users do not care about latency."
+      ],
+      "correct": 0,
+      "explanation": "Bounded time windows are the common serving pattern and should shape the storage layout."
+    },
+    {
+      "stage": "pre",
+      "question": "What is the main operational advantage of append-heavy writes?",
+      "options": [
+        "They naturally align with sequential ingest paths and avoid many random update patterns.",
+        "They guarantee query costs remain low at any lookback window.",
+        "They remove the need for retention planning.",
+        "They make cardinality irrelevant."
+      ],
+      "correct": 0,
+      "explanation": "Append-heavy ingest can be efficient, but it still needs partitioning and query discipline."
+    },
+    {
+      "stage": "post",
+      "question": "Why are rollups useful in time-series systems?",
+      "options": [
+        "They make long-range queries cheaper and reduce storage pressure for old raw data.",
+        "They guarantee no late-arriving data will ever be dropped.",
+        "They eliminate the need for recent hot storage.",
+        "They make every query strongly consistent with the latest point."
+      ],
+      "correct": 0,
+      "explanation": "Rollups trade precision for cheaper long-range queries and lower retention cost."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric best detects a dangerous recent-partition hotspot?",
+      "options": [
+        "Partition skew or queue depth concentrated in current buckets.",
+        "Only total disk size across the cluster.",
+        "The number of documentation pages for the service.",
+        "Median dashboard color theme preference."
+      ],
+      "correct": 0,
+      "explanation": "Recent-bucket skew reveals when one tenant or metric family is overloading the hot ingest path."
+    },
+    {
+      "stage": "post",
+      "question": "What is the hidden cost of letting users run unbounded time-range queries on the serving path?",
+      "options": [
+        "They can scan far more data than the interactive system is sized to handle.",
+        "They disable data compression automatically.",
+        "They prevent retention jobs from running at all.",
+        "They remove the need for caching."
+      ],
+      "correct": 0,
+      "explanation": "Large lookback scans can overwhelm the cluster and starve interactive traffic."
+    },
+    {
+      "stage": "post",
+      "question": "How should a strong design treat late-arriving time-series data?",
+      "options": [
+        "Ignore it because append-heavy systems should never allow disorder.",
+        "Define a clear acceptance window and repair or reconciliation policy.",
+        "Force all writes into one global serial order.",
+        "Store it only in the archive tier."
+      ],
+      "correct": 1,
+      "explanation": "Late data handling is a policy choice that affects correctness and operational cost."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off comes with keeping raw points for longer?",
+      "options": [
+        "Higher fidelity and replay value, but more storage and slower long-range queries unless tiered.",
+        "Instantly better cardinality behavior without extra cost.",
+        "Less need for query limits on dashboards.",
+        "Automatic elimination of aggregation lag."
+      ],
+      "correct": 0,
+      "explanation": "Raw retention preserves detail, but it is expensive unless paired with good lifecycle controls."
+    },
+    {
+      "stage": "post",
+      "question": "Which interview answer is strongest?",
+      "options": [
+        "I will build one large append table and trust the database to optimize the rest.",
+        "I will partition by time, bound query windows, and use rollups or archives for long-range access.",
+        "I will avoid retention to keep the model simple.",
+        "I will store dashboards directly as blobs instead of time-series points."
+      ],
+      "correct": 1,
+      "explanation": "That answer connects ingest shape, query shape, and lifecycle management coherently."
+    }
+  ]
+}

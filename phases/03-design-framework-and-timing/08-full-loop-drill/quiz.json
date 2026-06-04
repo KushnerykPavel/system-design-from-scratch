@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why is URL shortener a useful full-loop drill prompt?",
+      "options": [
+        "It is familiar enough to practice process quality while still exposing real scaling and trade-off choices.",
+        "It has no meaningful failure modes, so it is easy to finish quickly.",
+        "It removes the need for clarification because everyone defines it the same way.",
+        "It only tests storage schema design."
+      ],
+      "correct": 0,
+      "explanation": "The prompt is approachable but still rich enough for end-to-end interview practice."
+    },
+    {
+      "stage": "pre",
+      "question": "What is the biggest risk of using a familiar prompt poorly?",
+      "options": [
+        "You may fall back to memorized components and skip clarification, sizing, and trade-offs.",
+        "You will automatically overestimate redirect latency.",
+        "The interviewer will forbid caches in the design.",
+        "You must choose multi-region writes immediately."
+      ],
+      "correct": 0,
+      "explanation": "Familiarity can tempt you into pattern-recitation instead of structured reasoning."
+    },
+    {
+      "stage": "post",
+      "question": "Which set of elements best demonstrates full-loop coverage on a URL shortener answer?",
+      "options": [
+        "Clarification, sizing, high-level design, deep dive, failure modes, observability, trade-offs, and redesign.",
+        "Architecture diagram, API list, and a favorite database choice.",
+        "Only redirect flow and ID generation details.",
+        "Only storage schema and cache sizing."
+      ],
+      "correct": 0,
+      "explanation": "The drill is meant to exercise the entire interview loop, not just the core architecture."
+    },
+    {
+      "stage": "post",
+      "question": "What is often the most important capacity insight for a URL shortener?",
+      "options": [
+        "The redirect path is read-heavy, so cache behavior and hot-key handling matter early.",
+        "The create path always dominates total traffic.",
+        "The main challenge is full-text indexing of URLs.",
+        "Object storage throughput is the first bottleneck."
+      ],
+      "correct": 0,
+      "explanation": "Redirect-heavy load usually shapes the architecture more than writes."
+    },
+    {
+      "stage": "post",
+      "question": "Which deep dive is strongest when the interviewer emphasizes abuse risk?",
+      "options": [
+        "URL validation, quarantine flow, and how redirects are blocked or degraded safely.",
+        "Admin dashboard color themes and moderation tools.",
+        "A second reporting database for future exports.",
+        "A generic read replica discussion with no abuse controls."
+      ],
+      "correct": 0,
+      "explanation": "The deep dive should match the dominant concern."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off does a cache-heavy redirect path introduce?",
+      "options": [
+        "Lower read latency, but more complexity around invalidation and hot-key protection.",
+        "Higher write throughput with no additional operational cost.",
+        "Perfect consistency with no failure risk.",
+        "Less need for observability because the cache hides origin failures."
+      ],
+      "correct": 0,
+      "explanation": "Caching helps reads, but creates correctness and operational complexity."
+    },
+    {
+      "stage": "post",
+      "question": "Which signal best shows that your full-loop drill answer is improving?",
+      "options": [
+        "You consistently reach redesign and operational wrap-up without losing architecture clarity.",
+        "You mention more storage technologies in every rehearsal.",
+        "Your diagrams contain more boxes than before.",
+        "You spend most of the interview on ID generation."
+      ],
+      "correct": 0,
+      "explanation": "Improvement means reaching all stages with coherent trade-offs, not just adding detail."
+    },
+    {
+      "stage": "post",
+      "question": "If the interviewer changes the prompt to global multi-region writes, what should you discuss first?",
+      "options": [
+        "How write coordination, deletion semantics, and consistency expectations change across regions.",
+        "How to rename the API endpoints to match the new scope.",
+        "How to remove caches because they are no longer useful.",
+        "How to skip the wrap-up to save time."
+      ],
+      "correct": 0,
+      "explanation": "Multi-region writes mainly stress coordination, correctness, and operational complexity."
+    }
+  ]
+}

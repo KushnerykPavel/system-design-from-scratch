@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What is the first thing a strong low-latency design answer should identify?",
+      "options": [
+        "The primary hot path and the user-visible latency or freshness promise attached to it.",
+        "Every possible storage engine that might someday be useful.",
+        "A complete list of cloud services before scope is clear.",
+        "The names of all microservices that could exist later."
+      ],
+      "correct": 0,
+      "explanation": "Without a clear hot path, the rest of the design usually becomes generic."
+    },
+    {
+      "stage": "pre",
+      "question": "Why is skew estimation especially important in low-latency systems?",
+      "options": [
+        "Because hotspots, reconnect storms, or dense cells often dominate the real operational risk.",
+        "Because average load alone fully predicts user-visible latency.",
+        "Because low-latency systems do not need partitioning once cached.",
+        "Because skew matters only for billing systems."
+      ],
+      "correct": 0,
+      "explanation": "Averages hide the hot path failures that actually break these systems."
+    },
+    {
+      "stage": "post",
+      "question": "What is the strongest reason to separate synchronous and asynchronous work clearly in an interview answer?",
+      "options": [
+        "It defines what must happen before success is returned and what can lag without lying about correctness.",
+        "It guarantees every subsystem can be eventually consistent without exceptions.",
+        "It removes the need to discuss failure handling later.",
+        "It ensures lower cost than any alternative."
+      ],
+      "correct": 0,
+      "explanation": "Low-latency designs are largely about where you draw that boundary."
+    },
+    {
+      "stage": "post",
+      "question": "Which signal best shows that a candidate has not really designed for low latency?",
+      "options": [
+        "They never name the hot path, skew case, or degraded mode and only list components.",
+        "They mention one cache and one queue in the same answer.",
+        "They talk about observability before databases.",
+        "They draw a high-level diagram before the deep dive."
+      ],
+      "correct": 0,
+      "explanation": "Component lists without path or pressure analysis are the classic weak answer."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off is most common when keeping a read path extremely fast?",
+      "options": [
+        "Some supporting paths become more asynchronous, approximate, or stale-tolerant.",
+        "All correctness guarantees can be removed safely.",
+        "Observability becomes unnecessary because latency is low.",
+        "Hotspots disappear as soon as caches are introduced."
+      ],
+      "correct": 0,
+      "explanation": "Fast paths usually push complexity and lag elsewhere."
+    },
+    {
+      "stage": "post",
+      "question": "Why should degraded mode be explicit in a low-latency design answer?",
+      "options": [
+        "Because real systems often preserve the main user promise by allowing bounded staleness, delay, or reduced features elsewhere.",
+        "Because degraded mode only matters for security products.",
+        "Because it lets you avoid discussing capacity estimates.",
+        "Because it replaces the need for incident metrics."
+      ],
+      "correct": 0,
+      "explanation": "Graceful degradation is how these systems stay credible under stress."
+    },
+    {
+      "stage": "post",
+      "question": "What is the best response when a follow-up adds a 10x hotspot in one region or one symbol?",
+      "options": [
+        "Revisit isolation, partitioning, and admission control around the hot path instead of pretending averages still hold.",
+        "Assume the original design scales linearly everywhere.",
+        "Move all traffic to one stronger database node.",
+        "Drop the latency target and leave the rest unchanged."
+      ],
+      "correct": 0,
+      "explanation": "Hotspots are an architectural event, not a footnote."
+    },
+    {
+      "stage": "post",
+      "question": "Which redesign is most credible if cost pressure rises but the core latency target stays fixed?",
+      "options": [
+        "Protect the hot path and consider relaxing freshness, replay, or scope on less critical paths.",
+        "Cut observability and quota controls first because they are optional.",
+        "Remove every cache so the architecture looks simpler.",
+        "Replace all isolation boundaries with one shared cluster."
+      ],
+      "correct": 0,
+      "explanation": "Senior answers preserve the main promise and trade off secondary ones explicitly."
+    }
+  ]
+}

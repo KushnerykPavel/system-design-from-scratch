@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why are retries a first-class design input for location pipelines?",
+      "options": [
+        "Because weak networks can amplify duplicate sends, so dedupe capacity becomes part of normal operation.",
+        "Because retries only matter for analytics and never for live serving.",
+        "Because location events are always globally ordered by default.",
+        "Because mobile clients cannot attach timestamps or identifiers."
+      ],
+      "correct": 0,
+      "explanation": "Mobile and IoT senders often retry aggressively under poor connectivity."
+    },
+    {
+      "stage": "pre",
+      "question": "What is the main value of a monotonic client sequence number on updates?",
+      "options": [
+        "It gives a stronger signal for duplicate and out-of-order detection than timestamps alone.",
+        "It compresses GPS payloads for edge caches.",
+        "It replaces the need for any dedupe state.",
+        "It guarantees exact clock synchronization with the server."
+      ],
+      "correct": 0,
+      "explanation": "A sequence number makes ordering and stale-drop decisions far more credible."
+    },
+    {
+      "stage": "post",
+      "question": "What is the strongest reason to publish a live-state projection separate from the raw event stream?",
+      "options": [
+        "Serving paths need one trusted latest state, while replay and analytics want fuller event history.",
+        "Raw streams cannot be stored durably once they are consumed.",
+        "A live-state projection removes the need for freshness monitoring.",
+        "Analytics systems cannot read location data directly."
+      ],
+      "correct": 0,
+      "explanation": "Different consumers want different shapes of truth from the same pipeline."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric best exposes an unhealthy ordering story?",
+      "options": [
+        "Out-of-order discard rate and accepted-update age by partition or region.",
+        "The number of engineers subscribed to the pipeline team chat.",
+        "The count of configured API routes in the gateway repository.",
+        "The ratio of encrypted requests to total requests on the company network."
+      ],
+      "correct": 0,
+      "explanation": "Ordering and freshness pathologies appear directly in discard and age metrics."
+    },
+    {
+      "stage": "post",
+      "question": "Why can GPS smoothing be risky if overused?",
+      "options": [
+        "It can hide true movement or delay sharp changes even while making paths look cleaner.",
+        "It forces every update into a single database transaction.",
+        "It prevents duplicate detection from working.",
+        "It guarantees worse network cost than raw updates."
+      ],
+      "correct": 0,
+      "explanation": "Smoothing trades noisy accuracy for stability, so it can also mask reality."
+    },
+    {
+      "stage": "post",
+      "question": "What is the most credible behavior when one region's pipeline lags far behind the freshness target?",
+      "options": [
+        "Fail data stale and surface freshness state rather than silently serving old positions as current.",
+        "Keep serving the oldest available state without any expiry logic.",
+        "Pause all global regions so consistency stays perfectly matched.",
+        "Drop all analytics writes permanently to protect appearance."
+      ],
+      "correct": 0,
+      "explanation": "Silent stale data is usually worse than an explicit degraded state."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off comes with keeping a longer late-arrival window?",
+      "options": [
+        "It absorbs more network disorder but complicates serving freshness and state correction.",
+        "It removes the need for dedupe windows entirely.",
+        "It guarantees lower memory use in stream consumers.",
+        "It eliminates the need for sequence checks."
+      ],
+      "correct": 0,
+      "explanation": "Accepting more disorder helps ingestion but makes live truth harder to maintain."
+    },
+    {
+      "stage": "post",
+      "question": "Which redesign is most likely if downstream fraud detection must inspect all raw points but nearby search needs only the latest accepted state?",
+      "options": [
+        "Keep dual products: a durable raw stream for analysis and a bounded live-state projection for reads.",
+        "Stop smoothing entirely so both systems can share one exact read path.",
+        "Serve nearby search directly from the analytics warehouse.",
+        "Delete all rejected updates to reduce legal risk."
+      ],
+      "correct": 0,
+      "explanation": "One pipeline can feed multiple products, but not all of them should share the same read model."
+    }
+  ]
+}

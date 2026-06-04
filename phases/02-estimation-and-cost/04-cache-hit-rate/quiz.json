@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why is cache hit rate alone not a sufficient design metric?",
+      "options": [
+        "Because the important question is how much origin QPS, latency, or cost the misses still create.",
+        "Because hit rate matters only to frontend teams.",
+        "Because caches remove the need for origin capacity planning.",
+        "Because miss traffic never affects availability."
+      ],
+      "correct": 0,
+      "explanation": "Hit ratio only matters through its impact on the rest of the system."
+    },
+    {
+      "stage": "pre",
+      "question": "What is the most useful first input when estimating cache benefit?",
+      "options": [
+        "Read QPS on the path the cache protects.",
+        "The number of engineers running the service.",
+        "The storage retention window.",
+        "The number of monitoring dashboards."
+      ],
+      "correct": 0,
+      "explanation": "You need the request load the cache is expected to absorb."
+    },
+    {
+      "stage": "post",
+      "question": "If a cache protects 90K read QPS with a 92% hit ratio, what is rough origin QPS?",
+      "options": [
+        "720",
+        "7,200",
+        "18,000",
+        "82,800"
+      ],
+      "correct": 1,
+      "explanation": "8% of 90K is 7,200."
+    },
+    {
+      "stage": "post",
+      "question": "Why can a drop from 92% hit rate to 75% hit rate be dangerous even if both numbers sound high?",
+      "options": [
+        "Because the origin miss load can increase by several times, not just by the difference in percentage points.",
+        "Because caches stop serving any traffic below 80%.",
+        "Because lower hit rate changes only storage cost.",
+        "Because hit rate does not affect downstream systems."
+      ],
+      "correct": 0,
+      "explanation": "Miss traffic is the nonlinear part that hits the origin."
+    },
+    {
+      "stage": "post",
+      "question": "Which workload pattern most often makes a single fleet-wide hit rate misleading?",
+      "options": [
+        "Highly skewed hot objects and a long cold tail",
+        "A service with only one API route",
+        "Uniformly tiny payloads",
+        "A single-region deployment"
+      ],
+      "correct": 0,
+      "explanation": "Different object classes can hide very different miss behavior."
+    },
+    {
+      "stage": "post",
+      "question": "Which observability metric best validates whether cache is protecting origin as intended?",
+      "options": [
+        "Origin QPS attributable to misses, broken down by route or object class",
+        "Number of cache clusters provisioned",
+        "Monthly retention size",
+        "Count of successful deploys"
+      ],
+      "correct": 0,
+      "explanation": "Direct miss-attributed origin load is the signal you care about."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off usually comes with aggressively optimizing hit rate?",
+      "options": [
+        "Lower origin load, but more invalidation, warming, and freshness complexity.",
+        "Lower write durability, but higher read consistency.",
+        "Lower latency with no operational downside.",
+        "Higher CPU use only in the database layer."
+      ],
+      "correct": 0,
+      "explanation": "Higher hit rate often requires more sophisticated cache management."
+    },
+    {
+      "stage": "post",
+      "question": "When is miss latency especially important to estimate separately from miss QPS?",
+      "options": [
+        "When the cache primarily protects user-visible tail latency, not just origin capacity.",
+        "When the service has no users.",
+        "When retention is shorter than 30 days.",
+        "When all requests are writes."
+      ],
+      "correct": 0,
+      "explanation": "Miss cost can be latency pain even when origin capacity is still acceptable."
+    }
+  ]
+}

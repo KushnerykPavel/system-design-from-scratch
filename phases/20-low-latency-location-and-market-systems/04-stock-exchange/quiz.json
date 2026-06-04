@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why is deterministic sequencing so central to a matching engine design?",
+      "options": [
+        "Fair matching, replay, and incident reconstruction depend on a stable authoritative order of events.",
+        "Because order books are too small to need partitioning.",
+        "Because market-data subscribers require global transactions across all symbols.",
+        "Because price-time priority only matters for analytics exports."
+      ],
+      "correct": 0,
+      "explanation": "Without deterministic sequencing, both fairness and recovery become hard to defend."
+    },
+    {
+      "stage": "pre",
+      "question": "What is the main reason many matching-engine designs isolate symbols?",
+      "options": [
+        "A hot symbol should not drag unrelated symbols into its latency or correctness problems.",
+        "All symbols always share one identical order book.",
+        "Symbol isolation removes the need for journaling.",
+        "It guarantees equal traffic across all partitions."
+      ],
+      "correct": 0,
+      "explanation": "Per-symbol isolation shrinks blast radius and simplifies fairness."
+    },
+    {
+      "stage": "post",
+      "question": "Why is acknowledging only after durable sequencing often the stronger answer?",
+      "options": [
+        "It creates a recovery boundary that can be replayed credibly after crashes.",
+        "It makes market-data fanout unnecessary.",
+        "It guarantees every order is profitable.",
+        "It removes the need for any snapshots."
+      ],
+      "correct": 0,
+      "explanation": "The core issue is whether an accepted order can be reconstructed exactly."
+    },
+    {
+      "stage": "post",
+      "question": "Which signal best reveals that market-data fanout is threatening the execution core?",
+      "options": [
+        "A growing sequence gap between matched trades and downstream feed publication.",
+        "An increase in static documentation page views.",
+        "The total count of market symbols listed on the venue website.",
+        "The number of TLS ciphers enabled on gateway hosts."
+      ],
+      "correct": 0,
+      "explanation": "Feed lag relative to executed sequence is the direct signal."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off comes with a single-writer matching engine per symbol?",
+      "options": [
+        "It simplifies fairness and recovery but caps vertical scale for one hot book.",
+        "It makes replay impossible once snapshots exist.",
+        "It forces synchronous market-data publication on every fill.",
+        "It removes the need for risk checks before matching."
+      ],
+      "correct": 0,
+      "explanation": "Single-writer designs buy determinism at the cost of per-symbol scaling headroom."
+    },
+    {
+      "stage": "post",
+      "question": "Why do snapshots matter if the journal is authoritative?",
+      "options": [
+        "They shorten recovery time so replay does not always start from the beginning of history.",
+        "They replace the need to verify deterministic replay.",
+        "They make cancels unnecessary once the book is loaded.",
+        "They are only useful for legal retention, not operations."
+      ],
+      "correct": 0,
+      "explanation": "Snapshots are the operational shortcut layered on top of the journal."
+    },
+    {
+      "stage": "post",
+      "question": "What is the most credible first mitigation when one symbol becomes far hotter than others?",
+      "options": [
+        "Isolate that symbol's hardware and queueing path before trying to couple it with colder books.",
+        "Move all symbols into one shared partition to smooth load.",
+        "Disable journaling temporarily for the hot symbol.",
+        "Delay all cancels globally so new orders win."
+      ],
+      "correct": 0,
+      "explanation": "Hot symbols need stronger isolation, not more shared contention."
+    },
+    {
+      "stage": "post",
+      "question": "Which redesign is most likely if shared account risk checks become a latency bottleneck?",
+      "options": [
+        "Push more precomputed or reserved risk state closer to the symbol path while keeping a safe control boundary.",
+        "Let matching ignore risk checks for low-value orders.",
+        "Move the full order book into the risk database.",
+        "Require all symbols to serialize through one risk coordinator."
+      ],
+      "correct": 0,
+      "explanation": "Risk state may need local fast-path support, but not at the cost of collapsing the symbol isolation model."
+    }
+  ]
+}

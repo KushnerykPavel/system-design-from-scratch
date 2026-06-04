@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why is adding a DLQ only the beginning of the design?",
+      "options": [
+        "Because operators still need classification, inspection, replay, and discard controls.",
+        "Because DLQs automatically fix malformed events.",
+        "Because a DLQ guarantees no duplicate side effects.",
+        "Because every message should always be replayed immediately."
+      ],
+      "correct": 0,
+      "explanation": "DLQ storage without control-plane workflows is incomplete."
+    },
+    {
+      "stage": "pre",
+      "question": "What question most changes replay safety?",
+      "options": [
+        "Whether replay can retrigger side effects such as sends, writes, or billing actions.",
+        "Whether the DLQ dashboard has light mode.",
+        "Whether producers use protobuf or JSON comments.",
+        "Whether operators prefer alphabetical topic lists."
+      ],
+      "correct": 0,
+      "explanation": "Side-effect risk is central to replay design."
+    },
+    {
+      "stage": "post",
+      "question": "Which signal best shows that replay is harming the live system?",
+      "options": [
+        "Live-consumer lag rising while replay throughput increases.",
+        "Average replay-request title length.",
+        "The number of runbook pages in the wiki.",
+        "Median TLS handshake time for operator laptops."
+      ],
+      "correct": 0,
+      "explanation": "Replay must be evaluated against its impact on live traffic."
+    },
+    {
+      "stage": "post",
+      "question": "Why is a dry-run estimate valuable before replay?",
+      "options": [
+        "It previews scope and expected impact before operators inject load or duplicate side effects.",
+        "It guarantees the replay will succeed without errors.",
+        "It removes the need for actor attribution.",
+        "It replaces all need for DLQ retention."
+      ],
+      "correct": 0,
+      "explanation": "Dry run lowers blast radius and improves operator judgment."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off comes with longer DLQ retention?",
+      "options": [
+        "Better recovery and investigation at the cost of storage and policy burden.",
+        "Guaranteed lower live-traffic latency.",
+        "Elimination of poison messages.",
+        "No need for cleanup workflows."
+      ],
+      "correct": 0,
+      "explanation": "Retention is useful but not free."
+    },
+    {
+      "stage": "post",
+      "question": "Which failure is most directly mitigated by requiring scoped replay filters and actor identity?",
+      "options": [
+        "An operator accidentally replaying too much data without accountability.",
+        "A worker host losing NTP sync.",
+        "A dashboard using too many colors.",
+        "A queue partition becoming hot from normal traffic."
+      ],
+      "correct": 0,
+      "explanation": "Scoped, auditable replay reduces operator blast radius."
+    },
+    {
+      "stage": "post",
+      "question": "Why should replay usually use isolated workers or quotas?",
+      "options": [
+        "Because recovery traffic can otherwise starve live delivery paths.",
+        "Because replayed messages cannot be stored in the main system.",
+        "Because isolation removes the need for debugging metadata.",
+        "Because quotas make DLQs unnecessary."
+      ],
+      "correct": 0,
+      "explanation": "Replay is often bursty and dangerous to shared capacity."
+    },
+    {
+      "stage": "post",
+      "question": "What design change most improves the usefulness of a DLQ during incident response?",
+      "options": [
+        "Attach structured failure reason and last-processing context to each dead-lettered message.",
+        "Store messages without metadata to reduce write cost.",
+        "Delete old failures as soon as a new failure arrives.",
+        "Hide replay history from operators to simplify the UI."
+      ],
+      "correct": 0,
+      "explanation": "Triage depends on rich failure context."
+    }
+  ]
+}

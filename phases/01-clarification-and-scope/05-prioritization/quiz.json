@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why is explicit requirement prioritization important before deep architecture discussion?",
+      "options": [
+        "Because it helps the candidate choose what to optimize first and what trade-offs are acceptable.",
+        "Because interviewers require priorities to be numbered in every answer format.",
+        "Because it removes the need for scope cuts.",
+        "Because it guarantees the cheapest design is also the most reliable."
+      ],
+      "correct": 0,
+      "explanation": "Priority order makes architecture choices coherent instead of trying to maximize everything."
+    },
+    {
+      "stage": "pre",
+      "question": "Which pair of goals is most likely to be in tension for a global user-facing system?",
+      "options": [
+        "Latency and cost.",
+        "Documentation and indentation style.",
+        "README length and code comments.",
+        "Directory naming and unit tests."
+      ],
+      "correct": 0,
+      "explanation": "Aggressive latency optimization often increases infrastructure cost."
+    },
+    {
+      "stage": "post",
+      "question": "What is the clearest danger of declaring too many priorities as equally top-tier?",
+      "options": [
+        "The interviewer will assume you are optimizing for only one user persona.",
+        "The design loses a clear decision rule, so trade-offs become vague and internally inconsistent.",
+        "The code artifact becomes impossible to run.",
+        "It prevents any capacity estimation later."
+      ],
+      "correct": 1,
+      "explanation": "Flat priorities reduce architecture to wishful thinking."
+    },
+    {
+      "stage": "post",
+      "question": "Which architecture choice most directly reflects prioritizing availability over strict consistency?",
+      "options": [
+        "Accepting some asynchronous replication or bounded staleness so the system remains available under partition or failure.",
+        "Removing all replication to simplify writes.",
+        "Avoiding caches because they are hard to explain.",
+        "Using a larger README file."
+      ],
+      "correct": 0,
+      "explanation": "Availability-first systems often accept weaker consistency to preserve service continuity."
+    },
+    {
+      "stage": "post",
+      "question": "Why is it useful to confirm at least one requirement you will not optimize first?",
+      "options": [
+        "It demonstrates realism by showing that some goals are deliberately second-order rather than accidentally ignored.",
+        "It lets you skip the trade-off section later.",
+        "It proves the omitted requirement is unimportant forever.",
+        "It guarantees no redesign follow-up will be asked."
+      ],
+      "correct": 0,
+      "explanation": "Stating what is second-order makes the optimization boundary explicit."
+    },
+    {
+      "stage": "post",
+      "question": "What metric best indicates healthy prioritization discipline?",
+      "options": [
+        "The number of different technologies named in the architecture.",
+        "How many major design choices are justified by the ranked requirement order.",
+        "How many bullet points appear in the requirements section.",
+        "The number of metrics dashboards planned."
+      ],
+      "correct": 1,
+      "explanation": "Priorities matter only if they guide actual design decisions."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off comes with limiting yourself to a top-three priority list?",
+      "options": [
+        "It keeps the answer sharp and actionable, but some nuance must be deferred to later discussion.",
+        "It prevents any mention of compliance or security.",
+        "It always produces under-designed systems.",
+        "It makes follow-up questions impossible to answer."
+      ],
+      "correct": 0,
+      "explanation": "A short list improves clarity even though it is not exhaustive."
+    },
+    {
+      "stage": "post",
+      "question": "If the interviewer suddenly says compliance now outranks latency, what should you do first?",
+      "options": [
+        "Continue the original design and mention compliance only at the end.",
+        "Restate the priority order, then explain which architecture decisions change under the new ranking.",
+        "Remove all caches without explanation.",
+        "Start over from the problem statement without summarizing the delta."
+      ],
+      "correct": 1,
+      "explanation": "Reprioritization should be explicit so the redesign feels controlled rather than chaotic."
+    }
+  ]
+}

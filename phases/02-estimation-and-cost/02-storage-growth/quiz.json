@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why is raw payload size usually not the same as real retained storage footprint?",
+      "options": [
+        "Because replicas, indexes, and backups often add substantial overhead on top of the raw data.",
+        "Because payload size matters only for cache systems.",
+        "Because storage engines always compress data to zero.",
+        "Because retention windows do not affect disk use."
+      ],
+      "correct": 0,
+      "explanation": "Total footprint is usually much larger than raw data due to operational copies and indexing."
+    },
+    {
+      "stage": "pre",
+      "question": "What is the most important retention clarification to ask early?",
+      "options": [
+        "Whether the interviewer prefers decimal or binary units.",
+        "How long data must remain queryable in hot, warm, or cold tiers.",
+        "Which IDE the team uses.",
+        "Whether users know the exact record size."
+      ],
+      "correct": 1,
+      "explanation": "Retention by tier changes cost and architecture decisions dramatically."
+    },
+    {
+      "stage": "post",
+      "question": "If a service ingests about 450 GB of raw data per day and stores 3 replicas, what is rough daily durable size before indexes?",
+      "options": [
+        "150 GB",
+        "450 GB",
+        "1.35 TB",
+        "13.5 TB"
+      ],
+      "correct": 2,
+      "explanation": "Three copies of 450 GB is about 1.35 TB."
+    },
+    {
+      "stage": "post",
+      "question": "Which design choice most directly lowers long-term storage cost when old data is rarely queried?",
+      "options": [
+        "Moving older data into cheaper warm or cold storage tiers.",
+        "Increasing the replication factor for all data.",
+        "Serving reads from more regions.",
+        "Using smaller load balancers."
+      ],
+      "correct": 0,
+      "explanation": "Tiering matches data temperature to storage cost."
+    },
+    {
+      "stage": "post",
+      "question": "What is the hidden risk of forgetting index overhead in a storage estimate?",
+      "options": [
+        "The service may over-provision CPU but not disk.",
+        "The retained footprint can be materially undercounted, leading to poor capacity planning.",
+        "The system will automatically delete old records too early.",
+        "The architecture can no longer use caches."
+      ],
+      "correct": 1,
+      "explanation": "Indexes can add a large and persistent disk multiplier."
+    },
+    {
+      "stage": "post",
+      "question": "Which observability metric best validates storage-growth assumptions after launch?",
+      "options": [
+        "Daily bytes ingested and retained bytes by tier",
+        "Number of engineers on call",
+        "Average dashboard load time",
+        "Count of architecture review meetings"
+      ],
+      "correct": 0,
+      "explanation": "Real ingest and retained footprint are the direct signals."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off comes with aggressive cold-tiering?",
+      "options": [
+        "Lower storage cost, but slower restore and query latency for older data.",
+        "Higher CPU efficiency, but zero savings on storage.",
+        "Better consistency, but lower availability only for hot data.",
+        "No downside as long as replication stays high."
+      ],
+      "correct": 0,
+      "explanation": "Tiering saves money by accepting slower access to colder data."
+    },
+    {
+      "stage": "post",
+      "question": "When is a one-number total storage answer most misleading?",
+      "options": [
+        "When the system mixes hot queryable data, warm history, and compliance archives with different access needs.",
+        "When there are exactly two servers.",
+        "When records are smaller than one kilobyte.",
+        "When the team uses managed infrastructure."
+      ],
+      "correct": 0,
+      "explanation": "Different data temperatures usually deserve different storage treatment."
+    }
+  ]
+}

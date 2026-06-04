@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What is the main job of a global traffic-steering layer?",
+      "options": [
+        "Choose healthy and policy-appropriate destinations while balancing latency, capacity, and safety.",
+        "Replace every application-level retry policy.",
+        "Guarantee that no region ever becomes full.",
+        "Remove the need for observability."
+      ],
+      "correct": 0,
+      "explanation": "Traffic steering is about controlled route choice under changing conditions."
+    },
+    {
+      "stage": "pre",
+      "question": "Why might lowest latency not always win in routing decisions?",
+      "options": [
+        "Because health, capacity, compliance, or data affinity can outweigh raw latency.",
+        "Because latency is never visible to users.",
+        "Because anycast ignores geography completely.",
+        "Because sessions cannot survive in more than one POP."
+      ],
+      "correct": 0,
+      "explanation": "Senior routing answers account for policy and overload, not just speed."
+    },
+    {
+      "stage": "post",
+      "question": "What is route flapping?",
+      "options": [
+        "Rapid switching between destinations due to noisy or unstable health inputs.",
+        "A permanent move of traffic to a new region during migration.",
+        "The use of sticky sessions for one tenant.",
+        "A cache purge sent to all POPs."
+      ],
+      "correct": 0,
+      "explanation": "Flapping is dangerous because it amplifies instability and confusion."
+    },
+    {
+      "stage": "post",
+      "question": "Why should routing policy consider downstream capacity, not just edge health?",
+      "options": [
+        "A healthy POP can still send traffic into an overloaded region and worsen the incident.",
+        "Capacity signals only matter for batch jobs.",
+        "POP health guarantees backend capacity automatically.",
+        "Capacity signals are slower than latency so they can be ignored."
+      ],
+      "correct": 0,
+      "explanation": "Routing must avoid pushing more traffic into already saturated backends."
+    },
+    {
+      "stage": "post",
+      "question": "What is a strong reason to keep route explanations?",
+      "options": [
+        "Operators need to understand which health, latency, or override input caused a routing decision.",
+        "It removes the need for metrics.",
+        "It lets clients choose any backend directly.",
+        "It guarantees compliance policy correctness by itself."
+      ],
+      "correct": 0,
+      "explanation": "Explainability is critical during incidents and policy debugging."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric best detects control-plane propagation issues?",
+      "options": [
+        "Policy version skew or propagation lag across POPs.",
+        "Average logo image size.",
+        "The count of markdown headings in docs.",
+        "Only total fleet CPU."
+      ],
+      "correct": 0,
+      "explanation": "Skew tells you some POPs are acting on old route policy."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off comes with session or data affinity?",
+      "options": [
+        "It protects locality and correctness but limits how freely traffic can reroute during incidents.",
+        "It removes the need for traffic steering entirely.",
+        "It always lowers latency more than any other method.",
+        "It guarantees zero failover impact."
+      ],
+      "correct": 0,
+      "explanation": "Affinity is useful but can constrain recovery options."
+    },
+    {
+      "stage": "post",
+      "question": "When is anycast especially attractive at the global ingress layer?",
+      "options": [
+        "When you want resilient, low-latency entry into a large edge network before applying finer routing policy.",
+        "When you need every request to be pinned to one origin forever.",
+        "When control-plane updates should take hours to propagate.",
+        "When the service cannot expose health signals."
+      ],
+      "correct": 0,
+      "explanation": "Anycast shines as a resilient entry mechanism, not as the whole routing story."
+    }
+  ]
+}

@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What is the main goal of clarification in an ambiguous design prompt?",
+      "options": [
+        "To eliminate every unknown before any architecture discussion begins.",
+        "To identify the uncertainties that actually change scope, workload, or guarantees.",
+        "To prove that the prompt was underspecified by the interviewer.",
+        "To delay the deep dive until the interviewer gives away the intended answer."
+      ],
+      "correct": 1,
+      "explanation": "Clarification is meant to uncover design-shaping uncertainty, not all possible uncertainty."
+    },
+    {
+      "stage": "pre",
+      "question": "Why are explicit assumptions useful?",
+      "options": [
+        "They let you move forward honestly when the interviewer leaves details open.",
+        "They replace the need for capacity planning entirely.",
+        "They guarantee the interviewer will not change constraints later.",
+        "They matter only for storage-heavy prompts."
+      ],
+      "correct": 0,
+      "explanation": "Assumptions create a clear basis for the design and make later redesign easier."
+    },
+    {
+      "stage": "post",
+      "question": "Which clarification question is usually highest leverage?",
+      "options": [
+        "What exact UI library should the web client use?",
+        "Is the dominant challenge low-latency reads, high write volume, or correctness-sensitive updates?",
+        "Should the architecture diagram include icons or boxes only?",
+        "Can we postpone naming any data store until the last minute?"
+      ],
+      "correct": 1,
+      "explanation": "Workload shape and guarantee priorities often change the architecture directly."
+    },
+    {
+      "stage": "post",
+      "question": "What is the main risk of asking too many low-impact questions?",
+      "options": [
+        "The design can lose momentum without becoming any more correct or better scoped.",
+        "It always forces the system into eventual consistency.",
+        "It prevents the interviewer from asking follow-up questions later.",
+        "It mainly affects diagram aesthetics."
+      ],
+      "correct": 0,
+      "explanation": "Excessive low-value questioning burns time and makes the candidate seem less decisive."
+    },
+    {
+      "stage": "post",
+      "question": "Which assumption is strongest to state explicitly?",
+      "options": [
+        "I will assume external traffic and moderate global growth because that materially affects partitioning, latency, and rollout risk.",
+        "I assume the database will be fast enough because modern databases are optimized.",
+        "I assume all failures are rare so we can focus only on the happy path.",
+        "I assume the interviewer prefers message queues to RPC."
+      ],
+      "correct": 0,
+      "explanation": "Good assumptions are concrete, defensible, and connected to architectural consequences."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off comes with narrowing to one core workflow?",
+      "options": [
+        "You gain depth and coherence, but some secondary features will be intentionally deferred.",
+        "You guarantee that the design cannot scale beyond one region.",
+        "You remove the need to discuss non-functional requirements.",
+        "You automatically make every future redesign easier."
+      ],
+      "correct": 0,
+      "explanation": "A narrow scope helps depth, but it requires explicit deferral of other concerns."
+    },
+    {
+      "stage": "post",
+      "question": "If the interviewer changes one assumption mid-answer, what is the best response?",
+      "options": [
+        "Restart from the beginning without referencing earlier design choices.",
+        "Map the changed assumption to the affected components and explain what now becomes more expensive, slower, or more complex.",
+        "Ignore the change unless it affects the database selection directly.",
+        "Defend the first assumption because consistency of narrative matters more than accuracy."
+      ],
+      "correct": 1,
+      "explanation": "Changed constraints should trigger focused redesign, not panic or stubbornness."
+    },
+    {
+      "stage": "post",
+      "question": "Which sign most strongly suggests the prompt has been scoped enough to proceed?",
+      "options": [
+        "You can name the primary user journey, main workload shape, and top non-functional priority well enough to size the system.",
+        "You have listed all optional features that might ever be requested.",
+        "You have settled every implementation detail for the write path.",
+        "The interviewer has stopped talking entirely."
+      ],
+      "correct": 0,
+      "explanation": "Once you can size and prioritize the system, further clarification has diminishing returns."
+    }
+  ]
+}

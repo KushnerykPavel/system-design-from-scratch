@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What is the main reason to use more than one cache layer?",
+      "options": [
+        "Different layers can optimize for different distance, scope, and freshness needs.",
+        "Because every request must be cached in every possible place.",
+        "Because browsers cannot revalidate responses.",
+        "Because origin storage cannot serve immutable assets."
+      ],
+      "correct": 0,
+      "explanation": "Layered caching works when each layer has a distinct responsibility."
+    },
+    {
+      "stage": "pre",
+      "question": "What is the clearest danger in a shared CDN cache?",
+      "options": [
+        "Serving personalized or tenant-specific data under a public cache key.",
+        "Reducing origin egress too much.",
+        "Returning headers to the client.",
+        "Improving latency for static assets."
+      ],
+      "correct": 0,
+      "explanation": "Key ambiguity in shared caches can create severe privacy or tenancy bugs."
+    },
+    {
+      "stage": "post",
+      "question": "Why are immutable assets especially good for browser and CDN caching?",
+      "options": [
+        "They can be cached aggressively with versioned names and minimal correctness risk.",
+        "They require purge on every request.",
+        "They cannot be compressed at the edge.",
+        "They only work in single-region systems."
+      ],
+      "correct": 0,
+      "explanation": "Versioned immutable assets are the easiest and safest wins in a cache hierarchy."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric best shows whether purge or invalidation is healthy across POPs?",
+      "options": [
+        "Purge propagation latency or version skew by region.",
+        "Only total company revenue.",
+        "The number of markdown links in the lesson.",
+        "CPU model of developer laptops."
+      ],
+      "correct": 0,
+      "explanation": "Cross-region propagation timing directly measures whether mutable cached content is converging fast enough."
+    },
+    {
+      "stage": "post",
+      "question": "What is the hidden debugging cost of layered caches?",
+      "options": [
+        "A stale response may come from different layers, so headers and traces must reveal where it was served from.",
+        "Layered caches make traces impossible by design.",
+        "Only browsers need debugging, not CDNs.",
+        "More cache layers always simplify incident response."
+      ],
+      "correct": 0,
+      "explanation": "Without cache-debug visibility, operators cannot localize stale or leaking responses."
+    },
+    {
+      "stage": "post",
+      "question": "Which response class is the safest default for a shared edge cache?",
+      "options": [
+        "Public content with clear keys and cache-control rules.",
+        "Any authenticated response as long as it is popular.",
+        "All tenant-specific configuration.",
+        "Any response that ever returned 200 once."
+      ],
+      "correct": 0,
+      "explanation": "Shared caches are best for explicitly public content unless the keying model is extremely disciplined."
+    },
+    {
+      "stage": "post",
+      "question": "Which interview answer is strongest?",
+      "options": [
+        "I will cache the same payload identically in browser, CDN, and origin caches for simplicity.",
+        "I will classify content into immutable public, mutable public, and personalized paths, then assign each layer a clear role and cache key policy.",
+        "I will avoid discussing cache keys because the CDN vendor handles that.",
+        "I will disable browser caching so only one layer exists."
+      ],
+      "correct": 1,
+      "explanation": "Strong answers deliberately separate data classes and layer responsibilities."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off often comes with aggressive edge caching of mutable public content?",
+      "options": [
+        "Much better latency and origin offload, but more purge, freshness, and propagation complexity.",
+        "No extra complexity because public content never changes.",
+        "Lower privacy risk than no-store responses.",
+        "Guaranteed monotonic reads across every browser and region."
+      ],
+      "correct": 0,
+      "explanation": "Mutable public content benefits from edge caching, but freshness control becomes part of the design."
+    }
+  ]
+}

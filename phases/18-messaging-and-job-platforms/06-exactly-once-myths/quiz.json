@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What is the first step in answering an exactly-once design question well?",
+      "options": [
+        "Define the boundary of the guarantee before claiming it.",
+        "Promise global end-to-end exactly-once semantics immediately.",
+        "Assume the broker alone solves all duplicates.",
+        "Avoid discussing failures so the answer stays simple."
+      ],
+      "correct": 0,
+      "explanation": "Scope is the core of an honest answer."
+    },
+    {
+      "stage": "pre",
+      "question": "Why does idempotency still matter even when a platform advertises strong delivery semantics?",
+      "options": [
+        "Because retries, replays, and side-effect ambiguity still happen operationally.",
+        "Because idempotency is only for batch systems.",
+        "Because strong semantics remove the need for acknowledgements.",
+        "Because it guarantees external APIs never time out."
+      ],
+      "correct": 0,
+      "explanation": "Operational duplicates and ambiguity do not disappear."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric best reveals whether an exactly-once claim is working in practice?",
+      "options": [
+        "Duplicate-attempt rate and dedupe-hit rate.",
+        "Average service logo size.",
+        "The number of interview prep files in the repo.",
+        "Median source line length in consumer code."
+      ],
+      "correct": 0,
+      "explanation": "You need to see duplicate pressure and suppression behavior."
+    },
+    {
+      "stage": "post",
+      "question": "Why is 'exactly once into our database' usually easier to defend than 'exactly once end to end'?",
+      "options": [
+        "Because the database boundary is controllable, while external side effects add more ambiguity.",
+        "Because databases never fail or retry.",
+        "Because end-to-end systems do not need acknowledgements.",
+        "Because all external APIs support distributed transactions."
+      ],
+      "correct": 0,
+      "explanation": "Controllable boundaries are where stronger guarantees are realistic."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off comes with a longer dedupe-retention window?",
+      "options": [
+        "You catch more delayed duplicates but spend more on storage and lookup state.",
+        "You eliminate the need for replay controls.",
+        "You guarantee all downstream side effects are unique forever.",
+        "You remove all transaction complexity."
+      ],
+      "correct": 0,
+      "explanation": "Longer duplicate protection has real cost."
+    },
+    {
+      "stage": "post",
+      "question": "Which failure is most directly mitigated by an outbox pattern?",
+      "options": [
+        "A consumer updating state successfully but failing before publishing a dependent event.",
+        "A topic being created with too many partitions.",
+        "A scheduler clock drifting by one second.",
+        "A metrics query overloading a dashboard."
+      ],
+      "correct": 0,
+      "explanation": "Outbox patterns align local state changes with downstream publication."
+    },
+    {
+      "stage": "post",
+      "question": "Why is replay dangerous if it bypasses the normal dedupe path?",
+      "options": [
+        "Because historical recovery traffic can then recreate duplicates the system would normally suppress.",
+        "Because replayed events become unreadable.",
+        "Because acknowledgements stop working after replay.",
+        "Because replay only matters for logs, not messages."
+      ],
+      "correct": 0,
+      "explanation": "Recovery paths must preserve the same correctness controls."
+    },
+    {
+      "stage": "post",
+      "question": "What is the strongest senior-level answer when an interviewer insists on exactly-once wording?",
+      "options": [
+        "State a bounded guarantee clearly, explain the mechanism, and name the residual risk outside that boundary.",
+        "Keep repeating that duplicates are impossible everywhere.",
+        "Refuse to discuss retries at all.",
+        "Answer with only broker marketing terms."
+      ],
+      "correct": 0,
+      "explanation": "Precision and honesty are stronger than absolute claims."
+    }
+  ]
+}

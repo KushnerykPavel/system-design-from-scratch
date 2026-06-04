@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why is a URL shortener usually much more constrained by read-path design than by alias generation logic?",
+      "options": [
+        "Because redirect traffic is often massively higher than create traffic, especially during viral spikes.",
+        "Because alias generators require cross-region consensus for every request.",
+        "Because most shorteners never need a persistent metadata store.",
+        "Because custom aliases eliminate caching from the design."
+      ],
+      "correct": 0,
+      "explanation": "The hard operational problem is serving redirects cheaply and safely under skew."
+    },
+    {
+      "stage": "pre",
+      "question": "What is the main reason to add idempotency keys to link-creation requests?",
+      "options": [
+        "They reduce redirect latency by avoiding cache lookups.",
+        "They keep retries from creating multiple short links for the same logical create operation.",
+        "They make analytics perfectly real time.",
+        "They remove the need for uniqueness checks on aliases."
+      ],
+      "correct": 1,
+      "explanation": "Create retries happen in the real world, and duplicate link creation is a correctness bug."
+    },
+    {
+      "stage": "post",
+      "question": "Which change most directly protects the system when one short code becomes globally viral?",
+      "options": [
+        "Move analytics writes into the synchronous redirect path.",
+        "Replicate hot entries through edge or cache layers instead of relying on one backend lookup path.",
+        "Shorten alias length so clients type less.",
+        "Disable custom aliases for all users."
+      ],
+      "correct": 1,
+      "explanation": "Viral-link protection is mainly a hot-key mitigation and caching problem."
+    },
+    {
+      "stage": "post",
+      "question": "Why is asynchronous click logging often the right default for redirect services?",
+      "options": [
+        "It lowers redirect latency and isolates analytics backpressure from end-user navigation.",
+        "It guarantees every click event is stored before the redirect response is sent.",
+        "It removes the need for abuse monitoring entirely.",
+        "It ensures cache entries never go stale."
+      ],
+      "correct": 0,
+      "explanation": "The redirect path should stay thin unless the business case forces synchronous accounting."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric best exposes hot-link concentration before it becomes an outage?",
+      "options": [
+        "The share of total redirect traffic handled by the top N short codes.",
+        "Average link title length across the database.",
+        "The number of employees who deployed this week.",
+        "The median create payload byte size."
+      ],
+      "correct": 0,
+      "explanation": "Skew metrics reveal when one code dominates capacity."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off comes with long cache TTLs on redirect metadata?",
+      "options": [
+        "They reduce backend load but make fast revocation or destination edits harder to propagate.",
+        "They increase alias entropy but lower durability.",
+        "They guarantee malware verdicts are always current.",
+        "They make write-path uniqueness checks unnecessary."
+      ],
+      "correct": 0,
+      "explanation": "Read efficiency improves, but freshness-sensitive changes become harder."
+    },
+    {
+      "stage": "post",
+      "question": "Why should abuse screening happen before a newly created link is activated?",
+      "options": [
+        "So the service can block unsafe destinations before the redirect path starts serving them.",
+        "So click analytics can be skipped for all paid users.",
+        "So the database never needs secondary indexes.",
+        "So custom aliases become impossible to guess."
+      ],
+      "correct": 0,
+      "explanation": "Activation-time screening limits the blast radius of malicious links."
+    },
+    {
+      "stage": "post",
+      "question": "Which design decision is most likely to hurt redirect latency with little product value?",
+      "options": [
+        "Resolving the code from cache and emitting analytics asynchronously.",
+        "Requiring the redirect path to wait for a downstream analytics warehouse write.",
+        "Using a metadata store for durable link ownership.",
+        "Keeping revocation state in the same control plane as link metadata."
+      ],
+      "correct": 1,
+      "explanation": "Warehouses are the wrong dependency for a user-facing redirect path."
+    }
+  ]
+}

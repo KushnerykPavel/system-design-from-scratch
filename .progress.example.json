@@ -1,0 +1,91 @@
+{
+  "schema_version": 1,
+  "lessons": [
+    {
+      "lesson": "00-setup-and-workflow/01-repo-setup-and-progress",
+      "status": "done",
+      "last_updated": "2026-06-03",
+      "notes_path": "notes/00-setup-and-workflow/01-repo-setup-and-progress.md",
+      "artifact_paths": [
+        "phases/00-setup-and-workflow/01-repo-setup-and-progress/outputs/progress-checklist.md"
+      ],
+      "quiz_score": 7,
+      "quiz_history": [
+        {
+          "score": 5,
+          "completed_at": "2026-06-01",
+          "stage": "post"
+        },
+        {
+          "score": 7,
+          "completed_at": "2026-06-03",
+          "stage": "post"
+        }
+      ],
+      "confidence": "medium",
+      "mistake_tags": [
+        "no_sizing",
+        "missing_observability"
+      ],
+      "last_reviewed_at": "2026-06-03",
+      "next_review_at": "2026-06-07",
+      "review_interval_days": 4,
+      "review_ease": 2.3,
+      "lapse_count": 0,
+      "mode_history": [
+        {
+          "mode": "learn",
+          "completed_at": "2026-06-01"
+        },
+        {
+          "mode": "practice",
+          "completed_at": "2026-06-03"
+        }
+      ],
+      "feedback_history": [
+        {
+          "session_type": "lesson",
+          "completed_at": "2026-06-03",
+          "summary": "Clarification and sizing improved, but observability was still thin.",
+          "strengths": [
+            "Asked for workload shape before proposing components."
+          ],
+          "gaps": [
+            "Did not tie alerts to a specific failure mode."
+          ],
+          "highest_leverage_improvement": "For each major failure mode, name one metric, one alert, and one dashboard view.",
+          "dimensions": [
+            {
+              "dimension": "clarification",
+              "score": 3,
+              "evidence": "Clarified read/write mix and latency target."
+            },
+            {
+              "dimension": "sizing",
+              "score": 3,
+              "evidence": "Estimated steady-state QPS and storage growth."
+            },
+            {
+              "dimension": "observability",
+              "score": 2,
+              "evidence": "Mentioned metrics generally but no concrete alert thresholds.",
+              "next_action": "Attach one alert threshold to backlog growth and p99 latency."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "lesson": "01-clarification-and-scope/01-functional-vs-non-functional",
+      "status": "in_progress",
+      "last_updated": "2026-06-03",
+      "notes_path": "notes/01-clarification-and-scope/01-functional-vs-non-functional.md",
+      "artifact_paths": [],
+      "confidence": "low",
+      "mistake_tags": [
+        "skips_clarification",
+        "weak_requirements"
+      ]
+    }
+  ]
+}

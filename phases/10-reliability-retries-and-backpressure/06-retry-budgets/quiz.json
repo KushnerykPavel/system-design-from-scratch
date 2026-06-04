@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why are retry budgets useful?",
+      "options": [
+        "They cap how much extra work retries can create, so reliability tactics stay within real capacity limits.",
+        "They guarantee every request succeeds on a retry.",
+        "They make idempotency optional for write paths.",
+        "They remove the need to measure dependency saturation."
+      ],
+      "correct": 0,
+      "explanation": "Budgets turn speculative reliability behavior into an explicit capacity decision."
+    },
+    {
+      "stage": "pre",
+      "question": "What is a hedged request trying to improve?",
+      "options": [
+        "Tail latency by sending a second attempt after an initial delay when the first attempt looks unusually slow.",
+        "Storage durability by replicating every write twice.",
+        "Observability by doubling trace volume.",
+        "Security by encrypting the same request on two channels."
+      ],
+      "correct": 0,
+      "explanation": "Hedging is a tail-latency technique, not a durability primitive."
+    },
+    {
+      "stage": "post",
+      "question": "What is the strongest reason to delay a hedge until a percentile threshold instead of sending it immediately?",
+      "options": [
+        "It targets only true tail outliers and avoids spending speculative load on normal fast requests.",
+        "It guarantees that no losing request will need cancellation.",
+        "It removes the need for independent replicas.",
+        "It makes budget accounting unnecessary."
+      ],
+      "correct": 0,
+      "explanation": "Delayed hedging tries to help the tail without doubling all traffic."
+    },
+    {
+      "stage": "post",
+      "question": "Which trade-off comes with explicit hedge and retry budgets?",
+      "options": [
+        "You bound extra load, but policy tuning and accounting become more complex.",
+        "You eliminate every need for performance debugging.",
+        "You guarantee that p99 latency will match median latency.",
+        "You make cancellation support irrelevant."
+      ],
+      "correct": 0,
+      "explanation": "Budgets improve safety at the price of extra operational policy."
+    },
+    {
+      "stage": "post",
+      "question": "Why is cancellation of losing hedged requests so important?",
+      "options": [
+        "Without real cancellation, the backend still does duplicate work even after one request already won.",
+        "It ensures every request is processed in strict order.",
+        "It turns all replicas into one logical node.",
+        "It prevents the need for tracing in read paths."
+      ],
+      "correct": 0,
+      "explanation": "If losing attempts keep running, the latency gain still comes with most of the load cost."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric best tells you whether hedging is worth it?",
+      "options": [
+        "Hedge win rate compared with hedge budget burn and backend saturation.",
+        "Total number of Grafana users in the organization.",
+        "The count of DNS zones managed by the company.",
+        "The mean age of old on-call runbooks."
+      ],
+      "correct": 0,
+      "explanation": "A technique is only worth it if the latency benefit justifies the speculative load it spends."
+    },
+    {
+      "stage": "post",
+      "question": "When should a request usually not be hedged?",
+      "options": [
+        "When it is non-idempotent or when alternate replicas are highly correlated and unlikely to help.",
+        "When it is a read served from independent replicas.",
+        "When the service has plenty of spare capacity.",
+        "When the client can trace multiple spans."
+      ],
+      "correct": 0,
+      "explanation": "Unsafe semantics or correlated replicas make hedging far less attractive."
+    },
+    {
+      "stage": "post",
+      "question": "What weakens an answer about hedging most?",
+      "options": [
+        "Talking about faster tails without explaining budgets, cancellation, or replica independence.",
+        "Mentioning that speculative work should be measured separately from primary traffic.",
+        "Explaining that broad incidents may require disabling hedges.",
+        "Calling out read-heavy latency-sensitive paths as the best fit."
+      ],
+      "correct": 0,
+      "explanation": "The safety envelope matters as much as the speedup."
+    }
+  ]
+}

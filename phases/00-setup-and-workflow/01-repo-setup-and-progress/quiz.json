@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What is the main goal of tracking progress in a system design prep repo?",
+      "options": [
+        "To prove that every lesson was read line by line regardless of learning outcome.",
+        "To preserve enough evidence that you can choose the next lesson based on actual gaps and momentum.",
+        "To replace mock interviews with automated completion counts.",
+        "To avoid keeping any notes outside a single README file."
+      ],
+      "correct": 1,
+      "explanation": "Progress tracking should drive better next decisions, not create vanity metrics."
+    },
+    {
+      "stage": "pre",
+      "question": "Which metadata is most important to keep friction low while still preserving learning signal?",
+      "options": [
+        "A compact status, timestamp, and pointers to notes or artifacts.",
+        "A detailed paragraph after every study session whether useful or not.",
+        "A full architecture diagram embedded in the progress file.",
+        "Every intermediate thought captured as a revision history entry."
+      ],
+      "correct": 0,
+      "explanation": "Minimal required metadata is more likely to be updated consistently."
+    },
+    {
+      "stage": "post",
+      "question": "Why is a local machine-readable progress file useful in this course?",
+      "options": [
+        "It makes it easier to validate state, recommend next work, and keep lesson status separate from lesson content.",
+        "It guarantees all lesson scores will improve automatically over time.",
+        "It allows the learner to skip debriefs because the file is authoritative.",
+        "It is required because markdown cannot represent course state."
+      ],
+      "correct": 0,
+      "explanation": "A small structured file helps separate curriculum structure from current learner state."
+    },
+    {
+      "stage": "post",
+      "question": "Which failure is most dangerous for a progress tracker?",
+      "options": [
+        "The file uses JSON instead of YAML.",
+        "The tracker shows many lessons done, but notes, quiz evidence, and follow-up signals are missing or stale.",
+        "Artifact paths are kept near lesson folders.",
+        "The roadmap contains more than twenty phases."
+      ],
+      "correct": 1,
+      "explanation": "False confidence is worse than having no tracker because it hides missing learning evidence."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off comes with keeping the progress data model deliberately small?",
+      "options": [
+        "It improves consistency and maintenance cost, but limits rich analytics unless you derive them later.",
+        "It increases storage cost, but reduces bandwidth cost.",
+        "It removes the need to track mock interviews entirely.",
+        "It makes assisted lessons impossible to record honestly."
+      ],
+      "correct": 0,
+      "explanation": "A small schema keeps updates cheap, but richer reporting may need secondary processing."
+    },
+    {
+      "stage": "post",
+      "question": "Which observability signal best indicates that the prep workflow itself is healthy?",
+      "options": [
+        "The number of subdirectories in the repository.",
+        "How quickly the progress state is updated after sessions and whether notes or artifacts are linked consistently.",
+        "The number of times the learner opens the roadmap file.",
+        "The total size of markdown files committed each week."
+      ],
+      "correct": 1,
+      "explanation": "Fresh, linked evidence shows the workflow is actually being used rather than merely existing."
+    },
+    {
+      "stage": "post",
+      "question": "If two learners share the same repo for pair practice, what design concern becomes more important?",
+      "options": [
+        "Separating learner-specific progress state from shared lesson content and artifacts.",
+        "Removing timestamps so no one overwrites them accidentally.",
+        "Storing architecture diagrams inside the Go binaries.",
+        "Disabling validation to keep collaboration flexible."
+      ],
+      "correct": 0,
+      "explanation": "Shared content and individual state should not be conflated when multiple learners collaborate."
+    },
+    {
+      "stage": "post",
+      "question": "Why should this workflow distinguish `assisted` from `done`?",
+      "options": [
+        "Because assisted attempts still reflect progress, but they signal a different confidence level and may deserve retesting later.",
+        "Because only unassisted lessons may be kept in the repository.",
+        "Because interviewers will ask for the raw status values during interviews.",
+        "Because lessons with quizzes cannot be completed without assistance."
+      ],
+      "correct": 0,
+      "explanation": "The distinction preserves honesty without treating help as failure."
+    }
+  ]
+}

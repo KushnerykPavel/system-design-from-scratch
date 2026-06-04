@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why do large-blob systems usually need a separate metadata index service?",
+      "options": [
+        "Because blob storage is optimized for durable bytes, not low-latency rich listing and filtering queries.",
+        "Because metadata cannot be stored next to object IDs.",
+        "Because every object must live in a SQL database.",
+        "Because search is only useful for operators and never for product features."
+      ],
+      "correct": 0,
+      "explanation": "Blob durability and metadata queryability are different access patterns."
+    },
+    {
+      "stage": "pre",
+      "question": "What is the first thing to clarify before choosing indexes for metadata?",
+      "options": [
+        "The exact query shapes and sort orders the product actually needs.",
+        "Which color the dashboard should use.",
+        "How many engineers prefer document databases.",
+        "Whether object IDs should be sequential."
+      ],
+      "correct": 0,
+      "explanation": "Indexes should serve real access patterns, not hypothetical flexibility."
+    },
+    {
+      "stage": "post",
+      "question": "Why is a canonical metadata owner useful when you also have secondary indexes?",
+      "options": [
+        "It provides a source of truth for replay and conflict resolution while projections optimize reads.",
+        "It removes the need for any versioning or state transitions.",
+        "It guarantees all query projections are always instantaneously consistent.",
+        "It means backfills are no longer necessary."
+      ],
+      "correct": 0,
+      "explanation": "Ownership and projections solve different problems."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric best detects that listings are becoming stale?",
+      "options": [
+        "Projection lag from the canonical metadata source.",
+        "Average office temperature.",
+        "Only the total object count.",
+        "Branch protection rules in Git."
+      ],
+      "correct": 0,
+      "explanation": "Lag directly measures the freshness gap between truth and projection."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off comes with supporting arbitrary ad hoc filters in the metadata API?",
+      "options": [
+        "It increases apparent flexibility but often degrades into expensive scans and unpredictable latency.",
+        "It guarantees lower infrastructure cost.",
+        "It removes the need for replay pipelines.",
+        "It makes conditional updates unnecessary."
+      ],
+      "correct": 0,
+      "explanation": "Open-ended queries usually weaken performance guarantees."
+    },
+    {
+      "stage": "post",
+      "question": "Why are versioned updates important for async enrichment jobs?",
+      "options": [
+        "They reduce the chance that an older async update overwrites newer canonical state.",
+        "They make object bytes smaller.",
+        "They eliminate the need for indexes.",
+        "They only matter in single-threaded systems."
+      ],
+      "correct": 0,
+      "explanation": "Version checks protect against out-of-order state application."
+    },
+    {
+      "stage": "post",
+      "question": "What is the clearest reason to design replay or backfill from day one?",
+      "options": [
+        "Indexes, schemas, and enrichment logic will change, and you need a safe way to rebuild derived views.",
+        "It lets you skip observability entirely.",
+        "It guarantees no write failures can happen.",
+        "It makes storage retention unnecessary."
+      ],
+      "correct": 0,
+      "explanation": "Projection rebuildability is a core operational property, not a bonus."
+    },
+    {
+      "stage": "post",
+      "question": "Which follow-up most meaningfully changes the design?",
+      "options": [
+        "Customers now need cross-bucket search by tag with bounded freshness and predictable latency.",
+        "The team wants shorter variable names.",
+        "The office moved to a different floor.",
+        "One engineer prefers different markdown headers."
+      ],
+      "correct": 0,
+      "explanation": "That follow-up changes query surfaces, indexes, and freshness trade-offs."
+    }
+  ]
+}

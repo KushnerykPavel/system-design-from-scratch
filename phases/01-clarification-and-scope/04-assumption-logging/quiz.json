@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why is assumption logging valuable in a system design interview?",
+      "options": [
+        "It replaces the need for clarification questions entirely.",
+        "It lets you move forward under ambiguity while keeping your reasoning explicit and revisable.",
+        "It guarantees every assumption will be correct.",
+        "It is mainly useful for frontend design prompts."
+      ],
+      "correct": 1,
+      "explanation": "The value is preserving momentum without hiding uncertainty."
+    },
+    {
+      "stage": "pre",
+      "question": "Which assumption is most worth recording explicitly?",
+      "options": [
+        "An assumption that materially changes topology, consistency, or capacity choices.",
+        "An assumption about whether the interviewer likes bullet points.",
+        "An assumption about the IDE theme used during implementation.",
+        "An assumption that has no effect on architecture either way."
+      ],
+      "correct": 0,
+      "explanation": "Design-relevant assumptions deserve airtime because they affect the answer."
+    },
+    {
+      "stage": "post",
+      "question": "What is the strongest way to state an assumption?",
+      "options": [
+        "Hide it inside the diagram and hope the interviewer infers it.",
+        "State it clearly, tie it to a design decision, and note what changes if it flips.",
+        "Mention it only at the end if there is time.",
+        "Use as many assumptions as possible to avoid making commitments."
+      ],
+      "correct": 1,
+      "explanation": "An assumption is most useful when it informs and bounds the design."
+    },
+    {
+      "stage": "post",
+      "question": "Which failure is most dangerous when assumptions are not logged?",
+      "options": [
+        "The quiz becomes harder to grade.",
+        "Different parts of the answer drift into contradictory worldviews without being noticed.",
+        "The candidate uses too few service names.",
+        "The architecture becomes too simple to discuss."
+      ],
+      "correct": 1,
+      "explanation": "Silent contradictions are especially costly in long interview answers."
+    },
+    {
+      "stage": "post",
+      "question": "Why is the 'flip impact' of an assumption important?",
+      "options": [
+        "It shows how the design must adapt if reality differs from the current assumption.",
+        "It guarantees the interviewer will reveal the hidden requirements.",
+        "It removes the need for a trade-off section.",
+        "It proves the initial assumption was definitely wrong."
+      ],
+      "correct": 0,
+      "explanation": "Good assumption handling anticipates redesign, not just the current branch."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off comes with keeping the assumption log deliberately short?",
+      "options": [
+        "It stays usable in real time, but some low-value ambiguity will remain undocumented.",
+        "It always reduces design correctness.",
+        "It prevents any operational reasoning later.",
+        "It only works when the system is single-region."
+      ],
+      "correct": 0,
+      "explanation": "Brevity makes the tool practical even though it is not exhaustive."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric best reflects healthy assumption discipline?",
+      "options": [
+        "The number of assumptions that are explicitly tied to concrete design consequences.",
+        "The total number of assumptions regardless of usefulness.",
+        "The number of databases mentioned per assumption.",
+        "Whether every assumption is fully validated before design begins."
+      ],
+      "correct": 0,
+      "explanation": "Quality comes from relevance and linkage, not raw count."
+    },
+    {
+      "stage": "post",
+      "question": "If the interviewer corrects one of your assumptions midway through the answer, what should you do?",
+      "options": [
+        "Ignore the correction so the narrative stays consistent.",
+        "Update the assumption, restate the changed branch, and explain what design consequences follow.",
+        "Restart from the beginning without summarizing the delta.",
+        "Defend the original assumption to show confidence."
+      ],
+      "correct": 1,
+      "explanation": "The goal is adaptability with clear reasoning, not stubbornness."
+    }
+  ]
+}

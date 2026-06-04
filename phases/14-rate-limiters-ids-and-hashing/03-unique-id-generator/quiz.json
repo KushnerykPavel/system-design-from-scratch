@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why can ID generation become a system bottleneck?",
+      "options": [
+        "Because some strategies centralize coordination or assume properties like ordering that are expensive to preserve.",
+        "Because IDs can only be created after a cache miss.",
+        "Because globally unique IDs require no clocks or metadata.",
+        "Because random numbers always arrive sorted."
+      ],
+      "correct": 0,
+      "explanation": "Ordering, coordination, and throughput all shape the cost of ID generation."
+    },
+    {
+      "stage": "pre",
+      "question": "What is a common reason to choose a Snowflake-style ID over a DB sequence?",
+      "options": [
+        "It scales local generation while preserving rough time order without a single central allocator on every write.",
+        "It guarantees gapless numbering globally.",
+        "It removes any need to reason about clocks.",
+        "It is required for all public APIs."
+      ],
+      "correct": 0,
+      "explanation": "Snowflake-style IDs balance coordination cost and rough sortability."
+    },
+    {
+      "stage": "post",
+      "question": "What is the main operational risk in a Snowflake-style generator?",
+      "options": [
+        "Clock regressions or worker identity mistakes can create collisions or stalls.",
+        "It cannot support more than one region.",
+        "It forces every ID through a database transaction.",
+        "It always reveals less than random IDs."
+      ],
+      "correct": 0,
+      "explanation": "Snowflake-style designs depend on safe worker identity and time handling."
+    },
+    {
+      "stage": "post",
+      "question": "Why might random IDs be a poor storage primary key even when they are good public IDs?",
+      "options": [
+        "They can damage write locality and index behavior compared with more ordered keys.",
+        "They cannot be represented as strings.",
+        "They only work in one shard.",
+        "They prevent uniqueness checks."
+      ],
+      "correct": 0,
+      "explanation": "Randomness helps avoid guessability but may hurt storage locality."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off comes with a central DB sequence?",
+      "options": [
+        "It gives simple ordering semantics but can become a hot dependency at high write rates.",
+        "It removes all operational state from the system.",
+        "It is impossible to reason about in a single region.",
+        "It guarantees unguessable public IDs."
+      ],
+      "correct": 0,
+      "explanation": "A central allocator is easy to explain, but scale and availability can become concerns."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric is most useful for detecting a Snowflake generator problem before it becomes a collision incident?",
+      "options": [
+        "Timestamp regression or generator-stall count by region and worker.",
+        "Browser tab count.",
+        "Markdown line length.",
+        "Only total database size."
+      ],
+      "correct": 0,
+      "explanation": "Time anomalies are a leading indicator for Snowflake-style generation trouble."
+    },
+    {
+      "stage": "post",
+      "question": "When is decoupling storage key from public ID especially attractive?",
+      "options": [
+        "When you want storage locality internally but do not want externally visible IDs to reveal sequence or volume.",
+        "When you want every system to share the same weak randomness source.",
+        "When you need IDs only during local testing.",
+        "When write volume is zero."
+      ],
+      "correct": 0,
+      "explanation": "Separate internal and external IDs can balance locality and security properties."
+    },
+    {
+      "stage": "post",
+      "question": "What is the best first clarification when asked to design an ID generator?",
+      "options": [
+        "Ask whether IDs need uniqueness only, or also ordering, locality, and low guessability.",
+        "Assume UUIDs solve every downstream need.",
+        "Start by choosing a bit layout before discussing requirements.",
+        "Avoid asking about throughput."
+      ],
+      "correct": 0,
+      "explanation": "Those requirements directly determine which ID strategy fits."
+    }
+  ]
+}

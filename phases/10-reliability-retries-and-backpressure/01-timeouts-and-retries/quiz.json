@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why can retries make an outage worse instead of better?",
+      "options": [
+        "They multiply load on already stressed dependencies and can amplify queueing and tail latency.",
+        "They automatically disable deadline propagation at every service hop.",
+        "They guarantee duplicate writes even for read-only operations.",
+        "They remove the need for admission control in overloaded systems."
+      ],
+      "correct": 0,
+      "explanation": "Retries are extra work, so they can worsen overload when a dependency is already struggling."
+    },
+    {
+      "stage": "pre",
+      "question": "What is the main job of a timeout in a distributed system?",
+      "options": [
+        "To make every request fail at the same latency so dashboards stay tidy.",
+        "To bound how long work is allowed to consume resources before the caller gives up.",
+        "To guarantee that any failed request is safe to retry automatically.",
+        "To replace observability with a simpler failure signal."
+      ],
+      "correct": 1,
+      "explanation": "Timeouts are resource and latency bounds, not universal retry permission."
+    },
+    {
+      "stage": "post",
+      "question": "What is the strongest reason to propagate deadlines across service hops?",
+      "options": [
+        "It lets each dependency see how much latency budget remains before doing more work.",
+        "It makes all retries globally coordinated without additional logic.",
+        "It guarantees no request will ever need a fallback response.",
+        "It removes the need to classify retryable errors."
+      ],
+      "correct": 0,
+      "explanation": "Propagated deadlines help each hop make budget-aware decisions instead of guessing."
+    },
+    {
+      "stage": "post",
+      "question": "Which signal best reveals retry amplification during an incident?",
+      "options": [
+        "Attempts per original request rising sharply alongside dependency saturation.",
+        "The number of source files in the repository increasing over time.",
+        "Median latency staying unchanged during a severe outage.",
+        "The total number of developers who touched the service that quarter."
+      ],
+      "correct": 0,
+      "explanation": "Attempt-per-request ratio exposes how much extra work retries are creating."
+    },
+    {
+      "stage": "post",
+      "question": "What is the main trade-off of adding jitter to backoff?",
+      "options": [
+        "You reduce synchronized retry waves, but individual retries become less predictable to reason about by wall-clock time.",
+        "You make retries free from a capacity perspective.",
+        "You ensure every request succeeds on the second attempt.",
+        "You eliminate the need for idempotency."
+      ],
+      "correct": 0,
+      "explanation": "Jitter improves fleet behavior by spreading retries out, even though it makes exact timing less regular."
+    },
+    {
+      "stage": "post",
+      "question": "Which failure should usually not be retried blindly?",
+      "options": [
+        "A non-idempotent operation that may already have committed before the timeout was observed.",
+        "A brief network reset on an idempotent read.",
+        "A transient connection failure during a health probe.",
+        "A rare TLS handshake timeout on a safe GET request."
+      ],
+      "correct": 0,
+      "explanation": "If the side effect may already have happened, a blind retry can create correctness bugs."
+    },
+    {
+      "stage": "post",
+      "question": "Why is it dangerous for every layer in a call chain to have its own retry loop?",
+      "options": [
+        "Nested retries can multiply total attempts across the fanout path and create a storm.",
+        "Each layer will automatically share the same jitter schedule and cancel each other.",
+        "The root caller no longer needs to set a deadline.",
+        "It forces every dependency to behave as strongly consistent storage."
+      ],
+      "correct": 0,
+      "explanation": "Independent retry loops across layers can explode total work during a failure."
+    },
+    {
+      "stage": "post",
+      "question": "What is a strong senior-level answer to 'How many retries should we do?'",
+      "options": [
+        "It depends on failure mode, remaining deadline budget, idempotency, and how much extra load the system can tolerate.",
+        "Always retry exactly three times because that is the standard distributed-systems rule.",
+        "Retry until the dependency responds because availability matters more than overload.",
+        "Never retry anything because timeouts already provide enough reliability."
+      ],
+      "correct": 0,
+      "explanation": "Retry count is a workload and capacity decision, not a universal constant."
+    }
+  ]
+}

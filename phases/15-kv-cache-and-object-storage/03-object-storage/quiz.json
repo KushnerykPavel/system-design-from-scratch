@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why is it usually a mistake to serve metadata listing directly from the blob storage path?",
+      "options": [
+        "Because blob stores cannot contain any metadata fields at all.",
+        "Because listing and filtering need a smaller indexed control plane instead of expensive scans over durable object bytes.",
+        "Because blob stores are only allowed to store text files.",
+        "Because metadata queries must always be strongly consistent across all regions."
+      ],
+      "correct": 1,
+      "explanation": "The metadata access pattern is fundamentally different from cheap durable object storage."
+    },
+    {
+      "stage": "pre",
+      "question": "What is the main value of multipart uploads?",
+      "options": [
+        "They let very large or unstable-client uploads proceed in parts with resumability and parallelism.",
+        "They guarantee every object is globally replicated before the first byte is sent.",
+        "They remove the need for checksums.",
+        "They make metadata services unnecessary."
+      ],
+      "correct": 0,
+      "explanation": "Multipart upload is about robustness and scale for large objects."
+    },
+    {
+      "stage": "post",
+      "question": "What should happen before metadata is marked as a completed object?",
+      "options": [
+        "The service should confirm upload completion and integrity checks such as checksums or part manifests.",
+        "The object should be deleted from temporary storage immediately.",
+        "Every region in the company should finish background replication.",
+        "The cache cluster should prewarm the object into memory."
+      ],
+      "correct": 0,
+      "explanation": "Completion must reflect a truthful durable object state."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric best indicates a broken upload finalization workflow?",
+      "options": [
+        "The average length of object IDs.",
+        "Orphan upload or abandoned multipart session count.",
+        "Total number of engineers with bucket access.",
+        "Repository branch count."
+      ],
+      "correct": 1,
+      "explanation": "Stuck or orphaned uploads reveal finalize-path issues directly."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off comes with immutable object versions?",
+      "options": [
+        "They simplify caching and durability semantics, but old versions consume space until lifecycle cleanup runs.",
+        "They make metadata queries impossible.",
+        "They remove the need for retention policies.",
+        "They force all reads to wait for background compaction."
+      ],
+      "correct": 0,
+      "explanation": "Versioning buys simpler correctness at a storage-cost price."
+    },
+    {
+      "stage": "post",
+      "question": "Why should lifecycle transitions usually run asynchronously?",
+      "options": [
+        "To keep the write path simple and cheap while applying policy changes in the background.",
+        "Because asynchronous work guarantees lower total cost in every case.",
+        "Because object storage cannot track timestamps.",
+        "Because delete operations are never user-visible."
+      ],
+      "correct": 0,
+      "explanation": "Lifecycle work is operationally important but should not overload the serving path."
+    },
+    {
+      "stage": "post",
+      "question": "What is the real danger if delete removes metadata before retention-aware physical purge is checked?",
+      "options": [
+        "Only a minor naming inconsistency in object IDs.",
+        "Compliance violations or hidden durable bytes that no longer have an obvious control-plane record.",
+        "Improved upload throughput but weaker caching.",
+        "Lower metadata latency."
+      ],
+      "correct": 1,
+      "explanation": "Deletion semantics must respect policy and auditability."
+    },
+    {
+      "stage": "post",
+      "question": "What follow-up best tests senior understanding of object storage trade-offs?",
+      "options": [
+        "Ask how they would extend the design for resumable multi-GB uploads and legal hold without collapsing the metadata path.",
+        "Ask them to list three cloud vendor names that provide storage.",
+        "Ask whether object IDs should contain vowels.",
+        "Ask them to remove all background jobs for simplicity."
+      ],
+      "correct": 0,
+      "explanation": "A strong follow-up changes constraints around state, policy, and durability."
+    }
+  ]
+}

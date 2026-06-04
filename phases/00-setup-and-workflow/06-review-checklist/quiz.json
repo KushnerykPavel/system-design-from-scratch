@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What makes a review checklist more useful than general feedback like 'go deeper'?",
+      "options": [
+        "It ties feedback to specific answer stages and missing evidence rather than vague impressions.",
+        "It removes the need for any follow-up questions.",
+        "It guarantees the same score across all reviewers automatically.",
+        "It focuses only on architectural style."
+      ],
+      "correct": 0,
+      "explanation": "Structured reviews reveal which dimensions were missing and why that mattered."
+    },
+    {
+      "stage": "pre",
+      "question": "Which section is most often forgotten in weaker system design answers?",
+      "options": [
+        "Failure modes, observability, and trade-offs near the end of the answer.",
+        "The title of the prompt.",
+        "The name of the data center region.",
+        "A list of programming languages."
+      ],
+      "correct": 0,
+      "explanation": "Weak answers often stop at the diagram and never close the loop operationally."
+    },
+    {
+      "stage": "post",
+      "question": "Why should a review checklist ask for evidence instead of only a score?",
+      "options": [
+        "Evidence makes the feedback actionable and lowers the chance of reviewer bias or vague praise.",
+        "Scores are never useful in any context.",
+        "Evidence guarantees that all technical choices were correct.",
+        "It allows the reviewer to skip naming next actions."
+      ],
+      "correct": 0,
+      "explanation": "The learner needs to see what in the answer justified the review conclusion."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off comes with using one short checklist across many prompts?",
+      "options": [
+        "It improves consistency and comparison, but may miss some prompt-specific nuance unless supplemented verbally.",
+        "It increases review cost but lowers consistency.",
+        "It makes deep dives unnecessary.",
+        "It prevents company-specific mocks entirely."
+      ],
+      "correct": 0,
+      "explanation": "Reusable checklists are powerful, but they cannot encode every special case."
+    },
+    {
+      "stage": "post",
+      "question": "If an answer is technically correct but never reaches failure modes, how should the review treat it?",
+      "options": [
+        "As fully strong because the main architecture was right.",
+        "As incomplete, because senior-level signal includes reliability and operational reasoning.",
+        "As invalid only if the prompt was about security.",
+        "As impossible to evaluate without writing code."
+      ],
+      "correct": 1,
+      "explanation": "Operational completeness is part of system design quality, not an optional add-on."
+    },
+    {
+      "stage": "post",
+      "question": "Which observability signal would help improve the checklist itself?",
+      "options": [
+        "Which checklist categories recur most often as weak across many reviews.",
+        "How many markdown headers are in the learner's notes.",
+        "The number of services in each architecture diagram.",
+        "The cloud provider selected for each prompt."
+      ],
+      "correct": 0,
+      "explanation": "Recurring weak categories reveal where the checklist and training emphasis may need tuning."
+    },
+    {
+      "stage": "post",
+      "question": "What is the most valuable review summary to give a learner after a mock?",
+      "options": [
+        "One strength, one critical gap, and one next drill backed by evidence from the answer.",
+        "A long list of every possible improvement with no prioritization.",
+        "A numeric score only.",
+        "A rewritten perfect answer to memorize."
+      ],
+      "correct": 0,
+      "explanation": "Priority and evidence matter more than exhaustive commentary."
+    },
+    {
+      "stage": "post",
+      "question": "How should the checklist adapt for a 20-minute drill?",
+      "options": [
+        "It should keep the same core dimensions but compress the expected depth per category.",
+        "It should drop sizing entirely to save time.",
+        "It should focus only on diagrams and ignore wrap-up quality.",
+        "It should replace evidence notes with intuition."
+      ],
+      "correct": 0,
+      "explanation": "Short drills still need the same reasoning categories, just with scaled expectations."
+    }
+  ]
+}

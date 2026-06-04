@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What makes a global traffic design answer feel senior rather than generic?",
+      "options": [
+        "It ties topology, routing, cache behavior, failover, and consistency to explicit workload assumptions.",
+        "It says 'use a CDN and multiple regions' as quickly as possible.",
+        "It avoids discussing degraded behavior.",
+        "It treats all requests as having identical needs."
+      ],
+      "correct": 0,
+      "explanation": "Senior signal comes from explicit assumptions and trade-off-driven structure."
+    },
+    {
+      "stage": "pre",
+      "question": "Why should traffic classes be separated early in a global design drill?",
+      "options": [
+        "Static assets, read-heavy APIs, and writes often deserve different caching, routing, and consistency choices.",
+        "Because one region can only process one type of traffic.",
+        "Because DNS requires it.",
+        "Because observability cannot distinguish traffic classes."
+      ],
+      "correct": 0,
+      "explanation": "Different classes usually justify different system behavior."
+    },
+    {
+      "stage": "post",
+      "question": "What is the best first architecture move for a traffic mix that is 80% cacheable static content?",
+      "options": [
+        "Lean on edge and tiered cache layers to absorb most of the volume before origin.",
+        "Force all traffic into one central write region.",
+        "Disable cache invalidation to keep the design simple.",
+        "Route every request directly to the database."
+      ],
+      "correct": 0,
+      "explanation": "High cacheable share should heavily shape the architecture."
+    },
+    {
+      "stage": "post",
+      "question": "Why is 'multi-region' still incomplete without failover detail?",
+      "options": [
+        "Because you still need to say who serves traffic, how promotion works, and what degrades during outage.",
+        "Because extra regions automatically remove all failure modes.",
+        "Because only a single region can ever be healthy.",
+        "Because CDN layers replace regional recovery design."
+      ],
+      "correct": 0,
+      "explanation": "Topology without recovery semantics is only a label."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric best validates the cache hierarchy in this drill?",
+      "options": [
+        "Hit ratio by layer plus origin offload rate and purge propagation delay.",
+        "Only the number of regions in the deployment.",
+        "Average commit message length.",
+        "The total count of HTTP headers."
+      ],
+      "correct": 0,
+      "explanation": "Layered caching must be validated through both performance and correctness signals."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off comes with home-region writes in a global API?",
+      "options": [
+        "Simpler write correctness at the cost of higher latency for some distant writers.",
+        "Perfect global latency with no coordination cost.",
+        "Removal of the need for replication.",
+        "Guaranteed elimination of stale reads."
+      ],
+      "correct": 0,
+      "explanation": "Home-region ownership is often worth it, but distance still shows up."
+    },
+    {
+      "stage": "post",
+      "question": "Which failure handling choice usually improves outage experience the most?",
+      "options": [
+        "Defining a degraded mode such as read-only service instead of pretending full functionality always survives.",
+        "Avoiding any mention of recovery trade-offs.",
+        "Turning off observability during failover.",
+        "Letting every POP make independent promotion decisions."
+      ],
+      "correct": 0,
+      "explanation": "Explicit degraded modes are a hallmark of realistic design."
+    },
+    {
+      "stage": "post",
+      "question": "What is the clearest sign that a drill answer stayed too shallow?",
+      "options": [
+        "It named global components but never specified write ownership, freshness promises, or routing behavior under failure.",
+        "It used one ASCII diagram.",
+        "It estimated capacity before architecture.",
+        "It separated traffic classes."
+      ],
+      "correct": 0,
+      "explanation": "The missing depth is usually in semantics and failure behavior, not diagram count."
+    }
+  ]
+}

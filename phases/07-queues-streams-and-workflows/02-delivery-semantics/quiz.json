@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What is the first thing to clarify before discussing exactly-once delivery?",
+      "options": [
+        "Which side effect boundary the guarantee is supposed to cover in the real system.",
+        "Which dashboard color the team prefers.",
+        "How many developers like Kafka more than queues.",
+        "Whether JSON or Protobuf is more compact."
+      ],
+      "correct": 0,
+      "explanation": "Without a named boundary, the guarantee is too vague to evaluate."
+    },
+    {
+      "stage": "pre",
+      "question": "Why is at-least-once delivery often paired with idempotent consumers?",
+      "options": [
+        "Because retries and crash recovery are practical only if repeated delivery does not repeat the side effect.",
+        "Because at-least-once means the broker removes all duplicates.",
+        "Because idempotency eliminates the need for acknowledgements.",
+        "Because every consumer can safely drop old messages."
+      ],
+      "correct": 0,
+      "explanation": "Idempotent consumers are the usual way to make retries safe."
+    },
+    {
+      "stage": "post",
+      "question": "Which answer about exactly-once is strongest?",
+      "options": [
+        "The broker supports it, so every downstream side effect is safe automatically.",
+        "Exactly-once is only meaningful within a stated boundary, and external side effects still need idempotency or reconciliation.",
+        "Exactly-once removes the need to reason about crashes between processing and acknowledgement.",
+        "Exactly-once means replay is no longer possible."
+      ],
+      "correct": 1,
+      "explanation": "Strong answers name the scope and limits of the guarantee."
+    },
+    {
+      "stage": "post",
+      "question": "What failure is most likely if a consumer commits a database write and crashes before ack?",
+      "options": [
+        "The message may be delivered again, so the consumer must suppress duplicate side effects.",
+        "The broker permanently loses all future messages.",
+        "The partition ordering becomes globally random.",
+        "The producer can no longer retry publishes."
+      ],
+      "correct": 0,
+      "explanation": "This is the classic duplicate-delivery window in at-least-once systems."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric most directly reveals whether deduplication is doing useful work?",
+      "options": [
+        "Duplicate suppression hit rate alongside duplicate delivery rate.",
+        "Only total number of schemas in the repo.",
+        "Average README size per lesson.",
+        "The number of workflow timers created."
+      ],
+      "correct": 0,
+      "explanation": "Those metrics show both incoming duplication and successful suppression."
+    },
+    {
+      "stage": "post",
+      "question": "Why is very short dedupe retention dangerous?",
+      "options": [
+        "Late retries or planned replay can recreate the side effect after the protection window expires.",
+        "It forces all producers to use exactly-once transactions.",
+        "It makes consumer lag impossible to measure.",
+        "It guarantees message loss on the broker."
+      ],
+      "correct": 0,
+      "explanation": "Retention must match realistic retry and replay behavior."
+    },
+    {
+      "stage": "post",
+      "question": "When is at-most-once usually acceptable?",
+      "options": [
+        "When the event is low-value and occasional loss costs less than coordination and dedupe overhead.",
+        "When the system is charging a customer.",
+        "When the only copy of an audit record is on the event bus.",
+        "When downstream side effects cannot be repeated safely."
+      ],
+      "correct": 0,
+      "explanation": "Low-value telemetry is a common acceptable at-most-once case."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off often appears when moving from best-effort delivery to stronger application-level semantics?",
+      "options": [
+        "You gain clearer correctness under failure, but you pay with state, latency, and operational complexity.",
+        "You gain stronger correctness and always reduce cost at the same time.",
+        "You eliminate the need for reconciliation tooling.",
+        "You remove the need for message IDs."
+      ],
+      "correct": 0,
+      "explanation": "Stronger semantics are useful, but they are never free."
+    }
+  ]
+}

@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What is the purpose of the first-pass interview diagram?",
+      "options": [
+        "To show every component that might ever exist in production.",
+        "To communicate the main request flow, state boundaries, and scaling shape quickly enough to earn buy-in.",
+        "To eliminate the need for spoken explanation.",
+        "To demonstrate artistic polish under pressure."
+      ],
+      "correct": 1,
+      "explanation": "The diagram should support fast alignment, not exhaustive specification."
+    },
+    {
+      "stage": "pre",
+      "question": "Which detail is most likely to be deferred from the initial diagram?",
+      "options": [
+        "The presence of durable state.",
+        "The primary ingress path.",
+        "Low-level internal subcomponents that do not yet change the trade-off discussion.",
+        "The distinction between sync and async flow."
+      ],
+      "correct": 2,
+      "explanation": "Early diagrams should omit low-value detail until it becomes relevant."
+    },
+    {
+      "stage": "post",
+      "question": "Why use a box budget for the first-pass diagram?",
+      "options": [
+        "It protects explanation speed and forces prioritization of the components that matter most.",
+        "It makes the architecture more scalable by default.",
+        "It guarantees the interviewer will not ask deep-dive questions.",
+        "It removes the need to mention caches or queues."
+      ],
+      "correct": 0,
+      "explanation": "The budget creates a useful constraint on communication complexity."
+    },
+    {
+      "stage": "post",
+      "question": "Which omission is most dangerous in an initial diagram?",
+      "options": [
+        "Using plain rectangles for every box.",
+        "Leaving out the stateful boundaries that determine consistency, durability, or scaling behavior.",
+        "Not coloring the data path differently from the control path.",
+        "Failing to number every arrow sequentially."
+      ],
+      "correct": 1,
+      "explanation": "If state boundaries are hidden, the interviewer cannot evaluate core design trade-offs."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off comes with keeping the opening diagram deliberately sparse?",
+      "options": [
+        "It improves clarity and pacing, but some nuance must be added verbally or deferred to the deep dive.",
+        "It increases storage cost while lowering compute cost.",
+        "It prevents the use of multi-region designs.",
+        "It makes consistency discussions impossible."
+      ],
+      "correct": 0,
+      "explanation": "The sparse diagram is faster, but not every nuance belongs on the first pass."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric best indicates whether diagramming speed is improving?",
+      "options": [
+        "How many colors are used per architecture sketch.",
+        "Time to explain the complete primary request flow with minimal clarification from the interviewer.",
+        "The total number of service names written on the board.",
+        "The number of times the candidate redraws the load balancer."
+      ],
+      "correct": 1,
+      "explanation": "Better diagramming shows up in faster, clearer explanation rather than denser drawings."
+    },
+    {
+      "stage": "post",
+      "question": "When should a queue appear on the initial diagram?",
+      "options": [
+        "Only when the learner personally likes async designs.",
+        "When the queue materially changes latency, durability, decoupling, or failure behavior for the primary story.",
+        "Never, because it distracts from the database.",
+        "Only after the interviewer asks for detailed implementation."
+      ],
+      "correct": 1,
+      "explanation": "It belongs early if it is a meaningful architectural boundary."
+    },
+    {
+      "stage": "post",
+      "question": "If the interviewer interrupts before the diagram is finished, what is the best recovery?",
+      "options": [
+        "Insist on finishing every planned box before answering.",
+        "Use the partial diagram to explain the main path and add only the next most important missing boundary.",
+        "Erase the board and restart with more detail.",
+        "Stop using diagrams for the rest of the interview."
+      ],
+      "correct": 1,
+      "explanation": "The diagram is a live communication aid, so partial but coherent is better than complete but delayed."
+    }
+  ]
+}

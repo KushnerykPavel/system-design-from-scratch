@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What is the main purpose of a structured mock workflow?",
+      "options": [
+        "To preserve realistic pressure, usable evidence, and repeatable feedback rather than turning practice into casual brainstorming.",
+        "To prevent the interviewer from asking follow-up questions.",
+        "To maximize the number of prompts attempted per hour regardless of depth.",
+        "To avoid keeping any written notes after the session."
+      ],
+      "correct": 0,
+      "explanation": "A good workflow raises the signal quality of each session."
+    },
+    {
+      "stage": "pre",
+      "question": "Which stage is most dangerous to skip after the live mock ends?",
+      "options": [
+        "The feedback and debrief stages that convert the session into a next action.",
+        "The original prompt selection.",
+        "The timer setup.",
+        "The title of the architecture note."
+      ],
+      "correct": 0,
+      "explanation": "Without feedback and debrief, the mock often fails to change future behavior."
+    },
+    {
+      "stage": "post",
+      "question": "Why should a mock agenda reserve time for changed constraints or redesign follow-ups?",
+      "options": [
+        "That is often where senior-level prioritization and adaptability become visible.",
+        "Because the original prompt is usually too easy to discuss directly.",
+        "Because redesign removes the need for a high-level architecture.",
+        "Because it guarantees the interviewer will provide ideal hints."
+      ],
+      "correct": 0,
+      "explanation": "Follow-ups reveal how well the candidate can reason under changing assumptions."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off comes with a fixed stage agenda for mocks?",
+      "options": [
+        "It improves comparability and discipline, but can feel less spontaneous than a fully free-form conversation.",
+        "It lowers all feedback quality while increasing flexibility.",
+        "It removes the need for an interviewer role.",
+        "It makes 20-minute drills impossible."
+      ],
+      "correct": 0,
+      "explanation": "Structure adds value, but it should not become robotic."
+    },
+    {
+      "stage": "post",
+      "question": "Which failure mode most often degrades pair mocks?",
+      "options": [
+        "The interviewer rescues the candidate too early, so the session measures collaboration more than interview performance.",
+        "The note template has too many markdown headings.",
+        "The whiteboard uses simple rectangles.",
+        "The candidate estimates peak QPS before average QPS."
+      ],
+      "correct": 0,
+      "explanation": "Well-intentioned help can erase the main signal you wanted from the mock."
+    },
+    {
+      "stage": "post",
+      "question": "Which observability signal best indicates the mock workflow itself is healthy?",
+      "options": [
+        "The percentage of sessions that reach feedback, debrief, and at least one concrete next action.",
+        "The number of prompts listed in the scenario bank.",
+        "The average number of services drawn per mock.",
+        "The total length of the candidate's final answer."
+      ],
+      "correct": 0,
+      "explanation": "A healthy workflow closes the loop consistently."
+    },
+    {
+      "stage": "post",
+      "question": "If you only have 20 minutes for a drill, what should stay intact?",
+      "options": [
+        "The full set of high-signal stages, but with compressed timing and a narrower prompt scope.",
+        "Only the architecture deep dive, because clarification and feedback are optional.",
+        "Only the debrief, because the design itself can be skipped.",
+        "A long pre-brief, because live pressure matters less."
+      ],
+      "correct": 0,
+      "explanation": "The same loop still matters in short drills; the depth changes, not the principles."
+    },
+    {
+      "stage": "post",
+      "question": "How should a solo mock compensate for the absence of a live interviewer?",
+      "options": [
+        "By predefining timing, interruption points, and feedback prompts so the session still produces evidence.",
+        "By removing follow-up questions entirely.",
+        "By answering with polished written prose only.",
+        "By skipping the mistake log because no external reviewer was present."
+      ],
+      "correct": 0,
+      "explanation": "Solo mocks need synthetic structure to preserve interview-like constraints."
+    }
+  ]
+}

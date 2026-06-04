@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why is adding a secondary index never a free optimization?",
+      "options": [
+        "Because indexes increase write work, storage usage, and operational overhead.",
+        "Because indexes can only be used by background jobs.",
+        "Because indexes force all queries to become strongly consistent globally.",
+        "Because indexes remove the need for primary keys."
+      ],
+      "correct": 0,
+      "explanation": "Indexes speed reads by adding cost elsewhere, especially on writes and storage."
+    },
+    {
+      "stage": "pre",
+      "question": "What question should come before deciding to add an index?",
+      "options": [
+        "Which query deserves to be cheap often enough to justify permanent maintenance cost?",
+        "Which index name sounds most intuitive to the team?",
+        "How many columns can fit in the index definition syntax?",
+        "Whether the product might become multi-region one day."
+      ],
+      "correct": 0,
+      "explanation": "Indexes exist to serve important queries, so their value must justify their cost."
+    },
+    {
+      "stage": "post",
+      "question": "What is write amplification in the context of indexing?",
+      "options": [
+        "The tendency for reads to fan out across many replicas.",
+        "The extra storage updates and maintenance work caused by each logical write.",
+        "The number of clients that can retry the same request.",
+        "The increase in response payload size after pagination."
+      ],
+      "correct": 1,
+      "explanation": "A single logical write may update the base row, multiple indexes, and replicated logs."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric best reveals that index count is hurting the write path?",
+      "options": [
+        "Write latency rising while logical write volume stays similar.",
+        "Average UI session duration increasing.",
+        "Only total read QPS across the fleet.",
+        "Percentage of successful TLS handshakes."
+      ],
+      "correct": 0,
+      "explanation": "Stable traffic with worse commit latency strongly suggests write-path cost increased."
+    },
+    {
+      "stage": "post",
+      "question": "When is a derived search system often better than another compound secondary index?",
+      "options": [
+        "When the query surface becomes flexible and hard to bound in the OLTP store.",
+        "When there is only one stable lookup by primary key.",
+        "When the workload has no write traffic at all.",
+        "When the table is smaller than expected."
+      ],
+      "correct": 0,
+      "explanation": "Flexible search often belongs in a system built for that query style rather than many OLTP indexes."
+    },
+    {
+      "stage": "post",
+      "question": "What is the safest way to think about index backfills in interviews?",
+      "options": [
+        "They are instant and do not affect production capacity planning.",
+        "They should be throttled, measured, and validated because they compete with serving resources.",
+        "They are only a concern for on-premise databases.",
+        "They remove the need for replicas during rollout."
+      ],
+      "correct": 1,
+      "explanation": "Backfills consume I/O and compute, so they need rollout planning like any other heavy job."
+    },
+    {
+      "stage": "post",
+      "question": "What is the key trade-off of a covering index?",
+      "options": [
+        "Fewer reads may touch the base table, but storage and write maintenance cost increase.",
+        "It guarantees all writes become serializable.",
+        "It prevents any secondary query from going stale.",
+        "It lets the system avoid choosing a primary key."
+      ],
+      "correct": 0,
+      "explanation": "Covering indexes can speed reads significantly, but you pay for the duplicated indexed data."
+    },
+    {
+      "stage": "post",
+      "question": "Which interview answer sounds most senior?",
+      "options": [
+        "I will add indexes later once the table gets large enough.",
+        "I will add indexes for all current filters so no stakeholder is blocked.",
+        "I will support the top query paths directly and explicitly reject or offload the rest.",
+        "I will use a NoSQL store so indexes are not needed."
+      ],
+      "correct": 2,
+      "explanation": "Strong answers optimize intentionally and refuse unsupported query shapes instead of pretending everything is cheap."
+    }
+  ]
+}

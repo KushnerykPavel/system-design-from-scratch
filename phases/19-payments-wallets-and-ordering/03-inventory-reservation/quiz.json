@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What is the main purpose of an inventory reservation step before final order confirmation?",
+      "options": [
+        "It temporarily protects scarce stock while payment and checkout complete.",
+        "It guarantees carts can be stored forever at no cost.",
+        "It removes the need for payment authorization.",
+        "It makes hot products evenly distributed across shards."
+      ],
+      "correct": 0,
+      "explanation": "Reservations bridge the gap between intent to buy and final commitment."
+    },
+    {
+      "stage": "pre",
+      "question": "Why is cached availability usually unsafe as the only reservation authority?",
+      "options": [
+        "Because stale reads can allow concurrent requests to oversell the same stock.",
+        "Because caches cannot store integer values.",
+        "Because cached reads are always slower than database writes.",
+        "Because products with low traffic do not need availability checks."
+      ],
+      "correct": 0,
+      "explanation": "Correctness must come from the authoritative write path."
+    },
+    {
+      "stage": "post",
+      "question": "Which design choice most directly protects against oversell during concurrent reserve requests?",
+      "options": [
+        "Versioned authoritative updates or serialized writes for the stock record.",
+        "A nightly batch that recomputes inventory totals.",
+        "A bigger CDN cache for product pages.",
+        "A longer marketing landing page."
+      ],
+      "correct": 0,
+      "explanation": "You need a source-of-truth write mechanism that enforces the limit."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off comes with short reservation TTLs?",
+      "options": [
+        "They reclaim leaked stock faster but can expire legitimate slow checkouts.",
+        "They eliminate the need for release operations.",
+        "They prevent hot-key pressure automatically.",
+        "They make payment failures impossible."
+      ],
+      "correct": 0,
+      "explanation": "TTL choice balances fairness, leakage, and customer experience."
+    },
+    {
+      "stage": "post",
+      "question": "Which signal best reveals a reservation leak problem?",
+      "options": [
+        "Growing counts of aged active reservations and expired-but-not-released holds.",
+        "A drop in browser font-loading speed.",
+        "The number of internal wiki edits this week.",
+        "Mean product title length."
+      ],
+      "correct": 0,
+      "explanation": "You want direct evidence that stock is getting stuck in reservation state."
+    },
+    {
+      "stage": "post",
+      "question": "Why should confirm and release be idempotent?",
+      "options": [
+        "Because order and payment systems retry, and inventory should not be committed twice.",
+        "Because idempotency lets you skip reservation records.",
+        "Because idempotency increases the amount of stock available.",
+        "Because confirms and releases never happen asynchronously."
+      ],
+      "correct": 0,
+      "explanation": "Distributed workflows routinely replay the same intent."
+    },
+    {
+      "stage": "post",
+      "question": "What changes most for one extremely hot SKU during a launch?",
+      "options": [
+        "Hot-key mitigation and admission control become more important than average-case throughput.",
+        "Reservations no longer need TTLs.",
+        "Oversell tolerance becomes required.",
+        "Availability projections become the only source of truth."
+      ],
+      "correct": 0,
+      "explanation": "The tail behavior of one SKU can dominate the whole design."
+    },
+    {
+      "stage": "post",
+      "question": "What is the most credible redesign if payment takes longer than the reservation window?",
+      "options": [
+        "Extend reservation policy deliberately with state-machine rules instead of silently keeping stock locked forever.",
+        "Remove payment from the flow.",
+        "Turn every reservation into a permanent allocation.",
+        "Disable retries for payment callbacks."
+      ],
+      "correct": 0,
+      "explanation": "Longer reservation life is a policy change that needs explicit controls."
+    }
+  ]
+}

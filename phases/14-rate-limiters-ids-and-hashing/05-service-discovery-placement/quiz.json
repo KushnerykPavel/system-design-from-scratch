@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why is service discovery not the same thing as placement?",
+      "options": [
+        "Discovery finds candidate endpoints, while placement decides which healthy endpoint should receive this request now.",
+        "Discovery only works in databases.",
+        "Placement only matters for static assets.",
+        "They are exactly the same concept in all systems."
+      ],
+      "correct": 0,
+      "explanation": "A registry alone does not encode the routing decision policy."
+    },
+    {
+      "stage": "pre",
+      "question": "Why do many systems cache endpoint data locally in clients or proxies?",
+      "options": [
+        "To keep request-path latency low and avoid making the registry a hot dependency.",
+        "To guarantee that routing is always perfectly fresh.",
+        "To remove any need for health checks.",
+        "To ensure all callers hit the same endpoint."
+      ],
+      "correct": 0,
+      "explanation": "Local caches improve resilience and latency, at the cost of bounded staleness."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off comes with client-side discovery?",
+      "options": [
+        "It can reduce central proxy cost, but routing logic and config handling spread across many callers.",
+        "It forces every request through a global proxy.",
+        "It guarantees no stale endpoint data.",
+        "It eliminates rollout concerns."
+      ],
+      "correct": 0,
+      "explanation": "The upside is fewer middle hops; the downside is distributed policy complexity."
+    },
+    {
+      "stage": "post",
+      "question": "Which signal best detects dangerous config staleness in the fleet?",
+      "options": [
+        "Version skew and stale-cache age across clients, proxies, or POPs.",
+        "Only total CPU on one registry node.",
+        "The size of a README file.",
+        "Average code comment length."
+      ],
+      "correct": 0,
+      "explanation": "Version drift directly reveals inconsistent routing state."
+    },
+    {
+      "stage": "post",
+      "question": "Why can locality-only placement be risky?",
+      "options": [
+        "It may send traffic to the nearest endpoints even when those endpoints are overloaded or unhealthy.",
+        "It prevents any request from being routed.",
+        "It is incompatible with health checks.",
+        "It only matters in single-region systems."
+      ],
+      "correct": 0,
+      "explanation": "Low latency is not enough if the chosen endpoint cannot safely serve the traffic."
+    },
+    {
+      "stage": "post",
+      "question": "What is a strong mitigation when a recovered endpoint starts getting stampeded immediately?",
+      "options": [
+        "Ramp traffic gradually with weighting, jitter, and concurrency guards.",
+        "Disable all health signals.",
+        "Route all callers to the recovered endpoint at once.",
+        "Shorten every client timeout to zero."
+      ],
+      "correct": 0,
+      "explanation": "Recovery needs controlled ramp-up, not instant full load."
+    },
+    {
+      "stage": "post",
+      "question": "What is the clearest reason to keep the data plane working during control-plane trouble?",
+      "options": [
+        "A service registry or policy distributor should not become a request-path single point of failure.",
+        "It is easier to draw on a whiteboard.",
+        "It avoids any need for observability.",
+        "It makes endpoint health irrelevant."
+      ],
+      "correct": 0,
+      "explanation": "Cached routing state keeps the data plane resilient when central systems degrade."
+    },
+    {
+      "stage": "post",
+      "question": "What is the best first clarification when asked to design service discovery?",
+      "options": [
+        "Ask whether the challenge is endpoint lookup only, or also capacity-aware placement and rollout control.",
+        "Assume the registry solves everything.",
+        "Avoid asking about update frequency.",
+        "Start by choosing a specific vendor product."
+      ],
+      "correct": 0,
+      "explanation": "The real design difficulty often sits in placement policy, not naming a registry."
+    }
+  ]
+}

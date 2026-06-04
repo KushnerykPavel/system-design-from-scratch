@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why is schema evolution harder in event systems than in tightly coupled request-response APIs?",
+      "options": [
+        "Consumers often upgrade on different schedules and may replay old events long after producers changed.",
+        "Events cannot carry structured fields at all.",
+        "Event systems never need compatibility rules because they are asynchronous.",
+        "Only one consumer can exist for each event type."
+      ],
+      "correct": 0,
+      "explanation": "Loose coupling helps fanout, but it also creates many independent upgrade timelines."
+    },
+    {
+      "stage": "pre",
+      "question": "Which change is usually safest for an existing event schema?",
+      "options": [
+        "Adding an optional field with clear defaults and preserved semantics.",
+        "Renaming a field and reusing the old meaning implicitly.",
+        "Adding a new required field that all old consumers must read immediately.",
+        "Changing the event meaning while keeping the same type name."
+      ],
+      "correct": 0,
+      "explanation": "Additive optional changes are the usual safe default for long-lived event contracts."
+    },
+    {
+      "stage": "post",
+      "question": "What is the biggest risk of changing event semantics in place without a new version or type?",
+      "options": [
+        "Consumers may continue decoding successfully while interpreting the event incorrectly.",
+        "The event bus will always reject the payload.",
+        "Replay will become faster than real-time processing.",
+        "Storage costs for old events will disappear."
+      ],
+      "correct": 0,
+      "explanation": "Semantic drift is dangerous because the schema may still parse while the meaning becomes wrong."
+    },
+    {
+      "stage": "post",
+      "question": "Which signal most directly shows a consumer was broken by a producer schema change?",
+      "options": [
+        "A spike in deserialization failures or dead-letter events for that consumer and version.",
+        "A decrease in product roadmap size.",
+        "Fewer dashboards being viewed by operators.",
+        "A drop in HTTP cache hit ratio."
+      ],
+      "correct": 0,
+      "explanation": "Consumer decode failures and DLQ growth are strong immediate signals of compatibility breakage."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off comes with keeping deprecated fields around during migrations?",
+      "options": [
+        "It helps slow consumers survive, but increases contract clutter and migration overhead.",
+        "It eliminates the need for schema governance.",
+        "It guarantees no consumer inventory is needed.",
+        "It forces every event to become snapshot-based."
+      ],
+      "correct": 0,
+      "explanation": "Backward compatibility often buys safety by keeping extra contract surface alive for longer."
+    },
+    {
+      "stage": "post",
+      "question": "When is dual-publish or an upcaster most justified?",
+      "options": [
+        "When semantic incompatibility is real and consumers cannot all switch at once.",
+        "When adding a harmless optional field.",
+        "When the event bus has spare storage space.",
+        "When no consumers exist yet."
+      ],
+      "correct": 0,
+      "explanation": "Dual-publish and translation mechanisms are expensive tools best used for real compatibility gaps."
+    },
+    {
+      "stage": "post",
+      "question": "Why must replay be part of the schema evolution discussion?",
+      "options": [
+        "New consumers and backfills may need to process old event history under current expectations.",
+        "Replay only matters in databases, not event systems.",
+        "It removes the need for version tags.",
+        "It guarantees exactly-once semantics."
+      ],
+      "correct": 0,
+      "explanation": "A design that only works for fresh events is incomplete in many production event systems."
+    },
+    {
+      "stage": "post",
+      "question": "What is the strongest default governance mechanism for event schemas?",
+      "options": [
+        "Registry-backed compatibility checks before producers deploy breaking changes.",
+        "A shared chat room where teams mention schema changes informally.",
+        "Trusting every consumer to notice changes by reading payloads manually.",
+        "Allowing any producer to rewrite event history after publish."
+      ],
+      "correct": 0,
+      "explanation": "Automated compatibility checks reduce the chance of accidental ecosystem-wide breakage."
+    }
+  ]
+}

@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What usually makes a senior application-backend answer feel stronger than a mid-level one?",
+      "options": [
+        "It clarifies the contract, sizes the workload, and chooses trade-offs deliberately instead of listing components quickly.",
+        "It draws the most boxes in the first two minutes.",
+        "It avoids making assumptions at all costs.",
+        "It always recommends the same queue-plus-cache architecture."
+      ],
+      "correct": 0,
+      "explanation": "Structure and judgment matter more than sheer component count."
+    },
+    {
+      "stage": "pre",
+      "question": "Why is it risky to skip rough sizing in product-backend interviews?",
+      "options": [
+        "Because without traffic and skew estimates, architecture choices become arbitrary and hard to defend.",
+        "Because sizing is only needed for storage systems.",
+        "Because interviewers only care about exact monthly cloud cost.",
+        "Because sizing automatically reveals the final schema."
+      ],
+      "correct": 0,
+      "explanation": "Sizing is what anchors the rest of the design."
+    },
+    {
+      "stage": "post",
+      "question": "What is the best reason to choose only one or two deep dives in an interview answer?",
+      "options": [
+        "It shows intentional depth on the real risk areas while preserving time for the whole system.",
+        "It avoids discussing APIs and data models entirely.",
+        "It guarantees the interviewer will not ask follow-ups.",
+        "It makes observability unnecessary."
+      ],
+      "correct": 0,
+      "explanation": "Depth is valuable when it is aimed at the dominant risk."
+    },
+    {
+      "stage": "post",
+      "question": "Which omission most strongly suggests the answer is still incomplete even if the architecture sounds plausible?",
+      "options": [
+        "No failure-mode analysis or observability plan.",
+        "No mention of a specific cloud vendor.",
+        "No hand-drawn diagram colors.",
+        "No estimate of office Wi-Fi speed."
+      ],
+      "correct": 0,
+      "explanation": "Operational reasoning is part of the bar for strong answers in this repo."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off comes with picking one crisp assumption set when the prompt is vague?",
+      "options": [
+        "The answer stays coherent, but you may need to acknowledge which other assumptions would change the design.",
+        "It guarantees the interviewer cannot challenge the design.",
+        "It removes the need for clarification questions.",
+        "It ensures there is only one correct architecture."
+      ],
+      "correct": 0,
+      "explanation": "Assumptions create clarity, but they should still be surfaced explicitly."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric best tests whether the learner is actually thinking about skew in an answer?",
+      "options": [
+        "They can name a concrete concentration signal such as hot keys, celebrity fanout, or priority-queue backlog by class.",
+        "They know the default port for WebSockets.",
+        "They can list five database brands quickly.",
+        "They avoid using the word 'latency'."
+      ],
+      "correct": 0,
+      "explanation": "Skew must show up in a measurable way, not just as a buzzword."
+    },
+    {
+      "stage": "post",
+      "question": "Why is rollout or migration thinking valuable in product-backend interviews?",
+      "options": [
+        "It shows the design can be introduced safely in a real system instead of only existing as a greenfield sketch.",
+        "It proves the candidate memorized deployment tools.",
+        "It replaces the need for requirements.",
+        "It guarantees zero regressions."
+      ],
+      "correct": 0,
+      "explanation": "Real systems rarely appear from scratch with no migration path."
+    },
+    {
+      "stage": "post",
+      "question": "What is the strongest closing move after walking through an application-backend architecture?",
+      "options": [
+        "Summarize the main trade-off, name a likely redesign trigger, and explain how you would detect it.",
+        "Repeat the component list more slowly.",
+        "Claim the design scales indefinitely.",
+        "Avoid mentioning any weaknesses so the answer sounds confident."
+      ],
+      "correct": 0,
+      "explanation": "A strong close shows judgment, limits, and operational awareness."
+    }
+  ]
+}

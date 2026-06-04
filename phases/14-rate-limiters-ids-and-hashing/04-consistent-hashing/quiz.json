@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why is modulo hashing painful when a fleet grows or shrinks?",
+      "options": [
+        "A small node-count change can remap a large fraction of keys, causing heavy movement or cold misses.",
+        "It prevents hashing keys at all.",
+        "It only works for three servers.",
+        "It requires a control plane on every request."
+      ],
+      "correct": 0,
+      "explanation": "Modulo placement is simple, but topology changes can invalidate placement broadly."
+    },
+    {
+      "stage": "pre",
+      "question": "What is the main promise of consistent hashing?",
+      "options": [
+        "Topology changes should only remap a bounded portion of keys instead of almost all of them.",
+        "Every node always gets exactly the same load.",
+        "Hot keys disappear automatically.",
+        "Health checks are no longer necessary."
+      ],
+      "correct": 0,
+      "explanation": "The win is reduced remapping churn during node changes."
+    },
+    {
+      "stage": "post",
+      "question": "Why are virtual nodes often added to a consistent-hash ring?",
+      "options": [
+        "They smooth distribution so physical nodes own a more even share of the ring.",
+        "They remove the need for hashing.",
+        "They guarantee no node can ever fail.",
+        "They make placement impossible to explain."
+      ],
+      "correct": 0,
+      "explanation": "More virtual points usually reduce imbalance from coarse placement."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off comes with increasing virtual nodes aggressively?",
+      "options": [
+        "Balance improves, but metadata and control-plane complexity grow.",
+        "Remap percentage always becomes 100 percent.",
+        "Requests can no longer be routed locally.",
+        "Hot keys become harmless."
+      ],
+      "correct": 0,
+      "explanation": "Virtual nodes are helpful, but they are not free to manage."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric best validates a planned rebalance before rollout?",
+      "options": [
+        "Expected remap percentage and ownership histogram by node.",
+        "Only the number of markdown files in the repo.",
+        "Average laptop battery level.",
+        "TLS certificate age."
+      ],
+      "correct": 0,
+      "explanation": "You want to know how much movement and imbalance the change will create."
+    },
+    {
+      "stage": "post",
+      "question": "Why does consistent hashing not solve pathological hot keys by itself?",
+      "options": [
+        "One extremely hot key can still overload whichever node owns it even if average placement is balanced.",
+        "The ring can only place cold keys.",
+        "Hot keys cannot be hashed.",
+        "Consistent hashing requires every key to be unique globally."
+      ],
+      "correct": 0,
+      "explanation": "Distribution of average load is different from handling concentrated hotspots."
+    },
+    {
+      "stage": "post",
+      "question": "What is the most useful mitigation for a cold-cache storm after a node add or remove?",
+      "options": [
+        "Stage the rollout and prewarm or migrate selectively instead of switching all traffic at once.",
+        "Disable health checks.",
+        "Reduce virtual nodes to one.",
+        "Route all traffic to the newest node."
+      ],
+      "correct": 0,
+      "explanation": "Controlled rollout reduces miss spikes and recovery pain."
+    },
+    {
+      "stage": "post",
+      "question": "What is the strongest first clarification when asked about consistent hashing?",
+      "options": [
+        "Ask whether the placement is for caches, durable data, or request ownership, because rebalance cost differs a lot.",
+        "Assume every workload needs the same ring design.",
+        "Avoid talking about node churn.",
+        "Start by drawing a ring and stop there."
+      ],
+      "correct": 0,
+      "explanation": "The cost of movement and the safety requirements depend on what the placement controls."
+    }
+  ]
+}

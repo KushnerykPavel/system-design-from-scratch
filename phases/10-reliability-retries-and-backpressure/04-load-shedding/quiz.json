@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why can accepting all incoming work during overload be worse than rejecting some of it quickly?",
+      "options": [
+        "Because growing queues and in-flight work can destroy latency for every request, including critical ones.",
+        "Because overload only matters when disk is full.",
+        "Because fast rejections automatically make every client back off correctly.",
+        "Because accepting work prevents autoscaling from ever happening."
+      ],
+      "correct": 0,
+      "explanation": "Unbounded acceptance often turns a partial overload into a full-service collapse."
+    },
+    {
+      "stage": "pre",
+      "question": "What is admission control fundamentally deciding?",
+      "options": [
+        "Which work the system is still willing to accept given current capacity and priorities.",
+        "Which logs should be sampled during normal operation.",
+        "How many replicas every database table should have.",
+        "Whether retries are ever allowed in asynchronous systems."
+      ],
+      "correct": 0,
+      "explanation": "Admission control is about selective acceptance under constrained capacity."
+    },
+    {
+      "stage": "post",
+      "question": "Which signal is often stronger than raw queue length for overload decisions?",
+      "options": [
+        "Queue age, because it shows whether waiting work is already becoming stale or harmful.",
+        "The number of markdown headings in the runbook.",
+        "Average code review turnaround time.",
+        "Total process uptime in days."
+      ],
+      "correct": 0,
+      "explanation": "Old queued work is often a clearer sign of overload than count alone."
+    },
+    {
+      "stage": "post",
+      "question": "What is the main trade-off of reserving capacity for high-priority traffic?",
+      "options": [
+        "Critical flows stay healthy under stress, but average utilization can be lower in quiet periods.",
+        "All best-effort work becomes free to process later.",
+        "Clients stop needing retry logic entirely.",
+        "The service no longer needs any downstream health signals."
+      ],
+      "correct": 0,
+      "explanation": "Reserved capacity improves reliability for important work at some efficiency cost."
+    },
+    {
+      "stage": "post",
+      "question": "Which failure is most likely if the service queues work even when the downstream database is saturated?",
+      "options": [
+        "The service looks alive briefly, but queue age and end-to-end latency explode while the root bottleneck remains unsolved.",
+        "The database automatically gains more write throughput.",
+        "The queue becomes a reliable cache for all repeated requests.",
+        "Critical traffic stops needing classification."
+      ],
+      "correct": 0,
+      "explanation": "Queueing cannot fix a hard downstream bottleneck; it often just delays visible pain."
+    },
+    {
+      "stage": "post",
+      "question": "What metric best checks whether admission control is protecting the right traffic?",
+      "options": [
+        "Success rate and latency of critical traffic during overload windows.",
+        "Total number of service owners in the org chart.",
+        "The amount of unused RAM on developer laptops.",
+        "The count of dashboard panels per team."
+      ],
+      "correct": 0,
+      "explanation": "The goal is not only overall throughput, but preservation of the most important flows."
+    },
+    {
+      "stage": "post",
+      "question": "Why should overload responses consider client retry behavior?",
+      "options": [
+        "Because a shed request can trigger a retry storm unless callers have clear backoff guidance and budgets.",
+        "Because retries automatically guarantee fairness across tenants.",
+        "Because clients can never distinguish overload from success.",
+        "Because server-side limits stop mattering once a request is rejected."
+      ],
+      "correct": 0,
+      "explanation": "Load shedding is safer when the caller behavior it triggers has also been considered."
+    },
+    {
+      "stage": "post",
+      "question": "What weakens an interview answer about overload most?",
+      "options": [
+        "Treating autoscaling as the only strategy and ignoring queue limits, priorities, and fast rejection.",
+        "Explaining that some work may need to be dropped to save the core path.",
+        "Discussing both local and downstream bottlenecks.",
+        "Calling out fairness trade-offs during spikes."
+      ],
+      "correct": 0,
+      "explanation": "Senior-level overload answers protect the system before scaling catches up, not after."
+    }
+  ]
+}

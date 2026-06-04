@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why is origin protection a first-class concern in an edge gateway?",
+      "options": [
+        "Because the origin is often the most fragile part of the system and retries or regional shifts can amplify failure there.",
+        "Because edge gateways are never allowed to terminate TLS directly.",
+        "Because auth always runs only at the origin tier.",
+        "Because POP routing eliminates all latency concerns automatically."
+      ],
+      "correct": 0,
+      "explanation": "An edge gateway can either protect origins or accidentally overwhelm them during partial failures."
+    },
+    {
+      "stage": "pre",
+      "question": "What is a retry budget intended to prevent?",
+      "options": [
+        "Any form of regional failover during incidents.",
+        "The use of cacheable endpoints at the edge.",
+        "Unlimited retries that turn partial origin slowness into a broader outage.",
+        "TLS certificate rotation across POPs."
+      ],
+      "correct": 2,
+      "explanation": "Retry budgets cap amplification so retries remain a tool, not a failure multiplier."
+    },
+    {
+      "stage": "post",
+      "question": "Why is policy version visibility important across POPs?",
+      "options": [
+        "It helps detect rollout drift so different POPs do not enforce different auth or routing behavior unknowingly.",
+        "It guarantees that all requests become cacheable.",
+        "It removes the need for region-level monitoring.",
+        "It makes origin shielding optional."
+      ],
+      "correct": 0,
+      "explanation": "Version skew is a real operational risk when policy is pushed globally."
+    },
+    {
+      "stage": "post",
+      "question": "Which auth strategy usually gives the best balance for an edge gateway?",
+      "options": [
+        "A hybrid approach that keeps some decisions local while still allowing centralized policy checks where needed.",
+        "Always forwarding every auth decision to a single global service.",
+        "Disabling auth at the edge and trusting only the origin.",
+        "Failing open for every route whenever auth gets slower than expected."
+      ],
+      "correct": 0,
+      "explanation": "Hybrid designs often balance latency, freshness, and dependency risk."
+    },
+    {
+      "stage": "post",
+      "question": "What is the main purpose of an origin shield layer?",
+      "options": [
+        "To increase origin request fanout across more regions.",
+        "To centralize and smooth requests before they hit origins, reducing blast radius and improving locality.",
+        "To replace all edge caches with a single global cache.",
+        "To make retry budgets unnecessary."
+      ],
+      "correct": 1,
+      "explanation": "Shielding can absorb bursts and reduce the number of directly exposed origin requests."
+    },
+    {
+      "stage": "post",
+      "question": "Which observability signal is most useful during a partial origin slowness incident?",
+      "options": [
+        "Only total request count across the whole fleet.",
+        "Latency and retry metrics broken down by POP, region, route, and origin pool.",
+        "The number of architecture diagrams stored in the runbook.",
+        "Certificate expiration time for unrelated hostnames."
+      ],
+      "correct": 1,
+      "explanation": "Regional and origin-pool granularity is critical when the failure is partial rather than global."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off does local token validation at the edge introduce?",
+      "options": [
+        "Lower latency and fewer dependency hops, but potentially more policy freshness complexity.",
+        "Perfect global consistency at the cost of higher storage use.",
+        "No need for any TLS or routing configuration.",
+        "Guaranteed origin cache hits for dynamic traffic."
+      ],
+      "correct": 0,
+      "explanation": "Local validation is fast, but freshness and revocation semantics need deliberate handling."
+    },
+    {
+      "stage": "post",
+      "question": "If one region is slow but not down, what is the strongest first design concern?",
+      "options": [
+        "Making sure retries and failover do not overload other regions or the same weak origin pool.",
+        "Disabling all logging to reduce CPU usage.",
+        "Increasing TLS handshake size to slow clients evenly.",
+        "Removing rate limiting so users can retry more often."
+      ],
+      "correct": 0,
+      "explanation": "Partial failures often become major incidents because the mitigation path amplifies them."
+    }
+  ]
+}

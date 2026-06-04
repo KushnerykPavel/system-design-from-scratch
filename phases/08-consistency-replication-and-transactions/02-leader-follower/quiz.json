@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What question matters most right after choosing a leader-follower design?",
+      "options": [
+        "What commit rule, read routing policy, and failover behavior define the real guarantee?",
+        "Which diagram color makes followers easy to spot?",
+        "How many services can be placed in one box on the sketch?",
+        "Whether the database vendor uses the word cluster in marketing."
+      ],
+      "correct": 0,
+      "explanation": "Leader-follower only becomes meaningful once commit, read, and failover semantics are clear."
+    },
+    {
+      "stage": "pre",
+      "question": "Why can follower reads be dangerous on critical paths?",
+      "options": [
+        "Because lag can make the system return old state even when the write has already been acknowledged elsewhere.",
+        "Because followers cannot handle read traffic.",
+        "Because leaders are always cheaper for reads.",
+        "Because replicas never expose version information."
+      ],
+      "correct": 0,
+      "explanation": "Follower lag is a product-visible consistency decision."
+    },
+    {
+      "stage": "post",
+      "question": "What is the trade-off of waiting for a follower acknowledgement before confirming writes?",
+      "options": [
+        "You improve failover durability but usually pay higher write latency and more sensitivity to replica health.",
+        "You eliminate the need for observability.",
+        "You make split brain impossible without fencing.",
+        "You reduce replication bandwidth to zero."
+      ],
+      "correct": 0,
+      "explanation": "Stronger durability usually costs latency and operational flexibility."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric best detects whether follower reads are becoming unsafe?",
+      "options": [
+        "Follower freshness age or version lag on the entities served from replicas.",
+        "The number of diagram arrows in the lesson notes.",
+        "Total CPU time on the leader only.",
+        "Weekly hiring headcount."
+      ],
+      "correct": 0,
+      "explanation": "Freshness metrics connect replica lag to actual read safety."
+    },
+    {
+      "stage": "post",
+      "question": "What is the hidden risk of blind automatic promotion after a leader failure?",
+      "options": [
+        "A stale follower can become leader and lose acknowledged or expected writes if promotion is not fenced and validated.",
+        "Read traffic becomes permanently unavailable everywhere.",
+        "Followers stop replicating forever by design.",
+        "Caches automatically delete the working set."
+      ],
+      "correct": 0,
+      "explanation": "Promotion safety is about avoiding stale leadership and split brain."
+    },
+    {
+      "stage": "post",
+      "question": "When is routing reads only to the leader often justified?",
+      "options": [
+        "When the read path is correctness-critical and stale results would cause harmful user or policy outcomes.",
+        "When the system has more than one availability zone.",
+        "When diagrams need fewer arrows.",
+        "When writes are rare in development."
+      ],
+      "correct": 0,
+      "explanation": "Critical read correctness can justify higher cost and latency."
+    },
+    {
+      "stage": "post",
+      "question": "Why should failover logs include leader epoch and replica commit position?",
+      "options": [
+        "Because operators need evidence that the promoted node was current enough and properly fenced.",
+        "Because those fields make dashboards look more advanced.",
+        "Because they replace the need for health checks.",
+        "Because follower lag no longer matters once a node is promoted."
+      ],
+      "correct": 0,
+      "explanation": "Those details make failover decisions auditable and debuggable."
+    },
+    {
+      "stage": "post",
+      "question": "Which answer sounds most senior?",
+      "options": [
+        "We will use replicas for cheap reads, but only after separating critical versus convenience paths and defining promotion safety.",
+        "We will add followers because read scaling is always free.",
+        "We will let any healthy replica become leader whenever needed.",
+        "We will call the system strongly consistent because there is a primary node."
+      ],
+      "correct": 0,
+      "explanation": "The strongest answer ties topology choices to guarantees and failure handling."
+    }
+  ]
+}

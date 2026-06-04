@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What problem does an idempotency key primarily solve for write APIs?",
+      "options": [
+        "It makes every request cheaper to compute than a read request.",
+        "It helps repeated attempts avoid creating duplicate side effects after timeouts or retries.",
+        "It removes the need for any persistent storage on the write path.",
+        "It guarantees global consistency across every region automatically."
+      ],
+      "correct": 1,
+      "explanation": "Idempotency keys are mainly about safe retries and duplicate suppression."
+    },
+    {
+      "stage": "pre",
+      "question": "Why is key reuse with a different payload dangerous?",
+      "options": [
+        "The system may return a previous result for what is actually a different operation.",
+        "It guarantees the storage layer will rebalance immediately.",
+        "It always converts the request into a read-only transaction.",
+        "It prevents clients from ever retrying again."
+      ],
+      "correct": 0,
+      "explanation": "A reused key must still map to the same logical request, or the replay semantics become incorrect."
+    },
+    {
+      "stage": "post",
+      "question": "What is the safest default behavior when the same idempotency key arrives with a different request hash?",
+      "options": [
+        "Treat it as a retry and replay the earlier result.",
+        "Reject it as a conflict because the client is reusing the key for a different operation.",
+        "Execute the new request and replace the original stored result.",
+        "Ignore the hash because the key itself is enough context."
+      ],
+      "correct": 1,
+      "explanation": "A different semantic request should not silently inherit the previous operation's result."
+    },
+    {
+      "stage": "post",
+      "question": "Which failure mode remains if the business write commits but the client never receives the response?",
+      "options": [
+        "The system may see a retry and must return the original result instead of performing the side effect again.",
+        "All future writes become read-only until the key expires.",
+        "The API can never distinguish duplicates again.",
+        "The storage layer must rotate the primary key space immediately."
+      ],
+      "correct": 0,
+      "explanation": "This is the classic retry-after-commit case that idempotency is meant to handle."
+    },
+    {
+      "stage": "post",
+      "question": "What is the trade-off of keeping idempotency records for a long TTL?",
+      "options": [
+        "Better duplicate protection for late retries, but more storage growth and cleanup work.",
+        "Lower storage usage and fewer retained keys, but higher duplicate risk.",
+        "Guaranteed elimination of payload hash conflicts.",
+        "No trade-off exists because TTL is unrelated to storage."
+      ],
+      "correct": 0,
+      "explanation": "Longer retention improves protection windows but costs more to store and manage."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric most directly shows whether retry incidents are stressing the idempotency system?",
+      "options": [
+        "The number of sampled dashboard viewers per week.",
+        "Idempotency hit rate and duplicate write attempts during failure windows.",
+        "The count of static protobuf definitions in the repository.",
+        "The average number of query parameters per request."
+      ],
+      "correct": 1,
+      "explanation": "Those metrics expose real retry pressure and whether duplicate suppression is being exercised."
+    },
+    {
+      "stage": "post",
+      "question": "Why is a unique database constraint alone often insufficient as the full idempotency strategy?",
+      "options": [
+        "It cannot help at all with write safety.",
+        "It may prevent duplicate inserts, but it does not by itself preserve the original response or handle broader operation semantics.",
+        "It always increases latency more than an event bus.",
+        "It cannot be used in systems that expose HTTP APIs."
+      ],
+      "correct": 1,
+      "explanation": "Idempotency usually needs request identity plus replay behavior, not just write rejection."
+    },
+    {
+      "stage": "post",
+      "question": "What should happen if an operation is still pending when a retry arrives?",
+      "options": [
+        "The service should treat it as a duplicate-safe case and coordinate on the in-flight request state.",
+        "The service should always execute both requests and merge later.",
+        "The retry must be dropped without any response.",
+        "The client should be asked to pick a new key immediately."
+      ],
+      "correct": 0,
+      "explanation": "Pending work is still part of the same logical request and needs coordinated duplicate handling."
+    }
+  ]
+}

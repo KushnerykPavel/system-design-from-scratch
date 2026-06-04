@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why is a high-level diagram usually better than an immediate deep dive at the start of a design interview?",
+      "options": [
+        "It creates shared context for the system shape before details lock you into a local solution.",
+        "It removes the need to discuss APIs or storage later.",
+        "It guarantees the interviewer will agree with every component choice.",
+        "It lets you avoid naming the critical path."
+      ],
+      "correct": 0,
+      "explanation": "A shared overview reduces rework and gives the interviewer something coherent to react to."
+    },
+    {
+      "stage": "pre",
+      "question": "What is the biggest risk of deep-diving before the top-level request flow is clear?",
+      "options": [
+        "You may spend time optimizing a subsystem that changes once the full architecture is agreed.",
+        "You will always need a second database technology.",
+        "You will be forced into a multi-region design immediately.",
+        "You cannot talk about failure modes afterward."
+      ],
+      "correct": 0,
+      "explanation": "Early detail often becomes irrelevant if the system boundaries move."
+    },
+    {
+      "stage": "post",
+      "question": "What should the first-pass diagram optimize for?",
+      "options": [
+        "The maximum number of boxes the whiteboard can fit.",
+        "The clearest explanation of system boundaries and request flow.",
+        "A full accounting of every retry and timeout policy.",
+        "Detailed schema evolution plans for future services."
+      ],
+      "correct": 1,
+      "explanation": "The first pass should orient the discussion, not exhaust it."
+    },
+    {
+      "stage": "post",
+      "question": "Which condition best signals that the answer is ready for a deep dive?",
+      "options": [
+        "The interviewer has seen a high-level diagram and the critical path is explicit.",
+        "At least two storage engines have been compared.",
+        "The candidate has listed every non-functional requirement from memory.",
+        "The first diagram contains all background jobs and admin tools."
+      ],
+      "correct": 0,
+      "explanation": "Deep dives work best after the overview and critical path are aligned."
+    },
+    {
+      "stage": "post",
+      "question": "What is the best deep-dive selection heuristic?",
+      "options": [
+        "Pick the subsystem with the most familiar implementation details.",
+        "Pick the subsystem most tied to scale, correctness, or operational risk.",
+        "Pick whichever service was drawn first.",
+        "Pick the one least likely to change if requirements shift."
+      ],
+      "correct": 1,
+      "explanation": "A strong deep dive is driven by the dominant design constraint."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off comes with simplifying the first-pass diagram?",
+      "options": [
+        "You gain faster alignment, but some important details must be deferred.",
+        "You gain consistency at the cost of all failure tolerance.",
+        "You reduce latency by removing storage from the design.",
+        "You eliminate the need for a wrap-up."
+      ],
+      "correct": 0,
+      "explanation": "Abstraction is useful, but it means consciously delaying detail."
+    },
+    {
+      "stage": "post",
+      "question": "Which observability signal would best reveal that candidates deep dive too early in practice drills?",
+      "options": [
+        "Time spent before the main request path becomes clear.",
+        "The color used for storage boxes.",
+        "The number of arrows between caches.",
+        "The count of API examples included."
+      ],
+      "correct": 0,
+      "explanation": "If the request flow is still unclear late in the answer, the sequence is broken."
+    },
+    {
+      "stage": "post",
+      "question": "If the interviewer asks for detail before you finish the overview, what is the strongest response?",
+      "options": [
+        "Refuse and insist on completing the diagram first.",
+        "Briefly answer the detail question, then reconnect it to the high-level architecture and continue the overview.",
+        "Switch the entire interview into implementation mode.",
+        "Ignore the question and keep drawing."
+      ],
+      "correct": 1,
+      "explanation": "You want to stay collaborative while preserving architectural coherence."
+    }
+  ]
+}

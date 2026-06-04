@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What makes edge compute worth considering in the first place?",
+      "options": [
+        "It can cut user latency or origin load when the logic and state dependencies are truly local enough.",
+        "It guarantees every workload becomes simpler.",
+        "It removes the need for regional backends.",
+        "It only matters for image hosting."
+      ],
+      "correct": 0,
+      "explanation": "Edge compute is justified when it materially improves locality or offload."
+    },
+    {
+      "stage": "pre",
+      "question": "What is the main danger of ignoring data gravity?",
+      "options": [
+        "Edge code still makes remote calls for most requests, which erases much of the latency benefit.",
+        "The system automatically becomes cheaper.",
+        "It forces every POP to run a database primary.",
+        "It makes caches unnecessary."
+      ],
+      "correct": 0,
+      "explanation": "If the data stays far away, the edge often becomes just an extra hop."
+    },
+    {
+      "stage": "post",
+      "question": "Which workload is usually the strongest edge-compute candidate?",
+      "options": [
+        "Stateless request normalization, filtering, or response transformation with local policy data.",
+        "Strongly consistent cross-account money transfer.",
+        "Large mutable per-user state joins across regions.",
+        "Multi-step transaction coordination across several primaries."
+      ],
+      "correct": 0,
+      "explanation": "Stateless or cache-backed logic fits the edge best."
+    },
+    {
+      "stage": "post",
+      "question": "What is the clearest sign that edge placement failed to help?",
+      "options": [
+        "Most requests still need synchronous regional lookups before they can finish.",
+        "POP CPU usage increased slightly during success.",
+        "Static assets cache well.",
+        "Operators created rollout dashboards."
+      ],
+      "correct": 0,
+      "explanation": "A high remote-fetch ratio usually means the edge path is not truly local."
+    },
+    {
+      "stage": "post",
+      "question": "Why are staged rollouts especially important for edge platforms?",
+      "options": [
+        "A bad deployment can propagate quickly across many POPs and create a global incident.",
+        "Edge systems never support rollback.",
+        "Because latency does not matter during incidents.",
+        "Because configuration cannot be versioned."
+      ],
+      "correct": 0,
+      "explanation": "Global fanout amplifies deployment mistakes."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric best reveals whether edge logic is paying off?",
+      "options": [
+        "Remote-fetch ratio combined with edge latency and origin offload rate.",
+        "The number of repository stars.",
+        "Only the count of POPs in the network.",
+        "Average keyboard response time for operators."
+      ],
+      "correct": 0,
+      "explanation": "You need to see both locality and actual performance impact."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off comes with replicating reference data to every POP?",
+      "options": [
+        "Fewer remote reads in exchange for replication, memory, and version-management overhead.",
+        "Zero rollout complexity and zero staleness risk.",
+        "Automatic support for strongly consistent writes everywhere.",
+        "The elimination of fallback logic."
+      ],
+      "correct": 0,
+      "explanation": "Replicated data helps locality but creates update-management work."
+    },
+    {
+      "stage": "post",
+      "question": "What is usually the safest stance on writes at the edge?",
+      "options": [
+        "Keep authoritative writes centralized unless the edge write pattern is deliberately constrained and replay-safe.",
+        "Let every POP accept arbitrary multi-row transactions.",
+        "Avoid naming write ownership at all.",
+        "Assume eventual consistency removes all conflict risk."
+      ],
+      "correct": 0,
+      "explanation": "Strong answers limit edge writes to cases with clear correctness boundaries."
+    }
+  ]
+}

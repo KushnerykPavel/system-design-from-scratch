@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why should storage design start with access patterns instead of table names?",
+      "options": [
+        "Because the main queries determine which keys, indexes, and denormalizations are worth paying for.",
+        "Because interviewers usually refuse to discuss databases until the end.",
+        "Because access patterns eliminate the need for capacity estimation.",
+        "Because schema choices are mostly cosmetic and easy to reverse later."
+      ],
+      "correct": 0,
+      "explanation": "The cost profile of a data model is driven by the reads and writes it must serve well."
+    },
+    {
+      "stage": "pre",
+      "question": "Which query should most strongly influence the primary serving model?",
+      "options": [
+        "The rare export path requested once per quarter.",
+        "The query with the highest combined business criticality and traffic.",
+        "The most complex query the analytics team can imagine.",
+        "Any query that sounds hard enough to impress the interviewer."
+      ],
+      "correct": 1,
+      "explanation": "Primary storage should fit the dominant and most important request path, not the fanciest one."
+    },
+    {
+      "stage": "post",
+      "question": "What is the main reason to move exports and bulk scans to asynchronous jobs?",
+      "options": [
+        "It protects the serving path from long scans and unpredictable contention.",
+        "It guarantees all exports will be strongly consistent with every replica.",
+        "It removes the need for authentication and authorization checks.",
+        "It allows the primary database to skip backups."
+      ],
+      "correct": 0,
+      "explanation": "Async paths isolate heavy work from latency-sensitive online traffic."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric most directly tests whether the team ranked access patterns correctly?",
+      "options": [
+        "The number of meetings held by the schema review group.",
+        "Latency and volume grouped by named access pattern.",
+        "Only total CPU usage on the storage fleet.",
+        "The average number of columns per table."
+      ],
+      "correct": 1,
+      "explanation": "Per-pattern observability shows whether the designed hot path is actually the real hot path."
+    },
+    {
+      "stage": "post",
+      "question": "What is the hidden trade-off of adding a secondary index for every plausible filter?",
+      "options": [
+        "Reads become impossible on replicas.",
+        "Writes become more expensive and the model becomes harder to operate safely.",
+        "Primary keys are no longer required.",
+        "Client retries stop working."
+      ],
+      "correct": 1,
+      "explanation": "Every extra index consumes write budget, storage, and operational attention."
+    },
+    {
+      "stage": "post",
+      "question": "When should a rare but valuable query influence the primary schema anyway?",
+      "options": [
+        "When it is costly to explain why it is rare.",
+        "When it is actually business-critical enough that degrading it would break the product.",
+        "When it requires the most tables in the schema diagram.",
+        "When it is easier than building a derived system."
+      ],
+      "correct": 1,
+      "explanation": "Criticality can outweigh low frequency if the business truly depends on the path."
+    },
+    {
+      "stage": "post",
+      "question": "What is the best senior-level response when an interviewer asks for keyword search on top of OLTP data?",
+      "options": [
+        "Put full-text search directly into the primary serving table by default.",
+        "Reject search entirely because it is outside the prompt.",
+        "Consider a derived search system if keyword search is important enough to justify separate indexing and lag.",
+        "Store every field twice in the primary store and search by substring."
+      ],
+      "correct": 2,
+      "explanation": "A derived system is often the cleanest way to support search without distorting the OLTP model."
+    },
+    {
+      "stage": "post",
+      "question": "What outcome most strongly suggests the team optimized for the wrong access pattern?",
+      "options": [
+        "The rare admin query is elegant, but the main user read path now has unstable tail latency.",
+        "The system uses a compound primary key.",
+        "The architecture includes one asynchronous job.",
+        "The schema has fewer tables than expected."
+      ],
+      "correct": 0,
+      "explanation": "When the core path suffers to make rare paths nicer, the prioritization is wrong."
+    }
+  ]
+}

@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why is using a CDN not the end of the design discussion?",
+      "options": [
+        "Because you still need to decide cache keys, invalidation, freshness, and origin-protection behavior.",
+        "Because CDNs only work for images.",
+        "Because cache layers remove all consistency concerns.",
+        "Because browsers cannot cache responses."
+      ],
+      "correct": 0,
+      "explanation": "The hard parts are often policy and correctness, not the label 'CDN.'"
+    },
+    {
+      "stage": "pre",
+      "question": "What is a common reason to add a shield or tiered cache layer?",
+      "options": [
+        "To collapse many edge misses before they reach origin and reduce fan-in.",
+        "To make purges impossible.",
+        "To ensure every request visits more data centers than necessary.",
+        "To bypass all cache-control headers."
+      ],
+      "correct": 0,
+      "explanation": "Shield layers reduce duplicate origin misses from many POPs."
+    },
+    {
+      "stage": "post",
+      "question": "Which workload benefits most cleanly from long-lived versioned URLs?",
+      "options": [
+        "Immutable static assets such as JS bundles, CSS, and images.",
+        "Per-user personalized dashboards.",
+        "Write-heavy control-plane APIs.",
+        "Admin mutation endpoints."
+      ],
+      "correct": 0,
+      "explanation": "Versioned URLs make invalidation simple when content is immutable after publish."
+    },
+    {
+      "stage": "post",
+      "question": "What is the main risk of a poorly designed cache key?",
+      "options": [
+        "Cache fragmentation or accidental sharing of the wrong content variant.",
+        "Automatic elimination of all purge traffic.",
+        "Guaranteed improvement in origin protection.",
+        "The inability to use TLS at the edge."
+      ],
+      "correct": 0,
+      "explanation": "Bad keys either miss too often or serve unsafe content across users or variants."
+    },
+    {
+      "stage": "post",
+      "question": "Why can purge storms become a system-design problem?",
+      "options": [
+        "They can overload the invalidation control plane and delay freshness updates globally.",
+        "They increase browser battery usage only.",
+        "They remove the need for tags or prefixes.",
+        "They only matter when the origin is a database."
+      ],
+      "correct": 0,
+      "explanation": "Frequent purges create their own scale and propagation challenges."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric best reveals whether tiered caching is protecting origin effectively?",
+      "options": [
+        "Origin request collapse rate and origin QPS reduction on cacheable traffic.",
+        "The number of tabs open in the browser.",
+        "Only global average CPU on developer laptops.",
+        "The count of markdown files in the repo."
+      ],
+      "correct": 0,
+      "explanation": "Tiered caching is valuable when it measurably reduces duplicate origin fetches."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off comes with selective caching of dynamic fragments?",
+      "options": [
+        "Lower latency and origin load at the cost of more cache-key and invalidation complexity.",
+        "Perfect correctness with zero policy work.",
+        "Removal of all observability needs.",
+        "Guaranteed support for every personalization case."
+      ],
+      "correct": 0,
+      "explanation": "Dynamic caching can help a lot, but only if policy remains precise."
+    },
+    {
+      "stage": "post",
+      "question": "What is the best first response when shared caches accidentally serve personalized content?",
+      "options": [
+        "Separate personalized routes and tighten cache-key and cacheability rules immediately.",
+        "Increase TTL so users see the leak for less time.",
+        "Disable logs to reduce noise.",
+        "Move all content to one region."
+      ],
+      "correct": 0,
+      "explanation": "This is a correctness and privacy issue driven by policy boundaries."
+    }
+  ]
+}

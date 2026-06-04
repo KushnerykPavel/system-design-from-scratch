@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why is a short debrief after each lesson or mock valuable?",
+      "options": [
+        "It converts a finished session into strengths, gaps, and scheduled next actions before the details fade.",
+        "It replaces the need to practice again on similar prompts.",
+        "It guarantees that every mistake was technical rather than communicative.",
+        "It removes the need for progress tracking."
+      ],
+      "correct": 0,
+      "explanation": "Debriefs preserve learning signal while it is still fresh."
+    },
+    {
+      "stage": "pre",
+      "question": "What is the most important property of a sustainable iteration cadence?",
+      "options": [
+        "It revisits weak areas deliberately without creating an ever-growing impossible backlog.",
+        "It schedules every unresolved topic for the next day.",
+        "It prevents learners from repeating the same prompt.",
+        "It focuses only on favorite topics to maintain confidence."
+      ],
+      "correct": 0,
+      "explanation": "Good cadence balances reinforcement with realistic workload."
+    },
+    {
+      "stage": "post",
+      "question": "Why should each debrief include a due date or retest plan?",
+      "options": [
+        "Because unscheduled improvements are easy to agree with and easy to forget.",
+        "Because all lessons must be revisited within exactly 24 hours.",
+        "Because debriefs are primarily a calendar management tool.",
+        "Because interviewers score retest dates directly."
+      ],
+      "correct": 0,
+      "explanation": "Scheduling converts intention into an actual loop."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off comes with capping the number of active follow-up drills?",
+      "options": [
+        "It improves completion and focus, but some low-priority gaps will wait longer.",
+        "It makes weekly review impossible.",
+        "It removes the need for a mistake log.",
+        "It ensures all weaknesses disappear at the same rate."
+      ],
+      "correct": 0,
+      "explanation": "A small active queue is usually more effective than an exhaustive one."
+    },
+    {
+      "stage": "post",
+      "question": "Which failure mode most often breaks an iteration cadence?",
+      "options": [
+        "Debriefs capture too many possible next actions and none become the real priority.",
+        "The learner records one clear strength.",
+        "The session includes a retest date.",
+        "The progress tracker links back to the debrief."
+      ],
+      "correct": 0,
+      "explanation": "An overloaded queue destroys follow-through."
+    },
+    {
+      "stage": "post",
+      "question": "Which observability signal best reflects whether the cadence is working?",
+      "options": [
+        "The delay between identifying a weak area and actually retesting it.",
+        "The number of total markdown files in the repo.",
+        "The average length of a lesson title.",
+        "The total number of architecture diagrams stored locally."
+      ],
+      "correct": 0,
+      "explanation": "Cadence quality shows up in how reliably weak areas are revisited."
+    },
+    {
+      "stage": "post",
+      "question": "If a debrief says the architecture was fine but communication failed, what should happen next?",
+      "options": [
+        "Schedule a drill that constrains explanation time and review structure instead of only rereading technical content.",
+        "Ignore the feedback because the technical design was correct.",
+        "Switch only to easier prompts.",
+        "Stop taking notes during mocks."
+      ],
+      "correct": 0,
+      "explanation": "The next drill should target the failure mode you actually observed."
+    },
+    {
+      "stage": "post",
+      "question": "When interviews are very close, how should the cadence usually shift?",
+      "options": [
+        "Toward tighter retest loops on the highest-leverage weak areas rather than broad new exploration.",
+        "Toward adding as many new lessons as possible.",
+        "Toward deleting all old debriefs for clarity.",
+        "Toward skipping feedback to conserve time."
+      ],
+      "correct": 0,
+      "explanation": "Near interviews, focused reinforcement usually beats breadth."
+    }
+  ]
+}

@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why is a workflow engine usually more than just a queue plus workers?",
+      "options": [
+        "Because it must preserve durable state, timers, and progress across long-running execution.",
+        "Because queues cannot carry payloads larger than one kilobyte.",
+        "Because workflow engines never call external services.",
+        "Because workers in a queue system cannot fail."
+      ],
+      "correct": 0,
+      "explanation": "Durable orchestration state is the main extra requirement."
+    },
+    {
+      "stage": "pre",
+      "question": "What is the main reason activity idempotency matters in workflow systems?",
+      "options": [
+        "Activities may be retried after ambiguous or partial failure.",
+        "It makes timers unnecessary.",
+        "It guarantees total ordering across workflows.",
+        "It removes the need for workflow history."
+      ],
+      "correct": 0,
+      "explanation": "Retries are standard behavior in long-running orchestration."
+    },
+    {
+      "stage": "post",
+      "question": "Which signal best reveals that the timer subsystem is becoming a bottleneck?",
+      "options": [
+        "Overdue timer count and wakeup lag.",
+        "Average workflow name length.",
+        "The number of dashboard colors in the operator UI.",
+        "Median source-file size of worker binaries."
+      ],
+      "correct": 0,
+      "explanation": "Timer lag exposes whether delayed work is being resumed on time."
+    },
+    {
+      "stage": "post",
+      "question": "Why is workflow versioning a first-class platform concern?",
+      "options": [
+        "Because running workflows can outlive deploys and need compatible logic over time.",
+        "Because versioning replaces the need for retries.",
+        "Because it allows activities to skip persistence.",
+        "Because workflows cannot be monitored without version numbers."
+      ],
+      "correct": 0,
+      "explanation": "Long-lived executions and code evolution interact directly."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off comes with keeping a durable workflow event history?",
+      "options": [
+        "It improves recovery and auditability but increases storage and replay overhead.",
+        "It guarantees external systems cannot fail.",
+        "It removes the need for operator tools.",
+        "It makes compensation logic unnecessary."
+      ],
+      "correct": 0,
+      "explanation": "Strong recovery comes with platform cost."
+    },
+    {
+      "stage": "post",
+      "question": "Which failure is most directly mitigated by activity heartbeats?",
+      "options": [
+        "A long-running worker becoming stuck or dying mid-step.",
+        "A topic being deleted accidentally.",
+        "A metrics query returning stale data.",
+        "A queue partition becoming hot."
+      ],
+      "correct": 0,
+      "explanation": "Heartbeats help detect abandoned or stalled activity work."
+    },
+    {
+      "stage": "post",
+      "question": "Why are compensation hooks often better than pretending rollback is automatic?",
+      "options": [
+        "Because external side effects may need explicit cleanup steps after partial success.",
+        "Because compensation eliminates all consistency trade-offs.",
+        "Because rollback is forbidden in distributed systems.",
+        "Because compensation only matters for user-interface workflows."
+      ],
+      "correct": 0,
+      "explanation": "Real systems coordinate side effects that are not transactionally reversible."
+    },
+    {
+      "stage": "post",
+      "question": "What design change most improves tenant or workflow-family isolation in a shared engine?",
+      "options": [
+        "Per-type quotas and reserved worker capacity.",
+        "A single global queue for all activity types.",
+        "Removing operator cancellation tools.",
+        "Disabling retries platform-wide."
+      ],
+      "correct": 0,
+      "explanation": "Shared orchestration systems need explicit isolation controls."
+    }
+  ]
+}

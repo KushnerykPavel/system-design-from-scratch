@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What is the first goal of a consistency drill answer?",
+      "options": [
+        "Clarify which flows need what guarantees before choosing replication, transactions, or workflow patterns.",
+        "Choose the strongest database mode available immediately.",
+        "Avoid talking about failures so more time remains for diagrams.",
+        "Assume every entity needs the same consistency level."
+      ],
+      "correct": 0,
+      "explanation": "The drill rewards scoped guarantees, not blanket slogans."
+    },
+    {
+      "stage": "pre",
+      "question": "Why should the drill force explicit degraded-mode behavior?",
+      "options": [
+        "Because lag, failover, and partial workflow failure change what users can safely observe, and the design must say what happens then.",
+        "Because strong consistency removes the need for any fallback.",
+        "Because degraded mode only matters for caching lessons.",
+        "Because production systems can hide those choices from operators."
+      ],
+      "correct": 0,
+      "explanation": "Senior answers define behavior under failure, not just the happy path."
+    },
+    {
+      "stage": "post",
+      "question": "Which answer sounds strongest?",
+      "options": [
+        "I will use strong consistency everywhere and revisit details if the interviewer asks.",
+        "I will map guarantees by entity, choose selective replication and transaction boundaries, and close with lag, contention, and compensation behavior.",
+        "I will start with a quorum formula and hope the rest is implied.",
+        "I will avoid workflow design because consistency and transactions are enough."
+      ],
+      "correct": 1,
+      "explanation": "That answer ties the design to concrete guarantees and operating behavior."
+    },
+    {
+      "stage": "post",
+      "question": "What is the hidden risk of one uniform consistency rule for all paths?",
+      "options": [
+        "You usually overspend on coordination for cheap paths or underprotect critical ones because different entities need different guarantees.",
+        "It always reduces latency for every operation.",
+        "It removes the need for observability tiers.",
+        "It guarantees hotspot elimination."
+      ],
+      "correct": 0,
+      "explanation": "Uniformity often hides poor trade-offs."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric pair best connects internal correctness behavior to user risk?",
+      "options": [
+        "Freshness mismatch or version skew together with critical-flow latency or completion success.",
+        "Only total number of repositories and packages.",
+        "Average note-taking time and quiz count.",
+        "The number of build lessons in the phase."
+      ],
+      "correct": 0,
+      "explanation": "That pair ties system state to user impact."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off often appears when you shrink a transaction boundary?",
+      "options": [
+        "You reduce synchronous contention and blast radius, but you must coordinate later work with idempotency and compensation.",
+        "You automatically eliminate all retries.",
+        "You make replication lag irrelevant.",
+        "You no longer need workflow state."
+      ],
+      "correct": 0,
+      "explanation": "Smaller transactional scope often pushes complexity into async coordination."
+    },
+    {
+      "stage": "post",
+      "question": "Why should hotspot analysis appear even in a high-level consistency drill?",
+      "options": [
+        "Because one key or entity can dominate write contention and make the chosen consistency model fail operationally before the rest of the design matters.",
+        "Because hotspots only affect rate limiters.",
+        "Because quorum overlap removes skew automatically.",
+        "Because hot keys matter only for caching."
+      ],
+      "correct": 0,
+      "explanation": "Consistency choices must survive concentrated traffic, not just average traffic."
+    },
+    {
+      "stage": "post",
+      "question": "What should usually come last in a strong drill answer?",
+      "options": [
+        "A concise wrap-up on guarantees, failure handling, observability, and the main trade-offs of the chosen coordination model.",
+        "A long list of unrelated database brands.",
+        "An apology for not proving every theorem.",
+        "A claim that exact time ordering solves the remaining issues."
+      ],
+      "correct": 0,
+      "explanation": "Senior answers close by making operational and trade-off implications explicit."
+    }
+  ]
+}

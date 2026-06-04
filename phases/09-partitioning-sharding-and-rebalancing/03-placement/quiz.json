@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What is the main weakness of placing keys with `hash(key) % N` when the node count changes?",
+      "options": [
+        "A small topology change can remap a large fraction of keys at once.",
+        "It makes keys impossible to hash deterministically.",
+        "It prevents any node from receiving traffic.",
+        "It automatically keeps replicas in separate failure domains."
+      ],
+      "correct": 0,
+      "explanation": "Modulo hashing is simple, but topology changes can cause very disruptive remapping."
+    },
+    {
+      "stage": "pre",
+      "question": "Why do virtual nodes exist in consistent hashing systems?",
+      "options": [
+        "To smooth ownership balance and reduce the impact of unlucky token spacing.",
+        "To guarantee zero data movement when nodes fail.",
+        "To remove the need for hashing altogether.",
+        "To make replicas unnecessary in distributed storage."
+      ],
+      "correct": 0,
+      "explanation": "Virtual nodes help even out distribution across the ring."
+    },
+    {
+      "stage": "post",
+      "question": "What is the strongest benefit of consistent hashing in an autoscaled cache cluster?",
+      "options": [
+        "A node add or removal moves only a bounded slice of keys instead of most of them.",
+        "Every node instantly gets exactly equal load without virtual nodes.",
+        "Clients no longer need any topology information.",
+        "The system becomes strongly consistent by default."
+      ],
+      "correct": 0,
+      "explanation": "The big win is lower remap churn during topology changes."
+    },
+    {
+      "stage": "post",
+      "question": "What is the main trade-off of increasing virtual node count aggressively?",
+      "options": [
+        "You often get better balance, but ring state and update overhead increase.",
+        "You lose deterministic placement for all keys.",
+        "You guarantee every request stays inside one rack.",
+        "You eliminate the need for cache warming after remaps."
+      ],
+      "correct": 0,
+      "explanation": "More virtual nodes usually smooth balance, but they add control-plane and client overhead."
+    },
+    {
+      "stage": "post",
+      "question": "Which observability signal best checks whether a placement change was too disruptive?",
+      "options": [
+        "Remapped-key ratio and miss or migration spikes immediately after the topology update.",
+        "The number of code review comments on the rollout document.",
+        "The total number of environment variables in the service.",
+        "The length of every node hostname."
+      ],
+      "correct": 0,
+      "explanation": "Placement churn should be measured directly through remap behavior and its serving impact."
+    },
+    {
+      "stage": "post",
+      "question": "Why is consistent hashing alone not enough for durable replica placement?",
+      "options": [
+        "You still need explicit rules to keep replicas out of the same rack, zone, or region.",
+        "It cannot assign any primary owner at all.",
+        "It prevents background repair from working.",
+        "It makes load balancing impossible when capacity differs."
+      ],
+      "correct": 0,
+      "explanation": "Replica safety depends on failure-domain awareness, not just deterministic hashing."
+    },
+    {
+      "stage": "post",
+      "question": "When would range-based placement sometimes beat a consistent hashing ring?",
+      "options": [
+        "When sequential scans, controlled splits, or explicit ownership ranges matter more than churn-minimizing hashing.",
+        "When you never want to rebalance data again.",
+        "When all keys must be assigned to every node simultaneously.",
+        "When you want every add event to remap the maximum number of keys."
+      ],
+      "correct": 0,
+      "explanation": "Range ownership can be better for ordered data, range scans, and explicit split operations."
+    },
+    {
+      "stage": "post",
+      "question": "What makes a weighted ring design senior-level rather than superficial?",
+      "options": [
+        "It acknowledges heterogeneous capacity and explains how weights affect balance and failure behavior.",
+        "It assumes all machines are identical forever so planning is simpler.",
+        "It ignores control-plane rollout because hashing is deterministic.",
+        "It treats remap cost as a purely theoretical concern."
+      ],
+      "correct": 0,
+      "explanation": "Weighted placement is about real fleet differences and their operational consequences."
+    }
+  ]
+}

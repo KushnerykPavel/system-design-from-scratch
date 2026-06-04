@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What usually makes a Google senior design answer feel strong early?",
+      "options": [
+        "It quickly clarifies scope and connects estimates to the design before diving into implementation detail.",
+        "It starts with every possible subsystem so the interviewer can see broad knowledge immediately.",
+        "It avoids assumptions until all edge cases are fully resolved.",
+        "It spends most of the time on one favorite storage technology."
+      ],
+      "correct": 0,
+      "explanation": "Strong answers earn trust early through structure, prioritization, and rough sizing."
+    },
+    {
+      "stage": "pre",
+      "question": "Why is a deliberate deep-dive choice important?",
+      "options": [
+        "Because the best answer is to avoid any deep dive unless the interviewer insists on one.",
+        "Because depth shows judgment only when it is chosen to match the prompt's real risk or bottleneck.",
+        "Because every interview requires a database internals deep dive specifically.",
+        "Because deep dives work best when they happen accidentally during diagramming."
+      ],
+      "correct": 1,
+      "explanation": "The deep dive is strongest when it exposes the most important design tension, not random detail."
+    },
+    {
+      "stage": "post",
+      "question": "Which opening most closely matches a strong Google interview pattern?",
+      "options": [
+        "Start with assumptions, scope, and a quick workload estimate before naming the main components.",
+        "Draw a five-layer architecture immediately so the interviewer knows you are prepared.",
+        "List every non-functional requirement you can think of without prioritizing them.",
+        "Skip estimation because any numbers will probably be wrong."
+      ],
+      "correct": 0,
+      "explanation": "Interviewers usually prefer a scoped and workload-aware opening over a prebuilt diagram."
+    },
+    {
+      "stage": "post",
+      "question": "What is the main risk of skipping rough sizing?",
+      "options": [
+        "It makes the diagram harder to draw neatly.",
+        "It can leave shard counts, caching layers, and queue choices disconnected from the real workload.",
+        "It guarantees the interviewer will ask only API questions.",
+        "It mostly affects writing style rather than the actual architecture."
+      ],
+      "correct": 1,
+      "explanation": "Sizing anchors the architecture to reality and exposes which decisions matter."
+    },
+    {
+      "stage": "post",
+      "question": "Which trade-off communication is strongest at senior level?",
+      "options": [
+        "This gives us stronger consistency, but write latency and regional failover complexity both get worse.",
+        "This design has no real downside if we tune the cache carefully.",
+        "Trade-offs are mostly optional if the system is large enough.",
+        "I would mention trade-offs only if the interviewer explicitly asks."
+      ],
+      "correct": 0,
+      "explanation": "Senior answers make benefits and costs visible together."
+    },
+    {
+      "stage": "post",
+      "question": "Which signal best shows operational maturity?",
+      "options": [
+        "Naming a trendy database and saying it scales horizontally.",
+        "Explaining how a likely failure is detected, mitigated, and exposed through metrics or alerts.",
+        "Promising no downtime because the system is distributed.",
+        "Avoiding rollout discussion so the architecture stays clean."
+      ],
+      "correct": 1,
+      "explanation": "Operational credibility comes from realistic failure and observability thinking."
+    },
+    {
+      "stage": "post",
+      "question": "What is the biggest danger of an accidental deep dive?",
+      "options": [
+        "It often spends time on a technically interesting area that does not actually justify the design's main decisions.",
+        "It always lowers the estimated QPS by half.",
+        "It removes the need for redesign follow-ups.",
+        "It only matters in storage-heavy prompts."
+      ],
+      "correct": 0,
+      "explanation": "Depth matters only when it is applied to the most relevant risk or bottleneck."
+    },
+    {
+      "stage": "post",
+      "question": "If the interviewer changes one requirement near the end, what is the strongest response?",
+      "options": [
+        "Defend the original design and say the change would need a different interview.",
+        "State which assumption changed, which component or guarantee changes with it, and what new cost or risk appears.",
+        "Restart the whole answer from scratch without referencing the earlier design.",
+        "Ignore the changed constraint unless it affects the API surface."
+      ],
+      "correct": 1,
+      "explanation": "Strong redesign answers show constraint-aware adaptation, not panic or stubbornness."
+    }
+  ]
+}

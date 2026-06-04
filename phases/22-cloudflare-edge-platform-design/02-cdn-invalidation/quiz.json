@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why is CDN invalidation often treated as a control-plane problem rather than only a cache-node problem?",
+      "options": [
+        "Because the difficult part is safely distributing purge intent, sequencing updates, and explaining propagation globally.",
+        "Because CDN caches never store metadata about objects.",
+        "Because TTLs make purge requests unnecessary in production.",
+        "Because POPs cannot receive any asynchronous updates."
+      ],
+      "correct": 0,
+      "explanation": "Global purge behavior depends on coordination, rollout, and fanout, not just local eviction."
+    },
+    {
+      "stage": "pre",
+      "question": "What usually makes tag-based purges harder than single-object purges?",
+      "options": [
+        "They require more metadata, more fanout pressure, and tighter cardinality controls.",
+        "They only work when browser caches are disabled.",
+        "They guarantee stronger consistency automatically.",
+        "They eliminate the need for cache keys."
+      ],
+      "correct": 0,
+      "explanation": "Tag purges are powerful, but they add metadata indexing and propagation cost."
+    },
+    {
+      "stage": "post",
+      "question": "Why is versioned invalidation often preferred over scanning caches for matching objects?",
+      "options": [
+        "It makes global invalidation cheaper and safer by letting old entries age out while new versions stop serving.",
+        "It forces every purge to bypass the control plane entirely.",
+        "It guarantees browser caches refresh instantly.",
+        "It removes the need for observability around stale hits."
+      ],
+      "correct": 0,
+      "explanation": "Versioning avoids expensive global delete walks and gives cleaner semantics under scale."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric best detects that purge propagation is lagging even though the purge API is healthy?",
+      "options": [
+        "POP apply lag and stale-hit rate after purge.",
+        "Only global CPU utilization on origin servers.",
+        "The number of architecture reviews completed last quarter.",
+        "TLS certificate renewal count."
+      ],
+      "correct": 0,
+      "explanation": "Propagation lag becomes visible in POP-level apply delay and stale-serving after purge."
+    },
+    {
+      "stage": "post",
+      "question": "What is the main trade-off of supporting full-zone purges generously?",
+      "options": [
+        "Better customer simplicity, but much higher blast radius and control-plane cost.",
+        "Lower metadata use with no operational downside.",
+        "Perfect freshness with lower origin traffic automatically.",
+        "No need for per-tenant quotas anymore."
+      ],
+      "correct": 0,
+      "explanation": "Large-scope purges are easy for customers but expensive and risky for the platform."
+    },
+    {
+      "stage": "post",
+      "question": "Why should purge requests be rate-limited or quota-controlled per tenant?",
+      "options": [
+        "To prevent one tenant from turning purge fanout into a global control-plane incident.",
+        "To ensure stale content is always served longer.",
+        "To make object purges impossible for free plans.",
+        "To avoid storing request IDs."
+      ],
+      "correct": 0,
+      "explanation": "Per-tenant controls keep purge load from becoming a fleet-wide reliability problem."
+    },
+    {
+      "stage": "post",
+      "question": "If some POPs are partitioned from the purge stream, what is the strongest design need?",
+      "options": [
+        "Replayable, idempotent purge delivery with visibility into which POPs are behind.",
+        "Immediate deletion of the origin data store.",
+        "Disabling all caching globally until the partition clears.",
+        "Relying on operator memory instead of tracking lag."
+      ],
+      "correct": 0,
+      "explanation": "Partitions happen, so purge delivery needs replay and explicit lag tracking."
+    },
+    {
+      "stage": "post",
+      "question": "What hidden product risk appears when customers say a purge 'failed' even though CDN nodes applied it?",
+      "options": [
+        "Another cache layer such as browsers or intermediaries may still be serving stale content, so semantics must be explained clearly.",
+        "Purge systems cannot work with authenticated requests.",
+        "The cache key is always irrelevant to the result.",
+        "The only remaining cause is TLS handshake latency."
+      ],
+      "correct": 0,
+      "explanation": "A purge may succeed at one layer while users still see stale content from another cache."
+    }
+  ]
+}

@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why is a slow origin often more dangerous than a fully down origin?",
+      "options": [
+        "Because retries and failover may keep sending more traffic into it while masking the incident until overload spreads.",
+        "Because fully down origins never affect user latency.",
+        "Because slow origins automatically disable edge caching.",
+        "Because health checks cannot observe latency problems at all."
+      ],
+      "correct": 0,
+      "explanation": "Partial slowness often triggers the most damaging forms of amplification."
+    },
+    {
+      "stage": "pre",
+      "question": "What is the main purpose of origin shielding?",
+      "options": [
+        "To smooth and localize traffic before it reaches origins, reducing blast radius and repeated direct hits.",
+        "To eliminate the need for health checks and failover logic.",
+        "To guarantee lower latency than local POP delivery in all cases.",
+        "To store all customer data permanently at the edge."
+      ],
+      "correct": 0,
+      "explanation": "Shielding is about protecting origin behavior and making edge traffic easier to control."
+    },
+    {
+      "stage": "post",
+      "question": "Why is gradual health scoring often safer than a pure binary healthy/unhealthy decision?",
+      "options": [
+        "It reduces false failovers and allows traffic shifts to reflect degraded states before full failure.",
+        "It makes retries unlimited for healthy pools.",
+        "It removes the need to measure tail latency.",
+        "It guarantees all POPs see identical health instantly."
+      ],
+      "correct": 0,
+      "explanation": "Many real incidents involve degraded behavior, not a clean up/down transition."
+    },
+    {
+      "stage": "post",
+      "question": "Which signal best detects that the failover policy itself is becoming dangerous?",
+      "options": [
+        "Retry budget burn and rising load on surviving origin pools.",
+        "Only total DNS query count for the company.",
+        "The number of support documents published.",
+        "Certificate issuance rate."
+      ],
+      "correct": 0,
+      "explanation": "A policy is risky when the mitigation path starts amplifying traffic or shifting overload."
+    },
+    {
+      "stage": "post",
+      "question": "What is the main trade-off of strict failback cooldowns?",
+      "options": [
+        "They reduce routing flaps, but they may delay recovery to the preferred lower-latency origin path.",
+        "They guarantee zero stale health data everywhere.",
+        "They remove the need for local health snapshots.",
+        "They make shielding unnecessary."
+      ],
+      "correct": 0,
+      "explanation": "Cooldowns improve stability but can keep traffic on a non-preferred path longer."
+    },
+    {
+      "stage": "post",
+      "question": "If POPs disagree sharply on whether an origin is healthy, what is the strongest design response?",
+      "options": [
+        "Combine local observations with shared regional signals and alert on divergent failover behavior.",
+        "Force every POP to ignore local observations entirely.",
+        "Retry more aggressively from all POPs until opinions converge.",
+        "Disable observability to reduce decision noise."
+      ],
+      "correct": 0,
+      "explanation": "Health needs both local sensitivity and enough shared context to avoid chaotic routing."
+    },
+    {
+      "stage": "post",
+      "question": "Why should origin selection decisions be explainable to operators and customers?",
+      "options": [
+        "Because failover and shielding are product-visible behaviors, and invisible routing decisions are hard to debug or defend.",
+        "Because explainability replaces the need for metrics.",
+        "Because origins are always managed by the same platform team.",
+        "Because it guarantees customers will not misconfigure pools."
+      ],
+      "correct": 0,
+      "explanation": "A platform needs evidence for why traffic moved and why a request was handled a certain way."
+    },
+    {
+      "stage": "post",
+      "question": "What is the hidden risk of cross-region failover when the destination region remains technically healthy?",
+      "options": [
+        "It may overload the surviving region or create unacceptable cost and latency even while availability stays nominal.",
+        "It automatically fixes all retry storms.",
+        "It eliminates the need for admission control.",
+        "It ensures better tail latency for every tenant."
+      ],
+      "correct": 0,
+      "explanation": "Availability alone is not enough if the failover path creates new bottlenecks or cost spikes."
+    }
+  ]
+}

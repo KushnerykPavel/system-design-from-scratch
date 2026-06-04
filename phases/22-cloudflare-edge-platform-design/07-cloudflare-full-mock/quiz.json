@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What most distinguishes a Cloudflare-style full mock from a generic system design mock?",
+      "options": [
+        "It places more pressure on edge behavior, control-plane safety, origin protection, and explainable routing or enforcement decisions.",
+        "It removes the need for capacity estimation.",
+        "It focuses only on BGP and ignores application design.",
+        "It avoids redesign questions because the edge is already complex."
+      ],
+      "correct": 0,
+      "explanation": "Cloudflare-style prompts still require structure, but edge-specific risks become much more central."
+    },
+    {
+      "stage": "pre",
+      "question": "Why should a full Cloudflare mock force separation of control plane and data plane?",
+      "options": [
+        "Because many edge failures come from policy, purge, or rollout behavior rather than only request forwarding.",
+        "Because POPs are not allowed to make local decisions.",
+        "Because data-plane latency is irrelevant in edge systems.",
+        "Because control planes always operate instantly and safely."
+      ],
+      "correct": 0,
+      "explanation": "The edge is not only a request path problem; it is also a platform rollout problem."
+    },
+    {
+      "stage": "post",
+      "question": "What is the strongest sign that a Cloudflare mock answer stayed disciplined?",
+      "options": [
+        "It clarified the edge goal, sized amplification risks, separated control and data planes, chose one deep dive, and closed with failure and redesign.",
+        "It listed every edge technology the candidate had heard of.",
+        "It skipped degraded mode to spend more time on component names.",
+        "It started with detailed POP internals before stating requirements."
+      ],
+      "correct": 0,
+      "explanation": "The strongest answers stay structured while still sounding edge-aware."
+    },
+    {
+      "stage": "post",
+      "question": "Which deep dive is especially high-value in a Cloudflare-style interview?",
+      "options": [
+        "A subsystem where propagation, failover, or abuse-policy mistakes can amplify globally, such as purge rollout or origin failover.",
+        "Changing icon colors in the operations dashboard.",
+        "A storage engine detail that never affects the stated prompt.",
+        "A generic auth definition with no routing or failure implications."
+      ],
+      "correct": 0,
+      "explanation": "High-value deep dives target platform-wide risk and amplification paths."
+    },
+    {
+      "stage": "post",
+      "question": "Why is explainability a recurring requirement in edge platform answers?",
+      "options": [
+        "Because routing, blocking, and failover decisions are visible to operators and customers, so opaque behavior is hard to operate or defend.",
+        "Because explainability replaces metrics and traces.",
+        "Because edge systems rarely affect customer behavior directly.",
+        "Because only security products require reason codes."
+      ],
+      "correct": 0,
+      "explanation": "A platform answer should make operational and customer-visible decisions inspectable."
+    },
+    {
+      "stage": "post",
+      "question": "If the interviewer changes the main priority from latency to origin protection, what is the best redesign move?",
+      "options": [
+        "Re-evaluate retries, shielding, failover thresholds, and cache policy before optimizing the shortest path.",
+        "Keep the first routing plan unchanged to preserve consistency.",
+        "Remove observability to free latency budget.",
+        "Ignore cacheability because origin safety is now primary."
+      ],
+      "correct": 0,
+      "explanation": "When origin protection dominates, the design should become more conservative about amplification."
+    },
+    {
+      "stage": "post",
+      "question": "Which review metric is most useful after running a Cloudflare full mock?",
+      "options": [
+        "Whether the answer named at least one amplification risk, one control-plane safety mechanism, and one operator-visible detection signal.",
+        "The number of databases mentioned.",
+        "How many protocols were named in the first minute.",
+        "Whether the candidate used the term 'global edge' more than five times."
+      ],
+      "correct": 0,
+      "explanation": "The review should focus on the real edge-specific judgment signals."
+    },
+    {
+      "stage": "post",
+      "question": "What hidden failure appears when a mock answer treats the edge like a generic stateless proxy?",
+      "options": [
+        "It misses purge, routing, policy rollout, shielding, and customer-origin risk that often define the platform's hardest problems.",
+        "It guarantees lower complexity and therefore a better answer.",
+        "It makes redesign unnecessary.",
+        "It removes the need for any trade-off discussion."
+      ],
+      "correct": 0,
+      "explanation": "The edge platform challenge is often in the surrounding control and protection systems, not only proxying."
+    }
+  ]
+}

@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why can asynchronous pipelines hide overload better than synchronous systems?",
+      "options": [
+        "Because buffering can absorb pressure for a while, delaying visible failure even as backlog grows dangerously.",
+        "Because queues always process work faster than producers can send it.",
+        "Because lag is impossible to measure in event systems.",
+        "Because async systems cannot fail closed."
+      ],
+      "correct": 0,
+      "explanation": "Buffers smooth bursts but can also mask growing failure."
+    },
+    {
+      "stage": "pre",
+      "question": "What backlog signal is often more actionable than raw queue depth alone?",
+      "options": [
+        "Oldest unprocessed item age or user-visible completion delay.",
+        "The number of markdown files in the repository.",
+        "The number of fields in the event payload.",
+        "Only broker host uptime."
+      ],
+      "correct": 0,
+      "explanation": "Age maps better to user impact and hidden overload than count alone."
+    },
+    {
+      "stage": "post",
+      "question": "Which design is strongest under mixed critical and best-effort traffic?",
+      "options": [
+        "Protect critical work with priority lanes or admission control instead of making every event compete equally.",
+        "Let all classes share one undifferentiated queue and hope autoscaling keeps up.",
+        "Replay old promotional traffic first because it arrived earlier.",
+        "Avoid defining overload behavior until the first major incident."
+      ],
+      "correct": 0,
+      "explanation": "Differentiated policies are often necessary when business value differs."
+    },
+    {
+      "stage": "post",
+      "question": "What is the hidden risk of focusing only on queue depth?",
+      "options": [
+        "A large queue may be acceptable briefly, while a smaller queue with old items may already be violating user expectations.",
+        "Queue depth always underestimates storage cost by definition.",
+        "Depth makes consumer autoscaling impossible.",
+        "Depth cannot be exported as a metric."
+      ],
+      "correct": 0,
+      "explanation": "Age and service delay often matter more than count alone."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off often comes with bounded queues or bounded backlog age?",
+      "options": [
+        "You surface overload earlier, but you may need to reject, defer, or shed lower-value work.",
+        "You gain infinite burst absorption with no product impact.",
+        "You eliminate the need for producer feedback loops.",
+        "You make replay free."
+      ],
+      "correct": 0,
+      "explanation": "Boundaries force explicit overload policy instead of hiding it."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric most directly shows whether the system is recovering?",
+      "options": [
+        "Drain rate relative to ingest rate and the trend in oldest backlog age.",
+        "Only the number of configured partitions.",
+        "The total count of dashboards.",
+        "Average line length in logs."
+      ],
+      "correct": 0,
+      "explanation": "Recovery means the system is draining faster than new work arrives."
+    },
+    {
+      "stage": "post",
+      "question": "Why can replay trigger a second incident?",
+      "options": [
+        "Because catch-up traffic can compete with live work and overload already-fragile downstream systems.",
+        "Because replay automatically disables deduplication.",
+        "Because replay makes brokers forget offsets.",
+        "Because replay cannot be rate-limited."
+      ],
+      "correct": 0,
+      "explanation": "Recovery traffic itself can become overload if not controlled."
+    },
+    {
+      "stage": "post",
+      "question": "What question matters most before introducing producer throttling?",
+      "options": [
+        "Whether producers can safely slow down, batch, or degrade without violating critical product promises.",
+        "Whether the queue names are short enough.",
+        "Whether JSON or Avro is more popular internally.",
+        "Whether the consumers are deployed on virtual machines."
+      ],
+      "correct": 0,
+      "explanation": "Throttling is only safe if product behavior under slow publish is understood."
+    }
+  ]
+}

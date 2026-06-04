@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why is an explicit order state machine better than one generic status field?",
+      "options": [
+        "Because recovery behavior and allowed transitions become visible instead of implied.",
+        "Because databases cannot store short status strings efficiently.",
+        "Because state machines eliminate all retries automatically.",
+        "Because one status field prevents partial failures."
+      ],
+      "correct": 0,
+      "explanation": "Complex workflows need explicit semantics for progress and recovery."
+    },
+    {
+      "stage": "pre",
+      "question": "What is the main reason to keep an event history for orders?",
+      "options": [
+        "It supports debugging, replay, and operator understanding of what happened.",
+        "It lets you remove idempotency keys from downstream calls.",
+        "It guarantees every order can be rolled back synchronously.",
+        "It replaces the need for terminal states."
+      ],
+      "correct": 0,
+      "explanation": "Order history is the evidence trail for distributed workflow behavior."
+    },
+    {
+      "stage": "post",
+      "question": "What is the most credible response when payment succeeds but inventory reservation fails?",
+      "options": [
+        "Enter an explicit compensation path such as refund or release rather than hiding the mismatch.",
+        "Mark the order complete and fix it later manually.",
+        "Delete the order row and retry checkout from scratch automatically.",
+        "Assume the inventory system will eventually reconcile itself."
+      ],
+      "correct": 0,
+      "explanation": "Partial success needs modeled compensation, not wishful rollback."
+    },
+    {
+      "stage": "post",
+      "question": "Why should transition handling be idempotent?",
+      "options": [
+        "Because callbacks and retries can arrive multiple times or out of order.",
+        "Because idempotency reduces the number of workflow states required to two.",
+        "Because only successful transitions can repeat.",
+        "Because workflow engines never persist duplicate events."
+      ],
+      "correct": 0,
+      "explanation": "Repeated external input is a normal condition in distributed workflows."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric most directly surfaces stuck orders?",
+      "options": [
+        "State age percentiles and backlog counts for recoverable states.",
+        "Average length of customer shipping addresses.",
+        "Frontend bundle parse time for the help center.",
+        "Count of employees with admin access."
+      ],
+      "correct": 0,
+      "explanation": "You need to know which states are aging past policy."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off comes with explicit compensation flows instead of distributed transactions?",
+      "options": [
+        "They are more practical across services but allow temporary inconsistency windows.",
+        "They remove all operator complexity from the system.",
+        "They require fewer states than a simple workflow.",
+        "They guarantee synchronous rollback of external providers."
+      ],
+      "correct": 0,
+      "explanation": "Compensation is realistic, but not instant perfection."
+    },
+    {
+      "stage": "post",
+      "question": "What is the right reaction to an ambiguous payment timeout where final processor outcome is unknown?",
+      "options": [
+        "Model an explicit uncertain state and reconcile with the external system before finalizing.",
+        "Treat the payment as failed immediately and reuse the same charge reference.",
+        "Treat the payment as successful immediately and ship the order.",
+        "Delete the timeout event so dashboards stay clean."
+      ],
+      "correct": 0,
+      "explanation": "Unknown outcomes should stay explicit until confirmed."
+    },
+    {
+      "stage": "post",
+      "question": "Why does operator tooling belong in the design at senior level?",
+      "options": [
+        "Because rare stuck workflows still need safe inspection and recovery when automation stalls.",
+        "Because operator tooling makes tests unnecessary.",
+        "Because manual actions are always faster than automation.",
+        "Because workflow history is useless without a human approving every step."
+      ],
+      "correct": 0,
+      "explanation": "Operational recovery is part of the system, not an afterthought."
+    }
+  ]
+}

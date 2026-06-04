@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What makes resharding riskier than ordinary rebalancing?",
+      "options": [
+        "The shard map or key shape itself changes, so compatibility and client behavior may need to change too.",
+        "Rebalancing always copies more bytes than resharding.",
+        "Resharding never requires any validation or rollback.",
+        "The old layout can never coexist with a new one."
+      ],
+      "correct": 0,
+      "explanation": "Resharding changes layout semantics, not just physical location."
+    },
+    {
+      "stage": "pre",
+      "question": "Why are migration cohorts useful during resharding?",
+      "options": [
+        "They limit blast radius and allow gradual cutover, validation, and rollback.",
+        "They guarantee dual-write logic is unnecessary.",
+        "They eliminate the need for observability during migration.",
+        "They make every background job automatically idempotent."
+      ],
+      "correct": 0,
+      "explanation": "Cohorts are a practical control for safe incremental migration."
+    },
+    {
+      "stage": "post",
+      "question": "What is the safest high-level order for a live resharding plan?",
+      "options": [
+        "Prepare compatibility, backfill, keep up with changes, validate parity, then cut over gradually.",
+        "Cut over all traffic immediately and backfill only if customers complain.",
+        "Delete the old shard map before new clients are deployed.",
+        "Avoid any temporary coexistence because it complicates the diagram."
+      ],
+      "correct": 0,
+      "explanation": "Compatibility and phased validation are what make live resharding survivable."
+    },
+    {
+      "stage": "post",
+      "question": "What is the main trade-off of dual-layout compatibility?",
+      "options": [
+        "It greatly improves migration safety, but increases temporary complexity in routing and writes.",
+        "It removes the need for parity checks.",
+        "It guarantees no extra storage cost during migration.",
+        "It ensures every client upgrades instantly."
+      ],
+      "correct": 0,
+      "explanation": "Supporting old and new layouts together costs complexity, but buys safety."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric is most important before final cohort cutover?",
+      "options": [
+        "Parity mismatch rate and version adoption between old and new layouts.",
+        "The length of the migration channel name in chat.",
+        "The number of TODO comments in source files.",
+        "The total count of build pipelines in the company."
+      ],
+      "correct": 0,
+      "explanation": "You need evidence the new layout is correct and actually being used safely."
+    },
+    {
+      "stage": "post",
+      "question": "Why do secondary indexes deserve explicit mention in a resharding answer?",
+      "options": [
+        "They may depend on the old key or layout and can be incorrect even if primary backfill appears complete.",
+        "They always migrate automatically with no special handling.",
+        "They are only relevant for analytics systems, not serving paths.",
+        "They make rollback impossible by definition."
+      ],
+      "correct": 0,
+      "explanation": "Derived structures can lag or diverge and must be validated directly."
+    },
+    {
+      "stage": "post",
+      "question": "What is the real danger of a big-bang shard-map switch?",
+      "options": [
+        "A single compatibility or correctness mistake can impact the whole system with little rollback granularity.",
+        "It always uses less bandwidth than a phased approach.",
+        "It guarantees lower complexity for clients and operators.",
+        "It makes version skew impossible."
+      ],
+      "correct": 0,
+      "explanation": "Big-bang migrations maximize blast radius."
+    },
+    {
+      "stage": "post",
+      "question": "When might a parity mismatch threshold still be acceptable for cutover?",
+      "options": [
+        "When the mismatches are understood, bounded, non-user-visible, and explicitly accepted with a cleanup plan.",
+        "Whenever the team is tired of waiting on validation.",
+        "Whenever the new shard count is larger than the old one.",
+        "Only when observability is disabled and no one can measure the difference."
+      ],
+      "correct": 0,
+      "explanation": "The right answer is nuanced: some mismatches may be acceptable, but only if understood and controlled."
+    }
+  ]
+}

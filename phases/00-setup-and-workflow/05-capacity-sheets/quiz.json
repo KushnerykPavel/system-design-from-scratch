@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why is a rough capacity sheet useful before architecture?",
+      "options": [
+        "It anchors component choices in scale, throughput, and cost rather than intuition alone.",
+        "It removes the need for clarifying questions.",
+        "It guarantees production-accurate numbers during the interview.",
+        "It is only helpful for storage-heavy systems."
+      ],
+      "correct": 0,
+      "explanation": "The sheet gives directional numbers that shape the design."
+    },
+    {
+      "stage": "pre",
+      "question": "Which input is most important for preventing average load from hiding real stress?",
+      "options": [
+        "A peak factor or burst multiplier.",
+        "A list of preferred databases.",
+        "A count of diagram boxes.",
+        "A transcript of scope clarification."
+      ],
+      "correct": 0,
+      "explanation": "Burstiness often changes overload and scaling decisions more than the average."
+    },
+    {
+      "stage": "post",
+      "question": "What is the right attitude toward numbers in a system design interview?",
+      "options": [
+        "Use rounded estimates with stated assumptions so the numbers are auditable and decision-relevant.",
+        "Avoid numbers unless the interviewer insists on exact values.",
+        "Use as many decimal places as possible to appear rigorous.",
+        "Focus on only one metric because architecture rarely depends on multiple constraints."
+      ],
+      "correct": 0,
+      "explanation": "Interview sizing is about useful directionality and clarity, not fake precision."
+    },
+    {
+      "stage": "post",
+      "question": "Which failure mode most often corrupts capacity reasoning?",
+      "options": [
+        "Treating all requests as identical and ignoring traffic mix or payload differences.",
+        "Writing the estimates in markdown tables.",
+        "Comparing annual and daily storage separately.",
+        "Rounding values to an order of magnitude."
+      ],
+      "correct": 0,
+      "explanation": "Traffic shape and payload diversity often dominate architecture choices."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off comes with using a compact capacity sheet instead of a full spreadsheet model?",
+      "options": [
+        "It is faster and easier to communicate, but it leaves out deeper second-order cost and operational effects.",
+        "It increases detail while reducing speed.",
+        "It makes peak load impossible to discuss.",
+        "It removes the need for later observability design."
+      ],
+      "correct": 0,
+      "explanation": "Compact sheets optimize for interview utility, not full forecasting."
+    },
+    {
+      "stage": "post",
+      "question": "Which output most directly influences edge or CDN decisions?",
+      "options": [
+        "Annual storage growth only.",
+        "Peak bandwidth and payload size distribution.",
+        "The number of post-interview debrief items.",
+        "The count of database tables."
+      ],
+      "correct": 1,
+      "explanation": "Bandwidth and object size shape cache and egress strategy strongly."
+    },
+    {
+      "stage": "post",
+      "question": "Which observability signal best shows whether your own sizing discipline is improving?",
+      "options": [
+        "Whether later design reviews still uncover missing units, assumptions, or burst reasoning.",
+        "How colorful the capacity sheet template looks.",
+        "The number of total rows in the markdown table.",
+        "How many cloud products are mentioned in the architecture."
+      ],
+      "correct": 0,
+      "explanation": "Improvement appears when fewer essential sizing dimensions are missed."
+    },
+    {
+      "stage": "post",
+      "question": "If only 1 percent of requests have very large payloads, what should you do first?",
+      "options": [
+        "Ignore the outliers and size only the median request.",
+        "Separate the traffic classes so the large-payload tail can influence bandwidth and storage decisions explicitly.",
+        "Assume the system is too complex for rough math.",
+        "Replace the whole architecture with a queue."
+      ],
+      "correct": 1,
+      "explanation": "Mixed traffic classes often require separate reasoning even in a rough model."
+    }
+  ]
+}

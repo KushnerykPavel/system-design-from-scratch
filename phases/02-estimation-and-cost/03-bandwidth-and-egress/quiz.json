@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why can a modest-QPS service still have serious bandwidth and cost pressure?",
+      "options": [
+        "Because large payload sizes can make byte throughput and egress cost high even when request count is not huge.",
+        "Because bandwidth matters only for storage systems.",
+        "Because low QPS always implies low egress.",
+        "Because cache hit rate does not affect throughput."
+      ],
+      "correct": 0,
+      "explanation": "Requests are only half the story; bytes per request often dominate."
+    },
+    {
+      "stage": "pre",
+      "question": "What clarification is most important before estimating origin egress?",
+      "options": [
+        "Which whiteboard marker color the interviewer prefers.",
+        "How much traffic is absorbed by edge or CDN caches before reaching origin.",
+        "Whether the service uses SQL or NoSQL.",
+        "How many engineers work on the team."
+      ],
+      "correct": 1,
+      "explanation": "Cache hits directly reduce origin bandwidth and cost."
+    },
+    {
+      "stage": "post",
+      "question": "Which estimate most directly determines peak total throughput?",
+      "options": [
+        "Peak QPS multiplied by average payload size",
+        "Daily active users multiplied by retention days",
+        "Replication factor multiplied by write latency",
+        "CPU cores multiplied by cache hit rate"
+      ],
+      "correct": 0,
+      "explanation": "Bandwidth is fundamentally request rate times bytes per response."
+    },
+    {
+      "stage": "post",
+      "question": "If the edge cache hit rate increases, what usually happens to origin egress?",
+      "options": [
+        "It usually decreases materially.",
+        "It always increases because more content is served.",
+        "It stays identical because hits and misses cost the same.",
+        "It affects only latency, not bandwidth."
+      ],
+      "correct": 0,
+      "explanation": "More hits at the edge mean fewer bytes fetched from origin."
+    },
+    {
+      "stage": "post",
+      "question": "What is the hidden risk of relying on average payload size alone?",
+      "options": [
+        "A small set of large objects may dominate total bytes and overload links or budgets.",
+        "Average payload size removes the need for cache modeling.",
+        "It guarantees underestimation of write QPS only.",
+        "It affects storage but not network planning."
+      ],
+      "correct": 0,
+      "explanation": "Byte-heavy tails can matter much more than average request count suggests."
+    },
+    {
+      "stage": "post",
+      "question": "Which observability metric best checks whether cache is protecting origin bandwidth as planned?",
+      "options": [
+        "Origin miss bytes and edge hit ratio by content class",
+        "Number of API endpoints",
+        "Number of engineers on call",
+        "Average sprint velocity"
+      ],
+      "correct": 0,
+      "explanation": "You want direct evidence of how many bytes still reach origin."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off does aggressive compression introduce?",
+      "options": [
+        "Lower transfer size, but more CPU work and sometimes added latency.",
+        "Higher origin cost, but lower cache hit ratio.",
+        "Better retention efficiency, but lower write durability.",
+        "Lower queue depth, but worse consistency."
+      ],
+      "correct": 0,
+      "explanation": "Compression shifts cost from network to compute."
+    },
+    {
+      "stage": "post",
+      "question": "When is separate regional egress modeling especially important?",
+      "options": [
+        "When pricing or traffic distribution varies significantly across regions.",
+        "When all traffic is internal and free by definition.",
+        "When payload size is less than one kilobyte.",
+        "When the service has no caches at all."
+      ],
+      "correct": 0,
+      "explanation": "Regional pricing and traffic skew can make one global average misleading."
+    }
+  ]
+}

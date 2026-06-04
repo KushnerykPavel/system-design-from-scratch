@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why are large job schedulers vulnerable at common wall-clock boundaries like midnight?",
+      "options": [
+        "Many jobs align naturally and can create synchronized dispatch spikes.",
+        "Because schedulers cannot store timestamps precisely.",
+        "Because midnight disables retry logic in most systems.",
+        "Because shard ownership only works in daylight hours."
+      ],
+      "correct": 0,
+      "explanation": "Aligned schedules create herd behavior."
+    },
+    {
+      "stage": "pre",
+      "question": "What question about missed runs most changes a scheduler design?",
+      "options": [
+        "Whether missed jobs should be replayed, skipped, or coalesced after downtime.",
+        "Whether operators prefer tabs or spaces in the UI.",
+        "Whether jobs use JSON or YAML comments.",
+        "Whether the scheduler logo is company-specific."
+      ],
+      "correct": 0,
+      "explanation": "Outage catch-up semantics shape both control plane and safety."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric best shows that a scheduler is falling behind?",
+      "options": [
+        "Dispatch lag and overdue-job count.",
+        "Average job-description length.",
+        "The number of schedulers in the documentation set.",
+        "Median worker hostname length."
+      ],
+      "correct": 0,
+      "explanation": "Lag reveals when jobs are due but not dispatched."
+    },
+    {
+      "stage": "post",
+      "question": "Why is jitter often a core feature rather than an optional optimization?",
+      "options": [
+        "It spreads naturally aligned workloads and reduces synchronized load spikes.",
+        "It guarantees exactly-once execution.",
+        "It removes the need for shard leases.",
+        "It makes all retries succeed faster."
+      ],
+      "correct": 0,
+      "explanation": "Schedulers need to smooth concentrated demand."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off comes with letting the scheduler own retry policy centrally?",
+      "options": [
+        "You gain visibility and safety controls but add platform complexity and some product rigidity.",
+        "You eliminate the need for idempotent jobs.",
+        "You make all downstream incidents harmless.",
+        "You prevent deadlines from expiring."
+      ],
+      "correct": 0,
+      "explanation": "Central policy is powerful but not free."
+    },
+    {
+      "stage": "post",
+      "question": "Which failure is most directly mitigated by shard leases?",
+      "options": [
+        "A scheduler node dying after claiming responsibility for due jobs.",
+        "A worker returning an application error.",
+        "A monitoring dashboard rendering slowly.",
+        "A queue retaining messages too long."
+      ],
+      "correct": 0,
+      "explanation": "Leases let ownership recover after control-plane loss."
+    },
+    {
+      "stage": "post",
+      "question": "Why is deadline awareness valuable in a scheduler?",
+      "options": [
+        "Some jobs are no longer useful after enough delay and should be dropped or deprioritized.",
+        "It removes the need for timestamps.",
+        "It guarantees worker pools stay idle.",
+        "It only matters for monthly batch jobs."
+      ],
+      "correct": 0,
+      "explanation": "Late work can be wasted work."
+    },
+    {
+      "stage": "post",
+      "question": "What design change best protects a shared scheduler from one noisy tenant?",
+      "options": [
+        "Per-tenant quotas and priority-aware isolation.",
+        "A single retry queue for every tenant combined.",
+        "Turning off dead-letter handling.",
+        "Removing missed-run tracking."
+      ],
+      "correct": 0,
+      "explanation": "Isolation is the platform answer to noisy-neighbor behavior."
+    }
+  ]
+}

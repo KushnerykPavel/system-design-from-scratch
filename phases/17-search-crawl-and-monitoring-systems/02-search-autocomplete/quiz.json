@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why is autocomplete usually more latency-sensitive than many normal search requests?",
+      "options": [
+        "Because users generate many requests per query as they type.",
+        "Because autocomplete never allows caching.",
+        "Because every request must scan the full document corpus.",
+        "Because ranking is impossible without cross-region writes."
+      ],
+      "correct": 0,
+      "explanation": "Per-keystroke interaction amplifies latency and request rate."
+    },
+    {
+      "stage": "pre",
+      "question": "What is the main role of a prefix index in autocomplete?",
+      "options": [
+        "To run full-text document ranking for each keypress.",
+        "To cheaply generate a small candidate set for a typed prefix.",
+        "To replace all policy filtering and moderation checks.",
+        "To guarantee globally fresh trends every second."
+      ],
+      "correct": 1,
+      "explanation": "The prefix index is about fast candidate lookup."
+    },
+    {
+      "stage": "post",
+      "question": "Why is snapshot-based serving a common autocomplete design choice?",
+      "options": [
+        "It gives predictable low-latency reads while isolating update work from the serving path.",
+        "It removes the need for ranking features entirely.",
+        "It guarantees that every result is personalized.",
+        "It prevents any suggestion from ever becoming hot."
+      ],
+      "correct": 0,
+      "explanation": "Stable snapshots simplify the serving path."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric best detects that update freshness is slipping?",
+      "options": [
+        "Snapshot age by shard and publish success rate.",
+        "Median browser viewport width of clients.",
+        "The number of engineers on the ranking team.",
+        "Average string length of the top result."
+      ],
+      "correct": 0,
+      "explanation": "Snapshot age directly captures serving staleness."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off comes with adding per-user personalization to autocomplete?",
+      "options": [
+        "Higher relevance for some users but more memory pressure and feature-fetch complexity.",
+        "Lower latency and less memory use for all requests.",
+        "Guaranteed policy compliance without moderation systems.",
+        "No need for region-level popularity modeling."
+      ],
+      "correct": 0,
+      "explanation": "Personalization adds state and serving complexity."
+    },
+    {
+      "stage": "post",
+      "question": "Why is a stale-safe fallback snapshot useful?",
+      "options": [
+        "It keeps the system available when fresh ranking signals or publish steps are delayed.",
+        "It makes blue/green rollouts unnecessary.",
+        "It guarantees real-time trend discovery under all failures.",
+        "It removes the need for policy blocklists."
+      ],
+      "correct": 0,
+      "explanation": "Availability often matters more than perfect freshness."
+    },
+    {
+      "stage": "post",
+      "question": "Which failure mode is most directly addressed by canary diffing during snapshot rollout?",
+      "options": [
+        "A corrupted or bad-quality snapshot reaching all serving shards.",
+        "A browser typing slower than expected.",
+        "A user issuing the same prefix twice.",
+        "A data center changing its IP range."
+      ],
+      "correct": 0,
+      "explanation": "Canary diffing is a rollout-safety measure."
+    },
+    {
+      "stage": "post",
+      "question": "What is the stronger explanation for separating candidate generation from ranking?",
+      "options": [
+        "It limits expensive ranking logic to a small set instead of the whole corpus.",
+        "It avoids storing query popularity anywhere.",
+        "It guarantees exact consistency between all regions.",
+        "It eliminates the need for caches."
+      ],
+      "correct": 0,
+      "explanation": "The split bounds compute while preserving quality."
+    }
+  ]
+}

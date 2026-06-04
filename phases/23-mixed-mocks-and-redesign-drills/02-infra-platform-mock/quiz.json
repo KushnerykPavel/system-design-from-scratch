@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What is the most important early distinction in many platform design prompts?",
+      "options": [
+        "Which responsibilities belong to the data plane versus the control plane.",
+        "Which programming language the team prefers.",
+        "How many microservices can fit on one slide.",
+        "Whether to start with a queue or a cache."
+      ],
+      "correct": 0,
+      "explanation": "Control-plane and data-plane responsibilities usually have different latency, correctness, and failure requirements."
+    },
+    {
+      "stage": "pre",
+      "question": "Why do tenant boundaries matter in a platform mock?",
+      "options": [
+        "Because isolation, quota, and blast-radius choices often define whether the platform is operationally safe.",
+        "Because multi-tenancy only affects billing dashboards.",
+        "Because tenant count never changes architecture.",
+        "Because tenant isolation removes the need for rollout plans."
+      ],
+      "correct": 0,
+      "explanation": "Platforms often fail through noisy neighbors or misconfiguration, not just raw scale."
+    },
+    {
+      "stage": "post",
+      "question": "Why should a strong answer size hot paths and slow paths separately?",
+      "options": [
+        "Because low-latency serving and lower-rate state propagation often need different architectures and budgets.",
+        "Because only the smaller path matters in practice.",
+        "Because rollout systems should ignore request traffic entirely.",
+        "Because platform prompts never involve storage growth."
+      ],
+      "correct": 0,
+      "explanation": "Platform systems commonly mix very different traffic shapes that need different treatment."
+    },
+    {
+      "stage": "post",
+      "question": "Which signal best detects unsafe propagation in a control plane?",
+      "options": [
+        "Version convergence lag by region or tenant, paired with serving behavior by version.",
+        "Only average CPU across the fleet.",
+        "The total number of dashboards owned by the team.",
+        "The count of source files in the repository."
+      ],
+      "correct": 0,
+      "explanation": "Unsafe propagation is primarily visible through skew and lag, not broad aggregate signals."
+    },
+    {
+      "stage": "post",
+      "question": "What is the main trade-off of stricter tenant isolation?",
+      "options": [
+        "It reduces blast radius and noisy-neighbor risk, but can lower packing efficiency and increase operational cost.",
+        "It makes observability unnecessary.",
+        "It guarantees lower latency for every request.",
+        "It removes the need for rollback."
+      ],
+      "correct": 0,
+      "explanation": "Isolation improves safety, but it is rarely free."
+    },
+    {
+      "stage": "post",
+      "question": "Why is a rollout or migration plan required in a strong platform answer?",
+      "options": [
+        "Because changing shared state safely is often the real platform risk, especially under partial failure.",
+        "Because interviewers always reject stable architectures.",
+        "Because rollout plans matter only after launch.",
+        "Because stateless systems never change configuration."
+      ],
+      "correct": 0,
+      "explanation": "Many platform incidents happen while state changes, not while steady-state traffic flows."
+    },
+    {
+      "stage": "post",
+      "question": "If the interviewer adds a requirement for sub-five-second policy propagation to one premium tenant, what should change first?",
+      "options": [
+        "Revisit propagation topology, versioning strategy, and local serving fallback while naming the cost and complexity increase.",
+        "Keep the design unchanged and only document the new SLA.",
+        "Remove tenant isolation to simplify the rollout.",
+        "Assume strong consistency everywhere without explaining it."
+      ],
+      "correct": 0,
+      "explanation": "A tighter propagation requirement should create visible architectural changes and trade-offs."
+    },
+    {
+      "stage": "post",
+      "question": "Why should an infra-platform answer name one failure domain explicitly?",
+      "options": [
+        "It shows where mistakes stop, which is often more important than steady-state throughput claims.",
+        "It proves that outages cannot happen.",
+        "It replaces the need for quotas and validation.",
+        "It matters only for storage systems."
+      ],
+      "correct": 0,
+      "explanation": "Failure-domain clarity is central to platform safety and operational trust."
+    }
+  ]
+}

@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What is the clearest sign of a weak caching interview answer?",
+      "options": [
+        "It names a cache product but never states freshness promises or miss-path behavior.",
+        "It estimates read traffic before choosing a cache layer.",
+        "It distinguishes public and private content.",
+        "It mentions observability."
+      ],
+      "correct": 0,
+      "explanation": "A strong answer explains behavior and trade-offs, not just products."
+    },
+    {
+      "stage": "pre",
+      "question": "Why should a caching drill start by classifying data and user journeys?",
+      "options": [
+        "Because freshness, invalidation, and layer choice depend on what is hot, mutable, and user-critical.",
+        "Because caches only work for static assets.",
+        "Because key design never matters.",
+        "Because it removes the need for capacity thinking."
+      ],
+      "correct": 0,
+      "explanation": "Different data classes need different cache behaviors."
+    },
+    {
+      "stage": "post",
+      "question": "What should usually come immediately after choosing a primary cache path in a strong drill answer?",
+      "options": [
+        "An explanation of freshness and invalidation for the most important mutable data.",
+        "A list of every possible database technology.",
+        "A long detour into object serialization libraries.",
+        "Skipping directly to cost without naming failure modes."
+      ],
+      "correct": 0,
+      "explanation": "Freshness behavior is the next essential constraint after basic cache placement."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric most directly shows whether the cache is protecting the origin?",
+      "options": [
+        "Origin offload or miss amplification on the hot paths.",
+        "Only total team size.",
+        "The number of lesson artifacts produced.",
+        "Average line length in tests."
+      ],
+      "correct": 0,
+      "explanation": "A cache exists to improve latency and protect the origin, so origin pressure must stay visible."
+    },
+    {
+      "stage": "post",
+      "question": "Why is it often a mistake to use one TTL or freshness rule for every entity?",
+      "options": [
+        "Different data classes have different user impact, mutability, and read-after-write needs.",
+        "Because TTL is not supported by most caches.",
+        "Because invalidation is always free.",
+        "Because all objects are equally hot."
+      ],
+      "correct": 0,
+      "explanation": "Uniform freshness rules are easy to say but usually misfit the product."
+    },
+    {
+      "stage": "post",
+      "question": "What is the hidden risk of ignoring the miss path in a drill?",
+      "options": [
+        "A high steady-state hit ratio can still hide hot-key expiry incidents that overload the origin.",
+        "The cache will stop storing objects entirely.",
+        "The system becomes strongly consistent by accident.",
+        "Browser caches will no longer revalidate."
+      ],
+      "correct": 0,
+      "explanation": "The dangerous part of caching often appears during misses, not during hits."
+    },
+    {
+      "stage": "post",
+      "question": "Which interview answer is strongest?",
+      "options": [
+        "I will cache everything and tighten details later if the interviewer asks.",
+        "I will choose a primary cache path, define the freshness promise for critical entities, explain the hot-key miss path, and close with observability and trade-offs.",
+        "I will focus only on CDN behavior because all caches are the same.",
+        "I will avoid discussing stale data because it makes answers longer."
+      ],
+      "correct": 1,
+      "explanation": "That answer covers the decision points that distinguish a senior caching deep dive from a shallow one."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off often appears when the interviewer asks for stricter freshness late in the drill?",
+      "options": [
+        "You usually pay with more misses, invalidation coordination, or origin cost.",
+        "You automatically reduce complexity everywhere.",
+        "You remove the need for cache keys.",
+        "You make eviction policy irrelevant."
+      ],
+      "correct": 0,
+      "explanation": "Tighter freshness almost always costs something operationally."
+    }
+  ]
+}

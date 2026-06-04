@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why is separating PII from long-lived financial records usually a good design choice?",
+      "options": [
+        "It reduces compliance blast radius while preserving needed accounting evidence.",
+        "It makes deletion unnecessary because tokens never expire.",
+        "It guarantees legal-hold behavior without policy logic.",
+        "It removes the need for access logging."
+      ],
+      "correct": 0,
+      "explanation": "Separation lets you keep finance records while limiting sensitive identity exposure."
+    },
+    {
+      "stage": "pre",
+      "question": "What is the main value of immutable audit logs?",
+      "options": [
+        "They make privileged actions and manual overrides trustworthy during investigations.",
+        "They eliminate the need for role-based access control.",
+        "They compress archival storage automatically.",
+        "They allow customer data deletion to skip verification."
+      ],
+      "correct": 0,
+      "explanation": "Audit trails are evidence, so tamper resistance matters."
+    },
+    {
+      "stage": "post",
+      "question": "What is the most credible answer when privacy deletion conflicts with financial retention requirements?",
+      "options": [
+        "Delete or anonymize customer-identifying data while preserving required financial records with policy controls.",
+        "Delete all finance history immediately to satisfy the privacy request.",
+        "Reject all deletion requests categorically for financial systems.",
+        "Copy the financial data to a spreadsheet and remove the database row."
+      ],
+      "correct": 0,
+      "explanation": "The design should separate identity from accounting evidence."
+    },
+    {
+      "stage": "post",
+      "question": "Why should legal hold be modeled as an explicit policy override?",
+      "options": [
+        "Because deletion jobs must be able to deny or pause actions when retention obligations change.",
+        "Because legal hold is only relevant to frontend logging.",
+        "Because legal hold removes the need for access audits.",
+        "Because policy overrides are cheaper than storage."
+      ],
+      "correct": 0,
+      "explanation": "Hold semantics affect whether data may be altered or removed."
+    },
+    {
+      "stage": "post",
+      "question": "Which signal best reveals compliance workflow trouble?",
+      "options": [
+        "Deletion backlog, legal-hold conflict counts, and unlogged privileged-access violations.",
+        "Average keyboard type used by support agents.",
+        "Number of marketing emails sent this quarter.",
+        "Count of images on the billing FAQ page."
+      ],
+      "correct": 0,
+      "explanation": "The signals should map directly to compliance risk and operational delay."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off comes with centralizing retention policy by record type?",
+      "options": [
+        "You get consistent enforcement but must invest in classification and cross-system integration.",
+        "You remove the need for archive tiers entirely.",
+        "You guarantee all storage systems support the same native features.",
+        "You make privileged access invisible to operators."
+      ],
+      "correct": 0,
+      "explanation": "Consistency improves, but policy orchestration becomes a real subsystem."
+    },
+    {
+      "stage": "post",
+      "question": "Why should privileged reads be logged in addition to writes?",
+      "options": [
+        "Because sensitive data exposure often happens through access and export, not only mutation.",
+        "Because read logs replace the need for authentication.",
+        "Because writes are already impossible in financial systems.",
+        "Because read logs automatically minimize PCI scope."
+      ],
+      "correct": 0,
+      "explanation": "Exposure and misuse often come from viewing or exporting records."
+    },
+    {
+      "stage": "post",
+      "question": "What changes most when archived records are slow to retrieve during investigations?",
+      "options": [
+        "Metadata indexing and staged restore workflows become part of the design, not a storage footnote.",
+        "Legal hold can be ignored until hot storage is restored.",
+        "Audit logs should be deleted sooner.",
+        "Tokenization stops providing value."
+      ],
+      "correct": 0,
+      "explanation": "Long retention only works operationally if investigators can still find what they need."
+    }
+  ]
+}

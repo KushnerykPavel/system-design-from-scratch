@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why are wall-clock timestamps risky as the only ordering signal?",
+      "options": [
+        "Because different machines can drift and messages can arrive out of order, so timestamp order may not match real causal or business order.",
+        "Because timestamps cannot be stored in databases.",
+        "Because networked systems never use clocks at all.",
+        "Because display time and correctness time are always identical."
+      ],
+      "correct": 0,
+      "explanation": "Clock skew and delivery delay can make wall time misleading for correctness."
+    },
+    {
+      "stage": "pre",
+      "question": "What should you ask before relying on TTL or lease expiry?",
+      "options": [
+        "How much skew is possible and what safety margin or fencing mechanism protects ownership decisions?",
+        "Whether the timestamp field fits in 64 bits.",
+        "How to remove version metadata entirely.",
+        "Whether caches can hide lease bugs."
+      ],
+      "correct": 0,
+      "explanation": "Time-based ownership needs explicit skew and fencing thinking."
+    },
+    {
+      "stage": "post",
+      "question": "What is the hidden risk of last-write-wins under skewed clocks?",
+      "options": [
+        "A write with an apparently newer timestamp can overwrite the more correct or later-intended state.",
+        "It forces every write through a global lock instantly.",
+        "It prevents replica repair completely.",
+        "It guarantees causal ordering."
+      ],
+      "correct": 0,
+      "explanation": "Timestamp freshness is not always the same as logical correctness."
+    },
+    {
+      "stage": "post",
+      "question": "Why do fencing tokens help with lease ownership?",
+      "options": [
+        "They let the system reject stale owners even if lease timing and delayed messages would otherwise create overlap.",
+        "They synchronize every node's wall clock perfectly.",
+        "They eliminate the need for monitoring.",
+        "They make retries unnecessary."
+      ],
+      "correct": 0,
+      "explanation": "Fencing protects against stale actors after ownership changes."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric most directly exposes dangerous skew for control paths?",
+      "options": [
+        "Clock offset or fence-violation metrics by node or region.",
+        "The number of lesson exercises completed.",
+        "Average documentation line length.",
+        "How many worker binaries were built last week."
+      ],
+      "correct": 0,
+      "explanation": "Those metrics show whether timing assumptions are drifting toward unsafe behavior."
+    },
+    {
+      "stage": "post",
+      "question": "When is logical versioning usually better than timestamps alone?",
+      "options": [
+        "When correctness depends on ordering and conflicting writers or delayed delivery can make wall-clock order ambiguous.",
+        "Only when there is a single writer on one machine.",
+        "Only in batch analytics systems.",
+        "When user-visible display time must be hidden."
+      ],
+      "correct": 0,
+      "explanation": "Versioning is safer when ordering carries business meaning."
+    },
+    {
+      "stage": "post",
+      "question": "Why should TTL-based deletion be treated carefully in replicated systems?",
+      "options": [
+        "Because skew or lag can make one replica delete data before others or before consumers have safely observed the change.",
+        "Because tombstones are never used in distributed stores.",
+        "Because deletion can only happen on leaders.",
+        "Because time-based expiry removes the need for replay."
+      ],
+      "correct": 0,
+      "explanation": "Deletion timing interacts with lag, repair, and ordering."
+    },
+    {
+      "stage": "post",
+      "question": "What makes a time-assumptions answer sound senior?",
+      "options": [
+        "It separates display time from correctness ordering, adds fencing or buffers where needed, and makes skew observable.",
+        "It assumes NTP makes distributed timing exact enough for every invariant.",
+        "It replaces every version with a timestamp.",
+        "It avoids discussing leases or expiry risk."
+      ],
+      "correct": 0,
+      "explanation": "Senior answers know where clocks help and where they mislead."
+    }
+  ]
+}

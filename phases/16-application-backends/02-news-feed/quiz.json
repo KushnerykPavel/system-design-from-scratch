@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why is a pure fanout-on-write strategy usually dangerous for social feeds at large scale?",
+      "options": [
+        "Because ordinary users almost never read their home timeline.",
+        "Because celebrity accounts can create extreme write amplification to follower inboxes.",
+        "Because push fanout prevents any ranking from happening.",
+        "Because home timelines must always be generated at the edge."
+      ],
+      "correct": 1,
+      "explanation": "Follower-graph skew is the classic reason pure push breaks down."
+    },
+    {
+      "stage": "pre",
+      "question": "What is the main product reason to avoid offset pagination in feeds?",
+      "options": [
+        "Feeds change underneath the reader, so inserts and re-ranking make offsets unstable.",
+        "Offsets can only be computed inside SQL databases.",
+        "Offset pagination always doubles storage cost.",
+        "Offsets block moderation deletes from succeeding."
+      ],
+      "correct": 0,
+      "explanation": "Cursors are a better match for timelines whose contents and rank evolve continuously."
+    },
+    {
+      "stage": "post",
+      "question": "Which architecture choice best handles both ordinary users and celebrity accounts?",
+      "options": [
+        "Use only pull-on-read for everyone.",
+        "Use only push fanout for everyone.",
+        "Use mixed fanout, pushing ordinary content while reading celebrity content on demand.",
+        "Disable ranking so all timelines become cheaper."
+      ],
+      "correct": 2,
+      "explanation": "Mixed fanout matches skewed graphs without forcing one global compromise."
+    },
+    {
+      "stage": "post",
+      "question": "What is the cleanest fallback when ranking features become stale but the timeline store is healthy?",
+      "options": [
+        "Serve a chronological or rank-lite feed instead of failing the read path.",
+        "Reject all timeline reads until the model catches up.",
+        "Drop celebrity posts entirely.",
+        "Force every user to refollow their graph."
+      ],
+      "correct": 0,
+      "explanation": "Graceful degradation matters more than perfect ranking during incidents."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric most directly measures feed freshness for recently published content?",
+      "options": [
+        "Time from post creation to first visibility in follower timelines.",
+        "Average profile photo size for authors in the graph.",
+        "Total number of follows ever created.",
+        "Median HTTP request header count."
+      ],
+      "correct": 0,
+      "explanation": "Freshness should be measured against the user-visible outcome."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off comes with materialized timeline stores?",
+      "options": [
+        "They improve read latency but create write amplification and invalidation work.",
+        "They remove the need for follower-graph storage.",
+        "They guarantee perfect ranking relevance.",
+        "They make moderation deletes impossible."
+      ],
+      "correct": 0,
+      "explanation": "Precomputation buys read speed by paying more work up front."
+    },
+    {
+      "stage": "post",
+      "question": "Why are moderation tombstones useful in feed systems?",
+      "options": [
+        "They help suppress deleted or hidden posts even if some materialized entries still exist.",
+        "They reduce follower count for celebrity accounts.",
+        "They eliminate queueing for fanout workers.",
+        "They make cursor pagination unnecessary."
+      ],
+      "correct": 0,
+      "explanation": "A tombstone is a fast negative signal while cleanup catches up."
+    },
+    {
+      "stage": "post",
+      "question": "What is the hidden cost of pull-on-read for high-follower accounts?",
+      "options": [
+        "Reads become more expensive because the feed service must merge and rank more sources at query time.",
+        "It forces all posts to be stored only in memory.",
+        "It makes freshness impossible to observe.",
+        "It guarantees lower p99 latency than precomputed feeds."
+      ],
+      "correct": 0,
+      "explanation": "Pull avoids write explosion but shifts work onto feed reads."
+    }
+  ]
+}

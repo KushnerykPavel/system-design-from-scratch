@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What makes a sharding interview answer incomplete even if the shard key sounds reasonable?",
+      "options": [
+        "It ignores skew, movement, observability, and cross-shard consequences.",
+        "It includes too many concrete numbers during sizing.",
+        "It mentions both reads and writes in the same answer.",
+        "It acknowledges trade-offs explicitly."
+      ],
+      "correct": 0,
+      "explanation": "A shard key is only the start; the whole operational story matters."
+    },
+    {
+      "stage": "pre",
+      "question": "Why is a final drill useful at the end of this phase?",
+      "options": [
+        "It tests whether the learner can connect design choices across multiple sharding topics under one prompt.",
+        "It replaces the need for any earlier lessons.",
+        "It guarantees perfect interview performance after one attempt.",
+        "It only checks memorization of vocabulary."
+      ],
+      "correct": 0,
+      "explanation": "The drill checks integration, not isolated recall."
+    },
+    {
+      "stage": "post",
+      "question": "Which opening design choice is strongest for the feature-flag drill prompt?",
+      "options": [
+        "Start from tenant-local reads and choose tenant-aware routing plus a directory for flexible placement.",
+        "Shard only by random config ID and hope dashboards stay easy.",
+        "Design global dashboards first and postpone the serving path.",
+        "Avoid clarifying how uneven tenant sizes are."
+      ],
+      "correct": 0,
+      "explanation": "The prompt is dominated by tenant-local reads and uneven tenant sizes."
+    },
+    {
+      "stage": "post",
+      "question": "What is the main trade-off of adding a tenant directory to the drill solution?",
+      "options": [
+        "You gain controlled movement and flexible placement, but add routing indirection and control-plane state.",
+        "You eliminate the need for every migration plan.",
+        "You guarantee no noisy-neighbor incidents ever happen.",
+        "You make every admin query shard-local."
+      ],
+      "correct": 0,
+      "explanation": "Directories buy flexibility, but they are not free."
+    },
+    {
+      "stage": "post",
+      "question": "Which signal best checks whether the drill answer treated migrations seriously enough?",
+      "options": [
+        "It explained epochs, bounded move concurrency, validation, and rollback rather than only saying 'we move tenants.'",
+        "It listed more database brands than the interviewer expected.",
+        "It used the word 'scalable' several times.",
+        "It omitted every mention of parity checks to stay concise."
+      ],
+      "correct": 0,
+      "explanation": "Migration quality is about concrete safety mechanics, not broad claims."
+    },
+    {
+      "stage": "post",
+      "question": "Why are derived global views usually a better fit than live fanout for admin dashboards in the drill?",
+      "options": [
+        "They protect the primary tenant-serving path from growing cross-shard query cost.",
+        "They make every result globally consistent with zero lag.",
+        "They remove the need for observability entirely.",
+        "They keep storage cost lower than any local index."
+      ],
+      "correct": 0,
+      "explanation": "Derived views are often the right way to keep primary traffic local and fast."
+    },
+    {
+      "stage": "post",
+      "question": "What weakens a drill answer most under a follow-up about one huge enterprise tenant?",
+      "options": [
+        "Failing to discuss dedicated placement, splits, or stronger isolation controls.",
+        "Mentioning that the tenant may need a different service tier.",
+        "Explaining how per-tenant metrics would reveal the problem.",
+        "Calling out the cost implications of stronger isolation."
+      ],
+      "correct": 0,
+      "explanation": "Large-tenant follow-ups test whether the design handles skew beyond average cases."
+    },
+    {
+      "stage": "post",
+      "question": "What does a strong final answer in this drill usually sound like?",
+      "options": [
+        "A workload-first design with explicit shard choice, isolation, migration, observability, and trade-offs tied together.",
+        "A generic list of distributed-systems buzzwords with no sizing or failure story.",
+        "An argument that sharding details are implementation concerns outside interview scope.",
+        "A claim that one vendor feature removes the need for design decisions."
+      ],
+      "correct": 0,
+      "explanation": "The goal is an integrated, operationally credible design narrative."
+    }
+  ]
+}

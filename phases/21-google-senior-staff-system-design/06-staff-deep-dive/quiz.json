@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What usually makes a deep dive valuable at staff level?",
+      "options": [
+        "It focuses on the subsystem where better reasoning most changes confidence in the overall design.",
+        "It shows as many implementation details as possible regardless of the prompt.",
+        "It avoids trade-offs so the answer stays clean.",
+        "It covers every subsystem equally for fairness."
+      ],
+      "correct": 0,
+      "explanation": "The best deep dive increases trust in the whole architecture by addressing the most important risk."
+    },
+    {
+      "stage": "pre",
+      "question": "Why is choosing a deep dive deliberately important?",
+      "options": [
+        "Because interviews reward the component the candidate likes best personally.",
+        "Because time is limited, and depth should go where leverage is highest rather than wherever the conversation drifts.",
+        "Because staff interviews ban discussion of APIs and data models.",
+        "Because deliberate choice eliminates the need for failure analysis."
+      ],
+      "correct": 1,
+      "explanation": "A deliberate choice shows judgment and keeps time focused on the most valuable area."
+    },
+    {
+      "stage": "post",
+      "question": "Which deep dive is strongest for a correctness-sensitive workflow?",
+      "options": [
+        "A deep dive into write-path invariants, idempotency boundaries, and failure recovery behavior.",
+        "A deep dive into icon selection for the architecture diagram.",
+        "A deep dive into every optional API field regardless of workload.",
+        "A deep dive into a random caching library because it is popular."
+      ],
+      "correct": 0,
+      "explanation": "Correctness-sensitive systems benefit most from depth around the authoritative path and recovery semantics."
+    },
+    {
+      "stage": "post",
+      "question": "What is the main risk of an implementation-trivia deep dive?",
+      "options": [
+        "It consumes time without proving that the overall architecture handles the prompt's real bottleneck or failure risk.",
+        "It automatically lowers availability.",
+        "It makes the interviewer avoid all follow-ups.",
+        "It only matters in Google interviews, not elsewhere."
+      ],
+      "correct": 0,
+      "explanation": "Depth should expose architectural judgment, not disconnected technical facts."
+    },
+    {
+      "stage": "post",
+      "question": "Why should the candidate mention other deep-dive options briefly?",
+      "options": [
+        "It shows the chosen deep dive was compared against alternatives and not selected accidentally.",
+        "It guarantees the interviewer will not redirect the conversation.",
+        "It replaces the need for the actual deep dive.",
+        "It matters only when the system uses more than one database."
+      ],
+      "correct": 0,
+      "explanation": "A quick comparison makes the choice feel intentional and higher signal."
+    },
+    {
+      "stage": "post",
+      "question": "Which observability angle best strengthens a deep dive?",
+      "options": [
+        "Explaining how the subsystem's key failure or bottleneck would be measured and detected in production.",
+        "Mentioning that dashboards exist somewhere in the organization.",
+        "Saying monitoring can be added later if needed.",
+        "Avoiding metrics to preserve more time for component naming."
+      ],
+      "correct": 0,
+      "explanation": "Observability turns depth into something operationally credible."
+    },
+    {
+      "stage": "post",
+      "question": "If the interviewer pushes into a different subsystem than the one you chose, what is the best move?",
+      "options": [
+        "Adapt and explain that subsystem using the same guarantee, bottleneck, and failure-mode framing rather than defending the original pick stubbornly.",
+        "Refuse because the original deep dive was already selected.",
+        "Restart the answer from the beginning.",
+        "Ignore the new subsystem and continue the prepared explanation."
+      ],
+      "correct": 0,
+      "explanation": "The choice should be deliberate, but the candidate still needs to stay collaborative and flexible."
+    },
+    {
+      "stage": "post",
+      "question": "What most clearly shows that a deep dive connects back to the full design?",
+      "options": [
+        "The explanation changes how you reason about scaling, availability, or correctness in the rest of the system.",
+        "The explanation includes more acronyms than the rest of the interview.",
+        "The explanation uses a different diagram style.",
+        "The explanation focuses only on library-level implementation choices."
+      ],
+      "correct": 0,
+      "explanation": "A strong deep dive affects trust in the architecture as a whole."
+    }
+  ]
+}

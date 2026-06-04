@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What is the main idea behind comparing fanout patterns across products?",
+      "options": [
+        "To decide where work should happen based on workload shape instead of copying one slogan everywhere.",
+        "To prove push fanout is always the best design.",
+        "To avoid discussing user-visible freshness entirely.",
+        "To remove caches from backend systems."
+      ],
+      "correct": 0,
+      "explanation": "Fanout is fundamentally about work placement under specific constraints."
+    },
+    {
+      "stage": "pre",
+      "question": "Which workload signal most strongly warns that pure push fanout may be dangerous?",
+      "options": [
+        "Large audience size combined with strong skew toward a few producers.",
+        "Low average request header size.",
+        "A small number of total microservices.",
+        "The existence of any cache in the architecture."
+      ],
+      "correct": 0,
+      "explanation": "Skew and recipient count are what create explosive amplification."
+    },
+    {
+      "stage": "post",
+      "question": "Why is pull fanout often attractive for celebrity-style workloads?",
+      "options": [
+        "It avoids exploding write work when one event would otherwise fan out to massive audiences.",
+        "It guarantees lower read latency than precomputed views.",
+        "It eliminates the need for ranking or caching.",
+        "It prevents partial degradation entirely."
+      ],
+      "correct": 0,
+      "explanation": "Pull defers work and avoids impossible write amplification."
+    },
+    {
+      "stage": "post",
+      "question": "What is the hidden cost of choosing pull fanout too broadly?",
+      "options": [
+        "Read-time merge and ranking work can become too expensive or too slow.",
+        "Recipient sets can no longer be stored durably.",
+        "Freshness becomes impossible to observe.",
+        "Queues are no longer allowed in the architecture."
+      ],
+      "correct": 0,
+      "explanation": "Pull reduces writes by shifting cost to reads."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric most directly captures fanout write amplification?",
+      "options": [
+        "Number of downstream writes or enqueues per logical source event.",
+        "Average avatar image width.",
+        "The total number of dashboards in Grafana.",
+        "Median OAuth token length."
+      ],
+      "correct": 0,
+      "explanation": "Amplification should be measured close to the actual extra work created."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off comes with mixed fanout strategies?",
+      "options": [
+        "They fit skewed workloads better but add policy and debugging complexity.",
+        "They remove all need for observability.",
+        "They force every read to be stale.",
+        "They guarantee lower cost than any simpler design."
+      ],
+      "correct": 0,
+      "explanation": "Hybrids are often right, but they are not free."
+    },
+    {
+      "stage": "post",
+      "question": "Why should fanout strategy be tied to degraded-mode planning?",
+      "options": [
+        "Because delayed or failed secondary work can change whether users see stale, partial, or unavailable results.",
+        "Because degraded modes only matter for databases.",
+        "Because fanout has no effect on freshness.",
+        "Because fallback makes metrics unnecessary."
+      ],
+      "correct": 0,
+      "explanation": "Work placement determines where and how the product degrades."
+    },
+    {
+      "stage": "post",
+      "question": "What is the cleanest reason to migrate from a pure push feed to a hybrid model?",
+      "options": [
+        "Write amplification and queue lag for high-follower accounts are becoming the primary scaling risk.",
+        "Offset pagination is unpopular with frontend teams.",
+        "The company wants fewer Go services.",
+        "The cache hit rate is already perfect."
+      ],
+      "correct": 0,
+      "explanation": "A migration should respond to the dominant scaling pain, not fashion."
+    }
+  ]
+}

@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What does it mean to find the bottleneck in a system design estimate?",
+      "options": [
+        "Identify which resource reaches its limit first under the intended workload.",
+        "Identify which team owns the most code.",
+        "Pick the component with the highest monthly cost.",
+        "Choose the service with the lowest cache hit rate."
+      ],
+      "correct": 0,
+      "explanation": "The bottleneck is the first limiting resource, not just the most visible component."
+    },
+    {
+      "stage": "pre",
+      "question": "Why is saying 'the database is the bottleneck' often incomplete?",
+      "options": [
+        "Because the actual limit may be CPU, disk IOPS, storage bandwidth, or network, and the fix depends on which one saturates.",
+        "Because databases cannot bottleneck modern systems.",
+        "Because only caches and queues create performance limits.",
+        "Because bottlenecks matter only in single-region systems."
+      ],
+      "correct": 0,
+      "explanation": "Specificity is necessary to reason about scaling actions."
+    },
+    {
+      "stage": "post",
+      "question": "If CPU allows 128K req/s, disk allows 20K req/s, and network allows 131K req/s, what is the first bottleneck?",
+      "options": [
+        "CPU",
+        "disk",
+        "network",
+        "none of them"
+      ],
+      "correct": 1,
+      "explanation": "The smallest ceiling is the true current bottleneck."
+    },
+    {
+      "stage": "post",
+      "question": "Why is headroom important even after you identify the current bottleneck?",
+      "options": [
+        "Because operating close to hard max often causes latency spikes and weak failure tolerance.",
+        "Because headroom replaces the need for observability.",
+        "Because it guarantees exact cost forecasts.",
+        "Because headroom only matters for CPU-bound workloads."
+      ],
+      "correct": 0,
+      "explanation": "Systems usually degrade before they hit theoretical maximum throughput."
+    },
+    {
+      "stage": "post",
+      "question": "Which workload change most directly pressures the network bottleneck?",
+      "options": [
+        "Larger bytes per response",
+        "Longer data retention",
+        "Fewer replicas",
+        "Lower replication lag"
+      ],
+      "correct": 0,
+      "explanation": "Network saturation is strongly tied to bytes transferred per request."
+    },
+    {
+      "stage": "post",
+      "question": "Which observability view best confirms a disk bottleneck hypothesis?",
+      "options": [
+        "Disk IOPS, throughput, and queue depth rising near saturation",
+        "Number of employees in the team",
+        "Total roadmap length",
+        "Average documentation page count"
+      ],
+      "correct": 0,
+      "explanation": "You want direct storage saturation evidence."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off often follows after optimizing the first bottleneck?",
+      "options": [
+        "You gain throughput, but the next limiting resource becomes more visible and may need its own redesign.",
+        "All future bottlenecks disappear permanently.",
+        "System cost always drops automatically.",
+        "Observability becomes less important."
+      ],
+      "correct": 0,
+      "explanation": "Removing one limit typically exposes the next one."
+    },
+    {
+      "stage": "post",
+      "question": "When is one-node bottleneck math especially misleading?",
+      "options": [
+        "When hotspotting or skew means one shard saturates long before fleet averages show trouble.",
+        "When the service has only one API route.",
+        "When payload sizes are small.",
+        "When the system uses structured logs."
+      ],
+      "correct": 0,
+      "explanation": "Skew can make local bottlenecks appear earlier than global averages suggest."
+    }
+  ]
+}

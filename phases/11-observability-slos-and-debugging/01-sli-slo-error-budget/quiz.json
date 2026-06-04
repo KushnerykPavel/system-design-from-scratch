@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What is the main reason uptime alone is usually a weak primary SLI?",
+      "options": [
+        "It can stay healthy while users still see slow or failed important actions.",
+        "It is impossible to collect uptime data in distributed systems.",
+        "It automatically counts all latency as success regardless of thresholds.",
+        "It only works for internal platforms and never for public APIs."
+      ],
+      "correct": 0,
+      "explanation": "A host or service can be technically up while the user experience is still poor."
+    },
+    {
+      "stage": "pre",
+      "question": "What does an error budget represent?",
+      "options": [
+        "The maximum number of dashboards a team may create before launch freeze.",
+        "The fraction of unreliability allowed by the SLO before the target is violated.",
+        "The total number of alerts allowed in a quarter across all services.",
+        "The amount of logging storage reserved for failed requests."
+      ],
+      "correct": 1,
+      "explanation": "Error budget is the allowed bad-event share implied by the SLO target."
+    },
+    {
+      "stage": "post",
+      "question": "Which SLI is usually stronger for a user-facing read API?",
+      "options": [
+        "The percentage of user requests completed successfully under a meaningful latency threshold.",
+        "The percentage of hosts that responded to a health probe in the last hour.",
+        "The number of engineers currently assigned to the service.",
+        "The total count of log lines produced by the API fleet."
+      ],
+      "correct": 0,
+      "explanation": "User-meaningful success and latency better reflect experience than infrastructure-only health."
+    },
+    {
+      "stage": "post",
+      "question": "Why might a team split read and write SLOs instead of using one blended objective?",
+      "options": [
+        "Because read and write paths often have different user value, traffic shape, and failure characteristics.",
+        "Because blended objectives are not allowed in multi-service systems.",
+        "Because write traffic can never be measured reliably.",
+        "Because separate SLOs eliminate the need for alerts."
+      ],
+      "correct": 0,
+      "explanation": "Distinct paths often deserve separate targets to avoid hiding meaningful pain."
+    },
+    {
+      "stage": "post",
+      "question": "What does a high burn rate over a short window usually tell you?",
+      "options": [
+        "The service is consuming error budget faster than the elapsed time would justify.",
+        "The metrics backend has too much storage available.",
+        "The request volume is lower than expected but still healthy.",
+        "The team should always tighten the SLO target immediately."
+      ],
+      "correct": 0,
+      "explanation": "Burn rate compares budget consumption speed to time elapsed in the window."
+    },
+    {
+      "stage": "post",
+      "question": "Which trade-off comes with setting an extremely tight SLO target?",
+      "options": [
+        "It may drive higher cost and reduce room for launches or operational mistakes.",
+        "It guarantees zero incidents without additional engineering work.",
+        "It removes the need to define an SLI carefully.",
+        "It makes latency distributions less important."
+      ],
+      "correct": 0,
+      "explanation": "Stricter objectives shrink the budget and usually demand more operational investment."
+    },
+    {
+      "stage": "post",
+      "question": "What is a common sign that an SLI is poorly chosen?",
+      "options": [
+        "It stays green during incidents that clearly affect users or support channels.",
+        "It is based on completed requests rather than host health.",
+        "It has an explicit numerator and denominator.",
+        "It uses a rolling time window."
+      ],
+      "correct": 0,
+      "explanation": "A green metric during obvious user pain usually means the SLI is not measuring the right thing."
+    },
+    {
+      "stage": "post",
+      "question": "What is the strongest senior-level answer to 'What do you do when the error budget burns too fast?'",
+      "options": [
+        "Adjust paging, rollout, or reliability priorities based on the burn rather than treating the SLO as a vanity report.",
+        "Ignore it because traffic bursts are expected in distributed systems.",
+        "Delete the SLO and rely only on infrastructure alarms.",
+        "Lower the denominator until the SLI looks healthier."
+      ],
+      "correct": 0,
+      "explanation": "The point of error budget is to drive operational and product decisions."
+    }
+  ]
+}

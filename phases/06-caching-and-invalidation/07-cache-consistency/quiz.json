@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What does a strong cached consistency answer begin with?",
+      "options": [
+        "A user-visible freshness or read-after-write promise for the critical path.",
+        "A cache vendor selection table only.",
+        "The maximum possible TTL for every object.",
+        "A decision to avoid replication discussion."
+      ],
+      "correct": 0,
+      "explanation": "Consistency in cached systems should be explained in terms of what users observe, not just infrastructure terms."
+    },
+    {
+      "stage": "pre",
+      "question": "Why is 'eventual consistency' alone often too vague in an interview?",
+      "options": [
+        "It does not say who may see stale data, for how long, or after which failures.",
+        "It is always the wrong choice for caches.",
+        "It means the cache has no TTL.",
+        "It only applies to SQL databases."
+      ],
+      "correct": 0,
+      "explanation": "The interviewer wants the actual consistency envelope, not a generic label."
+    },
+    {
+      "stage": "post",
+      "question": "What technique can help provide monotonic reads for a user after a write?",
+      "options": [
+        "Session stickiness or a minimum-version read requirement.",
+        "Only increasing the cache size.",
+        "Removing invalidation events.",
+        "Using FIFO eviction."
+      ],
+      "correct": 0,
+      "explanation": "Monotonic-read behavior often needs routing or version-awareness beyond a plain TTL cache."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric best detects critical stale-read problems?",
+      "options": [
+        "Read-after-write mismatch rate or cache-versus-source version skew.",
+        "Only total memory allocated to the cache.",
+        "Average document length in the repo.",
+        "The number of dashboards in Grafana."
+      ],
+      "correct": 0,
+      "explanation": "Mismatch and version skew directly reveal when cached state diverges in user-visible ways."
+    },
+    {
+      "stage": "post",
+      "question": "What is a common trade-off of adding version-aware cache bypass on critical reads?",
+      "options": [
+        "Better correctness where it matters, at the cost of extra metadata and selective miss traffic.",
+        "Lower memory use and stronger freshness everywhere automatically.",
+        "No need for observability anymore.",
+        "Guaranteed global serializability."
+      ],
+      "correct": 0,
+      "explanation": "Selective strictness is powerful, but it is not free."
+    },
+    {
+      "stage": "post",
+      "question": "When is bounded stale data often acceptable?",
+      "options": [
+        "For noncritical content where lower latency and offload matter more than immediate post-write visibility.",
+        "For every safety-critical policy path.",
+        "Only when the cache is in the browser.",
+        "Never in any production system."
+      ],
+      "correct": 0,
+      "explanation": "Many cached systems deliberately accept bounded staleness for convenience data."
+    },
+    {
+      "stage": "post",
+      "question": "Which interview answer is strongest?",
+      "options": [
+        "I will say the cache is eventually consistent and move on.",
+        "I will name which entities allow bounded stale reads, which require read-after-write guarantees, and what mechanism enforces that difference.",
+        "I will disable all caches after any write globally.",
+        "I will treat all reads as equally critical."
+      ],
+      "correct": 1,
+      "explanation": "Strong answers classify guarantees by user impact and explain the enforcing mechanism."
+    },
+    {
+      "stage": "post",
+      "question": "What hidden issue appears when users bounce between regions quickly?",
+      "options": [
+        "They may see time go backward unless session affinity or version-aware reads preserve monotonic behavior.",
+        "All cache layers automatically synchronize instantly.",
+        "Eviction policy stops mattering.",
+        "The origin no longer needs replication."
+      ],
+      "correct": 0,
+      "explanation": "Cross-region movement can expose freshness differences that a single-region design never surfaces."
+    }
+  ]
+}

@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why are more metrics not automatically better?",
+      "options": [
+        "Because large metric sets can add cost and noise without narrowing the debugging space.",
+        "Because metric platforms can only store exactly ten metrics per service.",
+        "Because metrics are only useful for batch systems, not APIs.",
+        "Because traces make all metrics unnecessary."
+      ],
+      "correct": 0,
+      "explanation": "Useful metrics reduce ambiguity; extra low-signal metrics often do the opposite."
+    },
+    {
+      "stage": "pre",
+      "question": "What kind of metric is often most useful for an async pipeline?",
+      "options": [
+        "Queue age or end-to-end lag, because it tracks delayed user impact directly.",
+        "Source file count in the worker repository.",
+        "The number of runbooks linked from the dashboard.",
+        "The total memory in the on-call engineer's laptop."
+      ],
+      "correct": 0,
+      "explanation": "Queue age often reflects whether work is becoming stale or delayed for users."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric best helps explain a latency incident with no obvious local CPU saturation?",
+      "options": [
+        "Dependency latency and error rate broken out by downstream service.",
+        "The number of markdown files in the repo.",
+        "The median age of closed pull requests.",
+        "A single daily average of total request count."
+      ],
+      "correct": 0,
+      "explanation": "If local saturation is absent, downstream behavior is a strong next hypothesis."
+    },
+    {
+      "stage": "post",
+      "question": "Why are latency histograms or percentiles usually better than averages alone?",
+      "options": [
+        "They reveal tail pain that averages can hide even when users are timing out.",
+        "They eliminate all cost from metrics storage.",
+        "They guarantee every slow request will be traced automatically.",
+        "They are only needed when traffic is below 1 QPS."
+      ],
+      "correct": 0,
+      "explanation": "Tail latency often matters more operationally than average latency."
+    },
+    {
+      "stage": "post",
+      "question": "What is the main risk of putting raw `tenant_id` on default high-volume request metrics?",
+      "options": [
+        "It can create massive cardinality and make the metrics backend expensive or unstable.",
+        "It automatically disables region filtering.",
+        "It prevents alerts from being created at all.",
+        "It makes logs impossible to correlate."
+      ],
+      "correct": 0,
+      "explanation": "Unbounded labels can explode the number of stored time series."
+    },
+    {
+      "stage": "post",
+      "question": "Which combination is strongest for a synchronous API service?",
+      "options": [
+        "User success and latency, dependency health, and at least one saturation signal.",
+        "CPU percent alone plus a weekly dashboard screenshot.",
+        "Only request count, because success can be inferred later.",
+        "Only trace sampling rate, because metrics are redundant."
+      ],
+      "correct": 0,
+      "explanation": "A balanced set connects user outcome, bottlenecks, and capacity pressure."
+    },
+    {
+      "stage": "post",
+      "question": "What hidden trade-off appears when adding many detailed dimensions to metrics?",
+      "options": [
+        "You gain drill-down power, but storage cost and query latency can rise sharply.",
+        "You lose the ability to collect request counts entirely.",
+        "You guarantee that dashboards will stay simple to read.",
+        "You remove the need for logs or traces."
+      ],
+      "correct": 0,
+      "explanation": "Richer labels can help diagnosis, but they are never free."
+    },
+    {
+      "stage": "post",
+      "question": "What is a strong answer to 'Which metric would you inspect first during a backlog incident?'",
+      "options": [
+        "A metric tied to work delay such as queue age or end-to-end lag, because it best reflects whether the system is keeping up.",
+        "The number of developers in the owning team.",
+        "The age of the oldest README file in the repository.",
+        "A chart of hostnames sorted alphabetically."
+      ],
+      "correct": 0,
+      "explanation": "Delay-oriented metrics usually reveal backlog harm faster than raw activity counters."
+    }
+  ]
+}

@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What is the strongest reason to prefer an event interface over a synchronous API?",
+      "options": [
+        "The caller needs an immediate answer before returning to the user.",
+        "Many downstream consumers need the same state change and can process it asynchronously.",
+        "The system should avoid all schema management work.",
+        "The service has only one internal consumer and no fanout."
+      ],
+      "correct": 1,
+      "explanation": "Events are strongest when multiple consumers react asynchronously to the same state change."
+    },
+    {
+      "stage": "pre",
+      "question": "Why do many public APIs stay on HTTP even when internal services use gRPC?",
+      "options": [
+        "HTTP is easier for diverse clients, proxies, and debugging tools to support.",
+        "gRPC cannot express typed request and response contracts.",
+        "HTTP guarantees lower latency than every RPC framework.",
+        "Public APIs never need versioning or compatibility plans."
+      ],
+      "correct": 0,
+      "explanation": "Public APIs optimize for compatibility and ecosystem reach, not just internal efficiency."
+    },
+    {
+      "stage": "post",
+      "question": "Which boundary is the best fit for a payment authorization result that must be known before checkout completes?",
+      "options": [
+        "A replayable event consumed whenever downstream systems are ready.",
+        "A synchronous interface such as HTTP or gRPC on the critical path.",
+        "A batch export written once per hour.",
+        "A best-effort webhook sent to every dependent service."
+      ],
+      "correct": 1,
+      "explanation": "Checkout cannot complete safely without a direct answer, so the commit path should stay synchronous."
+    },
+    {
+      "stage": "post",
+      "question": "What is the main trade-off when replacing a chain of synchronous calls with events for side effects?",
+      "options": [
+        "You gain decoupling and replay, but accept eventual consistency and more debugging complexity.",
+        "You eliminate schema evolution because events never change shape.",
+        "You guarantee lower end-to-end latency for the user-facing path.",
+        "You remove the need for observability on downstream consumers."
+      ],
+      "correct": 0,
+      "explanation": "Events improve decoupling, but they also make timing and failure analysis more distributed."
+    },
+    {
+      "stage": "post",
+      "question": "Which signal best indicates that an event boundary is becoming unhealthy?",
+      "options": [
+        "Event lag and redelivery counts climbing for critical consumers.",
+        "The public API documentation getting longer than expected.",
+        "A decrease in static type generation time.",
+        "The number of HTTP headers used by a browser client."
+      ],
+      "correct": 0,
+      "explanation": "Lag and redelivery expose delivery pressure, consumer slowness, and replay churn."
+    },
+    {
+      "stage": "post",
+      "question": "When would gRPC usually be a stronger choice than HTTP between services?",
+      "options": [
+        "When the services are externally consumed by unknown clients over many environments.",
+        "When a low-latency internal boundary benefits from typed contracts and both sides are controlled together.",
+        "When the interaction is really a many-consumer domain event.",
+        "When the system wants to avoid release coordination entirely."
+      ],
+      "correct": 1,
+      "explanation": "gRPC shines most on controlled, internal service-to-service boundaries."
+    },
+    {
+      "stage": "post",
+      "question": "What design mistake often appears when engineers say \"everything is an API\"?",
+      "options": [
+        "They may hide whether the boundary is a command, query, or event and miss the real failure model.",
+        "They automatically select the correct interface for every workload.",
+        "They eliminate any need for ownership boundaries.",
+        "They reduce operational complexity across all teams."
+      ],
+      "correct": 0,
+      "explanation": "Calling everything an API can blur important differences in timing, ownership, and retries."
+    },
+    {
+      "stage": "post",
+      "question": "If a single state change must trigger analytics, email, and fulfillment, what is the best default design starting point?",
+      "options": [
+        "Make the user request wait on all three downstream systems synchronously.",
+        "Expose a public gRPC endpoint directly to each downstream team.",
+        "Emit a durable event after the primary transaction commits and let consumers react independently.",
+        "Poll the database every second from each consumer."
+      ],
+      "correct": 2,
+      "explanation": "A durable event keeps the primary path smaller while supporting fanout and replay."
+    }
+  ]
+}

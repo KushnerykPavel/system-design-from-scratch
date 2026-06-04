@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why is a single consistency answer usually weak for a global system?",
+      "options": [
+        "Different workflows have different freshness and correctness needs, so one mode rarely fits all of them well.",
+        "Because consistency only matters for batch systems.",
+        "Because global systems never replicate data.",
+        "Because eventual consistency is always enough."
+      ],
+      "correct": 0,
+      "explanation": "Senior answers match semantics to workflow rather than using one blanket label."
+    },
+    {
+      "stage": "pre",
+      "question": "What does long inter-region RTT usually do to strongly coordinated writes?",
+      "options": [
+        "It raises write latency and can reduce availability during partitions.",
+        "It makes writes cheaper than local writes.",
+        "It removes the need for repair tooling.",
+        "It guarantees read-your-writes everywhere."
+      ],
+      "correct": 0,
+      "explanation": "Distance makes stronger coordination slower and more failure-sensitive."
+    },
+    {
+      "stage": "post",
+      "question": "When is a home-region write model especially attractive?",
+      "options": [
+        "When per-entity ownership is clear and you want simpler correctness than global multi-writer coordination.",
+        "When every request must be served from every region equally.",
+        "When repair queues are desirable for their own sake.",
+        "When product requirements forbid naming ownership."
+      ],
+      "correct": 0,
+      "explanation": "Home-region ownership contains conflicts and simplifies write semantics."
+    },
+    {
+      "stage": "post",
+      "question": "What is the strongest reason to define bounded staleness explicitly?",
+      "options": [
+        "It makes the freshness trade-off measurable and easier to align with product expectations.",
+        "It guarantees strong consistency.",
+        "It removes the need for replication lag metrics.",
+        "It only matters for analytics systems."
+      ],
+      "correct": 0,
+      "explanation": "Explicit bounds turn a vague trade-off into an observable promise."
+    },
+    {
+      "stage": "post",
+      "question": "Which signal best shows that multi-writer design is becoming operationally unsafe?",
+      "options": [
+        "Conflict volume and repair backlog are growing faster than the system can reconcile them.",
+        "Static asset cache hit ratio is improving.",
+        "A single dashboard loads slowly in the browser.",
+        "The company opened a new office."
+      ],
+      "correct": 0,
+      "explanation": "Conflict and repair load reveal whether the chosen write model is sustainable."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off comes with routing critical reads to a home region?",
+      "options": [
+        "Stronger freshness at the cost of higher latency for those reads.",
+        "Lower latency and lower cost with no downside.",
+        "Automatic elimination of partitions.",
+        "Removal of the need for local replicas."
+      ],
+      "correct": 0,
+      "explanation": "Freshness often costs distance."
+    },
+    {
+      "stage": "post",
+      "question": "Why should partition behavior be defined per workflow?",
+      "options": [
+        "Some operations should fail closed, some can go read-only, and some can tolerate stale reads.",
+        "All partitions have identical product impact.",
+        "Partitions only affect control planes.",
+        "Undefined behavior gives operators more flexibility."
+      ],
+      "correct": 0,
+      "explanation": "Not every workflow should degrade the same way."
+    },
+    {
+      "stage": "post",
+      "question": "What is the clearest sign of a strong interview answer on geo-consistency?",
+      "options": [
+        "It ties semantics to concrete user workflows, latency cost, failure behavior, and repair strategy.",
+        "It only names CAP theorem terms.",
+        "It avoids numbers and RTT discussion.",
+        "It assumes global strong consistency is free if the company is large enough."
+      ],
+      "correct": 0,
+      "explanation": "High-signal answers are concrete about both cost and user-visible behavior."
+    }
+  ]
+}

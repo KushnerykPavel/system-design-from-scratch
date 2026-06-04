@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What is the clearest difference between authentication and authorization?",
+      "options": [
+        "Authentication proves who the caller is, while authorization decides what that caller may do.",
+        "Authentication handles internal traffic, while authorization only applies to internet traffic.",
+        "Authentication is for admins only, while authorization is for tenants only.",
+        "Authentication chooses a database, while authorization chooses a cache."
+      ],
+      "correct": 0,
+      "explanation": "Authentication establishes identity. Authorization evaluates permissions for an action and resource."
+    },
+    {
+      "stage": "pre",
+      "question": "Why are trust boundaries important in system design interviews?",
+      "options": [
+        "They reveal where identity and policy decisions must be re-checked instead of assumed.",
+        "They eliminate the need for audit logs.",
+        "They guarantee zero latency for policy checks.",
+        "They let all downstream services trust the gateway blindly."
+      ],
+      "correct": 0,
+      "explanation": "Trust boundaries define where assumptions stop being safe and where new verification is required."
+    },
+    {
+      "stage": "post",
+      "question": "Why should the resource-owning service often perform authorization even if the gateway already checked it?",
+      "options": [
+        "Because repeated checks are always cheaper than caching.",
+        "Because upstream context can be stale, forged, or too coarse for resource ownership decisions.",
+        "Because gateways are unable to validate tokens.",
+        "Because authorization only works inside databases."
+      ],
+      "correct": 1,
+      "explanation": "The owner service is best positioned to apply fine-grained resource and tenant checks."
+    },
+    {
+      "stage": "post",
+      "question": "What is the biggest risk of forwarding identity headers that downstream services trust without verification?",
+      "options": [
+        "Slightly higher network bandwidth costs.",
+        "Confused deputy or impersonation behavior if upstream context is forged or mishandled.",
+        "Automatic cache invalidation on every request.",
+        "Loss of trace IDs in healthy traffic only."
+      ],
+      "correct": 1,
+      "explanation": "Blind trust in forwarded identity can turn one boundary failure into broad privilege escalation."
+    },
+    {
+      "stage": "post",
+      "question": "Which design best limits blast radius for operator access?",
+      "options": [
+        "One shared admin role with all capabilities to reduce policy complexity.",
+        "Separate routine support roles from break-glass roles with stronger auditing.",
+        "Allow all internal services to impersonate admins during incidents.",
+        "Use only long-lived static credentials for staff tools."
+      ],
+      "correct": 1,
+      "explanation": "Splitting privileged roles reduces standing access and improves accountability."
+    },
+    {
+      "stage": "post",
+      "question": "What should cross an async job boundary when a user action schedules background work?",
+      "options": [
+        "Only the database primary key, because identity is irrelevant after enqueue.",
+        "Actor, tenant, scoped intent, and audit context needed for downstream authorization and attribution.",
+        "The user's raw password hash for later verification.",
+        "Nothing, because workers should run as anonymous system users."
+      ],
+      "correct": 1,
+      "explanation": "Async work still needs security context and attribution to avoid unsafe or unauditable behavior."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric is most useful for spotting authorization drift after a rollout?",
+      "options": [
+        "Authorization deny rate and policy version by service or region.",
+        "Only host CPU usage.",
+        "Average response body size.",
+        "Count of database indexes."
+      ],
+      "correct": 0,
+      "explanation": "Decision rates combined with policy versioning help reveal inconsistent enforcement."
+    },
+    {
+      "stage": "post",
+      "question": "Why are short-lived internal tokens often better than broad long-lived service credentials?",
+      "options": [
+        "They reduce replay window and narrow what a compromised identity can do.",
+        "They remove the need for time synchronization completely.",
+        "They guarantee global authorization consistency.",
+        "They make audit logging unnecessary."
+      ],
+      "correct": 0,
+      "explanation": "Short-lived scoped identity reduces blast radius if credentials leak or a service is compromised."
+    }
+  ]
+}

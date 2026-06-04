@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What is the core mistake in treating rebalancing as only a background copy job?",
+      "options": [
+        "It ignores that ownership, routing, and correctness are changing while live traffic continues.",
+        "It assumes copy jobs are always slower than databases.",
+        "It guarantees that no rollback is ever needed.",
+        "It means capacity planning becomes unnecessary."
+      ],
+      "correct": 0,
+      "explanation": "Rebalancing affects the serving path, so routing, writes, and rollback all matter."
+    },
+    {
+      "stage": "pre",
+      "question": "Why should a rebalance usually move data in bounded batches?",
+      "options": [
+        "To limit blast radius and protect serving capacity if something goes wrong.",
+        "Because distributed systems cannot copy more than one range at once.",
+        "Because small batches remove the need for verification.",
+        "Because cutover metadata cannot store multiple moves."
+      ],
+      "correct": 0,
+      "explanation": "Bounded concurrency is a direct blast-radius control."
+    },
+    {
+      "stage": "post",
+      "question": "What is the safest high-level sequence for live data movement under active writes?",
+      "options": [
+        "Copy, keep up with deltas, verify, switch routing epoch, then retire the source.",
+        "Flip routing first, then start copying, and verify only if alarms fire later.",
+        "Delete the source as soon as the target starts receiving bytes.",
+        "Pause all observability during the move to reduce overhead."
+      ],
+      "correct": 0,
+      "explanation": "Safe moves preserve the source until the target is current and verified."
+    },
+    {
+      "stage": "post",
+      "question": "What is the main trade-off of keeping the source owner available after copy completes?",
+      "options": [
+        "You preserve rollback safety, but temporarily pay extra capacity and operational complexity.",
+        "You eliminate all routing-version concerns automatically.",
+        "You make dual-write impossible.",
+        "You guarantee the move finishes faster."
+      ],
+      "correct": 0,
+      "explanation": "Safe rollback paths cost extra resources, but they are worth it for correctness."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric best warns that rebalance activity is harming the serving path?",
+      "options": [
+        "Serving latency and error rate correlated with active move count or copy bandwidth.",
+        "The number of lines in the migration playbook.",
+        "The size of the developers' local Git history.",
+        "The total count of feature flags in the company."
+      ],
+      "correct": 0,
+      "explanation": "The key question is whether copy activity is consuming too much serving headroom."
+    },
+    {
+      "stage": "post",
+      "question": "Why is versioned routing or ownership epochs important during cutover?",
+      "options": [
+        "They help clients and services detect stale ownership and redirect safely instead of silently misrouting.",
+        "They remove the need for target verification entirely.",
+        "They ensure all writes become globally ordered forever.",
+        "They make bandwidth planning irrelevant."
+      ],
+      "correct": 0,
+      "explanation": "Epochs make stale views visible and recoverable during ownership changes."
+    },
+    {
+      "stage": "post",
+      "question": "What is the real danger of launching too many moves in parallel?",
+      "options": [
+        "Copy traffic, warmup misses, and control-plane churn can combine into a serving outage.",
+        "The system will stop needing rebalancing in the future.",
+        "It permanently disables replication.",
+        "It makes data smaller so checksums fail."
+      ],
+      "correct": 0,
+      "explanation": "Parallel moves raise multiple risks at once, which is why batch limits matter."
+    },
+    {
+      "stage": "post",
+      "question": "When might a short write freeze be an acceptable migration strategy?",
+      "options": [
+        "When the moved scope is small, business tolerance is explicit, and dual-write complexity is not justified.",
+        "Whenever the engineering team wants the simplest code regardless of customer impact.",
+        "Only when the data is already corrupted.",
+        "Never, because all migrations must be completely invisible."
+      ],
+      "correct": 0,
+      "explanation": "A short freeze can be reasonable for tightly scoped moves when its cost is understood and acceptable."
+    }
+  ]
+}

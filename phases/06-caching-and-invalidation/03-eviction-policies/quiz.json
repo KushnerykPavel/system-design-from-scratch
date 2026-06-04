@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why is eviction policy choice inseparable from workload shape?",
+      "options": [
+        "Because recency-heavy, popularity-heavy, and scan-heavy traces reward different policies.",
+        "Because every cache product secretly uses the same policy.",
+        "Because working-set size never matters when memory is fixed.",
+        "Because eviction only affects write latency."
+      ],
+      "correct": 0,
+      "explanation": "Policy quality depends on access patterns, not just on the policy name."
+    },
+    {
+      "stage": "pre",
+      "question": "What kind of workload often favors LRU?",
+      "options": [
+        "Bursty traffic with strong short-term recency.",
+        "Purely random access with no locality.",
+        "Only immutable static assets with infinite capacity.",
+        "A workload where misses are free."
+      ],
+      "correct": 0,
+      "explanation": "LRU usually works well when recently accessed keys are likely to be accessed again soon."
+    },
+    {
+      "stage": "post",
+      "question": "What is a classic weakness of pure LFU?",
+      "options": [
+        "Yesterday's once-hot keys can linger too long if popularity shifts.",
+        "It cannot count frequencies at all.",
+        "It always performs worse than FIFO.",
+        "It makes all cache reads synchronous with the database."
+      ],
+      "correct": 0,
+      "explanation": "LFU can overvalue stale historical popularity unless aging or decay is added."
+    },
+    {
+      "stage": "post",
+      "question": "Why can wide scans hurt an LRU cache badly?",
+      "options": [
+        "They can evict many useful hot entries with one-time accesses that do not repeat soon.",
+        "They make every key immutable.",
+        "They prevent the cache from tracking hits.",
+        "They increase write durability requirements."
+      ],
+      "correct": 0,
+      "explanation": "Sequential scans pollute recency-based caches because recent does not always mean valuable."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric most directly shows whether the chosen policy is helping the business goal?",
+      "options": [
+        "Hit ratio or origin offload on the highest-cost paths, not just total requests.",
+        "Only the number of cache nodes deployed.",
+        "Average code review length.",
+        "The count of named policies in documentation."
+      ],
+      "correct": 0,
+      "explanation": "A policy matters because it protects expensive origin work on important traffic, not because it sounds advanced."
+    },
+    {
+      "stage": "post",
+      "question": "What is the hidden risk of evaluating eviction with only one tiny trace?",
+      "options": [
+        "You may overfit a toy example and choose a policy that fails on real skew or scan patterns.",
+        "You automatically get production-grade accuracy.",
+        "You remove the need for observability after launch.",
+        "You guarantee fairness across regions."
+      ],
+      "correct": 0,
+      "explanation": "Small traces can teach intuition, but they should not be mistaken for universal truth."
+    },
+    {
+      "stage": "post",
+      "question": "Which answer sounds strongest in an interview?",
+      "options": [
+        "LRU is industry standard, so I would use it and move on.",
+        "I would estimate working-set shape first, then choose a policy and possibly admission controls based on whether recency, frequency, or scans dominate.",
+        "I would choose FIFO because it is easiest to draw.",
+        "I would skip policy discussion because the cache vendor handles it."
+      ],
+      "correct": 1,
+      "explanation": "That answer reasons from workload shape, which is the senior-level move."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off often comes with making the cache bigger instead of changing policy?",
+      "options": [
+        "Higher memory cost and sometimes diminishing returns if the workload still contains harmful scans or trend shifts.",
+        "Perfect freshness with no additional cost.",
+        "Automatic elimination of hotspots.",
+        "No operational downside at all."
+      ],
+      "correct": 0,
+      "explanation": "More memory can help, but it does not fix every workload pathology and it costs real money."
+    }
+  ]
+}

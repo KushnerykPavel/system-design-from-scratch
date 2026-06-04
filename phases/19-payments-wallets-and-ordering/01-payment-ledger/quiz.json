@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why is an append-only ledger usually preferred over mutating a balance row directly?",
+      "options": [
+        "Because reconstructable history and explicit corrections matter more than write simplicity.",
+        "Because append-only storage guarantees zero latency for balance reads.",
+        "Because mutable balances cannot be replicated across regions.",
+        "Because a ledger removes the need for idempotency keys."
+      ],
+      "correct": 0,
+      "explanation": "Financial systems need trustworthy history, not just the latest value."
+    },
+    {
+      "stage": "pre",
+      "question": "What is the main value of idempotency in a payment API?",
+      "options": [
+        "It lets the same retry complete safely without creating duplicate money movement.",
+        "It compresses ledger entries before archiving them.",
+        "It removes the need for reconciliation with external processors.",
+        "It guarantees that downstream banks settle instantly."
+      ],
+      "correct": 0,
+      "explanation": "Retries are expected in payments, so duplicate side effects must be blocked."
+    },
+    {
+      "stage": "post",
+      "question": "Which invariant most directly protects ledger correctness?",
+      "options": [
+        "Each committed posting batch is balanced before it is accepted.",
+        "Each customer has at most one balance row.",
+        "Each API response is cached at the edge.",
+        "Each reconciliation job runs in under one second."
+      ],
+      "correct": 0,
+      "explanation": "A balanced batch is the accounting invariant that keeps books sane."
+    },
+    {
+      "stage": "post",
+      "question": "Why should corrections usually be modeled as reversals instead of updates in place?",
+      "options": [
+        "Reversals preserve audit history and make investigation possible after mistakes.",
+        "Updates in place cannot be replicated by databases.",
+        "Reversals are always cheaper than updates.",
+        "Updates in place break all balance materialization code."
+      ],
+      "correct": 0,
+      "explanation": "Financial systems need a durable trail of what changed and why."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off comes with using balance projections or snapshots?",
+      "options": [
+        "They speed reads but require rebuild and drift-detection mechanisms.",
+        "They make reconciliation unnecessary once enabled.",
+        "They force total ordering across all accounts.",
+        "They remove the need for retention policies."
+      ],
+      "correct": 0,
+      "explanation": "Serving speed improves, but operational complexity moves into projection management."
+    },
+    {
+      "stage": "post",
+      "question": "Which signal best reveals settlement drift between the internal ledger and a processor?",
+      "options": [
+        "Discrepancy count and unreconciled amount by source and aging bucket.",
+        "Median HTTP header size on payment requests.",
+        "Number of dashboard viewers from finance.",
+        "Ratio of GET requests to POST requests."
+      ],
+      "correct": 0,
+      "explanation": "You want a direct view of missing or mismatched money movement."
+    },
+    {
+      "stage": "post",
+      "question": "What is the most credible answer if payment status must be fast but books must remain exact?",
+      "options": [
+        "Separate customer-facing status projections from the ledger source of truth.",
+        "Store status only in the processor and skip internal postings.",
+        "Use one global lock so every read is perfectly current.",
+        "Treat every pending payment as settled for simplicity."
+      ],
+      "correct": 0,
+      "explanation": "A serving layer can move fast while the ledger remains authoritative."
+    },
+    {
+      "stage": "post",
+      "question": "What changes most when retry volume spikes during a processor outage?",
+      "options": [
+        "Idempotency storage and duplicate-suppression correctness become part of core capacity planning.",
+        "Double-entry accounting stops mattering until recovery is complete.",
+        "Balance snapshots should be disabled for all customers.",
+        "Audit logs can be dropped temporarily to save storage."
+      ],
+      "correct": 0,
+      "explanation": "Incident-time retry amplification is a design input, not an afterthought."
+    }
+  ]
+}

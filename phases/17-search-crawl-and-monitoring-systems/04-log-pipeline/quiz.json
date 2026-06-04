@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why are log systems often more expensive to keep fully searchable than metrics systems?",
+      "options": [
+        "Because logs usually have larger, less-structured payloads and more flexible query needs.",
+        "Because metrics always require full-text indexes on every value.",
+        "Because logs cannot be archived.",
+        "Because log agents never batch events."
+      ],
+      "correct": 0,
+      "explanation": "Logs are heavier and less structured than metrics."
+    },
+    {
+      "stage": "pre",
+      "question": "What is a strong reason to place a durable bus between collectors and indexers?",
+      "options": [
+        "It decouples ingest from indexing so short indexing slowdowns do not drop all logs.",
+        "It guarantees every search query is free.",
+        "It removes the need for redaction.",
+        "It makes archive retention unnecessary."
+      ],
+      "correct": 0,
+      "explanation": "Decoupling helps absorb spikes and failures."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric best reveals a parser rollout problem?",
+      "options": [
+        "Parser failure rate and schema drift after deploy.",
+        "Average laptop battery level of developers.",
+        "Median HTTP title length in logs.",
+        "The number of dashboards pinned by users."
+      ],
+      "correct": 0,
+      "explanation": "Parser breakage shows up in parse-failure and drift signals."
+    },
+    {
+      "stage": "post",
+      "question": "Why is early redaction preferable to indexing raw logs everywhere first?",
+      "options": [
+        "It reduces the privacy blast radius and downstream cleanup burden.",
+        "It guarantees every log becomes searchable faster.",
+        "It removes the need for retention policies.",
+        "It prevents any parser bugs from occurring."
+      ],
+      "correct": 0,
+      "explanation": "Redact early to avoid spreading sensitive data."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off comes with differentiated backpressure policies for log classes?",
+      "options": [
+        "You protect critical signals better but add policy complexity and fairness debates.",
+        "You eliminate all need for archives.",
+        "You guarantee uniform user experience for every tenant.",
+        "You make replay impossible."
+      ],
+      "correct": 0,
+      "explanation": "Priority policies help, but they are harder to operate."
+    },
+    {
+      "stage": "post",
+      "question": "Which failure is most directly addressed by replay support?",
+      "options": [
+        "A parser or enrichment bug that needs old events reprocessed.",
+        "A user forgetting a dashboard filter.",
+        "A browser rendering issue in the search UI.",
+        "A cold archive becoming cheaper."
+      ],
+      "correct": 0,
+      "explanation": "Replay helps recover from processing mistakes."
+    },
+    {
+      "stage": "post",
+      "question": "Why should hot searchable retention usually stay shorter than cold archive retention?",
+      "options": [
+        "Because indexed search is expensive, while older data can often move to cheaper storage.",
+        "Because old logs are never useful.",
+        "Because archives cannot be queried at all.",
+        "Because search only works on today's data."
+      ],
+      "correct": 0,
+      "explanation": "Hot search is valuable but costly."
+    },
+    {
+      "stage": "post",
+      "question": "What is the better platform response when one tenant overwhelms shared indexing capacity?",
+      "options": [
+        "Apply quotas or deferred indexing for that tenant rather than letting everyone degrade equally.",
+        "Delete the global archive immediately.",
+        "Turn off redaction for faster ingest.",
+        "Drop all logs from every tenant."
+      ],
+      "correct": 0,
+      "explanation": "Isolation matters in multi-tenant pipelines."
+    }
+  ]
+}

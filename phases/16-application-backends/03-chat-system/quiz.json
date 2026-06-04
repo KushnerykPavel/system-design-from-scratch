@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What does a strong chat answer clarify before discussing WebSockets or queues?",
+      "options": [
+        "Whether the service promises durable send acknowledgment, ordering, and offline replay.",
+        "Which icon set the mobile client uses for typing indicators.",
+        "Whether SQL is forbidden in the design.",
+        "How many emojis each message should support."
+      ],
+      "correct": 0,
+      "explanation": "Delivery semantics are the real contract of the system."
+    },
+    {
+      "stage": "pre",
+      "question": "Why are client-generated message IDs useful in chat systems?",
+      "options": [
+        "They make all messages smaller over the wire.",
+        "They help the server dedupe retries when mobile clients resend after uncertainty.",
+        "They eliminate the need for a conversation log.",
+        "They force every message to be globally ordered."
+      ],
+      "correct": 1,
+      "explanation": "Retries are common, and dedupe needs a stable operation identifier."
+    },
+    {
+      "stage": "post",
+      "question": "Why is acknowledging a send after durable append often a good default?",
+      "options": [
+        "It gives the sender a clear contract without requiring every recipient device to be online immediately.",
+        "It guarantees every recipient has already read the message.",
+        "It removes the need for replay cursors.",
+        "It makes presence heartbeats unnecessary."
+      ],
+      "correct": 0,
+      "explanation": "Durable append separates correctness from real-time delivery variability."
+    },
+    {
+      "stage": "post",
+      "question": "What role should presence usually play in chat delivery?",
+      "options": [
+        "It should be treated as a routing hint rather than the sole source of delivery correctness.",
+        "It should fully replace durable inboxes.",
+        "It should decide message authorization by itself.",
+        "It should guarantee globally synchronized clocks."
+      ],
+      "correct": 0,
+      "explanation": "Presence is helpful but too fragile to be the only correctness mechanism."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric best captures user-visible recovery after disconnects?",
+      "options": [
+        "Replay latency from reconnect to catch-up completion.",
+        "Average keyboard type-ahead length.",
+        "Profile image upload size.",
+        "Total employees on the chat team."
+      ],
+      "correct": 0,
+      "explanation": "Reconnect recovery is a first-class user outcome for chat."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off comes with waiting for recipient-device acknowledgment before showing 'sent'?",
+      "options": [
+        "It provides a stronger signal but makes sender-perceived latency and failure sensitivity much worse.",
+        "It lowers backend cost because no durable log is needed.",
+        "It prevents duplicate messages automatically.",
+        "It simplifies offline sync for all devices."
+      ],
+      "correct": 0,
+      "explanation": "The sender experience now depends on every downstream delivery hop."
+    },
+    {
+      "stage": "post",
+      "question": "Why should a chat backend separate online fanout from offline replay?",
+      "options": [
+        "Because low-latency push and durable catch-up have different performance and storage needs.",
+        "Because only one device per user is ever active.",
+        "Because replay makes ordering impossible.",
+        "Because presence storage cannot coexist with sockets."
+      ],
+      "correct": 0,
+      "explanation": "These are related but distinct paths with different constraints."
+    },
+    {
+      "stage": "post",
+      "question": "What is the most realistic ordering promise for many chat systems?",
+      "options": [
+        "Per-conversation ordering with client-side dedupe and replay handling.",
+        "Global ordering across every conversation in all regions.",
+        "No ordering at all because chat is best effort.",
+        "Physical-clock ordering across offline devices without conflicts."
+      ],
+      "correct": 0,
+      "explanation": "Local ordering where it matters is usually the right contract."
+    }
+  ]
+}

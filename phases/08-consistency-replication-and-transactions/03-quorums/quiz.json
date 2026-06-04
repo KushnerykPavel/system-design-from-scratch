@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why is `R + W > N` not a complete design answer by itself?",
+      "options": [
+        "Because you still need to discuss latency, version conflicts, repair behavior, and what stale or failed reads look like in practice.",
+        "Because quorum systems never use version metadata.",
+        "Because `N` is irrelevant once a cache is added.",
+        "Because all quorum systems automatically act like a single leader."
+      ],
+      "correct": 0,
+      "explanation": "Quorum math helps, but system behavior depends on more than overlap."
+    },
+    {
+      "stage": "pre",
+      "question": "What does read repair exist to do?",
+      "options": [
+        "Help replicas converge after a read discovers divergent versions or missing updates.",
+        "Eliminate the need for write acknowledgements.",
+        "Replace observability during incidents.",
+        "Guarantee zero-latency reads."
+      ],
+      "correct": 0,
+      "explanation": "Repair is a convergence mechanism, not a magic correctness shortcut."
+    },
+    {
+      "stage": "post",
+      "question": "What is a common trade-off when increasing the read quorum size?",
+      "options": [
+        "Freshness confidence usually improves, but latency and partial-failure sensitivity often increase.",
+        "Repair traffic disappears completely.",
+        "Writes become cheaper because fewer replicas matter.",
+        "Conflict resolution becomes unnecessary."
+      ],
+      "correct": 0,
+      "explanation": "Larger quorums improve overlap but cost performance and availability."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric best reveals that convergence work is becoming an operational problem?",
+      "options": [
+        "Repair backlog or divergent replica count climbing while sync traffic grows.",
+        "The number of rows in a design worksheet.",
+        "How many icons appear in the architecture diagram.",
+        "Average code comment length."
+      ],
+      "correct": 0,
+      "explanation": "Those metrics expose hidden anti-entropy cost."
+    },
+    {
+      "stage": "post",
+      "question": "What is the hidden risk of simple last-write-wins conflict resolution?",
+      "options": [
+        "It can discard meaningful user intent or domain state even though the system converges mechanically.",
+        "It forces every read to contact all replicas.",
+        "It makes deletions impossible.",
+        "It prevents quorum overlap."
+      ],
+      "correct": 0,
+      "explanation": "Convergence is not the same as preserving the right business outcome."
+    },
+    {
+      "stage": "post",
+      "question": "When might a leader-follower design be better than quorums?",
+      "options": [
+        "When strict write ordering and simpler conflict handling matter more than high write availability through independent replicas.",
+        "When repair traffic is cheap and conflicts are common.",
+        "When every client prefers stale reads.",
+        "When the system should avoid any single write serialization point at all costs."
+      ],
+      "correct": 0,
+      "explanation": "Leadered systems can simplify ownership and write correctness."
+    },
+    {
+      "stage": "post",
+      "question": "Why can a write acknowledged at a low quorum still create surprising reads later?",
+      "options": [
+        "Because some replicas may miss the newer version, leaving later reads to reconcile or return stale data depending on the read quorum.",
+        "Because acknowledgements automatically downgrade durability to zero.",
+        "Because caches remove version history.",
+        "Because read repair only works before writes happen."
+      ],
+      "correct": 0,
+      "explanation": "Lower write overlap raises the odds of later divergence."
+    },
+    {
+      "stage": "post",
+      "question": "What makes a quorum answer sound senior?",
+      "options": [
+        "It pairs quorum math with versioning, divergence detection, repair cost, and clear guidance on where quorums fit or do not fit.",
+        "It only states `R=2, W=2, N=3` and moves on.",
+        "It claims conflicts are theoretical and can be ignored.",
+        "It avoids any mention of latency trade-offs."
+      ],
+      "correct": 0,
+      "explanation": "Strong answers connect the math to actual operating behavior."
+    }
+  ]
+}

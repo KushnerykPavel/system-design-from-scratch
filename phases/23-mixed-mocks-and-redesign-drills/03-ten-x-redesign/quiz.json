@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What is the strongest first step after an interviewer says the system must handle 10x scale?",
+      "options": [
+        "Identify which assumption breaks first and re-estimate the new bottleneck before redesigning.",
+        "Assume horizontal scaling is enough.",
+        "Replace every subsystem with a distributed equivalent.",
+        "Skip sizing and move straight to multi-region."
+      ],
+      "correct": 0,
+      "explanation": "The value of the redesign depends on knowing what changed and why the old design now fails."
+    },
+    {
+      "stage": "pre",
+      "question": "Why is a 10x change not just a bigger version of the same system?",
+      "options": [
+        "Because a different bottleneck, cost term, or failure mode often becomes dominant at the new scale.",
+        "Because 10x scale automatically forces strong consistency.",
+        "Because caches stop working at large scale.",
+        "Because interviews always require a full rewrite."
+      ],
+      "correct": 0,
+      "explanation": "Scale changes what matters, not only how much hardware is required."
+    },
+    {
+      "stage": "post",
+      "question": "What is the main advantage of choosing the smallest meaningful redesign first?",
+      "options": [
+        "It targets the broken assumption while reducing migration risk and unnecessary churn.",
+        "It guarantees the system will scale forever without more work.",
+        "It removes the need for observability during migration.",
+        "It means no trade-offs get worse."
+      ],
+      "correct": 0,
+      "explanation": "Incremental redesign is usually safer and easier to validate than a full rewrite."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric best validates that the redesign actually addressed the new bottleneck?",
+      "options": [
+        "A direct measure of the old bottleneck, compared before and after the change, along with user-visible latency or freshness.",
+        "Only total number of servers in the fleet.",
+        "The size of the architecture diagram.",
+        "The number of migration meetings held."
+      ],
+      "correct": 0,
+      "explanation": "You need evidence that the bottleneck moved or shrank, not just that the system changed."
+    },
+    {
+      "stage": "post",
+      "question": "Why should a redesign answer include a migration plan?",
+      "options": [
+        "Because many good technical changes become risky or unrealistic if state, clients, or traffic cannot move safely.",
+        "Because migration plans only matter for databases.",
+        "Because migrations are operational details outside system design.",
+        "Because a good redesign never needs rollback."
+      ],
+      "correct": 0,
+      "explanation": "A redesign is incomplete if it cannot be introduced safely."
+    },
+    {
+      "stage": "post",
+      "question": "What hidden trade-off often appears when pushing more work asynchronous at 10x scale?",
+      "options": [
+        "Throughput can improve, but freshness, backpressure management, and debugging complexity often get worse.",
+        "It guarantees perfect ordering everywhere.",
+        "It eliminates hotspot risk.",
+        "It lowers operational complexity in all cases."
+      ],
+      "correct": 0,
+      "explanation": "Async work placement helps scale, but it is not operationally free."
+    },
+    {
+      "stage": "post",
+      "question": "If the 10x increase is concentrated in one region, what should a strong answer revisit first?",
+      "options": [
+        "Partitioning, routing, and regional headroom assumptions instead of treating the growth as globally uniform.",
+        "Only the company org chart.",
+        "The names of the APIs.",
+        "Whether to stop measuring cost."
+      ],
+      "correct": 0,
+      "explanation": "Localized growth often changes hotspot and failover behavior more than global averages suggest."
+    },
+    {
+      "stage": "post",
+      "question": "Why should a redesign answer name one new failure mode introduced by the change?",
+      "options": [
+        "Because the redesigned system often moves risk rather than removing it, and senior answers make that explicit.",
+        "Because new failures are impossible after scaling correctly.",
+        "Because failures matter only during the initial design.",
+        "Because redesign discussions should stay optimistic."
+      ],
+      "correct": 0,
+      "explanation": "Ownership means explaining what got safer and what got riskier."
+    }
+  ]
+}

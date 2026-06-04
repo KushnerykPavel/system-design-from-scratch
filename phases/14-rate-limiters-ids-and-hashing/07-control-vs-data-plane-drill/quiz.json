@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why is separating control plane from data plane a useful system-design habit?",
+      "options": [
+        "It clarifies which logic must stay fast per request and which logic can be centralized and eventually propagated.",
+        "It only matters for operating systems.",
+        "It removes the need for policy versioning.",
+        "It makes rollout risk disappear."
+      ],
+      "correct": 0,
+      "explanation": "The distinction helps preserve latency and resilience while still supporting centralized policy."
+    },
+    {
+      "stage": "pre",
+      "question": "What is the main reason data planes often cache compiled policy locally?",
+      "options": [
+        "To avoid reaching back to the control plane on the hot path for every request.",
+        "To guarantee that policies are never stale.",
+        "To avoid any need for validation.",
+        "To ensure only one node can make decisions."
+      ],
+      "correct": 0,
+      "explanation": "Local cached policy keeps request decisions fast and resilient."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off comes with local policy bundles in the data plane?",
+      "options": [
+        "They keep latency low, but introduce bounded staleness and version-skew management.",
+        "They require no rollout process.",
+        "They eliminate the control plane completely.",
+        "They make explanations impossible."
+      ],
+      "correct": 0,
+      "explanation": "Fast local decisions are valuable, but policy freshness is no longer perfect."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric most directly reveals inconsistent fleet behavior after a rollout?",
+      "options": [
+        "Bundle or policy version skew across nodes and POPs.",
+        "The number of open tabs in a browser.",
+        "Average file count in the repository.",
+        "Only total global traffic."
+      ],
+      "correct": 0,
+      "explanation": "Version divergence is the clearest signal that some nodes are enforcing different rules."
+    },
+    {
+      "stage": "post",
+      "question": "Why is staged rollout important for control-plane changes?",
+      "options": [
+        "A bad policy bundle can otherwise become a global outage or mass reject event very quickly.",
+        "It guarantees no human ever makes a mistake.",
+        "It removes all need for rollback.",
+        "It only matters for low-QPS systems."
+      ],
+      "correct": 0,
+      "explanation": "Policy is code-like; unsafe global rollout can amplify a mistake everywhere."
+    },
+    {
+      "stage": "post",
+      "question": "What is the clearest sign that a control-plane design is bleeding into the data path incorrectly?",
+      "options": [
+        "Request latency spikes whenever the central policy service is slow or unavailable.",
+        "Operators can explain decisions clearly.",
+        "Node caches hold versioned bundles.",
+        "Policies are compiled before distribution."
+      ],
+      "correct": 0,
+      "explanation": "The hot path should not depend synchronously on a centralized control service."
+    },
+    {
+      "stage": "post",
+      "question": "Why might different policy classes need different degraded modes?",
+      "options": [
+        "Availability and safety trade-offs differ between abuse controls, optimization hints, and customer-facing quotas.",
+        "All policies should always fail open.",
+        "All policies should always fail closed.",
+        "Policy classes do not affect risk."
+      ],
+      "correct": 0,
+      "explanation": "One blanket degraded-mode choice is often too coarse for mixed policy types."
+    },
+    {
+      "stage": "post",
+      "question": "What is the strongest first move in this drill?",
+      "options": [
+        "State explicitly what belongs in control plane versus data plane before drawing components.",
+        "Start by naming a vendor product.",
+        "Ignore versioning and talk only about throughput.",
+        "Assume the same failure mode for every policy."
+      ],
+      "correct": 0,
+      "explanation": "The interview value comes from making that boundary concrete and defensible."
+    }
+  ]
+}

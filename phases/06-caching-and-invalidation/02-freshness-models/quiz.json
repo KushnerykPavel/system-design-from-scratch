@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What is a TTL really expressing in a cached system?",
+      "options": [
+        "A maximum tolerated stale window for that data class under normal operation.",
+        "A guarantee that the cache and source are always identical.",
+        "The number of regions serving the object.",
+        "The size of the object in bytes."
+      ],
+      "correct": 0,
+      "explanation": "TTL is a freshness and load trade-off, not just a random duration."
+    },
+    {
+      "stage": "pre",
+      "question": "Why is explicit invalidation often added on top of TTL rather than replacing it completely?",
+      "options": [
+        "Because TTL can still limit damage if an invalidation event is missed or delayed.",
+        "Because TTL makes versions unnecessary.",
+        "Because invalidation only works in browsers.",
+        "Because caches cannot store timestamps."
+      ],
+      "correct": 0,
+      "explanation": "TTL often acts as a safety net when event-driven freshness is imperfect."
+    },
+    {
+      "stage": "post",
+      "question": "When is explicit invalidation most worth its complexity?",
+      "options": [
+        "When freshness soon after writes materially changes user-visible correctness or policy behavior.",
+        "When content never changes.",
+        "When origin traffic is already negligible.",
+        "When you want to avoid naming key ownership."
+      ],
+      "correct": 0,
+      "explanation": "Explicit invalidation is justified when stale reads near writes are meaningfully harmful."
+    },
+    {
+      "stage": "post",
+      "question": "What is the main operational danger of broad prefix invalidation?",
+      "options": [
+        "It can destroy the working set and trigger a large miss storm.",
+        "It guarantees data corruption at the source of truth.",
+        "It makes responses uncompressible.",
+        "It disables tracing."
+      ],
+      "correct": 0,
+      "explanation": "Large invalidations can collapse hit ratio and flood the origin even when correctness is fine."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric best detects freshness-path trouble?",
+      "options": [
+        "Invalidation publish-to-apply latency or version skew.",
+        "Only process uptime.",
+        "The number of SREs on the team.",
+        "Average markdown heading length."
+      ],
+      "correct": 0,
+      "explanation": "Propagation delay and version mismatch directly reveal freshness drift."
+    },
+    {
+      "stage": "post",
+      "question": "Why are version-aware reads useful?",
+      "options": [
+        "They let readers reason about whether cached data is recent enough instead of treating values as opaque.",
+        "They eliminate all misses automatically.",
+        "They force caches to become durable databases.",
+        "They make TTL unnecessary in every system."
+      ],
+      "correct": 0,
+      "explanation": "Version metadata makes stale behavior measurable and sometimes selectively avoidable."
+    },
+    {
+      "stage": "post",
+      "question": "Which interview statement is strongest?",
+      "options": [
+        "I will set one global 5-minute TTL for simplicity and avoid discussing user-visible stale windows.",
+        "I will classify data by mutability and user impact, then mix TTL and explicit invalidation where the product promise demands it.",
+        "I will invalidate every key on every write regardless of scale.",
+        "I will avoid freshness discussion until after the architecture diagram is approved."
+      ],
+      "correct": 1,
+      "explanation": "Strong answers tie freshness mechanisms to data classes and consequences."
+    },
+    {
+      "stage": "post",
+      "question": "What hidden trade-off usually comes with tighter freshness?",
+      "options": [
+        "More invalidation traffic, more misses, or more coordination cost against the origin.",
+        "Lower storage use and less origin work automatically.",
+        "No change, because freshness is free once a cache exists.",
+        "Fewer observability requirements."
+      ],
+      "correct": 0,
+      "explanation": "Stronger freshness generally costs more in coordination, traffic, or cache churn."
+    }
+  ]
+}

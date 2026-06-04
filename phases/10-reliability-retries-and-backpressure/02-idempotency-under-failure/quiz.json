@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why does idempotency become important during partial failure?",
+      "options": [
+        "Because callers may retry after ambiguous outcomes and the system still needs to avoid duplicate side effects.",
+        "Because it lets every operation skip durable storage entirely.",
+        "Because it guarantees every request will be strongly consistent across regions.",
+        "Because it makes timeouts unnecessary."
+      ],
+      "correct": 0,
+      "explanation": "Idempotency protects correctness when clients cannot tell whether the first attempt already succeeded."
+    },
+    {
+      "stage": "pre",
+      "question": "What is the core promise of an idempotency key?",
+      "options": [
+        "The same logical intent can be retried without being applied multiple times inside the supported window.",
+        "The request will finish faster than a normal write.",
+        "All duplicate requests are rejected before reaching the network.",
+        "The storage layer no longer needs cleanup policies."
+      ],
+      "correct": 0,
+      "explanation": "The key ties repeated submissions to one logical intent."
+    },
+    {
+      "stage": "post",
+      "question": "What is the strongest reason to store a request fingerprint alongside the idempotency key?",
+      "options": [
+        "It prevents the same key from being reused for a different payload without detection.",
+        "It guarantees the business operation becomes globally serializable.",
+        "It removes the need for a TTL on dedupe records.",
+        "It makes duplicate requests impossible during client outages."
+      ],
+      "correct": 0,
+      "explanation": "A fingerprint lets the server detect accidental or malicious key reuse with changed semantics."
+    },
+    {
+      "stage": "post",
+      "question": "Which failure mode is most dangerous if the server writes the side effect before reserving the key?",
+      "options": [
+        "A timeout after commit can lead to a duplicate side effect when the client retries.",
+        "The request will become faster than expected under load.",
+        "The dedupe store will automatically shrink too quickly.",
+        "Observability dashboards will stop reporting latency."
+      ],
+      "correct": 0,
+      "explanation": "The key must protect the side effect before ambiguous retries arrive."
+    },
+    {
+      "stage": "post",
+      "question": "What is the main trade-off of keeping idempotency records for a long retry window?",
+      "options": [
+        "You get safer duplicate suppression, but storage and cleanup costs increase.",
+        "You eliminate every need for retries anywhere else in the system.",
+        "You guarantee that all late requests are valid forever.",
+        "You make payload fingerprinting unnecessary."
+      ],
+      "correct": 0,
+      "explanation": "Longer retention improves safety but consumes more durable state."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric best reveals a client reusing keys incorrectly?",
+      "options": [
+        "Conflicts where the same key arrives with a different request fingerprint.",
+        "The total number of dashboards in the company wiki.",
+        "Median CPU utilization on developer laptops.",
+        "The count of successful GET requests per day."
+      ],
+      "correct": 0,
+      "explanation": "Fingerprint conflicts are the clearest signal of bad key reuse."
+    },
+    {
+      "stage": "post",
+      "question": "Why might returning the original response on duplicate replay be worth the cost?",
+      "options": [
+        "It gives callers a stable contract after ambiguous failures, but requires extra storage and response handling.",
+        "It makes the write path eventually consistent by default.",
+        "It avoids every need for transport retries.",
+        "It eliminates all ambiguity for downstream webhooks automatically."
+      ],
+      "correct": 0,
+      "explanation": "Response replay can greatly simplify caller behavior, but it is not free."
+    },
+    {
+      "stage": "post",
+      "question": "What weakens an interview answer about idempotency most?",
+      "options": [
+        "Ignoring the ambiguous 'committed but client timed out' case and talking only about duplicate button clicks.",
+        "Mentioning TTL, storage cost, and payload hash together.",
+        "Separating business success from transport success.",
+        "Discussing scope like tenant plus key plus operation."
+      ],
+      "correct": 0,
+      "explanation": "The hard part is ambiguous completion under partial failure, not only obvious duplicate submits."
+    }
+  ]
+}

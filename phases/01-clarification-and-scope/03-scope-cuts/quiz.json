@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What makes a scope cut honest in a system design interview?",
+      "options": [
+        "It removes the hardest part of the prompt so the candidate can finish faster.",
+        "It preserves the core user journey and explains what is deferred and why.",
+        "It avoids discussing trade-offs until the wrap-up.",
+        "It keeps every feature in scope but ignores implementation detail."
+      ],
+      "correct": 1,
+      "explanation": "Honest scope cuts narrow breadth without abandoning the prompt."
+    },
+    {
+      "stage": "pre",
+      "question": "Which scope cut is weakest for a file storage system prompt?",
+      "options": [
+        "Start with personal accounts before team collaboration.",
+        "Begin single-region and explain how multi-region would change metadata and replication later.",
+        "Ignore storage and sync for simplicity.",
+        "Defer advanced search and analytics to a later phase."
+      ],
+      "correct": 2,
+      "explanation": "Removing storage and sync erases the core of the problem."
+    },
+    {
+      "stage": "post",
+      "question": "Why should a deferred feature still be mentioned explicitly?",
+      "options": [
+        "Because it helps show that the omission was deliberate and lets you discuss how the design evolves later.",
+        "Because all deferred features must be fully implemented conceptually anyway.",
+        "Because interviewers only score the deferred work, not the in-scope work.",
+        "Because it guarantees no follow-up redesign questions."
+      ],
+      "correct": 0,
+      "explanation": "Explicit deferral builds trust and preserves a path to later evolution."
+    },
+    {
+      "stage": "post",
+      "question": "What is the clearest sign that a scope cut has gone too far?",
+      "options": [
+        "The candidate says one feature is out of scope.",
+        "The remaining answer no longer addresses the interviewer’s original system problem.",
+        "The architecture starts in one region instead of many.",
+        "The candidate postpones analytics reporting."
+      ],
+      "correct": 1,
+      "explanation": "If the identity of the problem disappears, the cut is no longer legitimate."
+    },
+    {
+      "stage": "post",
+      "question": "Which trade-off is most real when you defer multi-region support in v1?",
+      "options": [
+        "You simplify topology now, but accept later migration and failover redesign work.",
+        "You remove all durability concerns permanently.",
+        "You guarantee lower operational cost at every future scale.",
+        "You make the data model irrelevant."
+      ],
+      "correct": 0,
+      "explanation": "Deferring geography reduces current complexity but shifts work into future evolution."
+    },
+    {
+      "stage": "post",
+      "question": "Why is 'for simplicity' alone usually weak language?",
+      "options": [
+        "Because it often hides the reason for the cut and fails to explain what design pressure is being postponed.",
+        "Because the phrase is forbidden in system design interviews.",
+        "Because simplicity never matters in production systems.",
+        "Because it implies the interviewer asked the wrong question."
+      ],
+      "correct": 0,
+      "explanation": "The interviewer needs the logic behind the simplification, not just the conclusion."
+    },
+    {
+      "stage": "post",
+      "question": "What metric best indicates a healthy scope-control process?",
+      "options": [
+        "The number of features silently omitted from the final diagram.",
+        "Whether each cut has a stated reason, preserves the core workflow, and leaves the prompt recognizable.",
+        "How many services are removed from the first sketch.",
+        "Whether cost estimates are skipped entirely."
+      ],
+      "correct": 1,
+      "explanation": "Good scope control is explicit, purposeful, and still faithful to the prompt."
+    },
+    {
+      "stage": "post",
+      "question": "If the interviewer pushes you to add a deferred feature back, what should happen next?",
+      "options": [
+        "Insist that it must remain out of scope because the answer is already structured.",
+        "Acknowledge the change, restate the new scope, and explain how the architecture or trade-offs evolve.",
+        "Restart the whole interview from scratch.",
+        "Ignore the request and continue with the original diagram."
+      ],
+      "correct": 1,
+      "explanation": "A good scope cut is a framing choice, not a refusal to engage with follow-ups."
+    }
+  ]
+}

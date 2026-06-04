@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why are dashboards with dozens of equal-priority panels often weak during incidents?",
+      "options": [
+        "They make it harder to know what to inspect first and slow triage.",
+        "They prevent metrics from being exported.",
+        "They force traces to sample at 100 percent.",
+        "They automatically delete old runbooks."
+      ],
+      "correct": 0,
+      "explanation": "A good dashboard guides attention instead of scattering it."
+    },
+    {
+      "stage": "pre",
+      "question": "What is metric cardinality in practice?",
+      "options": [
+        "The number of distinct label combinations a metric family can create.",
+        "The number of engineers on call for the dashboard.",
+        "The count of panels in one row of the UI.",
+        "The total size of the service binary."
+      ],
+      "correct": 0,
+      "explanation": "Each unique label set becomes a separate time series."
+    },
+    {
+      "stage": "post",
+      "question": "Which label is usually safer than raw `path` on a high-volume request metric?",
+      "options": [
+        "A bounded `route_class` label that groups similar endpoints.",
+        "A raw query string label with all parameters included.",
+        "A full `tenant_id + user_id` composite label.",
+        "An unbounded error message string."
+      ],
+      "correct": 0,
+      "explanation": "Route classes preserve meaning without creating uncontrolled label explosion."
+    },
+    {
+      "stage": "post",
+      "question": "What should the first panel on a primary on-call dashboard usually show?",
+      "options": [
+        "User-impact or SLO health, because it establishes whether the service is hurting users right now.",
+        "The list of all configured alerts in alphabetical order.",
+        "A pie chart of dashboard authors by team.",
+        "The number of markdown files in the service repository."
+      ],
+      "correct": 0,
+      "explanation": "Triage should begin with user impact, not implementation details."
+    },
+    {
+      "stage": "post",
+      "question": "What is the main trade-off of pre-aggregated dashboard views?",
+      "options": [
+        "They query quickly and cheaply, but expose less raw per-entity detail by default.",
+        "They remove any need for logs and traces.",
+        "They guarantee no alert will ever be noisy.",
+        "They can only be used for batch systems."
+      ],
+      "correct": 0,
+      "explanation": "Pre-aggregation improves operational stability at the cost of some flexibility."
+    },
+    {
+      "stage": "post",
+      "question": "What is a sign the observability backend itself may become the next bottleneck?",
+      "options": [
+        "Dashboard query latency and active series count are climbing rapidly during incidents.",
+        "The service owner updated a runbook last week.",
+        "The primary SLI is healthy during normal traffic.",
+        "A route class was renamed for clarity."
+      ],
+      "correct": 0,
+      "explanation": "Query latency and exploding series count are direct warning signs."
+    },
+    {
+      "stage": "post",
+      "question": "Why is region filtering often worth keeping on a global service dashboard?",
+      "options": [
+        "It helps separate localized failures from fleet-wide issues that averages might hide.",
+        "It guarantees cardinality cannot grow.",
+        "It removes the need to monitor dependencies.",
+        "It means traces never need to be sampled."
+      ],
+      "correct": 0,
+      "explanation": "Global averages can hide one damaged region or POP."
+    },
+    {
+      "stage": "post",
+      "question": "What is the strongest answer to 'How do you review a new metric before rollout?'",
+      "options": [
+        "Check whether it improves diagnosis, whether its labels are bounded, and what cost it adds to the backend.",
+        "Approve it if the service owner likes the panel color.",
+        "Reject any metric that mentions latency or errors.",
+        "Add it everywhere first and worry about cardinality after the next outage."
+      ],
+      "correct": 0,
+      "explanation": "New metrics should be justified by signal quality and bounded operational cost."
+    }
+  ]
+}

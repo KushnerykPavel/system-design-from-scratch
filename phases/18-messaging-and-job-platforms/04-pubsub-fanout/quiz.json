@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why is per-subscription state central in pub/sub design?",
+      "options": [
+        "Because subscribers consume at different speeds and need independent progress and replay behavior.",
+        "Because topics do not store events durably.",
+        "Because pub/sub systems never support filtering.",
+        "Because all subscribers must acknowledge in the same order."
+      ],
+      "correct": 0,
+      "explanation": "Subscribers are intentionally independent from each other."
+    },
+    {
+      "stage": "pre",
+      "question": "What question most changes a pub/sub storage design?",
+      "options": [
+        "How long independent replay windows need to be for subscribers.",
+        "What font the operator console should use.",
+        "Whether publishers run on Linux or macOS laptops.",
+        "Whether subscribers prefer camelCase or snake_case fields."
+      ],
+      "correct": 0,
+      "explanation": "Replay and retention drive cost and control-plane shape."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric most directly shows that one subscriber is becoming a storage problem for the platform?",
+      "options": [
+        "Retained bytes and backlog age attributed to that subscription.",
+        "Average event payload indentation depth.",
+        "The number of topics created this quarter.",
+        "Median TLS certificate age on publisher hosts."
+      ],
+      "correct": 0,
+      "explanation": "Lagging subscribers often appear first as retention pressure."
+    },
+    {
+      "stage": "post",
+      "question": "Why is server-side filtering a trade-off rather than an automatic good?",
+      "options": [
+        "It reduces subscriber work but adds platform CPU cost and operational complexity.",
+        "It guarantees perfect topic ordering.",
+        "It removes the need for replay controls.",
+        "It makes slow subscribers impossible."
+      ],
+      "correct": 0,
+      "explanation": "Filtering moves work and complexity into the platform."
+    },
+    {
+      "stage": "post",
+      "question": "What is the cleanest way to protect live delivery from one subscriber's large replay?",
+      "options": [
+        "Isolate replay lanes or budgets from normal live-delivery capacity.",
+        "Disable acknowledgements during replay.",
+        "Delete the subscription's cursor.",
+        "Force all subscribers to replay whenever one subscriber does."
+      ],
+      "correct": 0,
+      "explanation": "Replay and live traffic need separate controls."
+    },
+    {
+      "stage": "post",
+      "question": "Which failure is most directly addressed by per-subscription backlog budgets?",
+      "options": [
+        "A slow subscriber forcing unbounded retention growth.",
+        "A publisher sending malformed JSON once.",
+        "A dashboard query running slowly.",
+        "A timer wheel drifting by milliseconds."
+      ],
+      "correct": 0,
+      "explanation": "Budgets keep one subscriber from consuming unlimited shared storage."
+    },
+    {
+      "stage": "post",
+      "question": "Why is topic durability not the same thing as subscription delivery success?",
+      "options": [
+        "Because stored events still need per-subscriber progress, retries, and delivery tracking.",
+        "Because durable topics prevent subscribers from lagging.",
+        "Because subscriptions do not use offsets or cursors.",
+        "Because durability only matters for filtered topics."
+      ],
+      "correct": 0,
+      "explanation": "Durability and downstream delivery are separate concerns."
+    },
+    {
+      "stage": "post",
+      "question": "What design change best helps a shared pub/sub system support mixed subscriber priorities?",
+      "options": [
+        "Separate delivery tiers or reserved capacity for high-priority subscriptions.",
+        "A single retry queue for all subscriptions combined.",
+        "Removing seek and pause controls.",
+        "Disabling filters globally."
+      ],
+      "correct": 0,
+      "explanation": "Priority lanes are a direct way to preserve quality for important consumers."
+    }
+  ]
+}

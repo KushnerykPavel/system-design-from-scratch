@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why does offset pagination often degrade at large page numbers?",
+      "options": [
+        "The backend may have to scan and skip many rows before returning the requested slice.",
+        "Offset pagination forces every response to be eventually consistent.",
+        "It prevents any filtering from being used safely.",
+        "The client must always download the whole table first."
+      ],
+      "correct": 0,
+      "explanation": "Large offsets commonly translate into expensive scans or skips in the storage layer."
+    },
+    {
+      "stage": "pre",
+      "question": "What is the main value of cursor pagination for time-ordered feeds?",
+      "options": [
+        "It allows arbitrary SQL predicates with no performance impact.",
+        "It provides more stable continuation through changing data and avoids deep offset scans.",
+        "It guarantees exact snapshot isolation automatically.",
+        "It removes the need for any indexes."
+      ],
+      "correct": 1,
+      "explanation": "Cursors are primarily useful for stable continuation and efficient traversal."
+    },
+    {
+      "stage": "post",
+      "question": "What should a good cursor usually include for a reverse-chronological list?",
+      "options": [
+        "Only the page number and client IP address.",
+        "The last seen sort key plus a tie-breaker identifier and filter context.",
+        "A full copy of every returned row.",
+        "Only the user's display name."
+      ],
+      "correct": 1,
+      "explanation": "Stable traversal usually needs the sort key, a tie-breaker, and context about the query shape."
+    },
+    {
+      "stage": "post",
+      "question": "What is the best default response when a user asks for a multi-million-row export through a normal list API?",
+      "options": [
+        "Serve it synchronously and let the client hold the connection open.",
+        "Increase the page size to the maximum integer value.",
+        "Route the request to an asynchronous export workflow instead of the interactive path.",
+        "Disable filtering entirely for the endpoint."
+      ],
+      "correct": 2,
+      "explanation": "Bulk exports should usually move off the latency-sensitive online path."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric most directly reveals that a filter contract is mismatched with the storage access path?",
+      "options": [
+        "Scan-to-result ratio climbing for certain query shapes.",
+        "The number of frontend components rendering a table.",
+        "The count of unit tests in the repository.",
+        "The amount of whitespace in response JSON."
+      ],
+      "correct": 0,
+      "explanation": "High scan amplification is a strong sign that the query shape is not index-friendly."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off comes with restricting list filters to a whitelist of indexed fields?",
+      "options": [
+        "You keep latency predictable, but reduce ad hoc query freedom for clients.",
+        "You eliminate all need for pagination.",
+        "You guarantee every result is snapshot-consistent.",
+        "You avoid having to monitor the endpoint."
+      ],
+      "correct": 0,
+      "explanation": "Restricted filters protect system performance at the cost of flexibility."
+    },
+    {
+      "stage": "post",
+      "question": "If concurrent inserts cause users to see duplicate items across pages, what is the best first fix?",
+      "options": [
+        "Increase page size until duplicates are hidden.",
+        "Use a stable sort key with a tie-breaker and encode it into the cursor.",
+        "Convert the endpoint to a write-only API.",
+        "Disable all new inserts while clients paginate."
+      ],
+      "correct": 1,
+      "explanation": "Stable ordering and cursor state are the right first tools for pagination consistency."
+    },
+    {
+      "stage": "post",
+      "question": "When is offset pagination still a reasonable choice?",
+      "options": [
+        "For small, low-scale datasets or simple admin views where deep pages are rare.",
+        "For high-churn feeds with strict latency targets at arbitrary depth.",
+        "For every user-facing timeline because it is easier to explain.",
+        "Only when the system has no indexes."
+      ],
+      "correct": 0,
+      "explanation": "Offset pagination is not wrong everywhere; it is just a poor default for large, mutable lists."
+    }
+  ]
+}

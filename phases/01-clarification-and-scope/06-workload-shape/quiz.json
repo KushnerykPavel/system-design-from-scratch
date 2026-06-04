@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why is 'high scale' by itself an incomplete requirement?",
+      "options": [
+        "Because it does not reveal whether the system is read-heavy, write-heavy, bursty, fanout-heavy, or bandwidth-intensive.",
+        "Because only low-scale systems need architecture decisions.",
+        "Because interviews are not allowed to mention scale without exact hardware counts.",
+        "Because storage growth is always more important than traffic shape."
+      ],
+      "correct": 0,
+      "explanation": "Scale only becomes actionable when translated into a concrete workload pattern."
+    },
+    {
+      "stage": "pre",
+      "question": "Which workload characteristic is most likely to change a feed system architecture?",
+      "options": [
+        "Whether the design uses rounded or square boxes.",
+        "Whether writes fan out to many followers or reads assemble personalized timelines on demand.",
+        "Whether the repository uses JSON or YAML quizzes.",
+        "Whether the lesson title mentions Google or Cloudflare first."
+      ],
+      "correct": 1,
+      "explanation": "Fanout strategy is central to feed workload shape and architecture."
+    },
+    {
+      "stage": "post",
+      "question": "Why should the primary user journey be translated into backend operations before architecture?",
+      "options": [
+        "Because it reveals request mix, amplification, and latency-sensitive paths that the design must support.",
+        "Because it replaces the need for any failure analysis.",
+        "Because it guarantees a single correct storage model.",
+        "Because it makes trade-offs less important."
+      ],
+      "correct": 0,
+      "explanation": "The journey becomes useful only when mapped to reads, writes, queues, and hotspots."
+    },
+    {
+      "stage": "post",
+      "question": "What is the main risk of sizing only the average case?",
+      "options": [
+        "The system may look correct on paper while bursts, hotspots, or fanout spikes still break it.",
+        "It makes the write path too durable.",
+        "It prevents any observability plan from being created.",
+        "It always overestimates hardware cost."
+      ],
+      "correct": 0,
+      "explanation": "Average-only thinking hides the operational stressors that often dominate design."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric best detects whether workload shape was captured well enough?",
+      "options": [
+        "Whether the answer names read/write mix, amplification, burst factor, and likely hotspots before component details expand.",
+        "The number of load balancers in the diagram.",
+        "The number of glossary terms referenced.",
+        "The total number of markdown headings."
+      ],
+      "correct": 0,
+      "explanation": "Those fields convert vague scale into architecture-ready workload shape."
+    },
+    {
+      "stage": "post",
+      "question": "Why is fanout factor dangerous to ignore?",
+      "options": [
+        "Because one user action can generate far more backend work than its input rate suggests.",
+        "Because fanout only matters for object storage products.",
+        "Because it eliminates the need for queues.",
+        "Because it makes burst factor irrelevant."
+      ],
+      "correct": 0,
+      "explanation": "Amplification can dominate throughput, storage, and queue sizing."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off comes with explicitly separating synchronous and asynchronous workload paths?",
+      "options": [
+        "It improves latency reasoning and failure analysis, but adds a bit more complexity to the explanation.",
+        "It makes the data model unnecessary.",
+        "It guarantees eventual consistency even when not desired.",
+        "It only helps systems with no user-facing reads."
+      ],
+      "correct": 0,
+      "explanation": "The extra structure is worth it because it clarifies what must be fast now versus processed later."
+    },
+    {
+      "stage": "post",
+      "question": "If one tenant suddenly becomes 30% of total traffic, what workload concern becomes more important?",
+      "options": [
+        "Hotspot and skew handling, because average fleet load no longer describes local stress accurately.",
+        "Markdown formatting consistency.",
+        "Whether the quiz has enough pre questions.",
+        "Whether the system still has a single core workflow."
+      ],
+      "correct": 0,
+      "explanation": "Skew changes the effective stress profile even when overall QPS looks manageable."
+    }
+  ]
+}

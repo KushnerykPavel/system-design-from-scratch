@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What does tenant isolation need to protect besides data confidentiality?",
+      "options": [
+        "Only brand design and logo colors.",
+        "Performance fairness, operational blast radius, and control-plane safety in addition to data boundaries.",
+        "Nothing else, because authorization solves every multitenancy problem.",
+        "Only object storage bandwidth."
+      ],
+      "correct": 1,
+      "explanation": "Multitenancy failures include noisy neighbors, shared failures, and admin-plane mistakes."
+    },
+    {
+      "stage": "pre",
+      "question": "Why is one heavy tenant dangerous in a shared platform?",
+      "options": [
+        "Because it can create skew, exhaust shared capacity, and degrade unrelated tenants.",
+        "Because premium customers never use shared systems.",
+        "Because storage systems cannot track tenant IDs.",
+        "Because queues do not support fairness."
+      ],
+      "correct": 0,
+      "explanation": "A single large tenant can distort load, latency, and cost across shared pools."
+    },
+    {
+      "stage": "post",
+      "question": "Which design most directly reduces cross-tenant data leakage in shared caches?",
+      "options": [
+        "Tenant-prefixing or otherwise scoping cache keys explicitly.",
+        "Increasing cache TTL for all keys.",
+        "Running more dashboards.",
+        "Storing cache values in larger JSON blobs."
+      ],
+      "correct": 0,
+      "explanation": "Explicit tenant scoping on keys is a basic but critical isolation control."
+    },
+    {
+      "stage": "post",
+      "question": "Why are quotas and fair schedulers useful even when authorization is correct?",
+      "options": [
+        "They protect performance isolation so one tenant cannot monopolize shared workers or throughput.",
+        "They replace the need for tenant IDs in storage.",
+        "They guarantee zero cost for premium tiers.",
+        "They eliminate the need for observability."
+      ],
+      "correct": 0,
+      "explanation": "Authorization protects data access, while quotas and fairness protect shared capacity."
+    },
+    {
+      "stage": "post",
+      "question": "When is moving a tenant to dedicated capacity most justified?",
+      "options": [
+        "When the tenant creates sustained skew, stricter compliance needs, or outsized blast-radius risk.",
+        "Whenever a tenant opens one support ticket.",
+        "Only when the fleet is completely idle.",
+        "Never, because shared infrastructure is always cheaper."
+      ],
+      "correct": 0,
+      "explanation": "Dedicated capacity is justified by isolation, fairness, or compliance requirements."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric best detects noisy-neighbor impact in a worker pool?",
+      "options": [
+        "Per-tenant queue wait and concurrency share for top tenants.",
+        "Only the total number of deployed hosts.",
+        "Average markdown line length.",
+        "The age of TLS certificates."
+      ],
+      "correct": 0,
+      "explanation": "Tenant-scoped queueing and concurrency metrics reveal fairness breakdowns directly."
+    },
+    {
+      "stage": "post",
+      "question": "What is the main risk of broad support tooling bypasses in a multitenant system?",
+      "options": [
+        "They can quietly undermine tenant boundaries and expand blast radius during mistakes or incidents.",
+        "They improve fairness too much.",
+        "They reduce memory pressure in shared caches.",
+        "They prevent background jobs from running."
+      ],
+      "correct": 0,
+      "explanation": "Support or admin bypasses can bypass the very isolation model the product depends on."
+    },
+    {
+      "stage": "post",
+      "question": "Why is shared-by-default plus selective carve-out often a strong answer?",
+      "options": [
+        "It balances efficiency for the long tail with a path to isolate large or regulated tenants.",
+        "It guarantees no future migrations are needed.",
+        "It removes the need for quotas.",
+        "It only works for single-region systems."
+      ],
+      "correct": 0,
+      "explanation": "Selective carve-out preserves cost efficiency without pretending every tenant has identical needs."
+    }
+  ]
+}

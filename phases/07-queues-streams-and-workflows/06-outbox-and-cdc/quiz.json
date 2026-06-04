@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What problem are outbox and CDC patterns mainly trying to solve?",
+      "options": [
+        "Keeping committed state changes and emitted events aligned under crash and retry failures.",
+        "Reducing all event payload sizes below one kilobyte.",
+        "Eliminating the need for downstream consumers.",
+        "Guaranteeing global ordering across every topic."
+      ],
+      "correct": 0,
+      "explanation": "These patterns address the dual-write inconsistency problem."
+    },
+    {
+      "stage": "pre",
+      "question": "Why is publishing directly from the request handler risky?",
+      "options": [
+        "Because the database write and broker publish can succeed or fail independently, creating inconsistent outcomes.",
+        "Because brokers cannot store message IDs.",
+        "Because retries are forbidden after commits.",
+        "Because transactional databases never support insert plus update."
+      ],
+      "correct": 0,
+      "explanation": "A direct dual-write has failure windows on both sides."
+    },
+    {
+      "stage": "post",
+      "question": "Which answer is strongest?",
+      "options": [
+        "Write the business row and outbox row in one transaction, then let a relay publish with stable event IDs.",
+        "Publish first and hope the database commit succeeds immediately after.",
+        "Skip event IDs because the outbox table is already durable.",
+        "Use a cron job that compares tables once a week."
+      ],
+      "correct": 0,
+      "explanation": "That approach closes the most important dual-write gap."
+    },
+    {
+      "stage": "post",
+      "question": "What metric most directly shows the relay path is unhealthy?",
+      "options": [
+        "Oldest unpublished outbox record age and backlog growth.",
+        "Only README file count.",
+        "Average CPU usage on unrelated consumers.",
+        "The number of markdown links in the lesson."
+      ],
+      "correct": 0,
+      "explanation": "Backlog age reveals how far event visibility has drifted from committed truth."
+    },
+    {
+      "stage": "post",
+      "question": "Why do stable event IDs still matter if the outbox is durable?",
+      "options": [
+        "Because the relay can still publish duplicates after uncertain acknowledgement, and consumers need dedupe handles.",
+        "Because stable IDs remove the need for a broker.",
+        "Because IDs guarantee global ordering automatically.",
+        "Because IDs make CDC unnecessary in every case."
+      ],
+      "correct": 0,
+      "explanation": "Durable publish pipelines still need duplicate suppression boundaries."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off often comes with CDC instead of an application-managed outbox?",
+      "options": [
+        "You reduce app-code changes, but you often gain more infrastructure complexity and rougher event semantics.",
+        "You gain perfect domain events with no transformation work.",
+        "You eliminate relay lag entirely.",
+        "You make cleanup and retention irrelevant."
+      ],
+      "correct": 0,
+      "explanation": "CDC can be powerful but often requires extra transformation and operations."
+    },
+    {
+      "stage": "post",
+      "question": "What is the hidden risk of letting the outbox table grow without lifecycle planning?",
+      "options": [
+        "It can degrade the primary database through storage, indexing, and scan pressure on the serving path.",
+        "It automatically deletes published business rows.",
+        "It prevents event versioning from working.",
+        "It disables broker replication."
+      ],
+      "correct": 0,
+      "explanation": "Outbox safety has real OLTP cost if retention is unmanaged."
+    },
+    {
+      "stage": "post",
+      "question": "When might CDC be the better fit than a transactional outbox?",
+      "options": [
+        "When you cannot or should not modify the application transaction path but can read committed database changes reliably.",
+        "When the service has no source of truth database at all.",
+        "When the product needs to avoid any ordering guarantees.",
+        "When you want to skip schema evolution planning."
+      ],
+      "correct": 0,
+      "explanation": "CDC is especially useful when application-level transaction changes are constrained."
+    }
+  ]
+}

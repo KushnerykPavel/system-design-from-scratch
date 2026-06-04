@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What is the main idea behind secure defaults?",
+      "options": [
+        "The easiest standard path should already be reasonably safe without custom heroics.",
+        "All features should be disabled forever.",
+        "Security settings should be chosen only after the first incident.",
+        "Every request should fail closed regardless of context."
+      ],
+      "correct": 0,
+      "explanation": "Secure defaults make the normal path safe enough that teams do not need risky custom workarounds."
+    },
+    {
+      "stage": "pre",
+      "question": "Why are permissive defaults dangerous in multitenant systems?",
+      "options": [
+        "Because they quietly expand blast radius before operators notice.",
+        "Because they reduce CPU usage.",
+        "Because they remove the need for onboarding.",
+        "Because they only affect backups."
+      ],
+      "correct": 0,
+      "explanation": "Broad default access and missing limits make new mistakes dangerous immediately."
+    },
+    {
+      "stage": "post",
+      "question": "Which default is the strongest baseline for new capabilities?",
+      "options": [
+        "Deny by default, then grant explicit scoped access as needed.",
+        "Allow everything internally until a later audit.",
+        "Use one shared admin credential for faster launches.",
+        "Skip quotas for the first month."
+      ],
+      "correct": 0,
+      "explanation": "Explicit grants keep initial blast radius small."
+    },
+    {
+      "stage": "post",
+      "question": "Why are expiring overrides better than indefinite emergency exceptions?",
+      "options": [
+        "They force review and prevent temporary risk from silently becoming permanent policy drift.",
+        "They guarantee no incidents occur.",
+        "They eliminate the need for audit logs.",
+        "They remove all onboarding friction."
+      ],
+      "correct": 0,
+      "explanation": "Override expiry creates a natural cleanup point and review trigger."
+    },
+    {
+      "stage": "post",
+      "question": "Which control most directly makes service onboarding safer by default?",
+      "options": [
+        "Managed workload identity and short-lived credentials.",
+        "A wiki page that says 'be careful'.",
+        "Long-lived shared tokens stored in config files.",
+        "Manual host SSH for every deploy."
+      ],
+      "correct": 0,
+      "explanation": "Safe-by-default onboarding is strongest when the platform issues scoped ephemeral identity."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off often comes with deny-by-default policy?",
+      "options": [
+        "Lower initial blast radius but more explicit onboarding and policy-management work.",
+        "Guaranteed zero support load.",
+        "No need for audits or metrics.",
+        "Perfect usability for every edge case immediately."
+      ],
+      "correct": 0,
+      "explanation": "Safer defaults usually require clearer provisioning and policy workflows."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric best reveals that secure defaults are being bypassed?",
+      "options": [
+        "Override count, override age, and shadow credential usage.",
+        "Only average response size.",
+        "Count of terminal tabs.",
+        "Markdown heading depth."
+      ],
+      "correct": 0,
+      "explanation": "Frequent or stale overrides often indicate the default path is not working well."
+    },
+    {
+      "stage": "post",
+      "question": "Why should degraded-mode behavior be part of a secure-defaults answer?",
+      "options": [
+        "Because defaults include how the system behaves when key controls like auth or challenge services are unhealthy.",
+        "Because degraded mode only matters for billing.",
+        "Because healthy systems never need fallback behavior.",
+        "Because it replaces incident response planning."
+      ],
+      "correct": 0,
+      "explanation": "Safe defaults also define what happens when security dependencies fail."
+    }
+  ]
+}

@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What is the most important purpose of a system design interview wrap-up?",
+      "options": [
+        "To summarize the architecture and make the key risks and trade-offs explicit.",
+        "To introduce additional components that did not fit earlier.",
+        "To avoid mentioning uncertainties so the answer sounds confident.",
+        "To repeat all clarifying questions in the same order."
+      ],
+      "correct": 0,
+      "explanation": "The wrap-up is about synthesis and judgment, not expansion."
+    },
+    {
+      "stage": "pre",
+      "question": "Why should observability often appear in the final summary?",
+      "options": [
+        "Because it shows how the design would be operated and verified in reality.",
+        "Because metrics can replace trade-offs entirely.",
+        "Because interviewers only care about dashboards at the end.",
+        "Because it avoids the need to discuss failure modes."
+      ],
+      "correct": 0,
+      "explanation": "Observability grounds the design in operation, not just architecture."
+    },
+    {
+      "stage": "post",
+      "question": "Which ending sounds most like a senior wrap-up?",
+      "options": [
+        "I would probably add more services later if needed.",
+        "We optimized for low-latency reads, accepted more invalidation complexity, and would watch stale-read rate during phased rollout.",
+        "The system has APIs, caches, databases, and maybe a queue.",
+        "I think the main thing is that microservices are flexible."
+      ],
+      "correct": 1,
+      "explanation": "It states the optimization target, trade-off, metric, and rollout consideration."
+    },
+    {
+      "stage": "post",
+      "question": "What is the strongest response if you only have one minute left?",
+      "options": [
+        "Start a new deep dive because detail creates more signal.",
+        "Summarize priorities, architecture, key risks, and one observability or rollout point.",
+        "Re-estimate all capacity numbers with more precision.",
+        "List every database alternative you considered."
+      ],
+      "correct": 1,
+      "explanation": "A compressed but complete summary is the highest-value use of the last minute."
+    },
+    {
+      "stage": "post",
+      "question": "Which sign suggests your wrap-up is weak?",
+      "options": [
+        "It names trade-offs and remaining risks clearly.",
+        "It introduces new architecture branches instead of synthesizing earlier decisions.",
+        "It includes one metric to validate the system.",
+        "It mentions a safe rollout step."
+      ],
+      "correct": 1,
+      "explanation": "The ending should consolidate, not widen scope."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off comes with using a structured wrap-up template?",
+      "options": [
+        "It adds consistency, but can sound canned if repeated mechanically.",
+        "It increases write amplification while reducing read cost.",
+        "It prevents all redesign follow-ups from the interviewer.",
+        "It makes sizing unnecessary."
+      ],
+      "correct": 0,
+      "explanation": "Structure helps, but you still need to adapt the language to the actual design."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric best checks whether you are closing answers effectively during practice?",
+      "options": [
+        "Whether the final summary included trade-offs, risks, and at least one operational check.",
+        "How many acronyms appeared in the last two minutes.",
+        "Whether the answer used a relational database.",
+        "How many boxes remained on the board."
+      ],
+      "correct": 0,
+      "explanation": "Completion quality matters more than raw verbosity."
+    },
+    {
+      "stage": "post",
+      "question": "How should rollout usually appear in a strong wrap-up?",
+      "options": [
+        "As a brief statement about staged deployment, blast radius control, or migration safety.",
+        "As a full implementation plan with ticket estimates.",
+        "As a reason to avoid discussing failure modes.",
+        "As a replacement for the architecture summary."
+      ],
+      "correct": 0,
+      "explanation": "A short rollout note shows practical engineering maturity."
+    }
+  ]
+}

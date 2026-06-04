@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why is separating hot and cold data useful in system design?",
+      "options": [
+        "Because all data naturally becomes cold at the same rate.",
+        "Because a small working set often drives most latency-sensitive traffic and deserves a different cost profile.",
+        "Because cold data never needs backups or integrity checks.",
+        "Because tiering removes the need for indexes."
+      ],
+      "correct": 1,
+      "explanation": "Hot and cold data have different performance and cost requirements, so treating them identically is wasteful."
+    },
+    {
+      "stage": "pre",
+      "question": "What is a hot row or hot key?",
+      "options": [
+        "A row that is encrypted with a newer key version.",
+        "A record that receives a disproportionate amount of read or write traffic.",
+        "A row that is stored only in memory.",
+        "A record that failed a checksum."
+      ],
+      "correct": 1,
+      "explanation": "Hotspots are about skewed traffic concentration, not storage medium alone."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric best exposes that one tenant is creating a dangerous storage hotspot?",
+      "options": [
+        "Overall fleet average latency without tenant breakdown.",
+        "Read and write skew metrics by tenant or key class.",
+        "Average size of deployment artifacts.",
+        "Only total number of archived objects."
+      ],
+      "correct": 1,
+      "explanation": "Averages hide skew, while per-tenant or per-key metrics reveal concentration."
+    },
+    {
+      "stage": "post",
+      "question": "What is the hidden risk of an archive tier that has never been restored in practice?",
+      "options": [
+        "It will make the hot path faster than expected.",
+        "It may fail exactly when compliance, audit, or incident recovery depends on it.",
+        "It eliminates all metadata consistency issues.",
+        "It automatically reduces write hotspots."
+      ],
+      "correct": 1,
+      "explanation": "An untested restore path is an operational risk, not a real capability."
+    },
+    {
+      "stage": "post",
+      "question": "When is caching alone not enough to solve hot/cold data problems?",
+      "options": [
+        "When long-term storage cost and archive lifecycle requirements matter in addition to hot reads.",
+        "When the application uses HTTP instead of gRPC.",
+        "When the database already has a primary key.",
+        "When the working set is smaller than memory."
+      ],
+      "correct": 0,
+      "explanation": "Caching helps hot reads, but it does not replace lifecycle, retention, and archive economics."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off comes with moving older data to a cheaper archive tier?",
+      "options": [
+        "Recent writes become impossible to replicate.",
+        "Long-term cost drops, but retrieval becomes slower and operationally more complex.",
+        "Consistency guarantees always improve automatically.",
+        "Secondary indexes no longer need maintenance."
+      ],
+      "correct": 1,
+      "explanation": "Archive tiers save money by trading away immediate low-latency access."
+    },
+    {
+      "stage": "post",
+      "question": "Which design move best handles a write-heavy hot counter?",
+      "options": [
+        "Force all writes through one stronger machine.",
+        "Split, shard, aggregate, or otherwise distribute the hotspot instead of letting one row absorb all pressure.",
+        "Store the counter in colder storage tiers.",
+        "Remove observability to reduce contention."
+      ],
+      "correct": 1,
+      "explanation": "Hot write concentration needs distribution or aggregation, not just more hope."
+    },
+    {
+      "stage": "post",
+      "question": "What should a strong interview answer include when proposing tiering?",
+      "options": [
+        "Only the storage classes and approximate cost savings.",
+        "How data is classified, when it moves, and how restore or replay works.",
+        "A statement that cold data is not important to users.",
+        "A promise that archived data will never be queried again."
+      ],
+      "correct": 1,
+      "explanation": "Tiering is a lifecycle and restore design, not just a storage pricing choice."
+    }
+  ]
+}

@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why is a single central counter often too slow for high-scale edge rate limiting?",
+      "options": [
+        "Because it cannot store more than one key at a time in memory.",
+        "Because every request must pay coordination latency and hotspot pressure on the same shared path.",
+        "Because token buckets are incompatible with distributed storage.",
+        "Because edge gateways are not allowed to make local decisions."
+      ],
+      "correct": 1,
+      "explanation": "A single coordination point increases latency and creates hotspots under skewed traffic."
+    },
+    {
+      "stage": "pre",
+      "question": "What is the main purpose of burst allowance in a rate limiter?",
+      "options": [
+        "It lets traffic briefly exceed the steady rate without treating every spike as abuse.",
+        "It permanently doubles the allowed traffic for premium customers.",
+        "It removes the need for a shared control plane.",
+        "It guarantees no requests will ever be rejected."
+      ],
+      "correct": 0,
+      "explanation": "Burst capacity absorbs short spikes while preserving the long-term rate policy."
+    },
+    {
+      "stage": "post",
+      "question": "What problem does a local fast path solve in a distributed limiter?",
+      "options": [
+        "It eliminates all coordination and consistency problems completely.",
+        "It reduces hot-path latency by serving common decisions locally with bounded staleness.",
+        "It allows policy updates to skip versioning.",
+        "It guarantees fairness across all regions without shared state."
+      ],
+      "correct": 1,
+      "explanation": "Local caching reduces latency, but only within a controlled inconsistency window."
+    },
+    {
+      "stage": "post",
+      "question": "Why is explainability valuable in a rate limiting system?",
+      "options": [
+        "It helps operators and customers understand why requests were rejected and how policy behaved.",
+        "It is only needed for local development environments.",
+        "It allows burst size to be recalculated without policy storage.",
+        "It replaces metrics during incidents."
+      ],
+      "correct": 0,
+      "explanation": "Without reject explanations, tuning and incident diagnosis become much harder."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off does fail-open introduce during a shared-store outage?",
+      "options": [
+        "It preserves availability but weakens enforcement while degraded mode lasts.",
+        "It improves strictness at the cost of higher storage usage.",
+        "It removes the need for cache TTLs.",
+        "It guarantees equal fairness for all tenants."
+      ],
+      "correct": 0,
+      "explanation": "Fail-open keeps traffic flowing, but enforcement becomes less strict while coordination is unavailable."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric best helps detect policy drift across the fleet?",
+      "options": [
+        "CPU usage on the gateway process alone.",
+        "Policy version skew across edges or POPs.",
+        "Only the total number of allowed requests.",
+        "Average response body size."
+      ],
+      "correct": 1,
+      "explanation": "Version skew directly reveals whether some nodes are enforcing older rules."
+    },
+    {
+      "stage": "post",
+      "question": "Why are hot keys dangerous in distributed rate limiting?",
+      "options": [
+        "They concentrate traffic onto a small portion of the fleet and can overload one shard or owner.",
+        "They make TLS termination impossible at the edge.",
+        "They only matter when keys are stored in SQL databases.",
+        "They prevent any kind of burst handling."
+      ],
+      "correct": 0,
+      "explanation": "Skew can overwhelm the owner shard even when average fleet load looks normal."
+    },
+    {
+      "stage": "post",
+      "question": "What is the clearest reason to choose token bucket over a sliding request log in many interviews?",
+      "options": [
+        "It is simpler to explain, supports bursts naturally, and avoids the memory overhead of storing many timestamps.",
+        "It guarantees stronger consistency than any shared counter design.",
+        "It requires no time calculations at all.",
+        "It makes long-horizon monthly quotas trivial."
+      ],
+      "correct": 0,
+      "explanation": "Token bucket is compact, intuitive, and often sufficient for short-window enforcement."
+    }
+  ]
+}

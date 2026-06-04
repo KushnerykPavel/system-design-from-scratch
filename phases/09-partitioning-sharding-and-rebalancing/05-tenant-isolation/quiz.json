@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What is the core noisy-neighbor problem in a multi-tenant shard pool?",
+      "options": [
+        "One tenant can consume disproportionate shared resources and degrade nearby tenants.",
+        "Every tenant always receives perfectly equal performance automatically.",
+        "Tenant isolation only matters for billing, not system behavior.",
+        "Sharding by tenant removes all fairness concerns by definition."
+      ],
+      "correct": 0,
+      "explanation": "Noisy neighbors are about unequal consumption in a shared failure domain."
+    },
+    {
+      "stage": "pre",
+      "question": "Why is sharding by tenant ID alone often insufficient for isolation?",
+      "options": [
+        "A single tenant can still be too large or too bursty for the shard that owns it.",
+        "Tenant IDs cannot be stored in distributed databases.",
+        "It guarantees every background job is already rate-limited.",
+        "It makes quotas impossible to implement."
+      ],
+      "correct": 0,
+      "explanation": "Routing by tenant helps locality, but not necessarily fairness or capacity safety."
+    },
+    {
+      "stage": "post",
+      "question": "What is the strongest first layer of tenant isolation in a shared system?",
+      "options": [
+        "Per-tenant accounting and fair-share controls on the resources that actually bottleneck.",
+        "Immediate dedicated hardware for every customer on day one.",
+        "Removing tenant identifiers from metrics to reduce cardinality.",
+        "Assuming all enterprise tenants behave like the median."
+      ],
+      "correct": 0,
+      "explanation": "You cannot isolate what you cannot measure or limit."
+    },
+    {
+      "stage": "post",
+      "question": "What is the main trade-off of moving a heavy tenant to a dedicated pool?",
+      "options": [
+        "You gain strong neighbor protection, but pay more in capacity and migration overhead.",
+        "You guarantee perfect utilization across the fleet.",
+        "You eliminate the need for quotas on every remaining pool.",
+        "You make cross-tenant observability unnecessary."
+      ],
+      "correct": 0,
+      "explanation": "Dedicated placement is powerful, but it costs money and operational effort."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric best reveals whether one tenant is harming others on a shard?",
+      "options": [
+        "Per-tenant resource share correlated with neighbor latency or error spikes on the same shard.",
+        "The number of pages in the architecture document.",
+        "The total count of source files in the service.",
+        "The average length of customer names."
+      ],
+      "correct": 0,
+      "explanation": "Noisy-neighbor diagnosis needs both attribution and observed impact on neighbors."
+    },
+    {
+      "stage": "post",
+      "question": "Why is request-QPS-only fairness often incomplete?",
+      "options": [
+        "Background jobs, compaction, and storage-heavy work can still starve neighbors even if request rates look fair.",
+        "QPS always measures CPU, IO, and memory perfectly.",
+        "Every tenant workload has identical resource shape.",
+        "Asynchronous systems never share bottlenecks."
+      ],
+      "correct": 0,
+      "explanation": "Fairness must account for the resources that really create contention."
+    },
+    {
+      "stage": "post",
+      "question": "When is a tiered shard-class strategy usually better than one universal pool?",
+      "options": [
+        "When tenant sizes and SLO expectations differ enough that one placement policy fits poorly.",
+        "When the engineering team wants to avoid any future migration logic.",
+        "When all tenants are truly identical and tiny.",
+        "When observability storage is unavailable."
+      ],
+      "correct": 0,
+      "explanation": "Tiered pools can preserve cost efficiency while giving heavy tenants stronger isolation."
+    },
+    {
+      "stage": "post",
+      "question": "What makes a senior answer stronger on noisy neighbors?",
+      "options": [
+        "It links product tiering, fairness controls, placement, and incident detection into one policy.",
+        "It claims that horizontal scaling removes tenant interference automatically.",
+        "It focuses only on database vendor names.",
+        "It avoids any economic discussion about isolation choices."
+      ],
+      "correct": 0,
+      "explanation": "Isolation is a combined technical and product policy decision, not just a routing detail."
+    }
+  ]
+}

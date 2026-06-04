@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What makes a mistake log more useful than simply remembering a bad mock?",
+      "options": [
+        "It turns repeated failures into searchable patterns with explicit corrective actions.",
+        "It guarantees that the same prompt will never be reused.",
+        "It allows the learner to avoid taking notes elsewhere.",
+        "It replaces the need for peer feedback."
+      ],
+      "correct": 0,
+      "explanation": "The real value is pattern detection and follow-through."
+    },
+    {
+      "stage": "pre",
+      "question": "Which field is most important for converting a logged mistake into progress?",
+      "options": [
+        "A concrete corrective drill or next action.",
+        "The exact color of the original diagram.",
+        "A numerical ranking of embarrassment level.",
+        "A full transcript of the interview."
+      ],
+      "correct": 0,
+      "explanation": "Without a next action, the log records pain but not improvement."
+    },
+    {
+      "stage": "post",
+      "question": "Why should mistake categories stay controlled instead of growing freely?",
+      "options": [
+        "Stable categories make trend analysis and retesting far easier over time.",
+        "Because distributed systems mistakes always fit exactly three labels.",
+        "Because mocks are invalid unless categories never change.",
+        "Because only interviewer-led sessions may create new labels."
+      ],
+      "correct": 0,
+      "explanation": "A controlled vocabulary helps surface recurring patterns."
+    },
+    {
+      "stage": "post",
+      "question": "Which failure mode makes a mistake log emotionally loud but operationally weak?",
+      "options": [
+        "Every entry includes a corrective action.",
+        "Entries describe frustration but omit root cause and retest plans.",
+        "Categories are reused across prompts.",
+        "The log links mistakes back to lessons and mocks."
+      ],
+      "correct": 1,
+      "explanation": "Ventilation is understandable, but it does not create a learning loop by itself."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off comes with keeping old resolved mistakes instead of deleting them?",
+      "options": [
+        "It preserves trend visibility and confidence evidence, but it can add noise unless statuses are maintained.",
+        "It prevents any new categories from being added.",
+        "It makes it impossible to focus on current weaknesses.",
+        "It raises storage costs enough to require archival tiers."
+      ],
+      "correct": 0,
+      "explanation": "Historical visibility is useful, but only if entries remain easy to filter."
+    },
+    {
+      "stage": "post",
+      "question": "Which signal best shows the feedback loop is actually closing?",
+      "options": [
+        "The number of entries logged each day.",
+        "How often mistakes are retested and either resolved or shown to recur in later sessions.",
+        "The total amount of markdown written in the log.",
+        "How many prompts were borrowed from public repositories."
+      ],
+      "correct": 1,
+      "explanation": "Improvement comes from re-encountering the weakness with evidence."
+    },
+    {
+      "stage": "post",
+      "question": "If the same mistake appears across unrelated prompts, what does that usually imply?",
+      "options": [
+        "The prompt bank is low quality.",
+        "The issue is likely a process or communication habit rather than a one-off technical miss.",
+        "The learner should stop doing mocks for a week.",
+        "The category system is too detailed to be useful."
+      ],
+      "correct": 1,
+      "explanation": "Cross-prompt recurrence often reveals a deeper habit worth targeted drilling."
+    },
+    {
+      "stage": "post",
+      "question": "How should the system treat a mistake fixed in solo practice but still present in live mocks?",
+      "options": [
+        "Mark it fully resolved because the technical concept was understood once.",
+        "Track it as partially improved and note that pressure, pacing, or communication still trigger it.",
+        "Delete the old entries and start a new category.",
+        "Ignore it because mocks add too much noise."
+      ],
+      "correct": 1,
+      "explanation": "Pressure-sensitive failures still matter in interview prep even when the concept seems understood."
+    }
+  ]
+}

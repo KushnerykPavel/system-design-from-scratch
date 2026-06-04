@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What is the healthiest default interpretation of an interviewer interruption?",
+      "options": [
+        "It is usually a signal about where they want more evidence or sharper trade-off reasoning.",
+        "It means your design has already failed completely.",
+        "It means you should stop explaining architecture altogether.",
+        "It means the interviewer prefers coding to design."
+      ],
+      "correct": 0,
+      "explanation": "Interruptions usually reveal what signal the interviewer wants next."
+    },
+    {
+      "stage": "pre",
+      "question": "Why is it useful to classify the interviewer move before answering?",
+      "options": [
+        "It helps you respond at the right depth without losing the thread of the overall answer.",
+        "It guarantees the interviewer will agree with your response.",
+        "It lets you ignore the question if it is inconvenient.",
+        "It replaces the need for clarification and sizing."
+      ],
+      "correct": 0,
+      "explanation": "Classification helps you decide whether the move is a probe, redirect, or redesign trigger."
+    },
+    {
+      "stage": "post",
+      "question": "What is the strongest response pattern after an interruption?",
+      "options": [
+        "Acknowledge it, state what changes, answer tightly, and reconnect to the main structure.",
+        "Defend the original answer until the interviewer withdraws the question.",
+        "Restart the entire design from the beginning.",
+        "Switch fully into implementation details."
+      ],
+      "correct": 0,
+      "explanation": "The goal is adaptation without losing coherence."
+    },
+    {
+      "stage": "post",
+      "question": "If the interviewer asks for trade-offs, what should you usually do first?",
+      "options": [
+        "Name two plausible options and explain what each buys and costs.",
+        "Add more components so the design seems more complete.",
+        "Repeat the same architecture with stronger confidence.",
+        "Avoid answering until all implementation details are known."
+      ],
+      "correct": 0,
+      "explanation": "Trade-off probes are about judgment between alternatives."
+    },
+    {
+      "stage": "post",
+      "question": "Which behavior most often causes an interruption to derail the interview?",
+      "options": [
+        "Never returning to the original flow after answering the probe.",
+        "Using a short pause before speaking.",
+        "Restating the changed assumption clearly.",
+        "Keeping the response under one minute."
+      ],
+      "correct": 0,
+      "explanation": "A good response is only half the job; you also need to reconnect."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off comes with very concise interruption responses?",
+      "options": [
+        "They preserve pace, but may leave nuance implicit unless you reconnect carefully.",
+        "They automatically reduce system reliability.",
+        "They prevent any deep dives later in the interview.",
+        "They remove the need for observability discussion."
+      ],
+      "correct": 0,
+      "explanation": "Concise answers are efficient, but they need enough framing to stay clear."
+    },
+    {
+      "stage": "post",
+      "question": "Which signal best measures whether interruption handling is improving in practice?",
+      "options": [
+        "Time to recover plus whether the answer returns to a clear structure afterward.",
+        "How many services were renamed during the interruption.",
+        "The length of every response in words.",
+        "How many times the candidate said 'it depends'."
+      ],
+      "correct": 0,
+      "explanation": "Recovery quality matters more than stylistic quirks."
+    },
+    {
+      "stage": "post",
+      "question": "If the interviewer challenges one of your assumptions, what is the best first move?",
+      "options": [
+        "Surface the assumption explicitly and explain how the design changes if the new assumption is true.",
+        "Insist the original assumption was standard and continue.",
+        "Switch to a completely different product example.",
+        "Skip directly to your wrap-up."
+      ],
+      "correct": 0,
+      "explanation": "Making the assumption visible is the foundation of a strong adaptation."
+    }
+  ]
+}

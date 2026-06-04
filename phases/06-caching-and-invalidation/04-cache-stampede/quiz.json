@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What turns an ordinary cache miss into a cache stampede?",
+      "options": [
+        "Many concurrent callers missing the same hot key and independently refilling it.",
+        "A single request hitting a cold key at low traffic.",
+        "A cache node using compression.",
+        "Any read that bypasses the browser cache."
+      ],
+      "correct": 0,
+      "explanation": "Stampedes are about synchronized miss fanout, not just about a miss existing."
+    },
+    {
+      "stage": "pre",
+      "question": "Why is request coalescing valuable?",
+      "options": [
+        "It lets one in-flight refresh serve many waiters instead of making the origin do repeated duplicate work.",
+        "It guarantees every request returns instantly.",
+        "It eliminates the need for cache keys.",
+        "It turns stale data into strongly consistent data."
+      ],
+      "correct": 0,
+      "explanation": "Coalescing shrinks miss amplification on hot keys."
+    },
+    {
+      "stage": "post",
+      "question": "What problem does TTL jitter address?",
+      "options": [
+        "It reduces synchronized expirations that would otherwise create periodic refill spikes.",
+        "It makes every key permanent.",
+        "It removes the need for origin capacity planning.",
+        "It guarantees cache hits on every request."
+      ],
+      "correct": 0,
+      "explanation": "Jitter spreads expiry over time so many keys do not refresh together."
+    },
+    {
+      "stage": "post",
+      "question": "When is stale-while-revalidate especially attractive?",
+      "options": [
+        "When bounded staleness is safer than blocking callers or flooding the origin during refresh.",
+        "When strict no-stale reads are required for every field.",
+        "When the cache is only used for writes.",
+        "When the source of truth has already been decommissioned."
+      ],
+      "correct": 0,
+      "explanation": "Slight staleness can be a good trade when the alternative is overload or latency collapse."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric best detects a developing stampede problem?",
+      "options": [
+        "Origin fetches per hot key or per cache miss, especially right after expiry.",
+        "Only total company headcount.",
+        "The number of cache policy diagrams.",
+        "Average response compression ratio."
+      ],
+      "correct": 0,
+      "explanation": "Miss amplification shows whether each expired object is causing too many backend fetches."
+    },
+    {
+      "stage": "post",
+      "question": "What is the hidden trade-off of request coalescing?",
+      "options": [
+        "It lowers origin load but adds coordination overhead and waiter management on the miss path.",
+        "It strengthens durability at no cost.",
+        "It eliminates invalidation design.",
+        "It guarantees the origin will never fail."
+      ],
+      "correct": 0,
+      "explanation": "Coalescing is usually worth it for hot keys, but it is not free to implement."
+    },
+    {
+      "stage": "post",
+      "question": "Which interview statement is strongest?",
+      "options": [
+        "A high hit ratio means stampedes are not worth discussing.",
+        "I would explain steady-state hits separately from the hot-key miss path, then add coalescing, jitter, and possibly stale serving to protect the origin.",
+        "I would lower TTL until all keys refresh constantly.",
+        "I would solve stampedes by making every read a database read."
+      ],
+      "correct": 1,
+      "explanation": "Strong answers explicitly separate steady-state cache value from bursty refill failure modes."
+    },
+    {
+      "stage": "post",
+      "question": "What if stale data is unacceptable for one endpoint under stampede conditions?",
+      "options": [
+        "Use selective strictness there and discuss whether blocking, limited queueing, or load shedding is safer than flooding the origin.",
+        "Disable all caches globally.",
+        "Pretend stampede risk no longer applies.",
+        "Increase only the browser cache TTL."
+      ],
+      "correct": 0,
+      "explanation": "Critical endpoints may need stricter behavior, but the alternative miss-path control still must be designed."
+    }
+  ]
+}

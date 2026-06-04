@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why can a shared cache cluster become an incident amplifier instead of only a performance booster?",
+      "options": [
+        "Because cache nodes are unable to store values larger than one kilobyte.",
+        "Because node loss or cold rebalancing can turn many cheap hits into simultaneous expensive origin misses.",
+        "Because caches cannot support TTL on stored objects.",
+        "Because every cache automatically persists all values forever."
+      ],
+      "correct": 1,
+      "explanation": "When many misses happen together, the origin may take the full blast."
+    },
+    {
+      "stage": "pre",
+      "question": "What is the main reason to use consistent hashing in a cache cluster?",
+      "options": [
+        "It reduces key movement when nodes are added or removed.",
+        "It makes all cache entries strongly consistent.",
+        "It removes the need for eviction policies.",
+        "It guarantees perfect balance even under any skew."
+      ],
+      "correct": 0,
+      "explanation": "Consistent hashing is primarily about reducing churn during topology changes."
+    },
+    {
+      "stage": "post",
+      "question": "What problem does request coalescing solve most directly?",
+      "options": [
+        "It guarantees every cache key fits in memory.",
+        "It collapses many concurrent misses for the same key into one origin fetch.",
+        "It permanently eliminates stale reads.",
+        "It prevents any node from ever failing."
+      ],
+      "correct": 1,
+      "explanation": "Coalescing protects the origin from duplicate work during popular misses."
+    },
+    {
+      "stage": "post",
+      "question": "Which signal best reveals that one tenant is polluting the cache?",
+      "options": [
+        "High eviction churn paired with poor hit rate for that tenant or object class.",
+        "The number of code comments in the cache service.",
+        "Average TLS handshake size.",
+        "Only total cluster memory allocated."
+      ],
+      "correct": 0,
+      "explanation": "Pollution shows up as churn without proportional benefit."
+    },
+    {
+      "stage": "post",
+      "question": "What is the trade-off of keeping very short TTLs on cached objects?",
+      "options": [
+        "Freshness improves, but origin pressure rises because entries expire more often.",
+        "Memory usage becomes zero for hot keys.",
+        "Node failures no longer matter.",
+        "Eviction policies are no longer required."
+      ],
+      "correct": 0,
+      "explanation": "Freshness is bought with more frequent repopulation."
+    },
+    {
+      "stage": "post",
+      "question": "Why might a team choose segmented cache pools instead of one shared pool?",
+      "options": [
+        "To improve tenant isolation or separate object classes with very different behavior.",
+        "Because consistent hashing only works with exactly two nodes.",
+        "To disable negative caching globally.",
+        "Because shared caches cannot expose metrics."
+      ],
+      "correct": 0,
+      "explanation": "Segmentation reduces noisy-neighbor effects at the cost of aggregate efficiency."
+    },
+    {
+      "stage": "post",
+      "question": "Which observability detail is most helpful after a sharp hit-rate drop during scaling?",
+      "options": [
+        "Key movement and hit-rate regression by shard after the topology change.",
+        "Only the number of engineers on call.",
+        "The average length of cache keys.",
+        "Daily repository commit count."
+      ],
+      "correct": 0,
+      "explanation": "You want to know whether the scale event itself caused cold shards and churn."
+    },
+    {
+      "stage": "post",
+      "question": "Why can negative caching be useful but dangerous?",
+      "options": [
+        "It reduces repeated lookups for missing data, but stale not-found entries can hide newly created objects.",
+        "It improves durability for irreplaceable data.",
+        "It makes cache clusters immune to hot keys.",
+        "It removes the need for version tokens."
+      ],
+      "correct": 0,
+      "explanation": "Negative caching is great for load reduction, but it can serve stale absence."
+    }
+  ]
+}

@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What is the main problem with paging on every infrastructure threshold breach?",
+      "options": [
+        "It often wakes people for low-signal symptoms that may not reflect user harm.",
+        "It makes CPU usage impossible to measure.",
+        "It guarantees lower MTTR for every outage.",
+        "It prevents any use of SLOs."
+      ],
+      "correct": 0,
+      "explanation": "Raw threshold pages often create noise without clear urgency."
+    },
+    {
+      "stage": "pre",
+      "question": "Why do teams separate pages, tickets, and informational alerts?",
+      "options": [
+        "Because not every issue requires immediate human interruption, and operator attention is limited.",
+        "Because metrics systems can only deliver one alert per day.",
+        "Because ticketing systems replace dashboards completely.",
+        "Because pages are only legal for storage systems."
+      ],
+      "correct": 0,
+      "explanation": "Severity routing protects attention and matches response urgency to actual risk."
+    },
+    {
+      "stage": "post",
+      "question": "What is a strong reason to page on SLO burn rate instead of only on CPU or memory?",
+      "options": [
+        "It reflects meaningful user harm more directly and reduces noisy infrastructure-only wakeups.",
+        "It guarantees every incident will be root-caused automatically.",
+        "It removes the need for runbooks and ownership.",
+        "It makes dependency failures impossible."
+      ],
+      "correct": 0,
+      "explanation": "SLO burn is closer to the actual reliability promise made to users."
+    },
+    {
+      "stage": "post",
+      "question": "Why combine short-window and long-window burn alerts?",
+      "options": [
+        "To catch both sudden severe incidents and slower ongoing degradation.",
+        "To ensure every alert pages two engineers by default.",
+        "To remove the need for any dashboard review.",
+        "To keep request volume constant through the week."
+      ],
+      "correct": 0,
+      "explanation": "Different windows catch different failure shapes."
+    },
+    {
+      "stage": "post",
+      "question": "What is a common failure mode in alert design?",
+      "options": [
+        "One underlying dependency issue pages many downstream teams independently with little context.",
+        "The runbook contains a title and an owner.",
+        "The service exposes region-level metrics.",
+        "The alert message includes a dashboard link."
+      ],
+      "correct": 0,
+      "explanation": "Duplicate pages from one shared cause create confusion and fatigue."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off comes with aggressive alert suppression or deduplication?",
+      "options": [
+        "It reduces noise, but can hide genuinely distinct incidents if designed poorly.",
+        "It makes every page more severe automatically.",
+        "It guarantees zero missed incidents.",
+        "It prevents MTTR from being measured."
+      ],
+      "correct": 0,
+      "explanation": "Suppression helps attention, but bad suppression can bury important signals."
+    },
+    {
+      "stage": "post",
+      "question": "Which alert is more likely to be ticket-worthy than page-worthy?",
+      "options": [
+        "A capacity trend showing disk usage will become risky next week if nothing changes.",
+        "A fast burn of the primary request-success SLO right now.",
+        "A sudden regional outage affecting live customer traffic.",
+        "A fleet-wide spike in request failures above the emergency threshold."
+      ],
+      "correct": 0,
+      "explanation": "Trend-based issues usually merit planned work rather than immediate interruption."
+    },
+    {
+      "stage": "post",
+      "question": "What is the strongest answer to 'What should every page contain?'",
+      "options": [
+        "Enough context to assess impact quickly, plus ownership and the first action or runbook link.",
+        "Only the raw metric name so responders can infer the rest.",
+        "A full dump of all recent logs from every service.",
+        "The names of all engineers who ever touched the codebase."
+      ],
+      "correct": 0,
+      "explanation": "A useful page points responders toward immediate understanding and action."
+    }
+  ]
+}

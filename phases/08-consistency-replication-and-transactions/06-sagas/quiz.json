@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "When is a saga usually worth considering?",
+      "options": [
+        "When a workflow spans service boundaries and one wide transaction would be brittle, slow, or operationally expensive.",
+        "When every step must appear instant and globally atomic.",
+        "When compensation is impossible for all steps.",
+        "When retries and idempotency are not needed."
+      ],
+      "correct": 0,
+      "explanation": "Sagas trade wide atomicity for controlled workflow coordination."
+    },
+    {
+      "stage": "pre",
+      "question": "Why is compensation not the same as rollback?",
+      "options": [
+        "Because later steps may have external side effects or user visibility, so reversal is often a new forward action, not an erase.",
+        "Because compensation only matters in databases.",
+        "Because rollback is always impossible across one service.",
+        "Because retries automatically undo prior work."
+      ],
+      "correct": 0,
+      "explanation": "Compensation is a domain-level recovery action, not a time machine."
+    },
+    {
+      "stage": "post",
+      "question": "What is the hidden cost of replacing a transaction with a saga?",
+      "options": [
+        "You gain looser coupling but accept intermediate state, retries, compensation logic, and more operational visibility work.",
+        "You eliminate duplicate side effects by definition.",
+        "You no longer need durable workflow state.",
+        "You make user-facing status simpler."
+      ],
+      "correct": 0,
+      "explanation": "Sagas move complexity from atomic commit to workflow coordination."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric best reveals stuck workflows?",
+      "options": [
+        "Oldest in-progress workflow age or growing queue of workflows with repeated step retries.",
+        "Total number of service owners.",
+        "Source file count for the orchestrator.",
+        "Average diagram width."
+      ],
+      "correct": 0,
+      "explanation": "Age and retry concentration expose workflows that stopped making progress."
+    },
+    {
+      "stage": "post",
+      "question": "Why are idempotency keys important in saga steps?",
+      "options": [
+        "Because step retries are normal, and duplicate execution must not multiply external side effects.",
+        "Because they remove the need for workflow state.",
+        "Because they guarantee compensation succeeds.",
+        "Because they replace all observability."
+      ],
+      "correct": 0,
+      "explanation": "Idempotency keeps retries from becoming business corruption."
+    },
+    {
+      "stage": "post",
+      "question": "When is an orchestrated saga often preferable to pure choreography?",
+      "options": [
+        "When visibility, retries, timeout handling, and operator recovery need one clear control point.",
+        "When no service owns any workflow step.",
+        "When every event consumer can guess the full workflow state safely.",
+        "When the design should hide partial progress from all tooling."
+      ],
+      "correct": 0,
+      "explanation": "Central orchestration can simplify control and debugging."
+    },
+    {
+      "stage": "post",
+      "question": "What is a strong reason to redesign step order in a saga?",
+      "options": [
+        "A later failure is hard to compensate, so moving reversible steps earlier reduces business risk.",
+        "The current diagram is visually unbalanced.",
+        "Earlier steps should always use the slowest external provider.",
+        "The workflow has too few status values."
+      ],
+      "correct": 0,
+      "explanation": "Step order should reduce the cost of partial failure."
+    },
+    {
+      "stage": "post",
+      "question": "What makes a saga answer sound senior?",
+      "options": [
+        "It names workflow state, compensation limits, idempotency, stuck-flow handling, and what the user sees during partial completion.",
+        "It says sagas are just eventual consistency for microservices.",
+        "It assumes every failed step can be rolled back cleanly.",
+        "It ignores operational recovery paths."
+      ],
+      "correct": 0,
+      "explanation": "Senior answers treat sagas as real operating systems for business workflows."
+    }
+  ]
+}

@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What is the most useful way to explain consistency in an interview?",
+      "options": [
+        "Describe what users can observe after writes, failovers, and replica lag rather than naming a database property alone.",
+        "State that all serious systems need strong consistency everywhere.",
+        "Avoid discussing guarantees until the deep dive.",
+        "Pick a storage engine first and let its defaults define the contract."
+      ],
+      "correct": 0,
+      "explanation": "Interview signal comes from turning abstract terms into observable behavior."
+    },
+    {
+      "stage": "pre",
+      "question": "Why is 'eventual consistency' usually too weak as a final answer?",
+      "options": [
+        "Because it does not say who may see stale data, for how long, or whether some flows need stronger guarantees.",
+        "Because eventual consistency is never used in production systems.",
+        "Because it only applies to analytics systems.",
+        "Because caches automatically eliminate its risks."
+      ],
+      "correct": 0,
+      "explanation": "A useful answer must scope the guarantee and its product impact."
+    },
+    {
+      "stage": "post",
+      "question": "Which flow most clearly deserves read-after-write behavior for the acting user?",
+      "options": [
+        "A user edits account security settings and immediately refreshes the page.",
+        "A weekly analytics dashboard updates overnight.",
+        "A batched recommendation job refreshes in the background.",
+        "A public trend page reorders every few minutes."
+      ],
+      "correct": 0,
+      "explanation": "Security settings are a correctness-sensitive user flow."
+    },
+    {
+      "stage": "post",
+      "question": "What is the hidden cost of applying linearizable reads to every request path?",
+      "options": [
+        "Higher latency, more coordination pressure, and less room to scale cheap read traffic.",
+        "Replica count becomes irrelevant.",
+        "Observability becomes optional.",
+        "Caches stop being useful only for images."
+      ],
+      "correct": 0,
+      "explanation": "Stronger guarantees increase coordination and usually latency."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric best detects broken read-after-write behavior?",
+      "options": [
+        "Mismatch rate between recent successful writes and immediate follow-up reads on critical flows.",
+        "The number of markdown files in the repository.",
+        "Average worker process uptime.",
+        "Total count of service owners."
+      ],
+      "correct": 0,
+      "explanation": "That metric ties the guarantee directly to a user-visible failure."
+    },
+    {
+      "stage": "post",
+      "question": "When is bounded stale data usually a good design choice?",
+      "options": [
+        "When the feature is read-heavy and brief staleness is acceptable compared with the latency and cost of strict coordination.",
+        "When financial balances must never lag after transfers.",
+        "When enforcement policy should fail safe on every read.",
+        "When cross-region writes must appear instantly worldwide."
+      ],
+      "correct": 0,
+      "explanation": "Bounded staleness is a selective optimization, not a universal rule."
+    },
+    {
+      "stage": "post",
+      "question": "Why can a user moving between regions break monotonic reads?",
+      "options": [
+        "Because a later read can land on a replica that has not caught up to the version seen earlier.",
+        "Because region changes disable write durability.",
+        "Because session cookies force global serial execution.",
+        "Because caches always make newer data appear older."
+      ],
+      "correct": 0,
+      "explanation": "Replica lag across regions can make time appear to move backward."
+    },
+    {
+      "stage": "post",
+      "question": "What makes a consistency answer sound senior?",
+      "options": [
+        "It maps each important entity or flow to a deliberate guarantee, a failure behavior, and an observability plan.",
+        "It insists that CAP theorem alone answers the design.",
+        "It avoids all mention of cost or latency trade-offs.",
+        "It treats every read path as equally important."
+      ],
+      "correct": 0,
+      "explanation": "Senior answers connect guarantees to system behavior and trade-offs."
+    }
+  ]
+}

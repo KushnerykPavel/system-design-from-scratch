@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What is the biggest hidden cost of an active-active regional design?",
+      "options": [
+        "It requires more thought about write ownership, conflict handling, and failback safety.",
+        "It can never improve latency for distant users.",
+        "It removes the need for traffic management.",
+        "It only works for static content."
+      ],
+      "correct": 0,
+      "explanation": "Active-active raises correctness and operations complexity, especially for writes."
+    },
+    {
+      "stage": "pre",
+      "question": "Why is active-passive often attractive for write-heavy systems?",
+      "options": [
+        "It keeps a single clear writer and simplifies correctness during normal operation.",
+        "It guarantees zero failover time.",
+        "It lets operators skip replication monitoring.",
+        "It avoids paying for standby capacity."
+      ],
+      "correct": 0,
+      "explanation": "A single active writer simplifies consistency even though failover may be slower."
+    },
+    {
+      "stage": "post",
+      "question": "Which question most directly separates active-active from active-passive?",
+      "options": [
+        "Whether multiple regions must accept the same class of writes concurrently.",
+        "Whether the service uses HTTP or gRPC.",
+        "Whether dashboards use dark mode.",
+        "Whether the frontend is mobile-first."
+      ],
+      "correct": 0,
+      "explanation": "Concurrent write acceptance is one of the most decisive topology questions."
+    },
+    {
+      "stage": "post",
+      "question": "What is the clearest risk of calling a passive region 'warm' without testing it?",
+      "options": [
+        "The region may fail to absorb traffic because caches, replicas, or automation are not actually ready.",
+        "The region will always be cheaper than expected.",
+        "Users will only notice lower bandwidth cost.",
+        "Replication lag becomes impossible by definition."
+      ],
+      "correct": 0,
+      "explanation": "Warm readiness has to be demonstrated, not assumed."
+    },
+    {
+      "stage": "post",
+      "question": "Why is failback often harder than failover?",
+      "options": [
+        "Because recovered regions may contain stale state and need controlled resynchronization before taking traffic again.",
+        "Because DNS cannot change twice in one day.",
+        "Because users reject any recovery plan involving automation.",
+        "Because stateless services cannot be restarted safely."
+      ],
+      "correct": 0,
+      "explanation": "Failback can reintroduce divergence unless it is staged carefully."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric best shows whether multi-region readiness is drifting?",
+      "options": [
+        "Replication lag and failover-readiness checks by region.",
+        "Only average response body size.",
+        "The number of open browser tabs on operators' laptops.",
+        "One global CPU metric across the whole company."
+      ],
+      "correct": 0,
+      "explanation": "Readiness depends on data freshness and promotion safety, not generic averages."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off comes with reserving spare regional capacity for failover?",
+      "options": [
+        "Higher steady-state cost in exchange for safer outage absorption.",
+        "Lower cost and lower resilience at the same time.",
+        "The removal of all traffic-steering logic.",
+        "Guaranteed elimination of stale reads."
+      ],
+      "correct": 0,
+      "explanation": "Failover safety usually requires paying for headroom."
+    },
+    {
+      "stage": "post",
+      "question": "What is the strongest interview move when proposing active-active?",
+      "options": [
+        "Explain which data is multi-writer, which is single-writer, and how conflicts are contained.",
+        "Say active-active is always more modern and move on.",
+        "Avoid discussing operator workflows to save time.",
+        "Assume regional failures are too rare to matter."
+      ],
+      "correct": 0,
+      "explanation": "The signal comes from constrained write semantics and operational clarity."
+    }
+  ]
+}

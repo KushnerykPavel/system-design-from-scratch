@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why is average QPS alone usually not enough for system design sizing?",
+      "options": [
+        "Because systems are provisioned for bursts, skew, and downstream amplification rather than a smooth average.",
+        "Because interviewers only care about monthly active users.",
+        "Because average QPS is relevant only for storage systems.",
+        "Because average QPS cannot be converted from daily traffic."
+      ],
+      "correct": 0,
+      "explanation": "Peak load and amplification shape real capacity limits more than the fleet-wide average."
+    },
+    {
+      "stage": "pre",
+      "question": "What is the main purpose of splitting traffic into reads and writes?",
+      "options": [
+        "It helps decide which paths need cache capacity, write durability, and storage throughput.",
+        "It removes the need to estimate peak factors.",
+        "It guarantees the correct database choice.",
+        "It replaces clarification of product scope."
+      ],
+      "correct": 0,
+      "explanation": "Read and write paths stress different parts of the system."
+    },
+    {
+      "stage": "post",
+      "question": "A product has 120M requests per day. What is the rough average QPS?",
+      "options": [
+        "About 140",
+        "About 1,400",
+        "About 14,000",
+        "About 140,000"
+      ],
+      "correct": 1,
+      "explanation": "120M divided by 86,400 seconds is about 1,389 QPS."
+    },
+    {
+      "stage": "post",
+      "question": "If a service has 8,000 peak QPS and 75% of requests are reads, what is rough peak write QPS?",
+      "options": [
+        "600",
+        "2,000",
+        "6,000",
+        "8,000"
+      ],
+      "correct": 1,
+      "explanation": "The remaining 25% is writes, so 8,000 x 0.25 = 2,000."
+    },
+    {
+      "stage": "post",
+      "question": "Which hidden factor most often makes downstream load much larger than user-visible ingress QPS?",
+      "options": [
+        "Perfect cache locality",
+        "Internal fanout, retries, or cache misses",
+        "A small number of API routes",
+        "Strong consistency guarantees"
+      ],
+      "correct": 1,
+      "explanation": "Amplification on the inside of the system is easy to miss and often more important than the frontend number."
+    },
+    {
+      "stage": "post",
+      "question": "What is the best response when the interviewer does not provide a read/write split?",
+      "options": [
+        "Refuse to continue until exact traffic data is provided.",
+        "Assume a plausible split, say it out loud, and explain how a different split would change the design.",
+        "Ignore the split and keep the design generic.",
+        "Always choose a 50/50 split to avoid bias."
+      ],
+      "correct": 1,
+      "explanation": "Senior answers make assumptions explicit and show sensitivity, rather than waiting for perfect data."
+    },
+    {
+      "stage": "post",
+      "question": "Which observability metric best validates whether your request-mix estimate was wrong in production?",
+      "options": [
+        "Actual read/write ratio by route over time",
+        "Total number of storage tables",
+        "Average deployment duration",
+        "Number of architecture diagrams created"
+      ],
+      "correct": 0,
+      "explanation": "You want real traffic composition, not indirect process metrics."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off comes with using rounded numbers in an interview estimate?",
+      "options": [
+        "You gain speed and clarity, but lose a small amount of numerical precision.",
+        "You gain precision, but lose architectural intuition.",
+        "You eliminate the need for sensitivity analysis.",
+        "You make cost modeling impossible."
+      ],
+      "correct": 0,
+      "explanation": "Rounded math is usually the right trade for a spoken design conversation."
+    }
+  ]
+}

@@ -1,0 +1,2 @@
+# Add per-course dependencies here. Empty by default.
+# Per-lesson dependencies live in phases/<phase>/<lesson>/requirements.txt

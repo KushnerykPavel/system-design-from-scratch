@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What is the goal of a lightning trade-off round?",
+      "options": [
+        "Make a clear decision tied to a priority, then say what the decision costs.",
+        "List every possible alternative without picking one.",
+        "Avoid mentioning downsides to sound confident.",
+        "Memorize one best practice for every system."
+      ],
+      "correct": 0,
+      "explanation": "Strong trade-off communication is about choosing and owning the cost of the choice."
+    },
+    {
+      "stage": "pre",
+      "question": "Why should a trade-off answer start from a requirement rather than from technology names?",
+      "options": [
+        "Because the correct option depends on which user or operational outcome matters most.",
+        "Because distributed systems have no reusable patterns.",
+        "Because technologies never influence trade-offs.",
+        "Because interviewers prefer generic answers."
+      ],
+      "correct": 0,
+      "explanation": "Requirements determine what counts as a good choice."
+    },
+    {
+      "stage": "post",
+      "question": "Why is naming one rejected alternative useful?",
+      "options": [
+        "It shows that the decision was comparative and grounded, not just a memorized preference.",
+        "It replaces the need for metrics.",
+        "It guarantees the chosen option is optimal forever.",
+        "It matters only when discussing databases."
+      ],
+      "correct": 0,
+      "explanation": "Rejected alternatives make the trade-off structure visible."
+    },
+    {
+      "stage": "post",
+      "question": "Which signal best proves that a trade-off answer is operationally grounded?",
+      "options": [
+        "A metric or failure mode that would reveal the chosen option is hurting the system.",
+        "Only a long list of buzzwords.",
+        "The number of whiteboard boxes drawn.",
+        "A vendor comparison table with no workload context."
+      ],
+      "correct": 0,
+      "explanation": "A measurable consequence turns a verbal opinion into a falsifiable design choice."
+    },
+    {
+      "stage": "post",
+      "question": "What is the main trade-off of forcing an early decision in a short round?",
+      "options": [
+        "The answer becomes clearer and more senior-sounding, but you have less room for broad exploration.",
+        "It removes all risk of choosing poorly.",
+        "It makes workload shape irrelevant.",
+        "It eliminates the need to say what gets worse."
+      ],
+      "correct": 0,
+      "explanation": "Fast decisions improve pacing, but they require disciplined prioritization."
+    },
+    {
+      "stage": "post",
+      "question": "If a trade-off answer does not mention what got worse, what is missing?",
+      "options": [
+        "The real cost of the decision, which is exactly what makes the trade-off credible.",
+        "Only some optional polish.",
+        "Nothing important if the chosen architecture is modern.",
+        "A second diagram, but not reasoning."
+      ],
+      "correct": 0,
+      "explanation": "Trade-offs are persuasive because they acknowledge what was sacrificed."
+    },
+    {
+      "stage": "post",
+      "question": "How should the answer change when the same decision applies only to a premium traffic class?",
+      "options": [
+        "Re-evaluate the choice with that segment's latency, cost, and reliability goals instead of assuming one policy fits all traffic.",
+        "Use the exact same answer because segmentation never matters.",
+        "Ignore cost because premium traffic has no budget.",
+        "Remove observability because smaller scope is easier."
+      ],
+      "correct": 0,
+      "explanation": "Segmentation often changes the right answer materially."
+    },
+    {
+      "stage": "post",
+      "question": "Why are short trade-off drills good preparation for full mocks?",
+      "options": [
+        "They train you to state priorities, choose deliberately, and close strongly under time pressure.",
+        "They remove the need for sizing practice.",
+        "They matter only for wrap-up, not deep dives.",
+        "They ensure the interviewer will agree with your design."
+      ],
+      "correct": 0,
+      "explanation": "Trade-off clarity is one of the fastest ways to improve interview signal."
+    }
+  ]
+}

@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What is the first design mistake many people make in notification-system interviews?",
+      "options": [
+        "They focus on SMTP or push providers before defining notification policy and user preference rules.",
+        "They assume SMS is cheaper than email in every region.",
+        "They require all notifications to be delivered by batch job only.",
+        "They ban queues from the system entirely."
+      ],
+      "correct": 0,
+      "explanation": "Transport details matter later; policy and correctness come first."
+    },
+    {
+      "stage": "pre",
+      "question": "Why is dedupe a core part of notification design?",
+      "options": [
+        "Because provider uncertainty and event retries can otherwise generate duplicate user-visible sends.",
+        "Because dedupe removes the need for preferences.",
+        "Because all notification channels require exactly-once networking.",
+        "Because it makes quiet hours irrelevant."
+      ],
+      "correct": 0,
+      "explanation": "Duplicate notifications are a real trust and product-quality problem."
+    },
+    {
+      "stage": "post",
+      "question": "Why should notification policy evaluation be separated from channel delivery orchestration?",
+      "options": [
+        "Policy decides whether a notification should exist, while orchestration handles transport attempts and fallback.",
+        "Because no notification system should ever use external providers.",
+        "Because orchestration can replace user preferences completely.",
+        "Because policy engines only work for email."
+      ],
+      "correct": 0,
+      "explanation": "Separating intent creation from delivery simplifies correctness and auditing."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric best reveals that low-priority traffic is hurting urgent delivery?",
+      "options": [
+        "Queue lag split by priority class.",
+        "Average user locale string length.",
+        "The number of notification templates in Git.",
+        "Median email subject character count."
+      ],
+      "correct": 0,
+      "explanation": "Priority-specific lag shows starvation directly."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off comes with provider failover for critical messages?",
+      "options": [
+        "It improves resilience but can raise cost and duplicate-delivery ambiguity when the first provider times out.",
+        "It guarantees exactly-once delivery across all channels.",
+        "It removes the need for retry budgets.",
+        "It makes preference checks optional."
+      ],
+      "correct": 0,
+      "explanation": "Fallback helps availability but complicates correctness."
+    },
+    {
+      "stage": "post",
+      "question": "Why are quiet hours and opt-outs important to observability, not just policy?",
+      "options": [
+        "Because suppressed sends are expected outcomes and should be measured distinctly from transport failures.",
+        "Because they reduce the need for audit logs.",
+        "Because they only affect client rendering.",
+        "Because they should never change over time."
+      ],
+      "correct": 0,
+      "explanation": "Not sending can be the correct system behavior and must be visible."
+    },
+    {
+      "stage": "post",
+      "question": "What is the cleanest source of truth for notification delivery state?",
+      "options": [
+        "An internal delivery-state record owned by the notification system rather than only provider callbacks.",
+        "Whatever the provider last claimed, even if callbacks are delayed or missing.",
+        "The client UI cache on the recipient device.",
+        "A random log line emitted by the producer service."
+      ],
+      "correct": 0,
+      "explanation": "The platform needs its own durable state to reason about retries and audits."
+    },
+    {
+      "stage": "post",
+      "question": "What design change most directly reduces notification fatigue without harming critical alerts?",
+      "options": [
+        "Separate urgency classes and apply stronger batching or throttling only to low-priority engagement traffic.",
+        "Retry all failed notifications forever until the user responds.",
+        "Send every event to every available channel.",
+        "Disable preference editing to keep policy simpler."
+      ],
+      "correct": 0,
+      "explanation": "Good notification systems distinguish urgency and user value."
+    }
+  ]
+}

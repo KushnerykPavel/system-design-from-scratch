@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why is traffic steering usually more than a lowest-latency routing problem?",
+      "options": [
+        "Because health quality, capacity, cost, and policy safety can all outweigh raw latency during real incidents.",
+        "Because latency never matters for user-facing systems.",
+        "Because anycast always chooses the optimal full application path automatically.",
+        "Because routing decisions should ignore origin state."
+      ],
+      "correct": 0,
+      "explanation": "Operationally useful routing balances several objectives rather than optimizing one number blindly."
+    },
+    {
+      "stage": "pre",
+      "question": "What is the main benefit of separating control-plane policy from data-plane routing decisions?",
+      "options": [
+        "It lets POPs act quickly within bounded policy while keeping global rollout and governance manageable.",
+        "It removes the need for health signals at the edge.",
+        "It guarantees all POPs always have fresh policy instantly.",
+        "It makes per-tenant policies impossible."
+      ],
+      "correct": 0,
+      "explanation": "Good edge systems combine local responsiveness with controlled policy publication."
+    },
+    {
+      "stage": "post",
+      "question": "Why are dampening or cooldown windows important in steering systems?",
+      "options": [
+        "They reduce oscillation and keep routing changes from amplifying noisy health or latency signals.",
+        "They eliminate the need for failover capacity.",
+        "They force all routes to stay on the same region permanently.",
+        "They only matter when browser caching is enabled."
+      ],
+      "correct": 0,
+      "explanation": "Without dampening, steering can flap and create new instability."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric best exposes that some POPs are using stale routing policy?",
+      "options": [
+        "Steering policy version skew by POP combined with divergent selected-region patterns.",
+        "Only total request volume across the company.",
+        "The number of configured TLS ciphers.",
+        "Object storage utilization in unrelated services."
+      ],
+      "correct": 0,
+      "explanation": "Version skew and path divergence reveal stale or inconsistent control-plane rollout."
+    },
+    {
+      "stage": "post",
+      "question": "What is the main trade-off of allowing premium route classes to use different steering policy?",
+      "options": [
+        "Better product fit and differentiated latency goals, but more complexity and possible shared-fleet risk.",
+        "Lower operational complexity for every tenant.",
+        "Perfect isolation with no extra guardrails.",
+        "No need for global capacity planning."
+      ],
+      "correct": 0,
+      "explanation": "Differentiated policies can be valuable, but they require stronger isolation and governance."
+    },
+    {
+      "stage": "post",
+      "question": "If the lowest-latency region is nearing saturation, what is the strongest routing decision principle?",
+      "options": [
+        "Include capacity and failure headroom in path selection so routing does not optimize into an outage.",
+        "Always keep sending traffic there because latency is the only user-visible metric.",
+        "Disable observability while rerouting.",
+        "Switch every tenant globally to the farthest region."
+      ],
+      "correct": 0,
+      "explanation": "The best path is not the shortest path if it creates overload and instability."
+    },
+    {
+      "stage": "post",
+      "question": "Why should steering decisions be explainable per request or route class?",
+      "options": [
+        "Because customers and operators need evidence for why traffic took a path, especially during incidents or cost disputes.",
+        "Because explainability replaces the need for failover testing.",
+        "Because routing never changes after launch.",
+        "Because only premium customers care about latency."
+      ],
+      "correct": 0,
+      "explanation": "Routing is product-visible behavior, so it needs transparency and debugging support."
+    },
+    {
+      "stage": "post",
+      "question": "What hidden risk appears when local POP decisions use only local observations with no shared context?",
+      "options": [
+        "Different POPs may react inconsistently to noisy signals and create chaotic regional traffic patterns.",
+        "All POPs will become too conservative automatically.",
+        "It guarantees lower transit cost everywhere.",
+        "It removes the need for policy rollout safety."
+      ],
+      "correct": 0,
+      "explanation": "Purely local decisions can fragment behavior and make incidents much harder to reason about."
+    }
+  ]
+}

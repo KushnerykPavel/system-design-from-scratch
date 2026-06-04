@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why should a wallet usually track held funds separately from available funds?",
+      "options": [
+        "Because reserved money should reduce spendable balance before final settlement occurs.",
+        "Because held funds are never written to durable storage.",
+        "Because a wallet cannot support credits once holds exist.",
+        "Because separate balances remove the need for idempotency."
+      ],
+      "correct": 0,
+      "explanation": "Holds express temporary reservation, not final posting."
+    },
+    {
+      "stage": "pre",
+      "question": "What is the main purpose of hold expiry?",
+      "options": [
+        "It returns abandoned reservations so money does not stay locked forever.",
+        "It compresses historical wallet events.",
+        "It guarantees all orders will eventually succeed.",
+        "It replaces the need for release APIs."
+      ],
+      "correct": 0,
+      "explanation": "Unresolved holds need an explicit cleanup path."
+    },
+    {
+      "stage": "post",
+      "question": "Which design choice most directly prevents overspend under concurrency?",
+      "options": [
+        "Authoritative per-wallet balance checks on the write path with versioned updates.",
+        "A dashboard that refreshes every five seconds.",
+        "A read-through cache in front of the wallet service.",
+        "A larger retention period for wallet history."
+      ],
+      "correct": 0,
+      "explanation": "The write path must enforce the invariant, not just the read path."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off comes with explicit hold objects?",
+      "options": [
+        "They improve lifecycle clarity but add cleanup and indexing complexity.",
+        "They remove the need for balance snapshots.",
+        "They force every wallet operation to use a global lock.",
+        "They make settlement impossible across services."
+      ],
+      "correct": 0,
+      "explanation": "You gain correctness and auditability at the cost of more state management."
+    },
+    {
+      "stage": "post",
+      "question": "Which signal best detects stuck funds in the wallet system?",
+      "options": [
+        "Age percentiles for active holds and sweeper backlog size.",
+        "Average CSS bundle size in the admin console.",
+        "Count of customers who changed passwords.",
+        "Ratio of GET to POST requests in unrelated services."
+      ],
+      "correct": 0,
+      "explanation": "You want direct evidence that reservations are aging beyond expectation."
+    },
+    {
+      "stage": "post",
+      "question": "Why should settle and release operations be idempotent?",
+      "options": [
+        "Because downstream retries are normal and should not change funds twice.",
+        "Because idempotency reduces the number of wallet accounts.",
+        "Because only credit operations can safely retry.",
+        "Because idempotency lets you skip hold state tracking."
+      ],
+      "correct": 0,
+      "explanation": "Retried finalization steps are common in distributed workflows."
+    },
+    {
+      "stage": "post",
+      "question": "What is the most credible answer when balance reads must be fast but correctness must stay strict?",
+      "options": [
+        "Use projections for reads while keeping authoritative checks on the write path.",
+        "Use the cache as the source of truth for all operations.",
+        "Disable hold expiry during peak traffic.",
+        "Recompute every balance from genesis for each request."
+      ],
+      "correct": 0,
+      "explanation": "Serving optimizations are fine as long as writes still enforce source-of-truth rules."
+    },
+    {
+      "stage": "post",
+      "question": "What changes most if holds can last for days instead of minutes?",
+      "options": [
+        "Expiry policy, customer support tooling, and audit semantics become much more important.",
+        "Idempotency stops mattering because retries are rare.",
+        "Wallet balances no longer need snapshots.",
+        "Overspend protection can move to the client."
+      ],
+      "correct": 0,
+      "explanation": "Long-lived reserves behave more like managed financial state than short request-side locks."
+    }
+  ]
+}

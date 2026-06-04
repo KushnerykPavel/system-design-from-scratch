@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What makes an interface design answer feel senior rather than superficial?",
+      "options": [
+        "It ties contract choices to workload, failure modes, compatibility, and operational constraints.",
+        "It lists the most endpoint names in the shortest time.",
+        "It avoids discussing retries or versioning to stay concise.",
+        "It chooses one protocol and uses it for every boundary."
+      ],
+      "correct": 0,
+      "explanation": "Senior answers connect interface shape to system behavior and long-term maintainability."
+    },
+    {
+      "stage": "pre",
+      "question": "Why is it useful to include both a write API and a list API in the same drill?",
+      "options": [
+        "Because they force different design concerns such as idempotency, pagination, and safe defaults.",
+        "Because all interviews require exactly two endpoints.",
+        "Because list APIs automatically cover versioning.",
+        "Because write APIs never need observability."
+      ],
+      "correct": 0,
+      "explanation": "The pair exercises two common contract problem shapes with different risks."
+    },
+    {
+      "stage": "post",
+      "question": "What should usually happen early in the drill before naming concrete endpoints?",
+      "options": [
+        "Clarify the critical path, client types, and likely misuse patterns.",
+        "Write out every possible future version number.",
+        "Assume all traffic is internal and trusted.",
+        "Pick a storage engine immediately."
+      ],
+      "correct": 0,
+      "explanation": "The interface plan should begin from workload and boundary understanding."
+    },
+    {
+      "stage": "post",
+      "question": "Which omission is most likely to create duplicate side effects in a drill answer?",
+      "options": [
+        "Skipping idempotency and retry semantics on the main write path.",
+        "Using a stable sort key for pagination.",
+        "Versioning responses explicitly.",
+        "Bounding page size for list requests."
+      ],
+      "correct": 0,
+      "explanation": "Retry safety is central to write contract correctness under failure."
+    },
+    {
+      "stage": "post",
+      "question": "What is the strongest trade-off of using a standardized drill rubric?",
+      "options": [
+        "It makes progress measurable, but may under-reward unusual but valid answers if used too mechanically.",
+        "It eliminates any need for expert review.",
+        "It guarantees every answer uses the same protocol stack.",
+        "It prevents follow-up questions about failure modes."
+      ],
+      "correct": 0,
+      "explanation": "Rubrics improve consistency, but strong judgment still matters."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric best shows whether your interface design accounted for safe query defaults?",
+      "options": [
+        "Rejected expensive query count and latency by normalized query shape.",
+        "The number of boxes in the high-level diagram.",
+        "The total count of markdown headings in the design doc.",
+        "The amount of protocol buffer code generated."
+      ],
+      "correct": 0,
+      "explanation": "Those metrics show whether the contract actually constrains unhealthy query behavior."
+    },
+    {
+      "stage": "post",
+      "question": "If time is running short, which closing move preserves the most signal?",
+      "options": [
+        "Summarize compatibility, retries, and key safety risks instead of adding more low-value endpoints.",
+        "Rush through three more endpoint definitions without trade-offs.",
+        "Skip failure modes because they are operational details.",
+        "End after drawing the public API only."
+      ],
+      "correct": 0,
+      "explanation": "A compact operational wrap-up carries more senior signal than extra shallow surface area."
+    },
+    {
+      "stage": "post",
+      "question": "What makes a Cloudflare-style interface drill differ from a generic CRUD drill?",
+      "options": [
+        "It often separates public API shape from internal propagation, edge constraints, and abuse protection.",
+        "It never uses asynchronous interfaces.",
+        "It avoids any conversation about limits or retries.",
+        "It assumes all consumers are browsers."
+      ],
+      "correct": 0,
+      "explanation": "Edge and platform contexts make internal propagation and safety controls especially important."
+    }
+  ]
+}

@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What is the goal of a lightning capacity round?",
+      "options": [
+        "Find the smallest set of estimates that changes the architecture or reveals the bottleneck.",
+        "Produce an exact spreadsheet for every subsystem.",
+        "Avoid making assumptions under uncertainty.",
+        "Delay design discussion until perfect math is complete."
+      ],
+      "correct": 0,
+      "explanation": "The round should create design signal quickly, not exhaustive arithmetic."
+    },
+    {
+      "stage": "pre",
+      "question": "Why is average QPS alone often misleading?",
+      "options": [
+        "Because burst factors, skew, or amplification can dominate the real capacity risk.",
+        "Because averages are never useful in system design.",
+        "Because QPS only matters for batch systems.",
+        "Because latency has no relationship to load."
+      ],
+      "correct": 0,
+      "explanation": "Averages hide the exact effects that often break systems in production."
+    },
+    {
+      "stage": "post",
+      "question": "What makes a lightning estimate high value in an interview?",
+      "options": [
+        "It leads to one concrete design implication, such as a partitioning, caching, or backlog decision.",
+        "It uses more decimal places than the interviewer expects.",
+        "It covers every possible resource equally.",
+        "It avoids uncertainty ranges."
+      ],
+      "correct": 0,
+      "explanation": "Useful estimates shape architecture choices."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric best tracks whether lightning rounds are improving your practice quality?",
+      "options": [
+        "The percentage of rounds that name a bottleneck and one resulting architecture consequence inside the time limit.",
+        "Only the total number of formulas used.",
+        "The number of diagrams drawn per round.",
+        "The amount of storage examples memorized."
+      ],
+      "correct": 0,
+      "explanation": "Speed matters only if the round still reaches a useful conclusion."
+    },
+    {
+      "stage": "post",
+      "question": "Why should a round include one amplification estimate when relevant?",
+      "options": [
+        "Because fanout, retries, replication, or invalidation often multiply the true load far beyond raw request count.",
+        "Because amplification matters only in social networks.",
+        "Because amplification replaces the need for latency targets.",
+        "Because amplification estimates make storage growth irrelevant."
+      ],
+      "correct": 0,
+      "explanation": "Multipliers often dominate the real system cost and risk."
+    },
+    {
+      "stage": "post",
+      "question": "What is the trade-off of range-based estimates instead of exact numbers?",
+      "options": [
+        "They are more honest and adaptable, but can feel less tidy than precise-looking arithmetic.",
+        "They make the architecture impossible to reason about.",
+        "They remove the need for assumptions.",
+        "They are useful only for storage systems."
+      ],
+      "correct": 0,
+      "explanation": "Rough ranges are often more credible than fake precision under interview uncertainty."
+    },
+    {
+      "stage": "post",
+      "question": "If a prompt suddenly introduces a 20x peak factor, what should change first?",
+      "options": [
+        "Revisit admission control, backlog behavior, and burst headroom rather than relying on the old steady-state model.",
+        "Only the database schema names.",
+        "The observability section should be removed to save time.",
+        "Nothing important, because peak factor rarely changes architecture."
+      ],
+      "correct": 0,
+      "explanation": "Burstiness often changes the correct architecture more than steady-state averages do."
+    },
+    {
+      "stage": "post",
+      "question": "Why is it useful to stop after identifying one dominant bottleneck in a short round?",
+      "options": [
+        "Because the point is to guide the design quickly, not to model every second-order effect before speaking.",
+        "Because systems have only one bottleneck forever.",
+        "Because follow-up questions will never test anything else.",
+        "Because bottlenecks matter only for storage-heavy prompts."
+      ],
+      "correct": 0,
+      "explanation": "A short round should optimize for clarity and momentum."
+    }
+  ]
+}

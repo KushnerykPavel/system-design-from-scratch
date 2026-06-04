@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why do API safety defaults belong in system design rather than only in documentation?",
+      "options": [
+        "Because client misuse and abusive patterns are predictable system workloads that shape reliability and cost.",
+        "Because documentation automatically enforces runtime limits.",
+        "Because only public APIs need any validation rules.",
+        "Because safe defaults eliminate the need for authentication."
+      ],
+      "correct": 0,
+      "explanation": "Unsafe contract defaults become operational problems under real traffic."
+    },
+    {
+      "stage": "pre",
+      "question": "Which default is usually safest for a list endpoint?",
+      "options": [
+        "An uncapped page size so clients can fetch as much as they want.",
+        "A modest default limit with an explicit maximum cap.",
+        "A mandatory full export for every query.",
+        "No filtering restrictions of any kind."
+      ],
+      "correct": 1,
+      "explanation": "Bounded defaults keep backend work predictable while still serving common usage."
+    },
+    {
+      "stage": "post",
+      "question": "What is the main risk of ambiguous retry guidance on write APIs?",
+      "options": [
+        "Clients may retry unsafe operations and amplify duplicate side effects during incidents.",
+        "The API will no longer support authentication.",
+        "Pagination will become impossible to implement.",
+        "Versioning telemetry will stop working."
+      ],
+      "correct": 0,
+      "explanation": "If clients cannot tell what is retry-safe, failures often get amplified instead of contained."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric most directly shows whether a safety policy is actively protecting the system?",
+      "options": [
+        "Rejected requests by policy type and per-tenant rate-limit hits.",
+        "The number of README edits this month.",
+        "How many architecture diagrams include arrows.",
+        "The total amount of whitespace in API payload samples."
+      ],
+      "correct": 0,
+      "explanation": "Those signals show which protections are actually firing and under what pressure."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off comes with strict default parameter caps?",
+      "options": [
+        "They keep capacity predictable, but some legitimate clients may need exceptions or async alternatives.",
+        "They eliminate all need for rate limiting.",
+        "They guarantee that every query becomes cheap.",
+        "They make observability unnecessary."
+      ],
+      "correct": 0,
+      "explanation": "Strict caps are protective, but they must be paired with a path for legitimate high-volume use."
+    },
+    {
+      "stage": "post",
+      "question": "What is the strongest default for authorization scopes on a shared API?",
+      "options": [
+        "Least-privilege scopes mapped to specific actions and resource boundaries.",
+        "One broad super-token for simplicity across every client.",
+        "No scopes as long as requests are rate limited.",
+        "Scopes chosen only after the API is widely adopted."
+      ],
+      "correct": 0,
+      "explanation": "Scope design directly affects blast radius and misuse potential."
+    },
+    {
+      "stage": "post",
+      "question": "If large exports are expensive but some customers need them, what is the best contract design?",
+      "options": [
+        "Force all list endpoints to return unlimited results.",
+        "Provide a bounded interactive API and a separate asynchronous export workflow.",
+        "Disable filtering entirely.",
+        "Let the client repeat paginated requests until the backend times out."
+      ],
+      "correct": 1,
+      "explanation": "Separate interactive and bulk paths so normal usage stays safe."
+    },
+    {
+      "stage": "post",
+      "question": "What failure pattern suggests your safety defaults may be too strict rather than too loose?",
+      "options": [
+        "Healthy clients are repeatedly rejected for common legitimate workflows, and the rejection metrics stay high.",
+        "Backend latency spikes because queries are unbounded.",
+        "Duplicate writes rise during network incidents.",
+        "Tenants bypass rate limits with broad tokens."
+      ],
+      "correct": 0,
+      "explanation": "Rejections against normal expected use are a sign the policy needs tuning."
+    }
+  ]
+}

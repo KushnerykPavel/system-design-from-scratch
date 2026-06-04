@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What is the main cost of a synchronous cross-shard query?",
+      "options": [
+        "Latency and coordination often grow with fanout width and shard count.",
+        "It automatically becomes cheaper as more shards are added.",
+        "It removes any need for indexes or derived views.",
+        "It guarantees globally ordered pagination for free."
+      ],
+      "correct": 0,
+      "explanation": "Cross-shard reads usually pay in network fanout, merge work, and tail latency."
+    },
+    {
+      "stage": "pre",
+      "question": "What is the best first question when a product asks for a global query after sharding?",
+      "options": [
+        "Whether the query must be exact and on the critical user path, or can be derived and eventual.",
+        "Whether the SQL keywords should be uppercase.",
+        "Whether the service logo needs updating.",
+        "Whether every shard uses the same hostname prefix."
+      ],
+      "correct": 0,
+      "explanation": "Freshness and latency expectations determine whether live fanout is even appropriate."
+    },
+    {
+      "stage": "post",
+      "question": "When is bounded scatter-gather usually acceptable?",
+      "options": [
+        "When query rate is modest, shard fanout is constrained, and the user path can tolerate the merge cost.",
+        "When every request in the system should hit every shard for consistency.",
+        "When the query needs sub-millisecond latency at global scale.",
+        "When the shard count is expected to grow without limit and no one wants observability."
+      ],
+      "correct": 0,
+      "explanation": "Low-rate, bounded fanout can be reasonable; unbounded critical-path fanout is not."
+    },
+    {
+      "stage": "post",
+      "question": "What is the main trade-off of a materialized global view?",
+      "options": [
+        "It gives fast reads, but adds pipeline complexity, duplicate storage, and freshness lag.",
+        "It removes the need for schema management forever.",
+        "It makes all queries exact and strongly consistent with no delay.",
+        "It guarantees lower cost than every other approach."
+      ],
+      "correct": 0,
+      "explanation": "Precomputed views trade serving simplicity for pipeline and freshness complexity."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric best exposes a dangerous cross-shard read pattern?",
+      "options": [
+        "Fanout width and merge latency rising on critical-path queries as shard count grows.",
+        "The number of screenshots attached to incident tickets.",
+        "The amount of whitespace in SQL files.",
+        "The average branch name length in Git."
+      ],
+      "correct": 0,
+      "explanation": "The query is dangerous when fanout and tail cost scale with topology."
+    },
+    {
+      "stage": "post",
+      "question": "Why are naive offset-based pages often weak for global cross-shard ordering?",
+      "options": [
+        "Because concurrent updates and distributed merge order can cause gaps or duplicates between pages.",
+        "Because offsets are only supported by NoSQL databases.",
+        "Because pagination is impossible after sharding.",
+        "Because every shard returns identical ordering automatically."
+      ],
+      "correct": 0,
+      "explanation": "Distributed merges need stable merge keys and continuation tokens, not simplistic offsets."
+    },
+    {
+      "stage": "post",
+      "question": "When should a query move to a search or analytics backend?",
+      "options": [
+        "When flexible, global filtering would otherwise overload primary shards or require large fanout routinely.",
+        "When the query is a single-key point lookup.",
+        "When the system wants fewer moving parts regardless of product need.",
+        "When freshness must always be exactly zero lag."
+      ],
+      "correct": 0,
+      "explanation": "Flexible global filtering is often better served by specialized derived systems."
+    },
+    {
+      "stage": "post",
+      "question": "What makes a strong senior answer on cross-shard reads?",
+      "options": [
+        "It scopes query classes, names their semantics, and matches each to local, derived, or bounded-fanout execution.",
+        "It says every important query can stay unchanged after sharding.",
+        "It avoids discussing latency or freshness trade-offs.",
+        "It recommends a search engine for every read pattern by default."
+      ],
+      "correct": 0,
+      "explanation": "Strong answers classify query types and choose execution strategies deliberately."
+    }
+  ]
+}

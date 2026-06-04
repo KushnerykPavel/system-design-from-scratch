@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why is document freshness often discussed separately from ranking freshness in search systems?",
+      "options": [
+        "Because content visibility and ranking-signal quality can evolve on different cadences.",
+        "Because ranking never changes after launch.",
+        "Because documents do not need versioning.",
+        "Because search indexes cannot process deletes."
+      ],
+      "correct": 0,
+      "explanation": "The two concerns often have different operational paths."
+    },
+    {
+      "stage": "pre",
+      "question": "What is a main reason to use tombstones for deletes?",
+      "options": [
+        "They allow fast removal behavior without waiting for a full rebuild.",
+        "They make storage free after deletion.",
+        "They remove the need for crawl pipelines.",
+        "They guarantee identical ranking across all shards."
+      ],
+      "correct": 0,
+      "explanation": "Deletes often need a quicker control path."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric best captures user-visible update freshness for important content?",
+      "options": [
+        "Document publish lag by priority tier.",
+        "Average keyboard repeat speed of clients.",
+        "Count of developers editing ranking configs.",
+        "Median shard host uptime."
+      ],
+      "correct": 0,
+      "explanation": "Publish lag is the direct freshness signal."
+    },
+    {
+      "stage": "post",
+      "question": "Why is blue/green or staged rollout helpful for index publishing?",
+      "options": [
+        "It lets you validate and roll back bad index updates before they affect every shard.",
+        "It eliminates the need for serving caches.",
+        "It makes all ranking features instantly fresh.",
+        "It prevents all duplicate documents."
+      ],
+      "correct": 0,
+      "explanation": "Safe rollout and rollback are the key benefits."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off comes with snapshot or segment-based publishing instead of mutating serving indexes per document?",
+      "options": [
+        "Serving becomes more stable, but freshness is bounded by publish cadence.",
+        "Freshness becomes perfect, but availability drops to zero.",
+        "Deletes become impossible.",
+        "Ranking signals no longer matter."
+      ],
+      "correct": 0,
+      "explanation": "Stable publishes usually trade against instant visibility."
+    },
+    {
+      "stage": "post",
+      "question": "Which failure is most directly indicated by high feature-version skew between publishers and serving shards?",
+      "options": [
+        "Ranking inputs and document snapshots are out of sync across the fleet.",
+        "Users are typing longer queries.",
+        "Crawlers are no longer finding URLs.",
+        "Logs are being redacted too early."
+      ],
+      "correct": 0,
+      "explanation": "Version skew is a consistency signal for search quality."
+    },
+    {
+      "stage": "post",
+      "question": "Why should backfill resources often be isolated from live freshness resources?",
+      "options": [
+        "So bulk reprocessing does not starve urgent new document visibility.",
+        "So tombstones never need cleanup.",
+        "So ranking features stay static forever.",
+        "So serving shards can ignore schema versions."
+      ],
+      "correct": 0,
+      "explanation": "Backfills can otherwise crowd out live traffic."
+    },
+    {
+      "stage": "post",
+      "question": "What is the better design response when breaking-news freshness becomes more important than perfect ranking quality?",
+      "options": [
+        "Create a faster publish path for high-priority content and accept bounded ranking lag there.",
+        "Disable all rollouts and publish checks globally.",
+        "Wait for the next full weekly rebuild.",
+        "Route every query to the crawler directly."
+      ],
+      "correct": 0,
+      "explanation": "Freshness and quality can be traded deliberately by content tier."
+    }
+  ]
+}

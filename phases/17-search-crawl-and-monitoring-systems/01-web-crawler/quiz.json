@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why is a crawler frontier usually partitioned by host or host hash instead of only by discovery time?",
+      "options": [
+        "Because host-aware partitioning makes politeness and fairness enforceable.",
+        "Because discovery time is never stored for URLs.",
+        "Because partitioning by host guarantees duplicate content cannot occur.",
+        "Because search ranking depends only on host-level ordering."
+      ],
+      "correct": 0,
+      "explanation": "Per-host scheduling is central to safe crawling."
+    },
+    {
+      "stage": "pre",
+      "question": "What is the main purpose of a lease on frontier work items?",
+      "options": [
+        "It reduces HTML size before parsing.",
+        "It lets workers keep URLs forever until they choose to release them.",
+        "It allows recovery when a fetcher dies after claiming work.",
+        "It guarantees each URL is fetched exactly once globally."
+      ],
+      "correct": 2,
+      "explanation": "Leases make work reclaimable after failure."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric best reveals that one domain is crowding out the rest of the crawl?",
+      "options": [
+        "Average HTML title length across all pages.",
+        "Frontier age spread and queued URL share by host.",
+        "The number of parser binaries deployed this week.",
+        "Median redirect chain length for successful fetches."
+      ],
+      "correct": 1,
+      "explanation": "Skew shows up as host concentration and aging queues."
+    },
+    {
+      "stage": "post",
+      "question": "Why should URL dedup and content dedup usually be separate stages?",
+      "options": [
+        "Because URLs and fetched content can differ through redirects, canonicals, and near-duplicate pages.",
+        "Because content dedup only works for images, not HTML.",
+        "Because URL dedup requires stronger consistency than any search engine can provide.",
+        "Because running both stages violates robots.txt."
+      ],
+      "correct": 0,
+      "explanation": "They address different kinds of duplication."
+    },
+    {
+      "stage": "post",
+      "question": "What is the trade-off in giving news domains a tighter recrawl target than the long tail?",
+      "options": [
+        "You improve freshness for valuable content but spend more crawl budget unevenly.",
+        "You eliminate the need for content parsing.",
+        "You guarantee ranking quality without measuring change rates.",
+        "You make robots.txt caching unnecessary."
+      ],
+      "correct": 0,
+      "explanation": "Freshness tiers are a budget-allocation choice."
+    },
+    {
+      "stage": "post",
+      "question": "Which failure is most directly mitigated by expiring frontier leases?",
+      "options": [
+        "A host returning stale ETags.",
+        "A parser discovering too many duplicate links.",
+        "A fetcher crashing after claiming a batch of URLs.",
+        "A ranking model lowering a page score."
+      ],
+      "correct": 2,
+      "explanation": "Lease expiry reclaims orphaned work."
+    },
+    {
+      "stage": "post",
+      "question": "Why is robots policy versioning useful in a distributed crawler?",
+      "options": [
+        "It helps detect when workers are applying stale crawl policy decisions.",
+        "It compresses HTML response bodies in transit.",
+        "It removes the need for retry backoff after 5xx responses.",
+        "It makes near-duplicate content impossible."
+      ],
+      "correct": 0,
+      "explanation": "Versioning lets you audit policy drift."
+    },
+    {
+      "stage": "post",
+      "question": "Which design change most improves product freshness without blindly raising fetch throughput everywhere?",
+      "options": [
+        "Uniformly doubling fetchers for all domains.",
+        "Adding recrawl tiers based on change rate and page importance.",
+        "Removing host politeness delays during peak hours.",
+        "Persisting only discovered links and skipping page content."
+      ],
+      "correct": 1,
+      "explanation": "Targeted freshness policy is usually better than brute-force crawling."
+    }
+  ]
+}

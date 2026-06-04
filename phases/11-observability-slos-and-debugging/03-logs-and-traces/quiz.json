@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why is a correlation or request ID useful in logs?",
+      "options": [
+        "It lets operators join events across services into one request narrative.",
+        "It guarantees every request is successful on retry.",
+        "It replaces the need for tracing systems completely.",
+        "It prevents high-cardinality metrics automatically."
+      ],
+      "correct": 0,
+      "explanation": "Stable identifiers make cross-service events queryable as one story."
+    },
+    {
+      "stage": "pre",
+      "question": "What is a major risk of logging full request payloads by default?",
+      "options": [
+        "Sensitive data can leak and storage cost can grow without improving debugging proportionally.",
+        "Latency percentiles stop working.",
+        "The service can no longer emit metrics.",
+        "The request path becomes strongly consistent."
+      ],
+      "correct": 0,
+      "explanation": "Payload logging can create both privacy and cost problems."
+    },
+    {
+      "stage": "post",
+      "question": "What makes structured logs better than free-form text for incident response?",
+      "options": [
+        "Stable fields make filtering, grouping, and correlation much easier at scale.",
+        "They remove the need for any human-readable messages.",
+        "They guarantee traces are complete without propagation.",
+        "They always cost less than metrics."
+      ],
+      "correct": 0,
+      "explanation": "Structured fields allow reliable querying during incidents."
+    },
+    {
+      "stage": "post",
+      "question": "Why might error-biased or tail-based trace sampling be a good compromise?",
+      "options": [
+        "It keeps interesting failures visible while reducing the cost of tracing healthy traffic.",
+        "It guarantees that every successful request is captured.",
+        "It removes the need for log redaction.",
+        "It prevents all async systems from losing context."
+      ],
+      "correct": 0,
+      "explanation": "Sampling can focus resources on the paths most useful for debugging."
+    },
+    {
+      "stage": "post",
+      "question": "What usually breaks observability across asynchronous boundaries?",
+      "options": [
+        "Failing to carry origin or causation identifiers into job messages and workers.",
+        "Using a queue instead of a database.",
+        "Keeping worker names short.",
+        "Storing traces for fewer than ninety days."
+      ],
+      "correct": 0,
+      "explanation": "Async systems need explicit metadata carry-forward to preserve narrative continuity."
+    },
+    {
+      "stage": "post",
+      "question": "Which trace design is strongest for a fanout-heavy API path?",
+      "options": [
+        "A root span at ingress with child spans for critical downstream hops and retries.",
+        "One span only after the request completes successfully.",
+        "A different trace ID for each dependency so dashboards stay simple.",
+        "No trace IDs as long as logs include timestamps."
+      ],
+      "correct": 0,
+      "explanation": "Hierarchical spans preserve causal structure across the critical path."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off comes with richer log schemas?",
+      "options": [
+        "They improve debugging, but require governance around field design, redaction, and cost.",
+        "They make traces impossible to join.",
+        "They always reduce storage even if traffic increases.",
+        "They eliminate the need for dashboards."
+      ],
+      "correct": 0,
+      "explanation": "Structured telemetry is valuable, but it needs discipline."
+    },
+    {
+      "stage": "post",
+      "question": "What is the strongest answer to 'What do you propagate across service hops?'",
+      "options": [
+        "Trace context and a stable request identity, plus async causation metadata where workflows continue later.",
+        "Only the full user payload so every service can log it.",
+        "Only the service version number and nothing request-specific.",
+        "Nothing, because clock timestamps are enough to reconstruct incidents."
+      ],
+      "correct": 0,
+      "explanation": "Shared context is what keeps logs and traces joinable end-to-end."
+    }
+  ]
+}

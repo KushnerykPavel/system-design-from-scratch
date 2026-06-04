@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why can a distributed system fail even when average fleet load looks healthy?",
+      "options": [
+        "A small number of hot keys can overload one owner path while the rest of the fleet is mostly idle.",
+        "Because distributed systems ignore hashing.",
+        "Because average load always predicts the worst case.",
+        "Because caches cannot serve repeated reads."
+      ],
+      "correct": 0,
+      "explanation": "Skew breaks systems through concentration, not just volume."
+    },
+    {
+      "stage": "pre",
+      "question": "What is the first useful distinction to make when a key gets hot?",
+      "options": [
+        "Whether the hotspot is read-heavy, write-heavy, or both.",
+        "Whether the codebase uses tabs or spaces.",
+        "Whether the traffic comes from one laptop.",
+        "Whether the key is stored in JSON."
+      ],
+      "correct": 0,
+      "explanation": "Read and write hotspots need different mitigation paths."
+    },
+    {
+      "stage": "post",
+      "question": "Why might replication help for a hot read key but not for a hot write key?",
+      "options": [
+        "Reads can often be spread across replicas, while writes may still require one serialization owner.",
+        "Replication only works during office hours.",
+        "Writes are never cached.",
+        "Read traffic does not use networks."
+      ],
+      "correct": 0,
+      "explanation": "Replication helps when work can be served from many places safely."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off comes with selective hot-key replication?",
+      "options": [
+        "It spreads read load, but adds staleness and invalidation complexity.",
+        "It removes all cost from the system.",
+        "It guarantees no key will ever become hot again.",
+        "It makes admission control unnecessary."
+      ],
+      "correct": 0,
+      "explanation": "Replication is powerful, but correctness boundaries must remain explicit."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric best reveals that a hot key is harming one owner disproportionately?",
+      "options": [
+        "Owner-node saturation compared with the fleet average plus top-key QPS.",
+        "Only total global request count.",
+        "Repository star count.",
+        "Median line length in docs."
+      ],
+      "correct": 0,
+      "explanation": "The problem is localized concentration, not just total volume."
+    },
+    {
+      "stage": "post",
+      "question": "Why is request coalescing useful during a hot-key cache miss?",
+      "options": [
+        "It collapses many simultaneous fetches into one backend request, reducing stampede pressure.",
+        "It permanently removes all future traffic.",
+        "It forces every request to wait forever.",
+        "It only works for write-heavy counters."
+      ],
+      "correct": 0,
+      "explanation": "Coalescing protects the backend during miss storms."
+    },
+    {
+      "stage": "post",
+      "question": "What is the clearest reason to isolate top tenants or keys onto dedicated capacity?",
+      "options": [
+        "It reduces blast radius so one hotspot does not degrade unrelated tenants.",
+        "It guarantees lower hardware cost in every case.",
+        "It removes the need for any metrics.",
+        "It makes keys stop being popular."
+      ],
+      "correct": 0,
+      "explanation": "Isolation is a blast-radius control, not a magic efficiency trick."
+    },
+    {
+      "stage": "post",
+      "question": "What is the strongest first clarification when asked about hot-key mitigation?",
+      "options": [
+        "Ask whether the hotspot is temporary or sustained, and whether stale reads are acceptable.",
+        "Assume consistent hashing is sufficient.",
+        "Ignore correctness and only talk about scale.",
+        "Start by replicating every key."
+      ],
+      "correct": 0,
+      "explanation": "Mitigation choice depends heavily on duration and consistency tolerance."
+    }
+  ]
+}

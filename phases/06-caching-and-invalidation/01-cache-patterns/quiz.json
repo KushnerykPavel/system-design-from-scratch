@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What is the most important first question when choosing a cache pattern?",
+      "options": [
+        "Which cache brand the team already knows best.",
+        "Which store is authoritative and how reads or writes interact with it.",
+        "Whether the API is public or private.",
+        "How many dashboards the team wants."
+      ],
+      "correct": 1,
+      "explanation": "The source of truth and write path determine whether a cache pattern is safe, not just whether it is fast."
+    },
+    {
+      "stage": "pre",
+      "question": "Why is a read-heavy workload often a good fit for read-through caching?",
+      "options": [
+        "Because misses can populate the cache while the system of record remains authoritative.",
+        "Because it guarantees zero miss latency.",
+        "Because it removes the need for invalidation entirely.",
+        "Because it makes writes asynchronous by default."
+      ],
+      "correct": 0,
+      "explanation": "Read-through fits when misses are acceptable and caching mainly protects the hot read path."
+    },
+    {
+      "stage": "post",
+      "question": "When is write-through most justified?",
+      "options": [
+        "When read-after-write freshness matters enough to pay extra work on the write path.",
+        "When writes are rare and correctness never matters.",
+        "When the cache is cheaper than the database.",
+        "When invalidation events are impossible to build."
+      ],
+      "correct": 0,
+      "explanation": "Write-through is often chosen to tighten freshness after mutation, but it raises write-path complexity and latency."
+    },
+    {
+      "stage": "post",
+      "question": "What is the main danger of write-behind?",
+      "options": [
+        "It usually increases read latency above origin-only serving.",
+        "It can hide delayed durability or dropped async updates if the deferred path is not reliable.",
+        "It prevents batching completely.",
+        "It only works with browser caches."
+      ],
+      "correct": 1,
+      "explanation": "Write-behind can be efficient, but only if the delayed persistence path is durable and observable."
+    },
+    {
+      "stage": "post",
+      "question": "Which trade-off is most accurate for read-through?",
+      "options": [
+        "Simple cache ownership and good miss amortization, but hot misses can still hammer the origin.",
+        "Perfect freshness and no miss path risk.",
+        "No need for source-of-truth versioning.",
+        "Guaranteed lower total cost regardless of workload."
+      ],
+      "correct": 0,
+      "explanation": "Read-through keeps the source authoritative, but miss behavior still matters a lot for hot keys."
+    },
+    {
+      "stage": "post",
+      "question": "What metric would best reveal trouble in a write-behind system?",
+      "options": [
+        "Queue lag or age of oldest pending write.",
+        "Only average response body size.",
+        "The number of markdown files in the repo.",
+        "Edge POP count."
+      ],
+      "correct": 0,
+      "explanation": "If deferred writes back up, the system risks delayed persistence and possibly visible inconsistency."
+    },
+    {
+      "stage": "post",
+      "question": "Which answer sounds strongest in an interview?",
+      "options": [
+        "I will add a cache in front of the database and decide later how writes work.",
+        "I will use read-through for the hot read path, then selectively use write-through only where read-after-write freshness matters.",
+        "I will use write-behind for every path because async is always more scalable.",
+        "I will skip naming the source of truth to stay flexible."
+      ],
+      "correct": 1,
+      "explanation": "That answer ties pattern choice to requirements instead of treating caches as interchangeable."
+    },
+    {
+      "stage": "post",
+      "question": "Which failure mode most clearly points to missing invalidation or version discipline?",
+      "options": [
+        "Repeated stale reads after the source of truth has already accepted an update.",
+        "A temporary drop in static asset compression ratio.",
+        "A one-time burst of client retries on login.",
+        "Fewer dashboards than expected."
+      ],
+      "correct": 0,
+      "explanation": "Persistent stale reads after confirmed writes usually mean the cache is not being refreshed or invalidated correctly."
+    }
+  ]
+}

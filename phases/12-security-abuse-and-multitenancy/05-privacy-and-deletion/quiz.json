@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why is deleting one primary database row usually not enough for privacy compliance?",
+      "options": [
+        "Because user data also appears in caches, indexes, analytics, blobs, and backups.",
+        "Because SQL tables cannot delete rows.",
+        "Because privacy rules apply only to object storage.",
+        "Because backups are always user-facing."
+      ],
+      "correct": 0,
+      "explanation": "Distributed systems usually hold many derived and replicated copies of user data."
+    },
+    {
+      "stage": "pre",
+      "question": "What is the purpose of retention policy in system design?",
+      "options": [
+        "To decide how long data is kept, when it expires, and which stores are allowed to preserve it.",
+        "To increase cache hit rate automatically.",
+        "To remove the need for deletion requests.",
+        "To guarantee infinite analytics history."
+      ],
+      "correct": 0,
+      "explanation": "Retention policy defines lifecycle rules before deletion or legal events occur."
+    },
+    {
+      "stage": "post",
+      "question": "Why is immediate logical hide plus asynchronous purge often a strong deletion design?",
+      "options": [
+        "It removes user-visible access quickly while giving downstream systems time to process deletion safely.",
+        "It guarantees backups are rewritten instantly.",
+        "It allows all caches to ignore invalidation.",
+        "It avoids tracking deletion state."
+      ],
+      "correct": 0,
+      "explanation": "This separates the fast user-facing guarantee from slower backend propagation."
+    },
+    {
+      "stage": "post",
+      "question": "What do tombstones or deletion ledgers mainly protect against?",
+      "options": [
+        "Data resurrection after lag, replay, or backup restore.",
+        "Slow markdown rendering.",
+        "Low CPU utilization.",
+        "TLS certificate mismatch."
+      ],
+      "correct": 0,
+      "explanation": "A deletion record prevents stale data sources from making deleted content visible again."
+    },
+    {
+      "stage": "post",
+      "question": "Which statement about backups is the most operationally honest?",
+      "options": [
+        "Immutable backups may retain deleted data until their retention window expires, so guarantees must say that clearly.",
+        "All backups can always be rewritten instantly.",
+        "Backups are irrelevant to privacy design.",
+        "Deleting a cache key also deletes every backup copy."
+      ],
+      "correct": 0,
+      "explanation": "Honest deletion guarantees must account for backup retention reality."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric best detects deletion pipeline trouble?",
+      "options": [
+        "Deletion backlog age and per-target completion lag.",
+        "Only the total number of deployed engineers.",
+        "Average favicon size.",
+        "The number of Go files in the repo."
+      ],
+      "correct": 0,
+      "explanation": "Lag and backlog directly show whether downstream deletion is keeping up."
+    },
+    {
+      "stage": "post",
+      "question": "What is a strong privacy design choice for analytics systems?",
+      "options": [
+        "Minimize raw identifiers early so fewer systems require complex deletion later.",
+        "Copy all raw PII into every pipeline for debugging convenience.",
+        "Disable retention for analytics entirely.",
+        "Treat analytics as outside the system boundary."
+      ],
+      "correct": 0,
+      "explanation": "Reducing raw sensitive data in derived systems lowers deletion burden and risk."
+    },
+    {
+      "stage": "post",
+      "question": "Why should delete guarantees be phrased carefully in interviews?",
+      "options": [
+        "Because strong answers are realistic about propagation delay, backups, and legal exceptions.",
+        "Because interviewers prefer vague promises.",
+        "Because deletion can never be measured.",
+        "Because only frontend teams handle privacy."
+      ],
+      "correct": 0,
+      "explanation": "Precision and honesty about guarantees is a senior-level signal."
+    }
+  ]
+}

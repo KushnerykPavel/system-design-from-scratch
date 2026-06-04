@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What is the biggest risk of jumping straight into architecture before clarification?",
+      "options": [
+        "You may optimize for the wrong requirement and spend the interview defending a mismatched design.",
+        "You will always choose the wrong database engine on the first attempt.",
+        "The interviewer will stop the interview because diagrams are not allowed.",
+        "You will be forced to discuss coding details instead of architecture."
+      ],
+      "correct": 0,
+      "explanation": "Without clarification, the architecture can drift away from the real prompt and become expensive to recover."
+    },
+    {
+      "stage": "pre",
+      "question": "Why is rough sizing early in the answer valuable?",
+      "options": [
+        "It replaces the need for a high-level architecture diagram.",
+        "It helps drive topology, bottleneck, and cost decisions before details pile up.",
+        "It guarantees the final latency numbers are production accurate.",
+        "It is only useful for storage-heavy interview prompts."
+      ],
+      "correct": 1,
+      "explanation": "Sizing gives the design numerical anchors so component choices are tied to scale and constraints."
+    },
+    {
+      "stage": "post",
+      "question": "In the default 45-minute loop, what should happen before the deep dive?",
+      "options": [
+        "A detailed schema migration plan and postmortem draft.",
+        "A high-level design with buy-in plus rough sizing and clarified scope.",
+        "Final trade-off summary and executive wrap-up.",
+        "Implementation pseudocode for the write path."
+      ],
+      "correct": 1,
+      "explanation": "The deep dive should come after scope, sizing, and high-level architecture are aligned."
+    },
+    {
+      "stage": "post",
+      "question": "Which follow-up best shows senior-level control of the interview?",
+      "options": [
+        "Listing additional infrastructure components as fast as possible.",
+        "Choosing one critical subsystem to deep dive and saying why it is the system's main risk.",
+        "Deferring all trade-offs until the very end so the architecture stays simple.",
+        "Avoiding assumptions until the interviewer supplies exact numbers."
+      ],
+      "correct": 1,
+      "explanation": "A deliberate deep dive shows prioritization, not just breadth."
+    },
+    {
+      "stage": "post",
+      "question": "What is the value of explicitly reserving wrap-up time?",
+      "options": [
+        "It leaves space for failure modes, observability, and trade-offs that weaker answers often skip.",
+        "It prevents the interviewer from asking any questions about cost.",
+        "It guarantees there will be no redesign follow-ups.",
+        "It allows the candidate to avoid discussing system limitations."
+      ],
+      "correct": 0,
+      "explanation": "Strong answers do not end at the diagram; they close with operational thinking and known limits."
+    },
+    {
+      "stage": "post",
+      "question": "If the interviewer changes the scale from 100K QPS to 10M QPS halfway through, what should you do first?",
+      "options": [
+        "Ignore the new constraint and finish the original answer quickly.",
+        "Restart the interview from scratch with a different prompt.",
+        "Call out which assumptions changed and identify the first architectural choices that would no longer hold.",
+        "Immediately replace every storage component with a globally replicated database."
+      ],
+      "correct": 2,
+      "explanation": "A good redesign starts by naming which assumptions broke and what those changes affect."
+    },
+    {
+      "stage": "post",
+      "question": "Which observability signal is most useful for improving interview pacing over time?",
+      "options": [
+        "Minutes spent in each stage and whether wrap-up was reached consistently.",
+        "The exact number of boxes drawn per architecture diagram.",
+        "The total number of services mentioned in the answer.",
+        "The number of times the interviewer interrupted the candidate."
+      ],
+      "correct": 0,
+      "explanation": "Tracking stage timing helps diagnose whether the answer structure is balanced."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off is introduced by using a fixed interview loop?",
+      "options": [
+        "It increases storage cost but reduces bandwidth cost.",
+        "It adds structure and consistency, but can feel rigid if applied without adapting to the prompt.",
+        "It removes the need for any deep dive selection.",
+        "It makes clarification unnecessary when time is short."
+      ],
+      "correct": 1,
+      "explanation": "The structure is useful, but strong candidates still adapt it rather than using it mechanically."
+    }
+  ]
+}

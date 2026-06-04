@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What is a bulkhead trying to control?",
+      "options": [
+        "Which traffic, tenants, or features are allowed to fail together instead of sharing one blast radius.",
+        "Which code style rules apply to production services.",
+        "How often databases replicate across regions.",
+        "Whether retries should use fixed or exponential backoff."
+      ],
+      "correct": 0,
+      "explanation": "Bulkheads are about failure isolation boundaries."
+    },
+    {
+      "stage": "pre",
+      "question": "Why can one shared worker pool be risky in a mixed-priority system?",
+      "options": [
+        "One noisy feature or tenant can consume capacity and drown critical work.",
+        "It guarantees lower latency than any isolated pool.",
+        "It makes observability impossible.",
+        "It prevents any use of autoscaling."
+      ],
+      "correct": 0,
+      "explanation": "Shared pools maximize efficiency until a hotspot turns them into shared failure."
+    },
+    {
+      "stage": "post",
+      "question": "Which resource is often worth isolating first in a reliability design?",
+      "options": [
+        "The execution pool or queue that carries critical traffic through overload and feature spikes.",
+        "The team calendar used for incident reviews.",
+        "The markdown formatter used by documentation builds.",
+        "The naming scheme for dashboards."
+      ],
+      "correct": 0,
+      "explanation": "Execution pools and queues directly control whether one class of work can starve another."
+    },
+    {
+      "stage": "post",
+      "question": "What is the main trade-off of dedicated capacity for critical traffic?",
+      "options": [
+        "You reduce blast radius, but some capacity may sit idle in quiet periods.",
+        "You remove every need for quotas or routing policy.",
+        "You guarantee that failover never overloads remaining cells.",
+        "You make observability simpler because all metrics collapse into one pool."
+      ],
+      "correct": 0,
+      "explanation": "Isolation often costs some average efficiency in exchange for better resilience."
+    },
+    {
+      "stage": "post",
+      "question": "Why is it dangerous if a fallback path uses the same shared dependency as the primary path?",
+      "options": [
+        "The fallback may fail under the same incident, so the blast radius is not actually reduced.",
+        "The primary path will automatically recover faster.",
+        "It makes capacity borrowing unnecessary.",
+        "It guarantees eventual consistency for all data."
+      ],
+      "correct": 0,
+      "explanation": "Isolation only works when the supposedly separate path is meaningfully separate."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric best shows whether one tenant or feature is breaching its isolation boundary?",
+      "options": [
+        "Per-pool utilization and reject rate diverging sharply by tenant or traffic class.",
+        "The number of interview questions in the course roadmap.",
+        "Average laptop battery health of on-call engineers.",
+        "The total count of services deployed company-wide."
+      ],
+      "correct": 0,
+      "explanation": "Per-class pool metrics reveal whether one group is dominating shared capacity."
+    },
+    {
+      "stage": "post",
+      "question": "Why can cell-based isolation help in large fleets?",
+      "options": [
+        "A failure can stay bounded to one cell or POP group instead of poisoning the whole fleet.",
+        "It removes all need for spare capacity planning.",
+        "It guarantees every request stays strongly consistent globally.",
+        "It eliminates routing complexity."
+      ],
+      "correct": 0,
+      "explanation": "Cell boundaries limit the spread of local faults, though they add placement complexity."
+    },
+    {
+      "stage": "post",
+      "question": "What weakens a bulkhead answer most in an interview?",
+      "options": [
+        "Talking about 'isolation' only abstractly without naming which resource, pool, or failure domain is actually separated.",
+        "Explaining that one huge tenant may need stronger isolation than the median tenant.",
+        "Noting that dedicated pools can lower average utilization.",
+        "Discussing revocable capacity borrowing as one compromise."
+      ],
+      "correct": 0,
+      "explanation": "Interview signal comes from concrete isolation boundaries, not only vocabulary."
+    }
+  ]
+}

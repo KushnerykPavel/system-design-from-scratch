@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Which statement is most clearly a non-functional requirement?",
+      "options": [
+        "Users can upload an image and receive a shareable link.",
+        "The system should keep p99 read latency under 150 ms during normal peak traffic.",
+        "Moderators can delete abusive content.",
+        "Users can search their own uploads by filename."
+      ],
+      "correct": 1,
+      "explanation": "Latency is a quality constraint on how the system behaves, not a user-visible feature."
+    },
+    {
+      "stage": "pre",
+      "question": "Why is it risky to start architecture before separating requirement types?",
+      "options": [
+        "Because interviews require requirements to be written in YAML first.",
+        "Because feature scope and quality constraints can blur together, making trade-offs hard to justify.",
+        "Because storage choices are always obvious once the prompt is heard.",
+        "Because non-functional requirements only matter after implementation."
+      ],
+      "correct": 1,
+      "explanation": "Mixing the categories too early makes the real design driver harder to identify."
+    },
+    {
+      "stage": "post",
+      "question": "What is the main value of ranking non-functional requirements instead of listing them flatly?",
+      "options": [
+        "It makes the answer sound more formal without changing design choices.",
+        "It reveals which quality constraint should drive the first architecture decisions and which ones are secondary.",
+        "It removes the need to discuss out-of-scope features.",
+        "It guarantees the interviewer will agree with your design."
+      ],
+      "correct": 1,
+      "explanation": "Priority creates a usable decision rule for architecture choices."
+    },
+    {
+      "stage": "post",
+      "question": "Which mixed prompt would most likely force a trade-off conversation?",
+      "options": [
+        "Support file upload, global low-latency reads, and the cheapest possible storage path.",
+        "Support user sign-in and password reset.",
+        "Allow read and write APIs for one internal team.",
+        "Store one configuration file per tenant."
+      ],
+      "correct": 0,
+      "explanation": "Global latency and aggressive cost control often pull the design in different directions."
+    },
+    {
+      "stage": "post",
+      "question": "Why should one dominant non-functional driver usually be named early?",
+      "options": [
+        "Because every senior interview only measures one metric.",
+        "Because it helps explain why you pick a particular topology, storage model, or failure policy first.",
+        "Because functional requirements are usually unimportant.",
+        "Because it prevents any follow-up redesign questions."
+      ],
+      "correct": 1,
+      "explanation": "A dominant driver gives coherence to early architecture choices."
+    },
+    {
+      "stage": "post",
+      "question": "Which failure is most dangerous in this lesson's workflow?",
+      "options": [
+        "Using markdown bullets instead of a table.",
+        "Treating every requirement as equally critical and never stating what you would optimize first.",
+        "Mentioning both latency and durability in the same answer.",
+        "Deferring one secondary feature to a later phase."
+      ],
+      "correct": 1,
+      "explanation": "Flat prioritization leads to hand-wavy architecture and weak trade-off discussion."
+    },
+    {
+      "stage": "post",
+      "question": "What metric best indicates the clarification process is healthy before architecture starts?",
+      "options": [
+        "The number of database technologies mentioned.",
+        "Whether the answer identifies both requirement categories and names a dominant non-functional driver.",
+        "The total number of user stories written down.",
+        "Whether a queue appears in the diagram."
+      ],
+      "correct": 1,
+      "explanation": "The signal is classification plus prioritization, not component selection."
+    },
+    {
+      "stage": "post",
+      "question": "If the interviewer adds 'must survive region loss' after you optimized for low latency, what should happen first?",
+      "options": [
+        "Ignore it because architecture already started.",
+        "Revisit the ranked non-functional priorities and explain how the new durability requirement changes topology or write path choices.",
+        "Immediately switch to a microservices diagram.",
+        "Add a cache and continue without discussion."
+      ],
+      "correct": 1,
+      "explanation": "A stronger durability requirement can materially change replication and acknowledgement strategy."
+    }
+  ]
+}

@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What is the main purpose of a full mock loop?",
+      "options": [
+        "To practice sequencing, timing, and judgment across the whole interview rather than polishing one isolated subsystem.",
+        "To memorize a single architecture that can be reused unchanged.",
+        "To avoid redesign follow-ups until the final lesson.",
+        "To focus only on generating large diagrams quickly."
+      ],
+      "correct": 0,
+      "explanation": "A full mock tests flow, prioritization, and adaptation under time pressure."
+    },
+    {
+      "stage": "pre",
+      "question": "Why should a full mock include a redesign step?",
+      "options": [
+        "Because strong answers should show how changed constraints alter decisions instead of pretending the first design was universally optimal.",
+        "Because redesign replaces the need for a high-level architecture.",
+        "Because interviewers always reveal the final answer during redesign.",
+        "Because redesign is mainly for frontend prompts."
+      ],
+      "correct": 0,
+      "explanation": "Redesign exposes whether the original design was grounded in clear assumptions and trade-offs."
+    },
+    {
+      "stage": "post",
+      "question": "What is the strongest signal that the mock answer stayed well structured?",
+      "options": [
+        "It moved from scope to sizing to architecture to a deliberate deep dive before closing with risks and redesign.",
+        "It started with implementation details to save time.",
+        "It avoided quantification so the conversation stayed flexible.",
+        "It kept all stages open at once instead of sequencing them."
+      ],
+      "correct": 0,
+      "explanation": "A disciplined sequence is one of the biggest differences between average and strong performances."
+    },
+    {
+      "stage": "post",
+      "question": "What is the main danger of spending too long in clarification?",
+      "options": [
+        "The answer can lose time needed for actual design, depth, and wrap-up without gaining enough new information.",
+        "It automatically forces eventual consistency.",
+        "It prevents any future deep dive entirely.",
+        "It matters only for short prompts like URL shortener."
+      ],
+      "correct": 0,
+      "explanation": "Clarification is important, but it must unlock progress rather than replace it."
+    },
+    {
+      "stage": "post",
+      "question": "Which trade-off usually comes with choosing one strong deep dive in a mock?",
+      "options": [
+        "You show more judgment and credibility in one area, but some secondary topics will receive less airtime.",
+        "You eliminate the need for high-level architecture.",
+        "You guarantee a perfect answer regardless of workload estimates.",
+        "You make observability unnecessary."
+      ],
+      "correct": 0,
+      "explanation": "Depth improves signal, but it uses time that could have gone elsewhere."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric is most useful for reviewing a mock performance afterward?",
+      "options": [
+        "Whether each phase of the answer happened at all and whether at least one estimate and one detection signal were included.",
+        "The number of technologies mentioned.",
+        "How many pages of notes were produced.",
+        "Whether the candidate used a preferred buzzword in the first five minutes."
+      ],
+      "correct": 0,
+      "explanation": "Post-mock review should focus on structure and signal, not ornamentation."
+    },
+    {
+      "stage": "post",
+      "question": "If the interviewer changes the top priority late in the mock, what is the best response?",
+      "options": [
+        "Restate which assumption changed, identify the affected components, and explain the new trade-off landscape clearly.",
+        "Keep the first design unchanged to maintain confidence.",
+        "Ignore the change unless it affects APIs directly.",
+        "Throw away the earlier answer and begin a new one with unrelated assumptions."
+      ],
+      "correct": 0,
+      "explanation": "A strong redesign reuses earlier reasoning while updating the affected decisions."
+    },
+    {
+      "stage": "post",
+      "question": "What most strongly distinguishes a full mock from isolated lesson practice?",
+      "options": [
+        "The mock tests transitions between stages, time management, and recovery from follow-up pressure as much as individual concepts.",
+        "The mock uses only one technology stack.",
+        "The mock avoids any operational concerns so the pace stays high.",
+        "The mock is mainly about code rather than design."
+      ],
+      "correct": 0,
+      "explanation": "The full loop is about joining all the skills into one coherent interview performance."
+    }
+  ]
+}

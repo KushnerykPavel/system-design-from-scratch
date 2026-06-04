@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What makes a reliability design answer incomplete even if it mentions retries and queues?",
+      "options": [
+        "It ignores idempotency, overload protection, isolation boundaries, and operator visibility.",
+        "It includes too many concrete capacity estimates.",
+        "It distinguishes sync and async paths clearly.",
+        "It talks about trade-offs instead of naming one perfect pattern."
+      ],
+      "correct": 0,
+      "explanation": "Strong reliability answers connect correctness, overload, and operations together."
+    },
+    {
+      "stage": "pre",
+      "question": "Why is a final drill useful for this phase?",
+      "options": [
+        "It tests whether the learner can combine many reliability mechanisms under one realistic prompt instead of recalling them in isolation.",
+        "It replaces the need for any earlier lessons in the phase.",
+        "It only checks whether the learner remembers terminology exactly.",
+        "It guarantees perfect interview performance after one pass."
+      ],
+      "correct": 0,
+      "explanation": "The drill is about synthesis under constraints, not vocabulary."
+    },
+    {
+      "stage": "post",
+      "question": "Which opening move is strongest for the webhook reliability drill?",
+      "options": [
+        "Separate durable ingest from async delivery and make retries, idempotency, and per-tenant isolation explicit from the start.",
+        "Deliver every webhook synchronously before acknowledging ingest.",
+        "Assume customer endpoints are always healthy and optimize only median latency.",
+        "Postpone backlog and retry policy decisions until after the final diagram."
+      ],
+      "correct": 0,
+      "explanation": "The prompt is dominated by durable intent plus controlled async delivery."
+    },
+    {
+      "stage": "post",
+      "question": "What is the main trade-off of using durable ingest plus async delivery?",
+      "options": [
+        "You protect front-door latency and gain delivery control, but add state, eventual delivery semantics, and more operational machinery.",
+        "You remove the need for any customer-visible delivery status.",
+        "You guarantee exactly-once delivery to every receiver.",
+        "You make backpressure irrelevant because work is decoupled."
+      ],
+      "correct": 0,
+      "explanation": "Durable ingest is often the right choice, but it shifts complexity into the delivery pipeline."
+    },
+    {
+      "stage": "post",
+      "question": "Which signal best checks whether the answer handled retry storms seriously enough?",
+      "options": [
+        "It included retry budgets, per-endpoint pause controls, and attempt-rate observability instead of only saying 'we retry with backoff.'",
+        "It listed more cloud products than the interviewer expected.",
+        "It avoided any mention of expired work to stay concise.",
+        "It treated every failure as a permanent error."
+      ],
+      "correct": 0,
+      "explanation": "Reliability signal comes from bounded, observable retry behavior."
+    },
+    {
+      "stage": "post",
+      "question": "Why is per-tenant or per-endpoint isolation important in the drill?",
+      "options": [
+        "One bad receiver or abusive tenant should not exhaust shared delivery capacity for healthy customers.",
+        "It guarantees every delivery will be ordered globally.",
+        "It removes the need for admission control on ingest.",
+        "It makes status APIs free to run."
+      ],
+      "correct": 0,
+      "explanation": "Isolation keeps pathological customers or destinations from becoming fleet-wide incidents."
+    },
+    {
+      "stage": "post",
+      "question": "What weakens the drill answer most under a follow-up about a two-hour downstream outage?",
+      "options": [
+        "Failing to discuss backlog usefulness, stale-drop or replay policy, and how operator actions avoid re-triggering the same outage.",
+        "Mentioning that retries should use jitter.",
+        "Explaining how idempotency protects duplicate submits.",
+        "Calling out that ingest and delivery can scale separately."
+      ],
+      "correct": 0,
+      "explanation": "Long incidents test whether the design can bound work and recover safely, not only queue forever."
+    },
+    {
+      "stage": "post",
+      "question": "What does a strong final answer in this drill usually sound like?",
+      "options": [
+        "A workload-first design with durable ingest, safe retries, bounded backlog, isolation, observability, and explicit trade-offs tied together.",
+        "A generic list of reliability buzzwords with no sizing or failure-boundary decisions.",
+        "An argument that webhook reliability is mostly an implementation detail outside interview scope.",
+        "A claim that one managed queue product removes the need for design trade-offs."
+      ],
+      "correct": 0,
+      "explanation": "The goal is an operationally credible design narrative, not a bag of patterns."
+    }
+  ]
+}

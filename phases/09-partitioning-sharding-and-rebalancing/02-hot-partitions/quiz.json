@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why can average fleet utilization hide a serious partitioning problem?",
+      "options": [
+        "Because one partition can be overloaded while the rest of the fleet stays mostly idle.",
+        "Because averages automatically include p99 latency and queue depth details.",
+        "Because utilization graphs cannot be collected in distributed systems.",
+        "Because hot partitions only happen in single-region databases."
+      ],
+      "correct": 0,
+      "explanation": "Skew is about concentration, so fleet averages often look safe while one owner is failing."
+    },
+    {
+      "stage": "pre",
+      "question": "What is the first thing to clarify about a hotspot?",
+      "options": [
+        "Which router version is installed on every engineer laptop.",
+        "Whether the heat is caused by reads, writes, a tenant, a key, or a time pattern.",
+        "How many markdown files document the service.",
+        "Whether the API uses JSON or Protobuf."
+      ],
+      "correct": 1,
+      "explanation": "Mitigation depends on the actual source of concentration, so diagnosis comes first."
+    },
+    {
+      "stage": "post",
+      "question": "Which mitigation best fits a read hotspot on a small set of objects?",
+      "options": [
+        "Cache, request coalescing, or replica fanout on the hot read path.",
+        "Randomly deleting half the objects during peak traffic.",
+        "Replacing all APIs with batch exports once per day.",
+        "Disabling observability to reduce metric overhead."
+      ],
+      "correct": 0,
+      "explanation": "Hot reads usually respond well to read-path mitigations, not schema destruction."
+    },
+    {
+      "stage": "post",
+      "question": "What is the main trade-off of salting or splitting a hot write key?",
+      "options": [
+        "It spreads writes, but reads and aggregation become more complex.",
+        "It guarantees every future migration is free.",
+        "It removes any need for backpressure or retries.",
+        "It makes the hottest key stronger for transactional semantics automatically."
+      ],
+      "correct": 0,
+      "explanation": "Write spreading helps concentration, but reconstruction and read locality often get harder."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric most directly reveals noisy-neighbor behavior in a multi-tenant shard pool?",
+      "options": [
+        "Per-tenant share of shard traffic and latency compared with fleet medians.",
+        "The number of files in the deployment manifest.",
+        "The total count of source code comments.",
+        "The length of incident titles in the pager system."
+      ],
+      "correct": 0,
+      "explanation": "Noisy neighbors are exposed by per-tenant concentration and degraded neighbor performance."
+    },
+    {
+      "stage": "post",
+      "question": "Why is \"add more shards\" often an incomplete answer to hotspotting?",
+      "options": [
+        "Because concentrated traffic may keep hitting the same logical owner and not spread at all.",
+        "Because sharding is unrelated to performance or availability.",
+        "Because more shards force every query to become strongly consistent.",
+        "Because caches stop working once shard counts increase."
+      ],
+      "correct": 0,
+      "explanation": "If routing logic or key choice stays the same, added shards may not help the hot owner."
+    },
+    {
+      "stage": "post",
+      "question": "If retries are amplifying a partition incident, what is the best next move?",
+      "options": [
+        "Use backoff, retry budgets, and admission control before the overloaded owner collapses further.",
+        "Encourage clients to retry faster so the partition catches up.",
+        "Turn off all alarms to avoid confusion.",
+        "Move every tenant in the system immediately without a plan."
+      ],
+      "correct": 0,
+      "explanation": "Retry amplification is an overload problem, so rate discipline and shedding matter."
+    },
+    {
+      "stage": "post",
+      "question": "What makes a senior answer stronger when discussing hot partitions?",
+      "options": [
+        "Connecting the hotspot cause to a targeted mitigation and an explicit observability plan.",
+        "Saying that modern distributed databases solve skew automatically.",
+        "Avoiding any mention of noisy neighbors or tail latency.",
+        "Talking only about average throughput and hardware size."
+      ],
+      "correct": 0,
+      "explanation": "Strong answers connect diagnosis, mitigation, and detection rather than naming generic tools."
+    }
+  ]
+}

@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why is a partition key usually more important than broker brand in queue design?",
+      "options": [
+        "Because it determines ordering boundaries, skew risk, and scaling behavior.",
+        "Because brokers never store messages on disk.",
+        "Because a partition key removes the need for acknowledgements.",
+        "Because all queues automatically rebalance hot keys evenly."
+      ],
+      "correct": 0,
+      "explanation": "Key choice shapes the system's core behavior."
+    },
+    {
+      "stage": "pre",
+      "question": "What problem does a visibility timeout or delivery lease primarily solve?",
+      "options": [
+        "It compresses large payloads before replication.",
+        "It allows message recovery when a consumer crashes after taking work.",
+        "It guarantees end-to-end exactly-once delivery.",
+        "It replaces the need for consumer offsets."
+      ],
+      "correct": 1,
+      "explanation": "The queue needs a reclaim path for abandoned work."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric most directly shows whether a consumer group is operationally unhealthy?",
+      "options": [
+        "Backlog age and consumer lag by group.",
+        "Average topic name length.",
+        "The number of YAML files in the deployment repo.",
+        "Median producer host uptime."
+      ],
+      "correct": 0,
+      "explanation": "Lag and age expose whether work is actually being processed."
+    },
+    {
+      "stage": "post",
+      "question": "Why is queue depth alone an incomplete signal?",
+      "options": [
+        "Because depth does not reveal whether the backlog is old, growing, or harmlessly buffered.",
+        "Because depth is only measured for push queues.",
+        "Because depth becomes meaningless once offsets exist.",
+        "Because all healthy queues keep depth at zero."
+      ],
+      "correct": 0,
+      "explanation": "Age and trend matter more than a raw count."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off comes with at-least-once delivery?",
+      "options": [
+        "It improves practical recovery at the cost of duplicate-processing risk.",
+        "It eliminates the need for retention controls.",
+        "It guarantees perfect ordering across all partitions.",
+        "It makes poison messages impossible."
+      ],
+      "correct": 0,
+      "explanation": "Retries and recovery usually imply possible duplicates."
+    },
+    {
+      "stage": "post",
+      "question": "What is the cleanest first mitigation when one poison message keeps blocking a partition?",
+      "options": [
+        "Move the message aside after bounded retries so progress can continue.",
+        "Delete the whole topic immediately.",
+        "Disable acknowledgements for that consumer group.",
+        "Double the replication factor and try again."
+      ],
+      "correct": 0,
+      "explanation": "Poison messages need explicit isolation."
+    },
+    {
+      "stage": "post",
+      "question": "Why should replay usually be treated as a control-plane operation instead of an unlimited runtime feature?",
+      "options": [
+        "Because large replays can starve live traffic and need quotas or isolation.",
+        "Because replays only work in test environments.",
+        "Because consumer groups never need historical data.",
+        "Because immutable logs cannot be read twice."
+      ],
+      "correct": 0,
+      "explanation": "Replay can become its own incident if unconstrained."
+    },
+    {
+      "stage": "post",
+      "question": "Which design change best helps a multi-tenant queue survive one very noisy tenant?",
+      "options": [
+        "Add per-tenant quotas and isolation for partitions or throughput.",
+        "Remove retention so backlogs disappear faster.",
+        "Force every tenant onto one shared partition.",
+        "Disable redelivery for all topics."
+      ],
+      "correct": 0,
+      "explanation": "Isolation and admission control are the shared-platform answer."
+    }
+  ]
+}

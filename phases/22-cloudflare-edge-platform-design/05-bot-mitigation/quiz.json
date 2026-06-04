@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why should bot mitigation systems separate detection from enforcement severity?",
+      "options": [
+        "Because the same score may justify different actions by product surface, tenant tolerance, and rollout stage.",
+        "Because good detectors never need customer policy.",
+        "Because challenge actions always have zero user cost.",
+        "Because blocking is the only meaningful mitigation."
+      ],
+      "correct": 0,
+      "explanation": "Separating score from action gives safer tuning and better product fit."
+    },
+    {
+      "stage": "pre",
+      "question": "What usually makes edge bot mitigation hard operationally?",
+      "options": [
+        "Latency budgets are tight, false positives are costly, and rule or model rollout mistakes can affect huge traffic volumes quickly.",
+        "POPs cannot make any local decisions.",
+        "Bots never adapt once challenged.",
+        "Customer-specific policy is always unnecessary."
+      ],
+      "correct": 0,
+      "explanation": "The challenge is operational safety at scale, not only classifier accuracy."
+    },
+    {
+      "stage": "post",
+      "question": "Why is shadow mode valuable for new bot rules or models?",
+      "options": [
+        "It lets the platform measure decision quality and false-positive risk before enforcing globally.",
+        "It guarantees the model has no bias.",
+        "It removes the need for reason codes.",
+        "It ensures attackers cannot observe any change."
+      ],
+      "correct": 0,
+      "explanation": "Shadow rollout is one of the safest ways to evaluate new detection logic."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric best signals that a new mitigation rule is hurting legitimate traffic?",
+      "options": [
+        "A sharp shift in decision mix combined with lower challenge solve quality or business-success proxies.",
+        "Only total request count across all products.",
+        "The number of POPs in the fleet.",
+        "TLS handshake completion time for static assets."
+      ],
+      "correct": 0,
+      "explanation": "Legitimate-user harm usually shows up in action mix and downstream success indicators."
+    },
+    {
+      "stage": "post",
+      "question": "What is the main trade-off of relying heavily on cached local signals at the edge?",
+      "options": [
+        "Lower latency and less dependency risk, but more freshness and consistency complexity.",
+        "Perfect global accuracy with no staleness risk.",
+        "No need for control-plane rollout.",
+        "Guaranteed lower false positives on every route."
+      ],
+      "correct": 0,
+      "explanation": "Cached local inputs are fast, but they can lag central intelligence or policy changes."
+    },
+    {
+      "stage": "post",
+      "question": "Why should enforcement decisions carry reason codes even when models are involved?",
+      "options": [
+        "Operators and customers still need enough explainability to debug, appeal, and tune policy safely.",
+        "Because reason codes make models unnecessary.",
+        "Because every request must expose raw training data.",
+        "Because false positives do not matter if a reason code exists."
+      ],
+      "correct": 0,
+      "explanation": "A platform cannot be safely operated if decisions are opaque."
+    },
+    {
+      "stage": "post",
+      "question": "If a detector becomes more accurate but doubles hot-path latency, what is the strongest first reaction?",
+      "options": [
+        "Re-evaluate what features must stay synchronous and what can move to cached or asynchronous enrichment.",
+        "Adopt it globally immediately because accuracy always dominates latency.",
+        "Remove all mitigations so latency stays flat.",
+        "Ignore the added latency unless customers complain publicly."
+      ],
+      "correct": 0,
+      "explanation": "At the edge, better detection is not automatically better if it breaks the latency budget."
+    },
+    {
+      "stage": "post",
+      "question": "What hidden risk appears when customer-defined policies are highly flexible?",
+      "options": [
+        "Conflicting or unsafe policy combinations can create inconsistent enforcement and larger blast radius without strong validation.",
+        "Attackers will stop adapting entirely.",
+        "Model rollout becomes unnecessary.",
+        "POP-level observability is less important."
+      ],
+      "correct": 0,
+      "explanation": "Flexible policy is useful, but it raises validation, precedence, and support complexity."
+    }
+  ]
+}

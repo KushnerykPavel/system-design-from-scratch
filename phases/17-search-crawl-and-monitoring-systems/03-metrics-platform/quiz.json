@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why are label choices often more dangerous to a metrics platform than raw sample size alone?",
+      "options": [
+        "Because bad labels can explode active-series cardinality and index cost.",
+        "Because labels are only stored in browser memory.",
+        "Because sample values are usually compressed to zero.",
+        "Because label sets automatically replicate across every region."
+      ],
+      "correct": 0,
+      "explanation": "Series cardinality is one of the core scaling risks in metrics systems."
+    },
+    {
+      "stage": "pre",
+      "question": "What is a primary reason to separate hot and cold retention tiers?",
+      "options": [
+        "To keep recent data fast and high-resolution while reducing long-term storage cost.",
+        "To prevent dashboards from reading any historical data.",
+        "To guarantee every query uses raw one-second samples forever.",
+        "To eliminate the need for alert evaluators."
+      ],
+      "correct": 0,
+      "explanation": "Retention tiers trade fidelity for cost over time."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric best signals a cardinality incident after a bad deploy?",
+      "options": [
+        "Active series count by tenant or metric family.",
+        "Median dashboard theme color.",
+        "Average office Wi-Fi throughput.",
+        "The number of new hire accounts created."
+      ],
+      "correct": 0,
+      "explanation": "Active-series growth is the direct symptom."
+    },
+    {
+      "stage": "post",
+      "question": "Why should alert evaluation usually have isolated query capacity?",
+      "options": [
+        "Because paging correctness should not depend on whether someone runs a heavy dashboard query.",
+        "Because alert evaluators never read recent data.",
+        "Because alerts do not use time-series storage.",
+        "Because shared query pools reduce durability."
+      ],
+      "correct": 0,
+      "explanation": "Operational signal quality needs predictable resources."
+    },
+    {
+      "stage": "post",
+      "question": "What is the main trade-off of strict ingest-side cardinality budgets?",
+      "options": [
+        "They protect the platform but can block teams unless onboarding and exceptions are well managed.",
+        "They remove all need for retention policies.",
+        "They guarantee every query is fast forever.",
+        "They make downsampling impossible."
+      ],
+      "correct": 0,
+      "explanation": "Guardrails help the platform, but they add friction."
+    },
+    {
+      "stage": "post",
+      "question": "Which failure mode is most directly indicated by growing alert-evaluator lag?",
+      "options": [
+        "Alert queries are not keeping up with required freshness for paging decisions.",
+        "Exporters are no longer adding labels.",
+        "All historical retention has been deleted.",
+        "Clients stopped viewing dashboards."
+      ],
+      "correct": 0,
+      "explanation": "Evaluator lag is an operational risk for alerts."
+    },
+    {
+      "stage": "post",
+      "question": "Why is downsampling often acceptable for cold historical queries?",
+      "options": [
+        "Long-range trend analysis usually tolerates lower resolution better than recent dashboards do.",
+        "Because downsampling improves label quality automatically.",
+        "Because alert evaluators only use one-year data.",
+        "Because it guarantees exact per-second replay forever."
+      ],
+      "correct": 0,
+      "explanation": "Historical trends usually need less fidelity than hot operational debugging."
+    },
+    {
+      "stage": "post",
+      "question": "What is the better first response when one tenant overwhelms shared ingest capacity?",
+      "options": [
+        "Apply per-tenant throttles and cardinality controls rather than let the whole platform degrade equally.",
+        "Disable all writes for every tenant globally.",
+        "Delete all historical data immediately.",
+        "Turn every metric into a log line."
+      ],
+      "correct": 0,
+      "explanation": "Isolation is a key multi-tenant design property."
+    }
+  ]
+}

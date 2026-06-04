@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why is 'use a rate limiter' not enough as a design answer?",
+      "options": [
+        "Because the primitive changes burst handling, fairness, memory use, and smoothing behavior.",
+        "Because rate limiters only work for login systems.",
+        "Because every limiter requires a SQL database.",
+        "Because all limiter algorithms behave the same under load."
+      ],
+      "correct": 0,
+      "explanation": "The primitive affects the traffic shape the system allows or rejects."
+    },
+    {
+      "stage": "pre",
+      "question": "What is the main appeal of token bucket in many interviews?",
+      "options": [
+        "It is simple, cheap on the hot path, and allows controlled bursts.",
+        "It guarantees exact fairness across every rolling second.",
+        "It removes all need for shared coordination.",
+        "It smooths output better than every queue-based approach."
+      ],
+      "correct": 0,
+      "explanation": "Token bucket is often a strong default because it handles bursts with little state."
+    },
+    {
+      "stage": "post",
+      "question": "When is sliding window usually a better fit than token bucket?",
+      "options": [
+        "When fairness over a rolling time interval matters more than minimal state cost.",
+        "When clocks do not exist on any node.",
+        "When you want to guarantee zero rejects.",
+        "When requests do not need any timestamps."
+      ],
+      "correct": 0,
+      "explanation": "Sliding window better approximates rolling fairness, but costs more state or computation."
+    },
+    {
+      "stage": "post",
+      "question": "Why is leaky bucket often discussed for downstream protection?",
+      "options": [
+        "It smooths outgoing work and can protect a fragile backend from sudden bursts.",
+        "It eliminates queueing entirely.",
+        "It is the only algorithm that works across regions.",
+        "It guarantees perfect abuse detection."
+      ],
+      "correct": 0,
+      "explanation": "Leaky bucket is about shaping the output rate, not just counting requests."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off comes with choosing token bucket for a public API?",
+      "options": [
+        "You get simple burst handling, but short adjacent windows may feel less strictly fair.",
+        "You lose the ability to reject requests.",
+        "You must store every timestamp forever.",
+        "You can no longer explain decisions to operators."
+      ],
+      "correct": 0,
+      "explanation": "Token bucket is efficient, but fairness is approximate around window boundaries."
+    },
+    {
+      "stage": "post",
+      "question": "Which signal best shows that a chosen limiter primitive is mismatched to backend needs?",
+      "options": [
+        "Backend saturation rises even while clients stay nominally within allowed average rate.",
+        "Markdown files become harder to read.",
+        "The limiter exposes a JSON API.",
+        "Global traffic volume remains flat."
+      ],
+      "correct": 0,
+      "explanation": "The primitive may be allowing unsafe burst or queue behavior for that backend."
+    },
+    {
+      "stage": "post",
+      "question": "Why can sliding-window-style designs be more expensive at scale?",
+      "options": [
+        "They often require more timestamps, buckets, or approximation logic per active key.",
+        "They can only run on one server.",
+        "They require a control plane for every request.",
+        "They cannot express rolling time windows."
+      ],
+      "correct": 0,
+      "explanation": "Rolling-window accuracy usually costs additional state or computation."
+    },
+    {
+      "stage": "post",
+      "question": "What is the strongest first move when the interviewer asks which limiter primitive to use?",
+      "options": [
+        "Clarify whether the system wants burst tolerance, fairness, or smoothed downstream throughput.",
+        "Choose leaky bucket immediately because it sounds advanced.",
+        "Assume all products need the same limiter.",
+        "Avoid discussing traffic shape."
+      ],
+      "correct": 0,
+      "explanation": "The right primitive depends on what behavior the business actually wants."
+    }
+  ]
+}

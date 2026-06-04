@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What is the strongest first move in a consumer-backend mock?",
+      "options": [
+        "Define the main user-visible promise and the dominant workload shape before drawing components.",
+        "Start with the cache layer because most consumer products need one.",
+        "Assume the answer is a feed system unless told otherwise.",
+        "Spend most of the time listing storage options."
+      ],
+      "correct": 0,
+      "explanation": "A clear product promise and workload shape keep the architecture from becoming generic."
+    },
+    {
+      "stage": "pre",
+      "question": "Why does producer or room skew matter so much in consumer systems?",
+      "options": [
+        "Because amplification from a few hot users or hot rooms can dominate fanout, storage, and queue behavior.",
+        "Because skew matters only in analytics systems.",
+        "Because skew removes the need to estimate QPS.",
+        "Because high skew always means the system should use strong consistency everywhere."
+      ],
+      "correct": 0,
+      "explanation": "Hot producers and hot groups often create the real bottleneck in consumer backends."
+    },
+    {
+      "stage": "post",
+      "question": "What is the main benefit of naming one unacceptable user-visible failure early?",
+      "options": [
+        "It helps prioritize which path needs stronger guarantees and which anomalies are tolerable.",
+        "It guarantees there will be no follow-up questions.",
+        "It replaces the need for architecture diagrams.",
+        "It means every subsystem must use the same latency target."
+      ],
+      "correct": 0,
+      "explanation": "The least acceptable failure usually reveals which parts of the system deserve the most budget."
+    },
+    {
+      "stage": "post",
+      "question": "Which signal best detects that a fanout design is failing under skew?",
+      "options": [
+        "Backlog growth and per-producer amplification metrics on the async distribution path.",
+        "Only average CPU across the whole fleet.",
+        "The number of teams using the service.",
+        "Total count of database tables."
+      ],
+      "correct": 0,
+      "explanation": "Skew problems show up most clearly in segmented amplification and backlog metrics."
+    },
+    {
+      "stage": "post",
+      "question": "Why should a strong answer choose one source-of-truth boundary explicitly?",
+      "options": [
+        "Because duplicate, stale, and missing-state trade-offs depend on where correctness is enforced.",
+        "Because interviews always require exactly one database.",
+        "Because source-of-truth decisions matter only for financial products.",
+        "Because caches become irrelevant once the boundary is named."
+      ],
+      "correct": 0,
+      "explanation": "Without a clear state boundary, consistency claims remain hand-wavy."
+    },
+    {
+      "stage": "post",
+      "question": "What is the main trade-off of pushing more work onto asynchronous pipelines?",
+      "options": [
+        "The system can scale better and protect tail latency, but freshness and operational debugging often get harder.",
+        "It guarantees strict ordering for all users.",
+        "It removes the need for degraded modes.",
+        "It makes hot producers irrelevant."
+      ],
+      "correct": 0,
+      "explanation": "Async work placement helps throughput, but it usually introduces lag and more operational surfaces."
+    },
+    {
+      "stage": "post",
+      "question": "If the interviewer changes the top priority from freshness to cost, what is the strongest response?",
+      "options": [
+        "Revisit caching, precomputation, and fanout strategy while naming which user-visible behavior becomes weaker.",
+        "Keep the same design and only change storage vendor names.",
+        "Remove the observability section to save time.",
+        "Assume cost and freshness are never related."
+      ],
+      "correct": 0,
+      "explanation": "A changed priority should trigger concrete architecture and guarantee changes."
+    },
+    {
+      "stage": "post",
+      "question": "Why is an explicit degraded mode important in a consumer mock answer?",
+      "options": [
+        "It shows the product can fail in a controlled way instead of pretending every path is equally critical.",
+        "It proves the system never loses availability.",
+        "It means the design no longer needs retries.",
+        "It is only helpful for edge networks, not backends."
+      ],
+      "correct": 0,
+      "explanation": "Senior answers describe what the user sees when the system is stressed, not only when it is healthy."
+    }
+  ]
+}

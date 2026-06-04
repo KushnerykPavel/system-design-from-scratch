@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What is the best first question before picking between relational, key-value, and document storage?",
+      "options": [
+        "Which database brand the team already knows best.",
+        "What the primary reads, writes, and invariants actually are.",
+        "Whether the product might one day use machine learning.",
+        "Which store has the lowest benchmarked single-node latency."
+      ],
+      "correct": 1,
+      "explanation": "Storage selection starts with workload shape and correctness requirements, not vendor familiarity."
+    },
+    {
+      "stage": "pre",
+      "question": "Why is a pure key-value store often a poor fit for invariant-heavy workflows?",
+      "options": [
+        "Because key-value systems cannot replicate data across nodes.",
+        "Because they make multi-entity constraints and rich queries harder to enforce directly.",
+        "Because they only support string keys and no binary data.",
+        "Because they require every client to own its own partition map."
+      ],
+      "correct": 1,
+      "explanation": "When the core problem is transactional integrity across entities, simple key lookup is not enough."
+    },
+    {
+      "stage": "post",
+      "question": "What is the clearest reason to keep one canonical system of record in a mixed-storage design?",
+      "options": [
+        "It eliminates the need for metrics on derived systems.",
+        "It prevents confusion about where correctness lives when indexes or caches lag.",
+        "It guarantees every query will be strongly consistent globally.",
+        "It allows all schema changes to happen without deployment coordination."
+      ],
+      "correct": 1,
+      "explanation": "Without a named source of truth, stale derived systems can silently become accidental authorities."
+    },
+    {
+      "stage": "post",
+      "question": "Which workload most strongly points toward relational storage as the primary database?",
+      "options": [
+        "Low-latency per-session lookups with no secondary queries.",
+        "A nested profile document that evolves weekly and is fetched as a whole object.",
+        "Order placement that must atomically reserve inventory and record payment intent.",
+        "An append-only event stream used mostly for analytics backfill."
+      ],
+      "correct": 2,
+      "explanation": "Atomic multi-entity updates with business constraints are a classic relational fit."
+    },
+    {
+      "stage": "post",
+      "question": "What is the hidden cost of adding many secondary indexes to a flexible document or relational workload?",
+      "options": [
+        "Clients can no longer retry writes safely.",
+        "Indexes increase write work, storage cost, and operational tuning pressure.",
+        "Primary keys stop being unique under burst traffic.",
+        "Replication becomes impossible across regions."
+      ],
+      "correct": 1,
+      "explanation": "Every maintained index consumes storage and usually makes writes more expensive."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric best reveals that the team is using the wrong storage path for common queries?",
+      "options": [
+        "Latency and volume broken down by lookup, secondary query, and scan class.",
+        "Only total disk usage across all database nodes.",
+        "Build duration for the application repository.",
+        "Average TLS handshake time at the load balancer."
+      ],
+      "correct": 0,
+      "explanation": "Per-query-class visibility exposes when a supposedly rare scan becomes the hot path."
+    },
+    {
+      "stage": "post",
+      "question": "When is a document model usually more attractive than a tightly normalized relational schema?",
+      "options": [
+        "When object shape evolves quickly and most reads fetch the object as a whole.",
+        "When every request needs many transactional joins with strict constraints.",
+        "When the main requirement is monthly quota counting by key.",
+        "When the system only stores ephemeral session tokens."
+      ],
+      "correct": 0,
+      "explanation": "Document storage fits evolving, nested object retrieval patterns better than heavy normalization."
+    },
+    {
+      "stage": "post",
+      "question": "What is the senior-level trade-off summary for storage choice in interviews?",
+      "options": [
+        "Choose the most scalable store and add transactions later if needed.",
+        "Choose the most familiar store so the rest of the design discussion is faster.",
+        "Choose the store that matches the dominant access paths and invariants, then name what it does poorly.",
+        "Choose two stores by default to show breadth and architectural maturity."
+      ],
+      "correct": 2,
+      "explanation": "Strong answers make the fit explicit and acknowledge the limitations up front."
+    }
+  ]
+}

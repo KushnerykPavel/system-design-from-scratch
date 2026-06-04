@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why are long-lived static secrets risky in large systems?",
+      "options": [
+        "They increase compromise blast radius because leaked credentials remain useful for too long.",
+        "They prevent workloads from using TLS.",
+        "They only work for databases and not APIs.",
+        "They make audit logging impossible."
+      ],
+      "correct": 0,
+      "explanation": "Long-lived credentials are harder to rotate and remain exploitable for longer after leakage."
+    },
+    {
+      "stage": "pre",
+      "question": "What is the main value of credential rotation?",
+      "options": [
+        "It changes hostnames so clients discover services faster.",
+        "It reduces exposure from stale or leaked material and proves the process works before emergencies.",
+        "It removes the need for workload identity.",
+        "It guarantees zero downtime automatically."
+      ],
+      "correct": 1,
+      "explanation": "Rotation both reduces risk and tests operational readiness before a real compromise."
+    },
+    {
+      "stage": "post",
+      "question": "Why should most production systems avoid fetching secrets on the request hot path?",
+      "options": [
+        "Because secret managers cannot authenticate workloads.",
+        "Because it turns every request into a dependency on secret-store latency and availability.",
+        "Because secrets can only be used at process startup.",
+        "Because caches are incompatible with credentials."
+      ],
+      "correct": 1,
+      "explanation": "Hot-path secret fetches create central latency and outage amplification."
+    },
+    {
+      "stage": "post",
+      "question": "What is the purpose of an overlap window during rotation?",
+      "options": [
+        "It allows old and new credentials or trust bundles to coexist safely during staged rollout.",
+        "It doubles credential lifetime permanently for reliability.",
+        "It removes the need for revocation.",
+        "It guarantees every node refreshes at the same millisecond."
+      ],
+      "correct": 0,
+      "explanation": "Overlap windows prevent cliff-edge cutovers during cert or key updates."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric best detects that cert rotation is harming production traffic?",
+      "options": [
+        "Handshake or authentication failure rate after rollout.",
+        "Average HTML page length.",
+        "Only CPU idle time.",
+        "Count of README files."
+      ],
+      "correct": 0,
+      "explanation": "Handshake failures reveal trust-chain or credential mismatch immediately."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off comes with very short credential TTLs?",
+      "options": [
+        "Smaller compromise window but more refresh traffic and tighter dependence on refresh automation.",
+        "Perfect revocation with no operational overhead.",
+        "Lower audit needs because secrets expire quickly.",
+        "Guaranteed better cache hit ratio."
+      ],
+      "correct": 0,
+      "explanation": "Short TTLs improve containment but increase renewal pressure."
+    },
+    {
+      "stage": "post",
+      "question": "What is the strongest first response when a workload credential is believed to be leaked?",
+      "options": [
+        "Wait for the next normal deployment cycle.",
+        "Revoke the affected version, re-issue scoped credentials, and watch for continued use.",
+        "Delete all audit logs to reduce noise.",
+        "Disable TLS across the fleet temporarily."
+      ],
+      "correct": 1,
+      "explanation": "Containment requires revocation, re-issuance, and monitoring for residual use."
+    },
+    {
+      "stage": "post",
+      "question": "Why is workload identity better than sharing one secret across many services?",
+      "options": [
+        "It improves attribution and allows narrower, service-specific credentials.",
+        "It guarantees no secret rotation is needed.",
+        "It removes the need for mTLS.",
+        "It works only in single-region systems."
+      ],
+      "correct": 0,
+      "explanation": "Per-workload identity improves scope control, auditing, and blast-radius reduction."
+    }
+  ]
+}

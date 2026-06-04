@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What makes a clarification question high leverage in a system design interview?",
+      "options": [
+        "It sounds sophisticated and covers many product details at once.",
+        "It can materially change the architecture, scope, consistency model, or workload assumptions.",
+        "It guarantees the interviewer will answer with exact numbers.",
+        "It avoids any mention of trade-offs so discussion stays broad."
+      ],
+      "correct": 1,
+      "explanation": "High-leverage questions reduce architectural uncertainty, not just conversational ambiguity."
+    },
+    {
+      "stage": "pre",
+      "question": "Which opening question is most likely to affect the design of a feed system?",
+      "options": [
+        "What logo should appear on the home page?",
+        "Is the feed primarily read-heavy with fanout on write, or personalized on read?",
+        "Should push notifications be optional in the future?",
+        "Would users like a dark mode?"
+      ],
+      "correct": 1,
+      "explanation": "Read/write and fanout shape directly affects architecture."
+    },
+    {
+      "stage": "post",
+      "question": "Why should the first few clarification questions map to architecture pivots?",
+      "options": [
+        "Because otherwise the interviewer will end the interview immediately.",
+        "Because early questions have the highest time leverage and should eliminate wrong design branches quickly.",
+        "Because pivot questions replace the need for capacity estimates.",
+        "Because only failure-related questions count as senior signal."
+      ],
+      "correct": 1,
+      "explanation": "The point is to constrain the solution space efficiently."
+    },
+    {
+      "stage": "post",
+      "question": "Which of these is the clearest low-signal question for the opening minute?",
+      "options": [
+        "Do writes need to be visible immediately to readers?",
+        "Can this system start single-region and add failover later?",
+        "Should the admin page use tabs or a sidebar?",
+        "Is tenant isolation strict or soft?"
+      ],
+      "correct": 2,
+      "explanation": "UI layout is usually not an architecture pivot in a backend-heavy system design round."
+    },
+    {
+      "stage": "post",
+      "question": "What is the main risk of asking too many clarifying questions?",
+      "options": [
+        "The interviewer will assume you cannot code.",
+        "You spend precious time gathering details that may not improve the architecture enough to justify the delay.",
+        "Your capacity model becomes impossible to estimate later.",
+        "The data model must be simplified automatically."
+      ],
+      "correct": 1,
+      "explanation": "Clarification has opportunity cost against sizing, architecture, and deep dive time."
+    },
+    {
+      "stage": "post",
+      "question": "If an interviewer answers vaguely with 'pretty high scale,' what is the best next move?",
+      "options": [
+        "Stop and ask the same question again until exact numbers arrive.",
+        "Make a reasonable range assumption, state it aloud, and continue with the design.",
+        "Skip sizing entirely because the interviewer was vague.",
+        "Replace the architecture with a generic microservices answer."
+      ],
+      "correct": 1,
+      "explanation": "Good clarification preserves momentum by turning uncertainty into explicit assumptions."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric best indicates a healthy clarification strategy?",
+      "options": [
+        "The total number of product questions asked.",
+        "The share of opening questions that map to workload, consistency, failure, scope, cost, or security pivots.",
+        "The number of acronyms used while asking the questions.",
+        "How many services appear in the final diagram."
+      ],
+      "correct": 1,
+      "explanation": "The goal is architectural signal density, not raw question count."
+    },
+    {
+      "stage": "post",
+      "question": "What is the hidden trade-off in using a strict question budget like three to five opening clarifiers?",
+      "options": [
+        "It speeds up convergence, but some lower-impact context may remain unasked and must be handled through assumptions.",
+        "It always produces weaker architectures than exhaustive discovery.",
+        "It removes the need to discuss scope cuts.",
+        "It only works for internal systems and not customer-facing ones."
+      ],
+      "correct": 0,
+      "explanation": "A short budget improves speed and focus, but you must accept some ambiguity."
+    }
+  ]
+}

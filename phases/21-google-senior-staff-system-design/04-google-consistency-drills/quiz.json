@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What is the first step in a useful consistency discussion?",
+      "options": [
+        "Name the database vendor that supports the most replication modes.",
+        "Identify which records or operations truly require strict correctness and which can tolerate staleness.",
+        "Assume global strong consistency unless the interviewer says otherwise.",
+        "Defer all consistency trade-offs until after observability is designed."
+      ],
+      "correct": 1,
+      "explanation": "Consistency only becomes meaningful when attached to concrete operations and business guarantees."
+    },
+    {
+      "stage": "pre",
+      "question": "Why is eventual consistency not automatically wrong?",
+      "options": [
+        "Because some read paths can trade freshness for latency, scale, or availability if the anomaly budget is acceptable.",
+        "Because eventual consistency guarantees zero stale reads after failover.",
+        "Because it removes the need for a source of truth.",
+        "Because Google interviews prefer any weaker guarantee by default."
+      ],
+      "correct": 0,
+      "explanation": "Weaker consistency can be appropriate when the product can tolerate specific anomalies."
+    },
+    {
+      "stage": "post",
+      "question": "What is the strongest way to describe a bounded-staleness read path?",
+      "options": [
+        "Reads may be slightly old, but they are usually fine in practice.",
+        "Replica reads are acceptable only if data is no more than the defined freshness budget behind the write authority.",
+        "Replica reads are always equivalent to the primary if caches are warm enough.",
+        "Read freshness is not worth measuring because it varies by region."
+      ],
+      "correct": 1,
+      "explanation": "Bounded staleness should be defined as an explicit contract, not a vague hope."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off usually appears when strong cross-region write coordination is required?",
+      "options": [
+        "Write latency and fault-tolerance flexibility often get worse because more synchronous coordination is needed.",
+        "Read path observability becomes unnecessary.",
+        "Sharding is no longer relevant anywhere in the system.",
+        "Caches become impossible to use."
+      ],
+      "correct": 0,
+      "explanation": "Synchronous coordination across regions typically raises latency and operational complexity."
+    },
+    {
+      "stage": "post",
+      "question": "Which failure signal best detects surprising stale reads?",
+      "options": [
+        "Replica freshness lag or version-skew metrics tied to the read path.",
+        "Only total CPU usage across the fleet.",
+        "The number of data stores shown in the diagram.",
+        "The average code review turnaround time."
+      ],
+      "correct": 0,
+      "explanation": "Freshness problems need freshness-aware instrumentation."
+    },
+    {
+      "stage": "post",
+      "question": "Why should a senior answer name at least one tolerated anomaly?",
+      "options": [
+        "Because it proves the consistency model is tied to real user-visible behavior rather than label-only terminology.",
+        "Because interviewers require an anomaly even when the system is fully serialized.",
+        "Because tolerated anomalies eliminate the need for repair jobs.",
+        "Because anomalies matter only for financial systems."
+      ],
+      "correct": 0,
+      "explanation": "Naming an acceptable anomaly clarifies what the design optimizes for and what it intentionally does not."
+    },
+    {
+      "stage": "post",
+      "question": "What is the main risk of a failover that promotes lagging state?",
+      "options": [
+        "The new leader may expose stale or missing updates unless promotion gates and repair logic are in place.",
+        "Clients will stop using load balancers entirely.",
+        "The system will automatically gain stronger consistency.",
+        "It only affects logging pipelines, not product behavior."
+      ],
+      "correct": 0,
+      "explanation": "Failover safety depends on how far the promoted state is behind and how the system contains that gap."
+    },
+    {
+      "stage": "post",
+      "question": "If the interviewer says globally visible writes must now appear within two seconds, what is the strongest response?",
+      "options": [
+        "Identify which replication, cache, or routing decisions must tighten and what new latency or cost trade-off appears.",
+        "Keep the same eventual consistency story and hope the interviewer accepts it.",
+        "Remove observability because stronger consistency will simplify operations.",
+        "Change only the API names."
+      ],
+      "correct": 0,
+      "explanation": "A stronger freshness target should cause concrete architectural and operational changes."
+    }
+  ]
+}

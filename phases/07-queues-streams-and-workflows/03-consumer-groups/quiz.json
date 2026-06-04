@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What ultimately limits the parallelism of one consumer group on a topic?",
+      "options": [
+        "The number of useful partitions relative to the required ordering boundary.",
+        "Only the number of pods the cluster can launch.",
+        "Only the size of the event payload schema.",
+        "The number of README files in the repository."
+      ],
+      "correct": 0,
+      "explanation": "Consumer-group parallelism is bounded by partitioning, not just fleet size."
+    },
+    {
+      "stage": "pre",
+      "question": "Why is partition-key choice a correctness decision, not just a scaling decision?",
+      "options": [
+        "Because the key determines which events preserve ordering together and which do not.",
+        "Because the broker requires keys to be human-readable.",
+        "Because keys eliminate the need for lag monitoring.",
+        "Because partition count never changes after launch."
+      ],
+      "correct": 0,
+      "explanation": "The key defines the ordering scope that the system can preserve."
+    },
+    {
+      "stage": "post",
+      "question": "What is the clearest sign of a hot-partition problem?",
+      "options": [
+        "One or a few partitions accumulate disproportionate lag and resource usage compared with the rest.",
+        "All partitions have identical traffic and latency.",
+        "The producer uses message IDs.",
+        "The cluster has more than one consumer group."
+      ],
+      "correct": 0,
+      "explanation": "Skew shows up as uneven lag and throughput across partitions."
+    },
+    {
+      "stage": "post",
+      "question": "Why might adding more consumers fail to improve throughput?",
+      "options": [
+        "If partition count or hot-key skew is already the real bottleneck, extra consumers stay idle or contend on the same hot partitions.",
+        "Because consumer groups cannot have more than three members.",
+        "Because offset commits disable horizontal scale.",
+        "Because replay is impossible once a second consumer joins."
+      ],
+      "correct": 0,
+      "explanation": "Extra consumers help only when there is unclaimed parallel work."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric most directly shows rebalance pain?",
+      "options": [
+        "Rebalance duration and the corresponding stall or lag increase during membership changes.",
+        "Only total disk size on producer hosts.",
+        "Average source file length.",
+        "The number of markdown headings in the lesson."
+      ],
+      "correct": 0,
+      "explanation": "Rebalance pain is about stop time and recovery lag, not static resource counts."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off comes with creating many more partitions early?",
+      "options": [
+        "You gain headroom for parallelism, but you pay with more metadata, coordination, and operational overhead.",
+        "You gain more partitions and automatically eliminate hot keys.",
+        "You remove the need for consumer lag metrics.",
+        "You make repartitioning impossible forever."
+      ],
+      "correct": 0,
+      "explanation": "Higher partition counts help scale but increase management cost."
+    },
+    {
+      "stage": "post",
+      "question": "What is the hidden risk of choosing a random partition key when per-account ordering is required?",
+      "options": [
+        "Updates for the same account can be processed concurrently on different partitions and violate business expectations.",
+        "The topic can no longer be replayed.",
+        "The producer loses the ability to batch messages.",
+        "The broker refuses offset commits."
+      ],
+      "correct": 0,
+      "explanation": "Random partitioning breaks the local ordering guarantee the product needs."
+    },
+    {
+      "stage": "post",
+      "question": "Which answer sounds most senior in a consumer-group interview?",
+      "options": [
+        "I will add more workers until lag disappears.",
+        "I will pick the partition key from the ordering scope, measure skew explicitly, and discuss how rebalances affect recovery and rollout.",
+        "I will avoid discussing offsets because the broker handles them.",
+        "I will use one partition first and scale later."
+      ],
+      "correct": 1,
+      "explanation": "That answer ties correctness, scale, and operations together."
+    }
+  ]
+}

@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why is a storage-platform interview drill more than just naming a KV store, cache, and blob store?",
+      "options": [
+        "Because the real challenge is making the promises across those components internally consistent under scale and failure.",
+        "Because interviewers only care about vendor product names.",
+        "Because caches and metadata are the same thing.",
+        "Because durability never interacts with product requirements."
+      ],
+      "correct": 0,
+      "explanation": "The integration and trade-offs are where most of the signal lives."
+    },
+    {
+      "stage": "pre",
+      "question": "What should you usually clarify first in a broad storage-platform prompt?",
+      "options": [
+        "Which user flows and constraints dominate the design such as upload, retrieval, listing, or retention.",
+        "The preferred slide color for the final summary.",
+        "Whether every bucket name should start with the same letter.",
+        "How many acronyms you are allowed to use."
+      ],
+      "correct": 0,
+      "explanation": "Without the dominant flows, architecture choices are mostly guesswork."
+    },
+    {
+      "stage": "post",
+      "question": "Why is separating metadata and object planes so central in this drill?",
+      "options": [
+        "Because query workloads and durable-byte workloads optimize for different systems and failure handling.",
+        "Because metadata cannot be versioned.",
+        "Because object storage can never support checksums.",
+        "Because listing APIs are always optional."
+      ],
+      "correct": 0,
+      "explanation": "The separation aligns architecture to access patterns and operational needs."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric most clearly reveals that the derived-asset cache is no longer protecting the platform well?",
+      "options": [
+        "Cache hit rate dropping while origin or object-store read pressure rises sharply.",
+        "The number of people in the team chat.",
+        "Only total stored bytes.",
+        "The average length of object prefixes."
+      ],
+      "correct": 0,
+      "explanation": "Protection value is about offload, not cache existence by itself."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off comes with offering multiple durability tiers in one platform?",
+      "options": [
+        "Better business alignment on cost and safety, but more migration, explanation, and policy complexity.",
+        "No need for repair scheduling anymore.",
+        "Every customer automatically gets the strongest guarantee at no cost.",
+        "Lifecycle policies become unnecessary."
+      ],
+      "correct": 0,
+      "explanation": "Tiering helps fit the product, but it increases operational surface area."
+    },
+    {
+      "stage": "post",
+      "question": "Why is upload finalize a natural deep dive in this phase?",
+      "options": [
+        "It touches integrity, metadata correctness, retries, and orphan cleanup all at once.",
+        "It is only useful because it sounds sophisticated.",
+        "It removes the need for multipart upload state.",
+        "It guarantees cache hit rate improvements."
+      ],
+      "correct": 0,
+      "explanation": "Finalize is where durable bytes and control-plane truth meet."
+    },
+    {
+      "stage": "post",
+      "question": "What is the strongest reason to include lifecycle and repair in a storage-platform answer?",
+      "options": [
+        "Because storage reliability and cost depend on background maintenance, not just foreground APIs.",
+        "Because interviewers prefer longer answers.",
+        "Because background jobs are always free to run.",
+        "Because caches cannot be monitored directly."
+      ],
+      "correct": 0,
+      "explanation": "Ignoring maintenance creates incomplete or unrealistic designs."
+    },
+    {
+      "stage": "post",
+      "question": "Which follow-up most strongly tests redesign skill?",
+      "options": [
+        "Cost must drop 40% while compliance and legal-hold requirements become stricter.",
+        "The README title should be shorter.",
+        "One graph should be blue instead of green.",
+        "The object IDs should avoid numbers."
+      ],
+      "correct": 0,
+      "explanation": "That follow-up forces tiering, lifecycle, and architecture trade-offs to change together."
+    }
+  ]
+}

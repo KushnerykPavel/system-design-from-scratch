@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What makes a capstone review panel different from a normal single mock?",
+      "options": [
+        "The same design is challenged from multiple perspectives, so you must compare options and revise under pressure.",
+        "It focuses only on coding details.",
+        "It removes the need for a high-level architecture.",
+        "It is mainly about memorizing ideal answers."
+      ],
+      "correct": 0,
+      "explanation": "Panel review tests whether the design survives conflicting but realistic feedback."
+    },
+    {
+      "stage": "pre",
+      "question": "Why is revising the design after feedback valuable?",
+      "options": [
+        "Because adaptability is a senior signal and shows you can improve the design without losing the thread.",
+        "Because the first design should always be discarded completely.",
+        "Because revisions matter only for product requirements.",
+        "Because panel feedback replaces the need for sizing."
+      ],
+      "correct": 0,
+      "explanation": "Strong candidates respond to critique by sharpening the design rather than defending it blindly."
+    },
+    {
+      "stage": "post",
+      "question": "Why should a panel review score dimensions separately instead of giving one overall rating?",
+      "options": [
+        "It makes strengths and gaps explicit, which is more useful for deliberate practice and redesign.",
+        "Because overall ratings are mathematically invalid.",
+        "Because only communication should be measured in capstones.",
+        "Because system design trade-offs cannot be compared."
+      ],
+      "correct": 0,
+      "explanation": "Dimension-level scoring creates a clearer learning loop."
+    },
+    {
+      "stage": "post",
+      "question": "What is the strongest sign that critique improved the answer?",
+      "options": [
+        "A concrete design revision that changes a boundary, trade-off, or rollout plan in response to the feedback.",
+        "Repeating the original architecture more confidently.",
+        "Ignoring the reviewer who raised operational concerns.",
+        "Adding more component names without changing reasoning."
+      ],
+      "correct": 0,
+      "explanation": "Useful critique should change the design, not just the presentation."
+    },
+    {
+      "stage": "post",
+      "question": "Why is one explicit rejected alternative valuable in the capstone?",
+      "options": [
+        "It shows judgment under pressure and proves the final design was chosen for a reason, not by habit.",
+        "It removes the need for observability.",
+        "It guarantees the chosen design is perfect.",
+        "It matters only for storage systems."
+      ],
+      "correct": 0,
+      "explanation": "Comparison makes the final decision more credible."
+    },
+    {
+      "stage": "post",
+      "question": "What is the main trade-off of a panel-style review?",
+      "options": [
+        "It surfaces weak spots quickly, but it is more cognitively demanding than a standard mock.",
+        "It makes failure-mode analysis unnecessary.",
+        "It always takes less time than a normal interview.",
+        "It removes disagreement from the process."
+      ],
+      "correct": 0,
+      "explanation": "The panel format increases pressure, which is why it is useful as a capstone."
+    },
+    {
+      "stage": "post",
+      "question": "If one panelist pushes for lower cost while another pushes for stronger correctness, what should a strong candidate do?",
+      "options": [
+        "Restate priorities, compare options explicitly, and revise the design around the chosen winner while naming the sacrificed property.",
+        "Promise both with no trade-offs.",
+        "Drop the sizing model entirely.",
+        "Answer each reviewer with unrelated subsystem details."
+      ],
+      "correct": 0,
+      "explanation": "Competing feedback should trigger prioritization, not vague optimism."
+    },
+    {
+      "stage": "post",
+      "question": "Why should rollout and observability still appear in the final capstone revision?",
+      "options": [
+        "Because the final answer should feel shippable and operable, not just architecturally interesting.",
+        "Because they are optional polish once the panel is satisfied.",
+        "Because rollout matters only for client applications.",
+        "Because observability is separate from system design."
+      ],
+      "correct": 0,
+      "explanation": "The best capstone answers close the loop from design to safe operation."
+    }
+  ]
+}

@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What is the first goal of a messaging drill answer?",
+      "options": [
+        "Choose the primitive by clarifying ownership, replay, and state needs before naming products.",
+        "List as many broker technologies as possible.",
+        "Skip clarification so more time is left for diagrams.",
+        "Assume all asynchronous problems are stream problems."
+      ],
+      "correct": 0,
+      "explanation": "The drill rewards clear reasoning about the problem, not product recall."
+    },
+    {
+      "stage": "pre",
+      "question": "Why should the drill force an explicit duplicate or loss policy?",
+      "options": [
+        "Because delivery guarantees are only meaningful when the system states what failure is acceptable on the critical path.",
+        "Because duplicates never happen in managed brokers.",
+        "Because loss and duplication are only observability concerns.",
+        "Because replay removes all semantic decisions."
+      ],
+      "correct": 0,
+      "explanation": "A strong answer must say what failure semantics matter and why."
+    },
+    {
+      "stage": "post",
+      "question": "Which answer sounds strongest?",
+      "options": [
+        "I will start with Kafka, then add exactly-once, then mention DLQs if there is time.",
+        "I will clarify whether this is task execution, event distribution, or orchestration, then define ordering, delivery, replay, and overload behavior for the critical path.",
+        "I will avoid backlog discussion because queues already absorb bursts.",
+        "I will treat every consumer as identical to keep the design simple."
+      ],
+      "correct": 1,
+      "explanation": "That answer structures the design around the real decision points."
+    },
+    {
+      "stage": "post",
+      "question": "What is the hidden risk of adding DLQ, replay, workflow, and streams all at once without a clear reason?",
+      "options": [
+        "The design becomes pattern soup with unclear ownership and unnecessary operational complexity.",
+        "The broker automatically rejects the architecture.",
+        "The system loses the ability to commit offsets.",
+        "The product can no longer support retries."
+      ],
+      "correct": 0,
+      "explanation": "A strong drill answer stays selective and intentional."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric pair best shows both steady-state health and hidden overload risk?",
+      "options": [
+        "Consumer lag or backlog age together with user-visible completion delay.",
+        "Only schema registry object count.",
+        "Average markdown heading depth.",
+        "The number of package imports in workers."
+      ],
+      "correct": 0,
+      "explanation": "Those metrics connect internal pipeline health to real product impact."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off often appears when tightening delivery guarantees late in the drill?",
+      "options": [
+        "You usually pay with more state, more latency, and more coordination work around retries or dedupe.",
+        "You automatically simplify the relay and replay paths.",
+        "You remove the need for event IDs and observability.",
+        "You make hot partitions disappear."
+      ],
+      "correct": 0,
+      "explanation": "Stronger guarantees nearly always increase system and operational cost."
+    },
+    {
+      "stage": "post",
+      "question": "Why is hot-key skew important even in a high-level drill?",
+      "options": [
+        "Because one partition or ordering key can become the real throughput limit even when the rest of the fleet looks healthy.",
+        "Because hot keys only matter in databases, not streams.",
+        "Because skew eliminates the need for consumer groups.",
+        "Because replay traffic always balances partitions automatically."
+      ],
+      "correct": 0,
+      "explanation": "Skew can defeat naive scaling assumptions in event systems."
+    },
+    {
+      "stage": "post",
+      "question": "What should usually come last in a strong messaging drill answer?",
+      "options": [
+        "A concise wrap-up on observability, failure handling, and the main trade-offs of the chosen async model.",
+        "A long list of unrelated storage products.",
+        "An apology for not covering every messaging pattern.",
+        "A restatement that all systems eventually use the same broker."
+      ],
+      "correct": 0,
+      "explanation": "Senior answers close by making trade-offs and operational behavior explicit."
+    }
+  ]
+}

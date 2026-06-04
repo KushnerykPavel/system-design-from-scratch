@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why are map-tile systems often dominated by cache strategy more than write throughput?",
+      "options": [
+        "Because reads dominate heavily, so immutability and cache layering shape latency and cost the most.",
+        "Because map data never changes after the first publish.",
+        "Because tiles are too small to benefit from CDNs.",
+        "Because publish paths must stay synchronous with every user request."
+      ],
+      "correct": 0,
+      "explanation": "Read-mostly systems win primarily on cacheability and rollout discipline."
+    },
+    {
+      "stage": "pre",
+      "question": "What is the main benefit of immutable versioned tile paths?",
+      "options": [
+        "They allow long-lived caches and safer rollback without global purge dependence.",
+        "They eliminate the need for any tile metadata API.",
+        "They make origin storage unnecessary after the first request.",
+        "They guarantee every region flips versions simultaneously."
+      ],
+      "correct": 0,
+      "explanation": "Versioned paths make cached data safe to keep around."
+    },
+    {
+      "stage": "post",
+      "question": "Why should the active tile version usually be controlled by a manifest or metadata layer?",
+      "options": [
+        "It lets clients switch versions cheaply without mutating or purging all cached tile URLs.",
+        "It ensures browser caches are disabled during publish windows.",
+        "It prevents any need for canary rollout by construction.",
+        "It replaces the need to validate tile checksums."
+      ],
+      "correct": 0,
+      "explanation": "A small control-plane decision is easier to flip than the whole asset corpus."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric best reveals that one zoom level is creating origin pressure?",
+      "options": [
+        "Edge hit rate and origin offload by zoom level, especially on hot metropolitan regions.",
+        "The count of map designers reviewing tile style mockups.",
+        "The number of tile schema comments left in pull requests.",
+        "The age of the oldest archived tile version in cold storage."
+      ],
+      "correct": 0,
+      "explanation": "Zoom-specific miss patterns show where the cache plan is weak."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off comes with keeping multiple active tile versions during rollout?",
+      "options": [
+        "It makes rollback easier but consumes more storage and operational tracking.",
+        "It guarantees worse cache hit rate in every case.",
+        "It removes the need for regional canaries.",
+        "It forces the browser to request every version on each pan."
+      ],
+      "correct": 0,
+      "explanation": "Extra versions buy safety at a storage and coordination cost."
+    },
+    {
+      "stage": "post",
+      "question": "What is the most credible way to avoid a purge storm during tile publishes?",
+      "options": [
+        "Publish immutable assets and flip a version reference instead of purging mutable paths everywhere.",
+        "Purge the full CDN globally before every regional update.",
+        "Set all TTLs to zero so clients always revalidate.",
+        "Move all tile requests directly to origin during publish windows."
+      ],
+      "correct": 0,
+      "explanation": "Manifest-based rollout is the usual escape from expensive broad invalidation."
+    },
+    {
+      "stage": "post",
+      "question": "Why is targeted prewarm usually stronger than prewarming the whole world?",
+      "options": [
+        "Traffic is concentrated in certain zooms and regions, so full prewarm wastes cost and time.",
+        "Cold tiles can never be cached by design.",
+        "Prewarm only matters for vector tiles, never raster.",
+        "It guarantees no cache misses for long-tail regions."
+      ],
+      "correct": 0,
+      "explanation": "Most value comes from warming the hot path, not every possible tile."
+    },
+    {
+      "stage": "post",
+      "question": "Which redesign is most likely if one subset of map layers must update every few minutes?",
+      "options": [
+        "Separate faster-changing layers or manifests so they can roll independently from slower base tiles.",
+        "Collapse every layer back into one mutable URL per tile.",
+        "Disable CDN caching for all layers globally.",
+        "Remove version tracking and let clients guess freshness."
+      ],
+      "correct": 0,
+      "explanation": "Different update cadences usually deserve different rollout units."
+    }
+  ]
+}

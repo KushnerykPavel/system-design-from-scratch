@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why is one global rate limit usually insufficient for abuse prevention?",
+      "options": [
+        "Because all attackers use the same API key.",
+        "Because abuse patterns differ by path, identity, cost, and attack style, so one dimension misses too much.",
+        "Because edge systems cannot count requests.",
+        "Because rate limiting only works for internal traffic."
+      ],
+      "correct": 1,
+      "explanation": "Abuse control usually needs multiple layers and key dimensions, not one blunt limiter."
+    },
+    {
+      "stage": "pre",
+      "question": "What is the goal of adding friction such as challenges?",
+      "options": [
+        "To make every request slower so the backend does less work.",
+        "To increase cost for suspicious automation without blocking all uncertain traffic immediately.",
+        "To replace authentication entirely.",
+        "To eliminate the need for observability."
+      ],
+      "correct": 1,
+      "explanation": "Friction helps separate suspicious automation from healthy humans when confidence is not absolute."
+    },
+    {
+      "stage": "post",
+      "question": "Why is IP-only abuse enforcement risky for login protection?",
+      "options": [
+        "Because every user has a unique IP address.",
+        "Because shared NATs and rotating attacker IPs make IP alone both unfair and weak.",
+        "Because login systems cannot read IP metadata.",
+        "Because IPs only matter in single-region networks."
+      ],
+      "correct": 1,
+      "explanation": "Healthy users may share IPs, while attackers often rotate them."
+    },
+    {
+      "stage": "post",
+      "question": "Which traffic should usually be protected with the earliest and cheapest controls?",
+      "options": [
+        "Traffic that is obviously bad or untrusted before origin work is spent on it.",
+        "Only traffic from premium customers.",
+        "Only responses larger than 1 MB.",
+        "Only requests that already passed all expensive business logic."
+      ],
+      "correct": 0,
+      "explanation": "Early cheap enforcement preserves origin capacity and lowers attack amplification."
+    },
+    {
+      "stage": "post",
+      "question": "What metric most directly shows collateral damage from an abuse rule?",
+      "options": [
+        "High deny or challenge rate for healthy enterprise traffic with support complaints.",
+        "Average CPU temperature on developer laptops.",
+        "Only the total number of requests.",
+        "Number of markdown files in the repository."
+      ],
+      "correct": 0,
+      "explanation": "Collateral damage appears as false positives on legitimate traffic and customer pain."
+    },
+    {
+      "stage": "post",
+      "question": "Why add tenant-aware budgets on expensive APIs?",
+      "options": [
+        "To protect shared backend cost and fairness even when one customer is not technically abusive.",
+        "To replace route-level monitoring.",
+        "To disable all enterprise traffic during bursts.",
+        "To avoid tracking account identity."
+      ],
+      "correct": 0,
+      "explanation": "Tenant-aware controls limit noisy-neighbor harm and backend cost blowups."
+    },
+    {
+      "stage": "post",
+      "question": "When is fail-closed behavior most justified in an abuse layer?",
+      "options": [
+        "On low-risk content reads where user friction matters most.",
+        "On high-risk flows like credential attacks where allowing abuse is more damaging than short-term friction.",
+        "Whenever an observability dashboard is slow.",
+        "Never, because all abuse systems should fail open."
+      ],
+      "correct": 1,
+      "explanation": "Credential attack paths often justify stricter degraded-mode behavior."
+    },
+    {
+      "stage": "post",
+      "question": "What is the strongest reason to keep block explanations?",
+      "options": [
+        "They help debug false positives, tune policies, and defend decisions to customers.",
+        "They remove the need for rate limiting storage.",
+        "They guarantee lower p99 latency.",
+        "They allow challenges to be skipped forever."
+      ],
+      "correct": 0,
+      "explanation": "Explainability is critical for operations and trust when policies affect legitimate users."
+    }
+  ]
+}

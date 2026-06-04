@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why should replication lag be framed as a freshness budget?",
+      "options": [
+        "Because different entities and user paths tolerate different stale windows, and routing should follow that contract.",
+        "Because lag only matters when disks are full.",
+        "Because freshness never affects user-visible behavior.",
+        "Because all follower reads have identical risk."
+      ],
+      "correct": 0,
+      "explanation": "A freshness budget turns lag into a usable product and routing decision."
+    },
+    {
+      "stage": "pre",
+      "question": "What is the first question to ask before sending reads to followers?",
+      "options": [
+        "How stale can this particular entity or flow safely be?",
+        "How many colors are available for the diagram?",
+        "Whether the leader has the most CPU cores.",
+        "How to avoid talking about routing trade-offs."
+      ],
+      "correct": 0,
+      "explanation": "Follower reads are safe only relative to a specific freshness need."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric most directly shows a freshness violation risk?",
+      "options": [
+        "Freshness age by entity tier and read path compared with the allowed stale budget.",
+        "Total number of service repositories.",
+        "Average build artifact size.",
+        "Percentage of markdown links in docs."
+      ],
+      "correct": 0,
+      "explanation": "That metric ties replica lag to the actual product contract."
+    },
+    {
+      "stage": "post",
+      "question": "What is the hidden cost of routing more reads to the leader for freshness?",
+      "options": [
+        "You usually increase tail latency and leader load to tighten correctness for a narrower set of flows.",
+        "You eliminate the need for failover planning.",
+        "You make version metadata unnecessary.",
+        "You prevent all stale reads in every region forever."
+      ],
+      "correct": 0,
+      "explanation": "Freshness improvements usually spend latency and capacity."
+    },
+    {
+      "stage": "post",
+      "question": "Why is a lag dashboard alone insufficient?",
+      "options": [
+        "Because routing or admission decisions must actually use freshness signals, or stale reads still reach users.",
+        "Because dashboards make replicas slower.",
+        "Because lag is invisible once caches exist.",
+        "Because strong consistency removes the need for metrics."
+      ],
+      "correct": 0,
+      "explanation": "Observability without control does not protect the product."
+    },
+    {
+      "stage": "post",
+      "question": "When is `Get(id, min_version)` especially helpful?",
+      "options": [
+        "After a mutation when one user needs a follow-up read that must not come from a stale replica.",
+        "Only for offline analytics jobs.",
+        "When the system never replicates writes.",
+        "When the product does not care about ordering."
+      ],
+      "correct": 0,
+      "explanation": "Version-aware reads protect read-after-write selectively."
+    },
+    {
+      "stage": "post",
+      "question": "What should happen if all cheap replicas exceed the freshness budget for a critical path?",
+      "options": [
+        "The system should reroute to a fresher source, degrade safely, or explicitly fail rather than silently serve stale data.",
+        "The system should always return the stalest replica to preserve latency.",
+        "The client should guess whether the data is fresh enough.",
+        "The team should disable monitoring temporarily."
+      ],
+      "correct": 0,
+      "explanation": "Critical paths need a deliberate degraded-mode choice."
+    },
+    {
+      "stage": "post",
+      "question": "What makes a replication-lag answer sound senior?",
+      "options": [
+        "It defines freshness tiers, routing rules, incident behavior, and metrics that tie lag to user-visible risk.",
+        "It says replicas are eventually caught up so the issue is minor.",
+        "It treats every read path as identical.",
+        "It avoids any discussion of cost."
+      ],
+      "correct": 0,
+      "explanation": "Senior answers convert lag into policy, not just awareness."
+    }
+  ]
+}

@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What is the biggest early mistake in a messaging-platform interview?",
+      "options": [
+        "Starting architecture before clarifying semantics and guarantee boundaries.",
+        "Drawing boxes on a whiteboard too neatly.",
+        "Estimating throughput before naming a cloud provider.",
+        "Choosing Go for helper code."
+      ],
+      "correct": 0,
+      "explanation": "Guarantees drive the whole rest of the design."
+    },
+    {
+      "stage": "pre",
+      "question": "Why should sizing include retry or replay amplification rather than only steady-state traffic?",
+      "options": [
+        "Incident behavior can dominate the real load and expose weak designs.",
+        "Because steady-state traffic is never useful.",
+        "Because retries only matter in workflow systems.",
+        "Because amplification replaces the need for storage estimates."
+      ],
+      "correct": 0,
+      "explanation": "Many messaging incidents are failure-mode scale problems."
+    },
+    {
+      "stage": "post",
+      "question": "Which deep dive is usually strongest for a distributed queue prompt?",
+      "options": [
+        "Partitioning, lag recovery, and consumer progress tracking.",
+        "The color palette of the operator dashboard.",
+        "How to name every cloud resource uniquely.",
+        "An unrelated CDN caching strategy."
+      ],
+      "correct": 0,
+      "explanation": "The best deep dive usually attacks the core guarantee and scaling pressure."
+    },
+    {
+      "stage": "post",
+      "question": "Why is a bounded guarantee often stronger than a broad absolute claim in interview design?",
+      "options": [
+        "Because it is more accurate, defensible, and easier to explain under failure follow-ups.",
+        "Because interviewers dislike precise language.",
+        "Because bounded guarantees eliminate all trade-offs.",
+        "Because absolute claims are simpler to implement."
+      ],
+      "correct": 0,
+      "explanation": "Senior answers optimize for correctness and clarity, not hype."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off comes with adding rich operator controls such as replay, pause, and seek?",
+      "options": [
+        "You gain recoverability and auditability but increase control-plane complexity and risk.",
+        "You guarantee zero incidents forever.",
+        "You remove the need for observability.",
+        "You make throughput scaling automatic."
+      ],
+      "correct": 0,
+      "explanation": "Operational power needs careful design and guardrails."
+    },
+    {
+      "stage": "post",
+      "question": "Which signal best shows that a candidate handled failure analysis well in the drill?",
+      "options": [
+        "Each major failure includes both a detection metric and a mitigation path.",
+        "They used many product-brand names.",
+        "They skipped observability to save time.",
+        "They answered every follow-up with 'add more servers.'"
+      ],
+      "correct": 0,
+      "explanation": "Concrete detection and response is the key quality bar."
+    },
+    {
+      "stage": "post",
+      "question": "Why should redesign after a changed requirement alter a specific component or policy?",
+      "options": [
+        "Because otherwise the answer sounds memorized rather than causally reasoned.",
+        "Because redesign is only for low-level coding interviews.",
+        "Because changed constraints should never affect architecture.",
+        "Because policy changes are always weaker than hardware changes."
+      ],
+      "correct": 0,
+      "explanation": "Good redesign answers show architectural consequences."
+    },
+    {
+      "stage": "post",
+      "question": "What design change most improves a shared messaging-platform answer when one tenant becomes extremely noisy?",
+      "options": [
+        "Add quotas, isolation lanes, or tiered capacity instead of treating all tenants identically.",
+        "Remove retry tracking to reduce control-plane state.",
+        "Disable replay for every tenant permanently.",
+        "Force all traffic into a single global partition."
+      ],
+      "correct": 0,
+      "explanation": "Shared platforms need explicit noisy-neighbor controls."
+    }
+  ]
+}

@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What is the best first step after an interviewer changes a major constraint?",
+      "options": [
+        "Restate which original assumption changed and identify the earliest parts of the design it affects.",
+        "Replace every core component with a managed service.",
+        "Restart the answer from a blank page without preserving context.",
+        "Ignore the change until the interviewer asks again."
+      ],
+      "correct": 0,
+      "explanation": "Redesign starts with the assumption delta, not the technology swap."
+    },
+    {
+      "stage": "pre",
+      "question": "Why is a full restart usually weak when constraints change?",
+      "options": [
+        "Because redesign should preserve stable parts unless the prompt truly becomes a different system.",
+        "Because interviewers never ask for clean-sheet redesigns.",
+        "Because old architectures always survive unchanged.",
+        "Because migration plans are not relevant in interviews."
+      ],
+      "correct": 0,
+      "explanation": "Good redesign reasoning separates what breaks from what remains valid."
+    },
+    {
+      "stage": "post",
+      "question": "Which response best handles a shift from single-region to multi-region?",
+      "options": [
+        "Say the current design is fine because regions only affect deployment.",
+        "Call out replication, failover, consistency windows, and which control-plane or data-plane paths must change first.",
+        "Add a CDN and leave the storage tier unchanged without discussion.",
+        "Skip migration because the new topology is obviously better."
+      ],
+      "correct": 1,
+      "explanation": "A strong answer names the concrete impact areas and the resulting trade-offs."
+    },
+    {
+      "stage": "post",
+      "question": "What is the main benefit of preserving unchanged parts of the original architecture during redesign?",
+      "options": [
+        "It shows continuity and reduces unnecessary rework in the answer.",
+        "It guarantees the redesign will cost less in production.",
+        "It avoids the need to discuss any new risks.",
+        "It removes the need for capacity estimates."
+      ],
+      "correct": 0,
+      "explanation": "Good redesign answers evolve the system rather than pretending everything resets."
+    },
+    {
+      "stage": "post",
+      "question": "Which omission most weakens a redesign answer?",
+      "options": [
+        "Not mentioning a migration or rollout path for the changed topology.",
+        "Not drawing a new title for the diagram.",
+        "Not changing the order of API examples.",
+        "Not listing every possible storage engine."
+      ],
+      "correct": 0,
+      "explanation": "Migration and rollout are part of realistic redesign thinking."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off often comes with incremental redesign instead of a clean-sheet rewrite?",
+      "options": [
+        "You preserve continuity, but may carry some legacy constraints forward.",
+        "You increase consistency and reduce all operational complexity automatically.",
+        "You avoid needing any observability changes.",
+        "You eliminate the need to re-evaluate failure modes."
+      ],
+      "correct": 0,
+      "explanation": "Incremental change is practical, but not free."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric best reveals whether redesign practice is getting stronger?",
+      "options": [
+        "How quickly you identify the broken assumption and map it to affected components.",
+        "The number of services added after the redesign.",
+        "The number of arrows in the new diagram.",
+        "The time spent renaming components."
+      ],
+      "correct": 0,
+      "explanation": "Fast, precise identification of impact is the key redesign skill."
+    },
+    {
+      "stage": "post",
+      "question": "If stronger correctness requirements are introduced, what should you usually discuss next?",
+      "options": [
+        "How write paths, coordination, latency, and failure handling change under the tighter guarantee.",
+        "How to add more read replicas for free throughput.",
+        "How to shorten the wrap-up by removing trade-offs.",
+        "How to keep all previous assumptions unchanged."
+      ],
+      "correct": 0,
+      "explanation": "Correctness changes usually land first on write semantics, coordination, and availability trade-offs."
+    }
+  ]
+}

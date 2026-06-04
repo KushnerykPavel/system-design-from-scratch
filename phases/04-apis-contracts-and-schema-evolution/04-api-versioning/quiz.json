@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Which change is most likely to be backward compatible by default?",
+      "options": [
+        "Adding an optional response field while preserving existing semantics.",
+        "Removing a field that some clients may still read.",
+        "Changing the meaning of an existing enum value.",
+        "Reordering results without documenting the new behavior."
+      ],
+      "correct": 0,
+      "explanation": "Additive changes are usually safer than removals or semantic changes."
+    },
+    {
+      "stage": "pre",
+      "question": "Why is API versioning an operational concern rather than just a URL naming choice?",
+      "options": [
+        "Because old clients, telemetry, migrations, and deprecation windows all affect system behavior over time.",
+        "Because version numbers must always increase every week.",
+        "Because only internal services ever need compatibility.",
+        "Because once `/v2` exists, `/v1` can always be turned off immediately."
+      ],
+      "correct": 0,
+      "explanation": "Versioning changes support load, rollout strategy, monitoring, and client coordination."
+    },
+    {
+      "stage": "post",
+      "question": "What is the main risk of treating a semantic change as an additive one?",
+      "options": [
+        "Clients may continue compiling while silently behaving incorrectly.",
+        "The API becomes impossible to document.",
+        "The service can no longer paginate results.",
+        "The system automatically switches to eventual consistency."
+      ],
+      "correct": 0,
+      "explanation": "Semantic drift is especially dangerous because shape-only validation may miss it."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric best tells you whether a deprecation is actually safe to enforce?",
+      "options": [
+        "The number of new feature ideas in the roadmap.",
+        "Request volume and error rate broken down by API version and client type.",
+        "The amount of time spent writing SDK examples.",
+        "The total number of fields in the latest schema."
+      ],
+      "correct": 1,
+      "explanation": "You need to see who is still using older versions and whether they are healthy."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off comes with keeping a translation layer for old clients?",
+      "options": [
+        "Smoother migrations, but more code paths and compatibility testing to maintain.",
+        "Zero maintenance cost and instant client upgrades.",
+        "Guaranteed elimination of breaking changes forever.",
+        "The ability to avoid any version telemetry."
+      ],
+      "correct": 0,
+      "explanation": "Translation layers buy compatibility at the cost of complexity and test surface."
+    },
+    {
+      "stage": "post",
+      "question": "When is an explicit new version usually warranted?",
+      "options": [
+        "When the change materially breaks semantics or contract expectations for supported clients.",
+        "When adding any optional field to a response payload.",
+        "Whenever the engineering team wants a fresh documentation page.",
+        "Only when changing the underlying storage engine."
+      ],
+      "correct": 0,
+      "explanation": "Hard version boundaries are most justified for real incompatibility, not cosmetic changes."
+    },
+    {
+      "stage": "post",
+      "question": "What failure pattern often causes version sprawl?",
+      "options": [
+        "Supporting new versions before defining retirement rules and telemetry for old ones.",
+        "Using typed clients for internal services.",
+        "Rejecting all breaking changes permanently.",
+        "Monitoring latency by version."
+      ],
+      "correct": 0,
+      "explanation": "Without support windows and observability, old versions linger indefinitely."
+    },
+    {
+      "stage": "post",
+      "question": "If partner clients upgrade slowly for a year, what is the strongest response?",
+      "options": [
+        "Shut off the old version on schedule and hope for the best.",
+        "Maintain clear support windows, version telemetry, communication, and a migration plan that matches client reality.",
+        "Stop making any changes to the API forever.",
+        "Replace the entire protocol stack with events."
+      ],
+      "correct": 1,
+      "explanation": "Long-tail client upgrades require operational planning, not just a new endpoint name."
+    }
+  ]
+}

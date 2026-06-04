@@ -1,0 +1,73 @@
+# Course manifest — single source of truth for this course.
+# Edit, then run: scripts/init-course.sh
+#
+# All placeholders {{LIKE_THIS}} in README.md / AGENTS.md / ROADMAP.md /
+# .claude/skills/**/SKILL.md / CHANGELOG.md are filled from this file.
+
+course:
+  title: "System Design from Scratch"
+  slug: "system-design-from-scratch"
+  tagline: "From ambiguous prompts to senior-level architecture decisions. Design resilient systems, defend trade-offs, and practice Google and Cloudflare interview loops."
+  topic: "system design"
+  website: "https://github.com/KushnerykPavel/system-design-from-scratch"
+  github: "https://github.com/KushnerykPavel/system-design-from-scratch"
+
+style:
+  # Per-lesson sections. Order is fixed; toggle which ones are mandatory.
+  sections:
+    problem: required
+    concept: required
+    build: required
+    use: required
+    attack: optional
+    ship: required
+    exercises: required
+    test_vectors: optional
+
+  # Languages used across the course. First entry is the default scaffolding lang.
+  languages:
+    - go
+
+  # Reusable artifact types every lesson can ship.
+  artifacts:
+    - design-review-prompt
+    - interview-card
+    - capacity-worksheet
+    - tradeoff-matrix
+    - failure-mode-checklist
+    - observability-checklist
+    - skill
+    - cli-tool
+
+# Phases — fill before running init. Each phase becomes phases/NN-slug/.
+# Lessons are NOT pre-created; use scripts/scaffold-lesson.sh per lesson.
+phases:
+  - { num: "00", slug: "setup-and-workflow", name: "Setup & Workflow", hours: 8 }
+  - { num: "01", slug: "clarification-and-scope", name: "Clarification & Scope Control", hours: 8 }
+  - { num: "02", slug: "estimation-and-cost", name: "Back-of-the-Envelope Estimation & Cost", hours: 10 }
+  - { num: "03", slug: "design-framework-and-timing", name: "System Design Framework & Timing", hours: 8 }
+  - { num: "04", slug: "apis-contracts-and-schema-evolution", name: "APIs, Contracts & Schema Evolution", hours: 10 }
+  - { num: "05", slug: "storage-indexing-and-access-patterns", name: "Storage, Indexing & Access Patterns", hours: 10 }
+  - { num: "06", slug: "caching-and-invalidation", name: "Caching & Invalidation", hours: 10 }
+  - { num: "07", slug: "queues-streams-and-workflows", name: "Queues, Streams & Workflows", hours: 10 }
+  - { num: "08", slug: "consistency-replication-and-transactions", name: "Consistency, Replication & Transactions", hours: 12 }
+  - { num: "09", slug: "partitioning-sharding-and-rebalancing", name: "Partitioning, Sharding & Rebalancing", hours: 10 }
+  - { num: "10", slug: "reliability-retries-and-backpressure", name: "Reliability, Retries & Backpressure", hours: 10 }
+  - { num: "11", slug: "observability-slos-and-debugging", name: "Observability, SLOs & Incident Debugging", hours: 10 }
+  - { num: "12", slug: "security-abuse-and-multitenancy", name: "Security, Abuse & Multitenancy", hours: 10 }
+  - { num: "13", slug: "multi-region-cdn-and-edge-traffic", name: "Multi-Region, CDN & Edge Traffic", hours: 10 }
+  - { num: "14", slug: "rate-limiters-ids-and-hashing", name: "Rate Limiters, IDs & Consistent Hashing", hours: 12 }
+  - { num: "15", slug: "kv-cache-and-object-storage", name: "KV Stores, Cache Clusters & Object Storage", hours: 12 }
+  - { num: "16", slug: "application-backends", name: "Application Backends", hours: 12 }
+  - { num: "17", slug: "search-crawl-and-monitoring-systems", name: "Search, Crawl & Monitoring Systems", hours: 10 }
+  - { num: "18", slug: "messaging-and-job-platforms", name: "Messaging & Job Platforms", hours: 10 }
+  - { num: "19", slug: "payments-wallets-and-ordering", name: "Payments, Wallets & Ordering Consistency", hours: 10 }
+  - { num: "20", slug: "low-latency-location-and-market-systems", name: "Low-Latency, Location & Market Systems", hours: 12 }
+  - { num: "21", slug: "google-senior-staff-system-design", name: "Google Senior/Staff System Design", hours: 12 }
+  - { num: "22", slug: "cloudflare-edge-platform-design", name: "Cloudflare Edge & Platform Design", hours: 12 }
+  - { num: "23", slug: "mixed-mocks-and-redesign-drills", name: "Mixed Mocks & Redesign Drills", hours: 12 }
+
+totals:
+  phases: 24
+  lessons: 180
+  hours: 248

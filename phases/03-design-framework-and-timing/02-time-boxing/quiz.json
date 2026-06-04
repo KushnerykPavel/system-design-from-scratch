@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What is the main reason to reserve explicit wrap-up time in a system design interview?",
+      "options": [
+        "It creates room for risks, observability, and trade-offs that otherwise get skipped.",
+        "It guarantees the interviewer will not ask follow-up questions.",
+        "It removes the need to estimate capacity early.",
+        "It lets you avoid discussing design weaknesses."
+      ],
+      "correct": 0,
+      "explanation": "The wrap-up is where senior judgment often shows up through trade-offs, failure thinking, and limitations."
+    },
+    {
+      "stage": "pre",
+      "question": "If your answer has no rough sizing by minute 15, what is the biggest likely problem?",
+      "options": [
+        "The design may no longer be grounded in scale, cost, or bottleneck assumptions.",
+        "The interviewer will assume your API design is incorrect.",
+        "Your consistency model must become strongly consistent.",
+        "Your diagram will need more services to succeed."
+      ],
+      "correct": 0,
+      "explanation": "Without sizing, later component choices are harder to justify."
+    },
+    {
+      "stage": "post",
+      "question": "Which pacing plan best fits a strong 45-minute interview default?",
+      "options": [
+        "3 minutes clarify, 2 minutes size, 30 minutes architecture, 10 minutes wrap-up.",
+        "6 minutes clarify, 6 minutes size, 12 minutes architecture, 14 minutes deep dive, 7 minutes wrap-up.",
+        "15 minutes clarify, 15 minutes size, 15 minutes wrap-up, no deep dive.",
+        "10 minutes API details, 10 minutes storage schema, 25 minutes database tuning."
+      ],
+      "correct": 1,
+      "explanation": "A balanced pacing plan reaches all critical stages without overinvesting too early."
+    },
+    {
+      "stage": "post",
+      "question": "What is the best response when the deep dive is expanding beyond the time budget?",
+      "options": [
+        "Add more detail quickly so the interviewer sees breadth.",
+        "Pause, restate the critical path, and defer lower-value subtopics.",
+        "Restart the architecture from the beginning with a cleaner diagram.",
+        "Skip failure modes because the deep dive is more important."
+      ],
+      "correct": 1,
+      "explanation": "Time control requires actively cutting lower-value detail."
+    },
+    {
+      "stage": "post",
+      "question": "Which signal most directly reveals a pacing problem across repeated practice sessions?",
+      "options": [
+        "Minutes spent in each stage and whether wrap-up was reached.",
+        "The number of infrastructure services named.",
+        "How many storage engines were compared.",
+        "The exact count of arrows in the system diagram."
+      ],
+      "correct": 0,
+      "explanation": "Stage timing shows where the answer routinely drifts."
+    },
+    {
+      "stage": "post",
+      "question": "What is the core trade-off of a rigid time-boxing plan?",
+      "options": [
+        "It improves data durability but weakens throughput.",
+        "It adds structure, but can sound mechanical if not adapted to the conversation.",
+        "It guarantees deep dives will never be necessary.",
+        "It prevents the use of back-of-the-envelope estimation."
+      ],
+      "correct": 1,
+      "explanation": "Good pacing is structured, but still flexible."
+    },
+    {
+      "stage": "post",
+      "question": "If an interviewer interrupts at minute 8 with a scaling change, what should happen first?",
+      "options": [
+        "Ignore the change until the deep dive stage.",
+        "Call out how the new constraint affects your current time plan and earliest architecture choices.",
+        "Replace every component with a managed cloud service immediately.",
+        "Move directly to observability because the design is now unstable."
+      ],
+      "correct": 1,
+      "explanation": "Adapting the plan and naming what changes is part of senior interview control."
+    },
+    {
+      "stage": "post",
+      "question": "Which question best checks whether your wrap-up was strong enough?",
+      "options": [
+        "Did I name the database twice for emphasis?",
+        "Did I summarize key risks, mitigations, and trade-offs before time expired?",
+        "Did I draw every cache layer in the request path?",
+        "Did I avoid making any assumptions at all?"
+      ],
+      "correct": 1,
+      "explanation": "A strong wrap-up closes the loop on operational risk and decision quality."
+    }
+  ]
+}

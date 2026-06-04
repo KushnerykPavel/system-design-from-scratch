@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What is the strongest first principle when choosing a shard key?",
+      "options": [
+        "Pick the field with the shortest name so the API stays simple.",
+        "Pick the field that best matches the dominant access pattern and locality boundary.",
+        "Pick a random UUID because it guarantees every query will be cheap.",
+        "Pick the oldest column in the table to avoid migration work."
+      ],
+      "correct": 1,
+      "explanation": "A shard key should be selected from workload shape, locality, and operational risk, not convenience."
+    },
+    {
+      "stage": "pre",
+      "question": "Why can sharding by random object ID be a poor default for a multi-tenant SaaS product?",
+      "options": [
+        "It often destroys tenant-local queries and turns common reads into cross-shard fanout.",
+        "It prevents replication from working in distributed databases.",
+        "It makes every write strongly consistent across all regions automatically.",
+        "It removes the need for routing or metadata services."
+      ],
+      "correct": 0,
+      "explanation": "Random IDs help spread load, but they can badly misalign with tenant-scoped reads and writes."
+    },
+    {
+      "stage": "post",
+      "question": "When is sharding by tenant ID usually strongest?",
+      "options": [
+        "When most important queries, write ownership, and isolation requirements are tenant-scoped.",
+        "When the system only runs global analytical scans on every request.",
+        "When the dominant goal is to eliminate directory metadata entirely at any cost.",
+        "When all tenants have identical volume and no one ever needs to move data."
+      ],
+      "correct": 0,
+      "explanation": "Tenant sharding is strongest when the workload and ownership boundary are both tenant-local."
+    },
+    {
+      "stage": "post",
+      "question": "What is the main trade-off of introducing hashed tenant buckets instead of raw tenant ID placement?",
+      "options": [
+        "You gain smoother distribution, but routing and future tenant moves become more complex.",
+        "You guarantee every cross-shard query disappears forever.",
+        "You remove the need for per-tenant observability because balance is automatic.",
+        "You make hotspotting impossible even for a single very large customer."
+      ],
+      "correct": 0,
+      "explanation": "Bucketed hashing can improve balance, but it adds indirection and migration complexity."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric best exposes whether the shard key is mismatched to the real workload?",
+      "options": [
+        "The percentage of critical-path requests that require scatter-gather across many shards.",
+        "The total number of markdown files in the repository.",
+        "The amount of free disk space on developer laptops.",
+        "The average length of API method names."
+      ],
+      "correct": 0,
+      "explanation": "Frequent scatter-gather on important flows is a clear sign the key does not match workload locality."
+    },
+    {
+      "stage": "post",
+      "question": "What is the real danger of optimizing only for even distribution when picking a shard key?",
+      "options": [
+        "You may create a nicely balanced system that performs badly on the queries users actually run.",
+        "You will be unable to use caching or replication anywhere in the architecture.",
+        "You automatically force all writes into one partition.",
+        "You make every migration impossible regardless of tooling."
+      ],
+      "correct": 0,
+      "explanation": "Distribution matters, but a balanced system with poor locality can still be slow and expensive."
+    },
+    {
+      "stage": "post",
+      "question": "If one tenant starts producing 15% of all traffic, what is the best senior-level response?",
+      "options": [
+        "Acknowledge that no shard key can ever change once deployed.",
+        "Consider tenant splits, dedicated placement, or bucketed routing while preserving tenant-local APIs.",
+        "Move every tenant to a random object ID scheme immediately with no migration plan.",
+        "Delete the tenant from hot dashboards so operators are not distracted."
+      ],
+      "correct": 1,
+      "explanation": "Large tenants often require explicit isolation or split strategies, not denial."
+    },
+    {
+      "stage": "post",
+      "question": "Why might a directory service be worth adding to a sharded design?",
+      "options": [
+        "It enables more flexible placement and controlled moves when self-locating keys are too rigid.",
+        "It guarantees zero-latency routing even during network partitions.",
+        "It removes every need for versioning during migration.",
+        "It makes analytical queries local to a single shard automatically."
+      ],
+      "correct": 0,
+      "explanation": "Directory indirection can make moves, placement control, and gradual migration far safer."
+    }
+  ]
+}

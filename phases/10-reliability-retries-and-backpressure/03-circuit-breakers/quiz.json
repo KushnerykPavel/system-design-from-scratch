@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What problem is a circuit breaker primarily trying to prevent?",
+      "options": [
+        "Sending unlimited traffic into a failing dependency and spreading the failure to callers.",
+        "Making every dependency perfectly fresh all the time.",
+        "Removing the need for retries and timeouts entirely.",
+        "Guaranteeing that fallback responses are always correct."
+      ],
+      "correct": 0,
+      "explanation": "Breakers stop the caller from continuing to overload an unhealthy dependency."
+    },
+    {
+      "stage": "pre",
+      "question": "Why is a breaker alone not a complete design answer?",
+      "options": [
+        "You still need an intentional degraded behavior and safe recovery strategy.",
+        "Breakers cannot be used with any form of caching.",
+        "They only work in single-region architectures.",
+        "They require fully synchronous APIs to function."
+      ],
+      "correct": 0,
+      "explanation": "A breaker changes traffic flow, but the product experience during failure still needs design."
+    },
+    {
+      "stage": "post",
+      "question": "What is the main purpose of half-open probing?",
+      "options": [
+        "To test whether the dependency has recovered without flooding it with full traffic immediately.",
+        "To guarantee every cached response is fully fresh before serving it.",
+        "To keep the breaker permanently open unless an operator intervenes.",
+        "To route all failed requests into the same fallback queue."
+      ],
+      "correct": 0,
+      "explanation": "Half-open state is a cautious recovery mechanism, not an instant full reopen."
+    },
+    {
+      "stage": "post",
+      "question": "Which trade-off is strongest when serving stale fallback data?",
+      "options": [
+        "You preserve availability for some requests, but freshness and semantic accuracy get weaker.",
+        "You remove the need for observability because users still get responses.",
+        "You guarantee the dependency will recover faster.",
+        "You make breaker thresholds irrelevant."
+      ],
+      "correct": 0,
+      "explanation": "Graceful degradation often preserves service by accepting weaker freshness or completeness."
+    },
+    {
+      "stage": "post",
+      "question": "What is a dangerous fallback anti-pattern?",
+      "options": [
+        "A fallback path that depends on the same struggling dependency or bottleneck as the primary path.",
+        "A fallback cache with a documented freshness contract.",
+        "A breaker scoped to one dependency class instead of the whole service.",
+        "A small recovery probe budget during half-open state."
+      ],
+      "correct": 0,
+      "explanation": "Fallbacks only help if they are meaningfully independent from the failure."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric best shows whether degradation is actually preserving user value?",
+      "options": [
+        "User-visible success rate and fallback hit ratio during dependency incidents.",
+        "The number of slide decks in the team folder.",
+        "The total amount of code comments in the service.",
+        "The count of healthy hosts in unrelated clusters."
+      ],
+      "correct": 0,
+      "explanation": "The key question is whether the degraded path still serves acceptable user outcomes."
+    },
+    {
+      "stage": "post",
+      "question": "Why is breaker scope important?",
+      "options": [
+        "Per-dependency breakers usually reduce blast radius compared with one global breaker for everything.",
+        "A single global breaker always improves isolation automatically.",
+        "Breaker scope only affects dashboards, not runtime behavior.",
+        "Narrow scope makes observability impossible."
+      ],
+      "correct": 0,
+      "explanation": "Breakers that are too broad can take out healthy paths along with unhealthy ones."
+    },
+    {
+      "stage": "post",
+      "question": "What weakens a senior-level answer about breakers most?",
+      "options": [
+        "Saying 'add a circuit breaker' without explaining degraded behavior, probe policy, or user impact.",
+        "Mentioning that optional features can degrade differently from critical flows.",
+        "Calling out stale cache as one possible fallback mode.",
+        "Discussing how the trip signal could include saturation as well as error rate."
+      ],
+      "correct": 0,
+      "explanation": "The operational and product behavior around the breaker is where the real signal lives."
+    }
+  ]
+}

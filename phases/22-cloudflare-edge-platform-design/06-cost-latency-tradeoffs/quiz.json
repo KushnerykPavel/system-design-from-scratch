@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why can a small cache hit-rate improvement matter a lot in edge systems?",
+      "options": [
+        "Because even a 1% to 2% shift can remove a very large absolute number of origin requests and miss penalties at high traffic scale.",
+        "Because hit rate only affects dashboard appearance, not system behavior.",
+        "Because higher hit rate always means lower purge complexity.",
+        "Because origin costs disappear completely after any improvement."
+      ],
+      "correct": 0,
+      "explanation": "At massive traffic volumes, small percentages correspond to meaningful infrastructure and latency changes."
+    },
+    {
+      "stage": "pre",
+      "question": "What is the main reason cost discussions belong in an edge design interview answer?",
+      "options": [
+        "Because edge footprint, routing, and cache policy choices can materially change egress, origin load, and operational complexity.",
+        "Because cost only matters after the system is fully launched.",
+        "Because interviewers care only about cheaper systems, not reliable ones.",
+        "Because latency and cost are never connected."
+      ],
+      "correct": 0,
+      "explanation": "Strong designs acknowledge the real business and operational cost of their choices."
+    },
+    {
+      "stage": "post",
+      "question": "Why should incident-time traffic shifts be part of cost modeling?",
+      "options": [
+        "Failover paths can create large temporary egress and origin-capacity spikes that normal-state averages hide.",
+        "Incidents do not affect network cost significantly.",
+        "Because cost modeling should ignore degraded mode to stay simple.",
+        "Because latency is irrelevant during failover."
+      ],
+      "correct": 0,
+      "explanation": "The most expensive path may appear only during incidents, which is exactly when it matters."
+    },
+    {
+      "stage": "post",
+      "question": "What hidden cost often appears when expanding cacheability aggressively?",
+      "options": [
+        "Purge and invalidation complexity can rise sharply even while hit rate improves.",
+        "Origin load always increases instead of decreases.",
+        "Regional shields stop providing value.",
+        "Routing policy becomes simpler automatically."
+      ],
+      "correct": 0,
+      "explanation": "Caching more data is not free if keeping it fresh becomes much harder."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric best validates whether a proposed edge optimization actually paid off?",
+      "options": [
+        "Hit rate and origin QPS avoided by route class, paired with latency deltas.",
+        "Only the total number of POPs in the network.",
+        "The number of internal documents written about the feature.",
+        "TLS certificate chain length."
+      ],
+      "correct": 0,
+      "explanation": "You need both performance and avoided-origin-load evidence, ideally by traffic class."
+    },
+    {
+      "stage": "post",
+      "question": "What is the main trade-off of prioritizing premium low-latency routing for a subset of traffic?",
+      "options": [
+        "It can improve important user paths, but increases routing complexity and possibly network spend for the fleet.",
+        "It lowers cost and complexity for every other tenant automatically.",
+        "It removes the need for cache hit-rate analysis.",
+        "It guarantees the best incident behavior in all regions."
+      ],
+      "correct": 0,
+      "explanation": "Differentiated routing can be valuable, but it is not operationally free."
+    },
+    {
+      "stage": "post",
+      "question": "If origin capacity is cheap but user latency is extremely valuable, what is the strongest design instinct?",
+      "options": [
+        "Optimize the user-visible hot path deliberately while still making purge and control-plane cost visible.",
+        "Ignore cost modeling entirely because latency is valuable.",
+        "Disable all cache layers to simplify the answer.",
+        "Assume every route should receive identical treatment."
+      ],
+      "correct": 0,
+      "explanation": "Valuable latency improvements can justify spend, but the answer should still quantify the trade."
+    },
+    {
+      "stage": "post",
+      "question": "Why is a global average cache hit rate often misleading in design review?",
+      "options": [
+        "Different route classes and object shapes can have very different economics and freshness constraints, so averages hide the real trade-offs.",
+        "Because global averages are mathematically invalid.",
+        "Because origin load depends only on median latency.",
+        "Because purge cost is unrelated to traffic shape."
+      ],
+      "correct": 0,
+      "explanation": "Useful cost and latency analysis should usually be segmented by traffic class."
+    }
+  ]
+}

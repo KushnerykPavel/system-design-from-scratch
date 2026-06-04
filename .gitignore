@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+
+# Node
+node_modules/
+dist/
+
+# Rust
+target/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Editors
+.idea/
+.vscode/
+*.swp
+
+# OS
+.DS_Store
+
+# Personal progress (never commit)
+.progress.json
+
+# Local env
+.env
+.env.local
+.tmp/

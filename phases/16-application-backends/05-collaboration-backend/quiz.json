@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What does a collaborative-document backend have to solve before 'use WebSockets' becomes meaningful?",
+      "options": [
+        "How edits converge, how versions advance, and how reconnecting clients catch up safely.",
+        "Which monospace font the editor ships with.",
+        "How to render comments in the browser sidebar.",
+        "Whether the document title is limited to 80 characters."
+      ],
+      "correct": 0,
+      "explanation": "Transport alone does not define correctness for concurrent editing."
+    },
+    {
+      "stage": "pre",
+      "question": "Why are snapshots useful in collaborative systems with operation logs?",
+      "options": [
+        "They bound replay cost so reconnecting or recovering clients do not reapply an unbounded edit history.",
+        "They make presence heartbeats unnecessary.",
+        "They remove the need for durable operation logs.",
+        "They guarantee perfect conflict resolution."
+      ],
+      "correct": 0,
+      "explanation": "Operation history is useful, but replay must stay bounded."
+    },
+    {
+      "stage": "post",
+      "question": "What is the main benefit of routing a document session through an owner or coordinator?",
+      "options": [
+        "It simplifies sequencing and convergence reasoning for live edits.",
+        "It ensures all users are always in one geographic region.",
+        "It eliminates hotspot risk for popular documents.",
+        "It removes the need for snapshots."
+      ],
+      "correct": 0,
+      "explanation": "A session owner can make ordering and merge rules easier to reason about."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric best reveals that replay cost is becoming a user problem?",
+      "options": [
+        "Reconnect recovery time or replay length per active document.",
+        "Average toolbar button count.",
+        "Number of document titles beginning with a vowel.",
+        "Median comment character length."
+      ],
+      "correct": 0,
+      "explanation": "Replay pain becomes visible when recovery time grows."
+    },
+    {
+      "stage": "post",
+      "question": "Why should presence usually be treated as ephemeral state?",
+      "options": [
+        "Because stale cursor or online indicators are tolerable compared with corrupting document truth.",
+        "Because presence has no user value.",
+        "Because presence can never be stored in memory.",
+        "Because presence only matters for offline editing."
+      ],
+      "correct": 0,
+      "explanation": "Presence is important, but it should not outrank document correctness."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off comes with using a central sequencer or owner per active document?",
+      "options": [
+        "It makes convergence easier but can create hotspots for highly active documents.",
+        "It guarantees every client can edit offline for days without merge work.",
+        "It removes the need for snapshots and logs.",
+        "It makes transform bugs impossible."
+      ],
+      "correct": 0,
+      "explanation": "Simplicity on correctness often costs concentration of load."
+    },
+    {
+      "stage": "post",
+      "question": "What is a realistic way to detect corruption in transform or merge logic?",
+      "options": [
+        "Replay operations deterministically against snapshots and compare resulting state.",
+        "Assume client cursors will reveal corruption immediately.",
+        "Disable concurrent editing in production after every deploy.",
+        "Store no versions so mismatches cannot be observed."
+      ],
+      "correct": 0,
+      "explanation": "Deterministic validation is one of the few concrete safety checks available."
+    },
+    {
+      "stage": "post",
+      "question": "What changes most when the product adds true offline editing with long reconnect gaps?",
+      "options": [
+        "Merge strategy, conflict semantics, and replay design become significantly more complex.",
+        "Presence heartbeats become the only critical subsystem.",
+        "Snapshots become unnecessary because clients have local copies.",
+        "The service can drop durable history entirely."
+      ],
+      "correct": 0,
+      "explanation": "Long-lived divergence expands the convergence problem dramatically."
+    }
+  ]
+}

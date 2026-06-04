@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What is the main purpose of contract testing between a provider and its consumers?",
+      "options": [
+        "To catch compatibility regressions before deployment without relying only on production traffic.",
+        "To replace all integration and end-to-end testing permanently.",
+        "To guarantee every consumer upgrades at the same time.",
+        "To avoid documenting ownership boundaries."
+      ],
+      "correct": 0,
+      "explanation": "Contract tests provide a focused early warning for contract breakage."
+    },
+    {
+      "stage": "pre",
+      "question": "Why do ownership boundaries matter for shared contracts?",
+      "options": [
+        "Because someone must own the promise, review changes, and respond when compatibility breaks.",
+        "Because ownership removes the need for any CI validation.",
+        "Because only public APIs need owners.",
+        "Because consumers should never influence contract expectations."
+      ],
+      "correct": 0,
+      "explanation": "Clear ownership turns a vague interface into a managed operational commitment."
+    },
+    {
+      "stage": "post",
+      "question": "What is the key weakness of relying only on end-to-end tests for contract safety?",
+      "options": [
+        "They usually find breakage later, with noisier diagnosis and more environmental coupling.",
+        "They always run faster than focused CI checks.",
+        "They cannot observe status codes or payloads.",
+        "They eliminate semantic regressions by default."
+      ],
+      "correct": 0,
+      "explanation": "End-to-end tests are useful, but they are often too broad and late for sharp contract protection."
+    },
+    {
+      "stage": "post",
+      "question": "Which provider change should most clearly trigger contract validation?",
+      "options": [
+        "Any shape or semantic change that could alter consumer expectations.",
+        "Only infrastructure changes with no API effect.",
+        "A code comment update in an unrelated module.",
+        "Rotating an internal build cache."
+      ],
+      "correct": 0,
+      "explanation": "Contract gates should focus on changes that affect consumer-visible behavior."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off comes with CI-based contract gating?",
+      "options": [
+        "More setup and fixture maintenance in exchange for earlier, cheaper compatibility detection.",
+        "No maintenance cost with complete production realism.",
+        "Guaranteed elimination of all integration bugs.",
+        "The ability to avoid observability during rollout."
+      ],
+      "correct": 0,
+      "explanation": "Contract gates are valuable, but they require discipline and upkeep."
+    },
+    {
+      "stage": "post",
+      "question": "How can a contract test still miss a real production issue?",
+      "options": [
+        "If it validates only payload shape and ignores semantic behaviors like defaults, ordering, or status codes.",
+        "If it runs in CI instead of production.",
+        "If the provider owns the contract documentation.",
+        "If consumers publish examples of expected behavior."
+      ],
+      "correct": 0,
+      "explanation": "Shape-only testing can miss semantic regressions that matter to consumers."
+    },
+    {
+      "stage": "post",
+      "question": "What is the strongest ownership model for a shared internal contract?",
+      "options": [
+        "The provider owns publication and change control, while consumers publish concrete expectations used in verification.",
+        "No one owns it because all teams share responsibility equally.",
+        "Only consumers own it because providers should move quickly.",
+        "Only SRE owns it because availability is the main concern."
+      ],
+      "correct": 0,
+      "explanation": "That split creates accountability while keeping consumer expectations visible."
+    },
+    {
+      "stage": "post",
+      "question": "When a provider must introduce an intentional breaking change, what is the best next step?",
+      "options": [
+        "Use the contract process to version, stage, communicate, and monitor the migration rather than shipping it silently.",
+        "Disable contract tests so rollout is not blocked.",
+        "Force all consumers to upgrade instantly without telemetry.",
+        "Hide the change behind a renamed environment variable."
+      ],
+      "correct": 0,
+      "explanation": "Intentional breaks still need structured rollout and visibility."
+    }
+  ]
+}

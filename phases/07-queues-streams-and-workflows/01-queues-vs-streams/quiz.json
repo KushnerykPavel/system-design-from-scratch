@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What is the clearest reason to choose a stream instead of a queue?",
+      "options": [
+        "Several independent consumers need durable replayable history from the same producer output.",
+        "A single worker needs to finish one background task after another.",
+        "The system wants to avoid thinking about ordering and offsets.",
+        "The producer does not want to persist events anywhere."
+      ],
+      "correct": 0,
+      "explanation": "Streams are strongest when multiple consumers need shared durable history and replay."
+    },
+    {
+      "stage": "pre",
+      "question": "What usually makes a workflow engine necessary?",
+      "options": [
+        "The system must track long-running state, timers, retries, and step-by-step progress explicitly.",
+        "The system only needs a fast single-step image resize task.",
+        "The team wants fewer state transitions in the business process.",
+        "The producer never needs to know whether work completed."
+      ],
+      "correct": 0,
+      "explanation": "Workflow engines are for stateful orchestration, not just asynchronous dispatch."
+    },
+    {
+      "stage": "post",
+      "question": "Which design is weakest?",
+      "options": [
+        "Use a queue for one-owner execution and publish events separately for analytics replay.",
+        "Use a workflow engine when multi-step business progress and timers must be visible.",
+        "Use a stream because multiple consumers need independent replay and offset control.",
+        "Use Kafka for all async needs without clarifying consumer ownership, replay, or business state."
+      ],
+      "correct": 3,
+      "explanation": "Naming a product without stating the required semantics is the anti-pattern."
+    },
+    {
+      "stage": "post",
+      "question": "What hidden risk appears when a team uses only a queue for an event-sharing problem?",
+      "options": [
+        "New downstream consumers often need ad hoc taps or copied databases because replayable shared history is missing.",
+        "The queue automatically creates too many workflow timers.",
+        "Consumers will always get strict global ordering for free.",
+        "The producer no longer needs idempotency."
+      ],
+      "correct": 0,
+      "explanation": "Queues are poor at durable one-to-many replay unless extra systems are added."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric most directly distinguishes task execution problems from history distribution problems?",
+      "options": [
+        "The number of independent consumer groups and their replay needs.",
+        "Only CPU usage on one producer host.",
+        "The number of developers on the team.",
+        "Average JSON document size in the codebase."
+      ],
+      "correct": 0,
+      "explanation": "Consumer independence and replay expectations are core primitive-selection inputs."
+    },
+    {
+      "stage": "post",
+      "question": "Why is 'exactly-once' still not enough to skip idempotent handlers?",
+      "options": [
+        "Because side effects outside the broker boundary can still be repeated or partially applied.",
+        "Because brokers do not preserve partition ordering.",
+        "Because queues cannot retry failed tasks.",
+        "Because workflow engines remove the need for durable storage."
+      ],
+      "correct": 0,
+      "explanation": "Broker guarantees do not fully cover downstream side effects."
+    },
+    {
+      "stage": "post",
+      "question": "Which observability signal best shows an async architecture is mismatched to the product?",
+      "options": [
+        "Teams keep building bespoke replay tools and shadow status tables around the primitive.",
+        "The producer logs include request IDs.",
+        "Consumers expose CPU metrics.",
+        "The docs mention eventual consistency."
+      ],
+      "correct": 0,
+      "explanation": "Repeated compensating systems often reveal the primitive itself is the wrong fit."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off often comes with choosing a workflow engine over a plain queue?",
+      "options": [
+        "You gain explicit state, timers, and compensation, but you pay with orchestration metadata and platform complexity.",
+        "You gain global exactly-once side effects with no extra cost.",
+        "You remove the need for retries and timeouts entirely.",
+        "You make long-running jobs cheaper than stateless fire-and-forget tasks."
+      ],
+      "correct": 0,
+      "explanation": "Workflow engines buy stateful orchestration at the cost of more system complexity."
+    }
+  ]
+}

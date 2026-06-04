@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What makes an observability answer incomplete in a system design interview?",
+      "options": [
+        "It lists tools like logs and dashboards but never ties them to user impact, paging, or debugging decisions.",
+        "It includes a primary SLI and a burn-rate policy.",
+        "It separates dashboards from runbooks.",
+        "It discusses regional drill-down and label discipline."
+      ],
+      "correct": 0,
+      "explanation": "Observability only matters if it supports diagnosis and action."
+    },
+    {
+      "stage": "pre",
+      "question": "Why is a drill useful at the end of this phase?",
+      "options": [
+        "Because good observability requires integrating targets, telemetry, triage, and response into one coherent design.",
+        "Because individual lessons become incorrect after one week.",
+        "Because tracing replaces every other observability concept.",
+        "Because quizzes alone can fully substitute for design practice."
+      ],
+      "correct": 0,
+      "explanation": "The phase is about connecting the pieces, not memorizing them separately."
+    },
+    {
+      "stage": "post",
+      "question": "What should come first in a strong observability drill answer?",
+      "options": [
+        "A primary user-meaningful SLI and explicit SLO framing for the most important path.",
+        "A long list of every possible metric label.",
+        "A detailed history of logging libraries used by the team.",
+        "A full set of postmortem action items before any system context."
+      ],
+      "correct": 0,
+      "explanation": "The observability design should anchor on what user experience matters most."
+    },
+    {
+      "stage": "post",
+      "question": "Why is bounded label design part of a strong drill answer?",
+      "options": [
+        "Because observability that cannot scale economically is not a credible system design.",
+        "Because labels are only used for alert titles.",
+        "Because traces cannot be sampled when labels are bounded.",
+        "Because SLOs do not need metrics if dashboards are colorful."
+      ],
+      "correct": 0,
+      "explanation": "Telemetry cost and scale are part of the system design trade-off."
+    },
+    {
+      "stage": "post",
+      "question": "Which alerting choice is strongest for the gateway drill?",
+      "options": [
+        "Symptom-first paging on user-impact or SLO burn, with drill-down signals to guide triage.",
+        "Paging separately on every CPU spike across every dependency.",
+        "Sending only weekly emails even during live outages.",
+        "Avoiding alerts entirely and relying on customer reports."
+      ],
+      "correct": 0,
+      "explanation": "Pages should point at urgent user harm first, then help narrow cause."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off comes with segmented observability for enterprise and free-tier traffic?",
+      "options": [
+        "You gain clearer customer-specific visibility, but add telemetry policy complexity and possible cost.",
+        "You eliminate the need for any global view.",
+        "You guarantee all incidents stay regional.",
+        "You remove the need for runbooks."
+      ],
+      "correct": 0,
+      "explanation": "Segmentation can be valuable, but it is not operationally free."
+    },
+    {
+      "stage": "post",
+      "question": "How should a strong drill answer treat traces?",
+      "options": [
+        "As one part of the story, connected to metrics, logs, and debugging flow rather than presented alone.",
+        "As a full replacement for all dashboards and alerts.",
+        "As unnecessary if the gateway has a health endpoint.",
+        "As valuable only when request volume is below 10 QPS."
+      ],
+      "correct": 0,
+      "explanation": "Traces are most useful when integrated into a broader incident workflow."
+    },
+    {
+      "stage": "post",
+      "question": "What is the strongest answer to 'How do you know this observability design is good?'",
+      "options": [
+        "It makes user impact measurable, incidents diagnosable, pages actionable, and telemetry cost intentionally bounded.",
+        "It exports the maximum number of metrics possible.",
+        "It uses the newest logging vendor in the market.",
+        "It produces the longest runbook in the repository."
+      ],
+      "correct": 0,
+      "explanation": "Good observability is measured by actionability and sustainable scale, not sheer volume."
+    }
+  ]
+}

@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why do nearby-search systems usually separate candidate retrieval from exact distance ranking?",
+      "options": [
+        "Because a fast approximate geo index narrows the set before more exact checks run.",
+        "Because exact distance math cannot be computed in distributed systems.",
+        "Because ranking and filtering are identical once data is partitioned.",
+        "Because nearby search never needs business filters after lookup."
+      ],
+      "correct": 0,
+      "explanation": "Approximate lookup keeps the search set bounded, then exact checks preserve correctness."
+    },
+    {
+      "stage": "pre",
+      "question": "What makes nearby search harder than a static place lookup?",
+      "options": [
+        "Moving objects continuously update the index, so freshness and write amplification become central.",
+        "Static places always require full-table scans at query time.",
+        "Distance cannot be estimated until after payment is processed.",
+        "Geo partitioning only matters for map-rendering systems."
+      ],
+      "correct": 0,
+      "explanation": "The moving write path is the real pressure point in proximity systems."
+    },
+    {
+      "stage": "post",
+      "question": "What is the main reason dense urban cells become dangerous in proximity systems?",
+      "options": [
+        "They create extreme read and write skew that can overload one shard or candidate set.",
+        "They make exact geometry mathematically impossible.",
+        "They force all data into one global database transaction.",
+        "They remove the need for caching because locality is perfect."
+      ],
+      "correct": 0,
+      "explanation": "Hotspot skew, not geometry, is the usual operational problem."
+    },
+    {
+      "stage": "post",
+      "question": "Which signal best reveals stale-location risk on the serving path?",
+      "options": [
+        "The age distribution of the latest accepted object updates relative to the freshness target.",
+        "The number of product managers reading the dashboard.",
+        "The ratio of successful reads to total API routes in the company.",
+        "The total count of configured geo cells in the control plane."
+      ],
+      "correct": 0,
+      "explanation": "Freshness age directly measures how old returned locations can be."
+    },
+    {
+      "stage": "post",
+      "question": "Why is separating availability from the geo index often useful?",
+      "options": [
+        "It reduces write amplification when business state changes more often than coordinates.",
+        "It guarantees exact global ordering across all updates.",
+        "It removes the need for a fallback radius during low supply.",
+        "It ensures every query can be served from a browser cache."
+      ],
+      "correct": 0,
+      "explanation": "Different data changes at different rates, so separating them protects the write path."
+    },
+    {
+      "stage": "post",
+      "question": "What is the most credible fallback when a query finds too few nearby candidates?",
+      "options": [
+        "Widen the search radius in controlled steps with caps and clear ranking logic.",
+        "Randomly choose objects from distant regions to fill the list.",
+        "Disable exact distance checks until traffic normalizes.",
+        "Repartition the whole geo index synchronously for that request."
+      ],
+      "correct": 0,
+      "explanation": "Progressive widening is a product and systems decision, not a random fill."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off comes with replicating hot cells to more shards?",
+      "options": [
+        "It lowers hotspot pressure but increases control-plane and consistency complexity.",
+        "It eliminates the need for exact reranking entirely.",
+        "It makes stale updates impossible by definition.",
+        "It guarantees lower write cost than a single-shard design."
+      ],
+      "correct": 0,
+      "explanation": "Replication buys read resilience but creates more coordination and update work."
+    },
+    {
+      "stage": "post",
+      "question": "Which redesign is most likely if availability changes every second but coordinates change rarely?",
+      "options": [
+        "Push more filtering into a fast availability layer while keeping geo membership relatively stable.",
+        "Recompute every geo partition from scratch on each query.",
+        "Store all objects in one relational row to simplify joins.",
+        "Replace all TTLs with manual operator updates."
+      ],
+      "correct": 0,
+      "explanation": "When business state changes fastest, that layer deserves the lighter update path."
+    }
+  ]
+}

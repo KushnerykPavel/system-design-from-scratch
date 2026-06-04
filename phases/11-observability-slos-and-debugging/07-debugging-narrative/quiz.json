@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What is the weakness in saying only 'I’d check the logs' during an interview debugging prompt?",
+      "options": [
+        "It names a tool, but not the hypothesis or what evidence would narrow the cause.",
+        "It proves the candidate understands every likely root cause already.",
+        "It is only wrong for storage systems and never for APIs.",
+        "It guarantees the fastest possible mitigation."
+      ],
+      "correct": 0,
+      "explanation": "Strong debugging answers explain why a check matters and what it distinguishes."
+    },
+    {
+      "stage": "pre",
+      "question": "Why are hypotheses useful during incident response?",
+      "options": [
+        "They organize plausible causes and guide which evidence to inspect next.",
+        "They make metrics unnecessary during outages.",
+        "They guarantee perfect root-cause accuracy before mitigation.",
+        "They are only useful after the incident ends."
+      ],
+      "correct": 0,
+      "explanation": "Hypotheses shrink the search space and make debugging deliberate."
+    },
+    {
+      "stage": "post",
+      "question": "What should usually come before a deep dive into raw logs?",
+      "options": [
+        "A quick check of user impact, scope, and high-level metrics that classify the incident shape.",
+        "A full rewrite of the service in a safer language.",
+        "Deleting the oldest alert policy in the system.",
+        "Reading every runbook in the organization."
+      ],
+      "correct": 0,
+      "explanation": "Broad scope and symptom classification often narrow the cause faster than raw event search."
+    },
+    {
+      "stage": "post",
+      "question": "Why prefer reversible mitigations when confidence is low?",
+      "options": [
+        "They reduce the chance of worsening the outage while evidence is still incomplete.",
+        "They eliminate the need to validate recovery later.",
+        "They always solve the root cause permanently.",
+        "They guarantee lower page volume in future quarters."
+      ],
+      "correct": 0,
+      "explanation": "Under uncertainty, safer mitigations protect the system from compounding mistakes."
+    },
+    {
+      "stage": "post",
+      "question": "What is a sign of random-walk debugging?",
+      "options": [
+        "Responders bounce between dashboards, logs, and commands without stating how each check narrows the cause.",
+        "A runbook includes escalation thresholds.",
+        "A trace links a slow dependency to a parent request.",
+        "A service has separate read and write SLIs."
+      ],
+      "correct": 0,
+      "explanation": "A strong debugging story makes the narrowing logic explicit."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off comes with documenting the debugging narrative during the incident?",
+      "options": [
+        "It adds a little overhead, but keeps the team aligned and improves postmortem quality.",
+        "It guarantees slower mitigations in every case with no benefit.",
+        "It removes the need for communication updates.",
+        "It prevents experts from contributing quickly."
+      ],
+      "correct": 0,
+      "explanation": "Lightweight documentation helps coordination and later learning."
+    },
+    {
+      "stage": "post",
+      "question": "Which evidence most directly helps distinguish a regional issue from a global one?",
+      "options": [
+        "Comparing user-impact and dependency metrics across regions or POPs.",
+        "Counting the total number of source files in the service.",
+        "Reading the oldest closed issue in the repository.",
+        "Checking only the p50 latency across the whole fleet."
+      ],
+      "correct": 0,
+      "explanation": "Scope comparison across regions is what separates local and global failure patterns."
+    },
+    {
+      "stage": "post",
+      "question": "What is the strongest answer to 'How do you know the mitigation worked?'",
+      "options": [
+        "Validate the expected recovery in the user-impact metrics and the suspected bottleneck signal, not just one local chart.",
+        "Assume success if the command completed without an error.",
+        "Wait for the next quarterly review to confirm.",
+        "Check whether the dashboard color looks calmer."
+      ],
+      "correct": 0,
+      "explanation": "Recovery validation should match both the symptom and the suspected cause."
+    }
+  ]
+}

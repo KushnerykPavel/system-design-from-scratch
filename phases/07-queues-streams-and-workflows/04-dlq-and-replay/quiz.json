@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What is the main purpose of a dead-letter queue?",
+      "options": [
+        "To quarantine and preserve failed messages for investigation and controlled recovery.",
+        "To replace all ordinary retry logic.",
+        "To guarantee every message is processed exactly once.",
+        "To remove the need for failure classification."
+      ],
+      "correct": 0,
+      "explanation": "DLQs are for quarantine and recovery, not a universal retry substitute."
+    },
+    {
+      "stage": "pre",
+      "question": "Why is replay design important when adding a DLQ?",
+      "options": [
+        "Because recovery can overload downstream systems or repeat the same bug if replay is uncontrolled.",
+        "Because replay is never needed after a message fails once.",
+        "Because dead-lettered messages must always be deleted immediately.",
+        "Because replay eliminates the need for observability."
+      ],
+      "correct": 0,
+      "explanation": "The recovery path is where many DLQ designs fail operationally."
+    },
+    {
+      "stage": "post",
+      "question": "Which answer is weakest?",
+      "options": [
+        "We will alert on oldest DLQ age and classify failures before replaying.",
+        "We will separate transient retries from poison-message quarantine.",
+        "We have a DLQ, so failures are handled even if no one owns triage or replay safety.",
+        "We will retain enough metadata to trace the original topic, offset, and reason."
+      ],
+      "correct": 2,
+      "explanation": "A DLQ without ownership and process is just hidden backlog."
+    },
+    {
+      "stage": "post",
+      "question": "What metric most directly reveals that the DLQ has become a silent graveyard?",
+      "options": [
+        "Oldest item age growing steadily with low replay or triage throughput.",
+        "The total number of code comments in consumers.",
+        "The number of partitions on an unrelated topic.",
+        "Average markdown file size."
+      ],
+      "correct": 0,
+      "explanation": "Oldest age captures neglected quarantine better than raw count alone."
+    },
+    {
+      "stage": "post",
+      "question": "Why is blind automatic replay dangerous?",
+      "options": [
+        "It can rapidly reproduce the same failure or overwhelm dependencies after an incident.",
+        "It permanently deletes the original message IDs.",
+        "It guarantees strict ordering across all keys.",
+        "It makes incident analysis impossible by definition."
+      ],
+      "correct": 0,
+      "explanation": "Replay needs guardrails because the root cause may still exist."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off often comes with operator-controlled replay?",
+      "options": [
+        "You gain safer recovery and better triage, but you pay with slower manual intervention and tooling needs.",
+        "You gain stronger guarantees and remove all staffing cost.",
+        "You eliminate the need for message metadata.",
+        "You make live traffic slower even when the DLQ is empty."
+      ],
+      "correct": 0,
+      "explanation": "Safer replay usually means more operational process and tooling."
+    },
+    {
+      "stage": "post",
+      "question": "Which failure class should usually not jump straight to DLQ on the first attempt?",
+      "options": [
+        "A short-lived downstream timeout that fits normal retry policy.",
+        "A poison message that violates schema assumptions consistently.",
+        "A malformed payload with missing required fields.",
+        "A business rule violation that will never succeed unchanged."
+      ],
+      "correct": 0,
+      "explanation": "Transient faults usually deserve bounded retries before quarantine."
+    },
+    {
+      "stage": "post",
+      "question": "What question matters most before replaying ordering-sensitive events?",
+      "options": [
+        "Whether replay can preserve the required per-key or per-partition ordering assumptions.",
+        "Whether the message payload is in JSON rather than Avro.",
+        "Whether the DLQ topic name is short enough.",
+        "Whether producers use gzip compression."
+      ],
+      "correct": 0,
+      "explanation": "Ordering-sensitive replay can create subtle state divergence if handled casually."
+    }
+  ]
+}

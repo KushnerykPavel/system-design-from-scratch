@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Which opening behavior is most likely to hurt a senior system design answer early?",
+      "options": [
+        "Pausing to rank requirements before architecture.",
+        "Jumping into components before clarifying scope, workload, or key constraints.",
+        "Deferring one secondary feature explicitly.",
+        "Stating a reasonable assumption out loud."
+      ],
+      "correct": 1,
+      "explanation": "Rushing to architecture without framing often poisons the rest of the discussion."
+    },
+    {
+      "stage": "pre",
+      "question": "Why is a clarification anti-pattern checklist useful?",
+      "options": [
+        "It gives the learner a short, recoverable set of failure modes to watch for during practice.",
+        "It replaces the need for mock interviews.",
+        "It guarantees the final architecture is always correct.",
+        "It is mainly useful for writing production runbooks."
+      ],
+      "correct": 0,
+      "explanation": "The checklist supports early detection and small-course corrections."
+    },
+    {
+      "stage": "post",
+      "question": "Which anti-pattern is most likely if a candidate asks many questions but still cannot justify the architecture?",
+      "options": [
+        "Too few clarifying questions overall.",
+        "Low-signal questioning that does not map to architecture pivots.",
+        "Overly strict workload estimates.",
+        "Excessive use of failure-mode tables."
+      ],
+      "correct": 1,
+      "explanation": "Question volume is not the same as architectural signal."
+    },
+    {
+      "stage": "post",
+      "question": "Why should recovery moves be short and specific?",
+      "options": [
+        "Because recovering from an anti-pattern should restore momentum without effectively restarting the interview.",
+        "Because the interviewer will reject any correction longer than five words.",
+        "Because a long recovery always means the architecture is wrong.",
+        "Because anti-patterns only happen in the final wrap-up."
+      ],
+      "correct": 0,
+      "explanation": "A good recovery patches the framing with minimal disruption."
+    },
+    {
+      "stage": "post",
+      "question": "What is the clearest sign that scope-cutting became an anti-pattern?",
+      "options": [
+        "A single-region v1 was proposed.",
+        "The deferred items were named explicitly.",
+        "The remaining answer no longer addresses the original system problem in a meaningful way.",
+        "The learner used a checklist during practice."
+      ],
+      "correct": 2,
+      "explanation": "At that point the cut is evasive rather than clarifying."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric best indicates anti-pattern recovery is working?",
+      "options": [
+        "The number of times the learner restarts from scratch.",
+        "How quickly a detected issue is followed by a compact recovery that restores scope, priorities, or assumptions.",
+        "The number of diagrams drawn per interview.",
+        "Whether every answer uses exactly the same database."
+      ],
+      "correct": 1,
+      "explanation": "The key signal is timely correction, not total absence of mistakes."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off comes with using a small anti-pattern checklist instead of a detailed rubric mid-interview?",
+      "options": [
+        "It is much more usable under pressure, but it captures less nuance than a full debrief rubric.",
+        "It always makes feedback less honest.",
+        "It removes the need for exercises.",
+        "It only works for Google-style interviews."
+      ],
+      "correct": 0,
+      "explanation": "A short checklist favors actionability over exhaustiveness."
+    },
+    {
+      "stage": "post",
+      "question": "If you realize midway through a design that you never stated workload shape, what is the best recovery?",
+      "options": [
+        "Ignore it and hope the architecture implies the traffic pattern.",
+        "Pause briefly, summarize the read/write mix, burstiness, and hot path, then continue with the existing design.",
+        "Delete the current architecture and begin again from zero.",
+        "Add more databases so the design appears scalable."
+      ],
+      "correct": 1,
+      "explanation": "A concise workload summary can repair the narrative without a full restart."
+    }
+  ]
+}

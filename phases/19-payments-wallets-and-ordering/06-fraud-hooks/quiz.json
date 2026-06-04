@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why should only some fraud checks run synchronously in checkout?",
+      "options": [
+        "Because the critical path needs a bounded latency budget and cannot depend on every enrichment step.",
+        "Because asynchronous systems never detect fraud accurately.",
+        "Because manual review is always faster than inline policy.",
+        "Because synchronous checks eliminate false positives completely."
+      ],
+      "correct": 0,
+      "explanation": "Inline checks must be narrow enough to preserve availability and latency."
+    },
+    {
+      "stage": "pre",
+      "question": "What is the main value of logging the model or rule version for each risk decision?",
+      "options": [
+        "It lets teams trace behavior changes, disputes, and false-positive spikes to a specific rollout.",
+        "It removes the need for review queues.",
+        "It guarantees identical scores across all regions forever.",
+        "It replaces storing any request context."
+      ],
+      "correct": 0,
+      "explanation": "Version traceability is essential for debugging and rollback."
+    },
+    {
+      "stage": "post",
+      "question": "What is the most credible timeout policy for the fraud service?",
+      "options": [
+        "Define an explicit fallback based on product risk instead of silently failing open or closed.",
+        "Always deny all traffic because safety is free.",
+        "Always allow all traffic because latency is the only metric.",
+        "Retry inline forever until a score arrives."
+      ],
+      "correct": 0,
+      "explanation": "Fallback behavior is a product and risk decision that must be deliberate."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off comes with async scoring and manual review?",
+      "options": [
+        "You gain richer coverage but some bad activity may be acted on only after initial acceptance.",
+        "You eliminate the need for inline checks entirely.",
+        "You guarantee zero false positives and zero false negatives.",
+        "You make operator tooling irrelevant."
+      ],
+      "correct": 0,
+      "explanation": "Depth of analysis often comes after the first request path."
+    },
+    {
+      "stage": "post",
+      "question": "Which signal best reveals a bad new risk model rollout?",
+      "options": [
+        "A sharp change in approval rate and manual-overturn rate by model version.",
+        "The number of engineers on vacation.",
+        "Average icon size in the admin panel.",
+        "Count of product FAQs translated this month."
+      ],
+      "correct": 0,
+      "explanation": "You want a direct comparison tied to the deployed logic version."
+    },
+    {
+      "stage": "post",
+      "question": "Why is a manual-review lane valuable?",
+      "options": [
+        "It gives uncertain cases a controlled path instead of forcing every decision into allow or deny.",
+        "It lets the fraud service skip all logging requirements.",
+        "It removes the need for asynchronous pipelines.",
+        "It guarantees the fastest possible checkout latency."
+      ],
+      "correct": 0,
+      "explanation": "Some decisions are ambiguous and need escalation."
+    },
+    {
+      "stage": "post",
+      "question": "What changes most during an attack spike 8x above normal?",
+      "options": [
+        "Isolation, load shedding, and preserving the narrow critical path become primary design concerns.",
+        "Review queues no longer matter.",
+        "Model versioning becomes unnecessary.",
+        "The checkout path should start doing heavier enrichment inline."
+      ],
+      "correct": 0,
+      "explanation": "Hostile load changes the system's priority from enrichment breadth to graceful survival."
+    },
+    {
+      "stage": "post",
+      "question": "What is the best answer if a later async signal identifies a risky order after acceptance?",
+      "options": [
+        "Use downstream review, reversal, freeze, or refund workflows tied back to the original decision history.",
+        "Delete the order and all logs immediately.",
+        "Ignore the signal because the order already passed checkout.",
+        "Re-run checkout synchronously on the customer browser."
+      ],
+      "correct": 0,
+      "explanation": "Late risk signals need operational follow-through, not silent loss."
+    }
+  ]
+}

@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why is blob metadata usually stored separately from large object bytes?",
+      "options": [
+        "Because metadata queries need indexed, low-latency access without reading full objects.",
+        "Because object storage systems cannot store checksums.",
+        "Because metadata does not need durability guarantees.",
+        "Because separate storage automatically guarantees transactionality."
+      ],
+      "correct": 0,
+      "explanation": "Large bytes and rich metadata have very different access and indexing needs."
+    },
+    {
+      "stage": "pre",
+      "question": "What is an orphan blob?",
+      "options": [
+        "A blob that is compressed but not encrypted.",
+        "A blob stored durably without corresponding live metadata pointing to it.",
+        "A blob larger than the configured multipart threshold.",
+        "A blob that has not yet been replicated to a backup region."
+      ],
+      "correct": 1,
+      "explanation": "Orphans waste storage and create lifecycle or compliance ambiguity."
+    },
+    {
+      "stage": "post",
+      "question": "What is the main role of a finalize step after upload?",
+      "options": [
+        "To make the object and its metadata transition into a tracked ready state with integrity information.",
+        "To eliminate the need for retries during upload.",
+        "To avoid storing object size or checksum data.",
+        "To let clients skip authentication for downloads."
+      ],
+      "correct": 0,
+      "explanation": "Finalize moves the object from staged upload to a consistent recorded state."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric most directly detects blob/metadata drift?",
+      "options": [
+        "Average HTTP header count on uploads.",
+        "Orphan object count and reconciliation age.",
+        "Only total number of successful downloads.",
+        "CPU usage on the metadata API nodes."
+      ],
+      "correct": 1,
+      "explanation": "Orphan counts and aging show where lifecycle state is no longer coherent."
+    },
+    {
+      "stage": "post",
+      "question": "Why should list and filter APIs avoid touching raw blob storage directly?",
+      "options": [
+        "Blob stores are optimized for large object durability, not rich low-latency metadata filtering.",
+        "Blob stores cannot return checksums or object size fields.",
+        "Reading blob storage always violates consistency guarantees.",
+        "Blob stores do not support authentication."
+      ],
+      "correct": 0,
+      "explanation": "Metadata serving paths should stay small and indexed instead of scanning large object systems."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off comes with asynchronous scanning or thumbnail generation after upload?",
+      "options": [
+        "The upload path stays narrower, but some derived states become eventually consistent.",
+        "Uploads become strongly serializable automatically.",
+        "Object durability is reduced to memory-only storage.",
+        "Delete workflows become unnecessary."
+      ],
+      "correct": 0,
+      "explanation": "Async processing protects the upload path while introducing delayed derived readiness."
+    },
+    {
+      "stage": "post",
+      "question": "What is the safest delete posture for blob systems with compliance requirements?",
+      "options": [
+        "Delete metadata immediately and never audit the byte removal.",
+        "Use a tracked, auditable workflow with tombstones, policy checks, and durable delete state transitions.",
+        "Only delete bytes and reconstruct metadata later if needed.",
+        "Treat metadata deletion as sufficient proof that the object no longer exists."
+      ],
+      "correct": 1,
+      "explanation": "Compliance-sensitive deletion requires explicit state, auditability, and verification."
+    },
+    {
+      "stage": "post",
+      "question": "Which answer sounds strongest in an interview?",
+      "options": [
+        "We keep everything in one database so the system stays simple.",
+        "We separate bytes from metadata, then explain upload finalize, integrity checks, and cleanup of orphaned state.",
+        "We optimize only for download bandwidth and ignore listing behavior.",
+        "We assume deletes are rare and skip lifecycle discussion."
+      ],
+      "correct": 1,
+      "explanation": "Strong answers cover both the storage split and the lifecycle correctness around it."
+    }
+  ]
+}

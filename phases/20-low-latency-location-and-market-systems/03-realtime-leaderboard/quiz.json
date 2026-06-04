@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why are leaderboards more than a simple sorted-set problem in interviews?",
+      "options": [
+        "Because update semantics, corrections, segmentation, and publication delays matter as much as ordering.",
+        "Because sorted data structures cannot be distributed.",
+        "Because users never ask for their own rank position.",
+        "Because anti-cheat concerns only affect logging systems."
+      ],
+      "correct": 0,
+      "explanation": "The surrounding semantics are what make the design senior-level."
+    },
+    {
+      "stage": "pre",
+      "question": "What usually makes around-me rank harder than top-N reads?",
+      "options": [
+        "Top-N can be cached compactly, while around-me often needs deeper position lookup or approximation.",
+        "Top-N is impossible unless all writes are globally locked.",
+        "Around-me rank never depends on the leaderboard scope.",
+        "Top-N reads always require full leaderboard scans."
+      ],
+      "correct": 0,
+      "explanation": "The hot top of a ranking is often much cheaper to serve than arbitrary positions."
+    },
+    {
+      "stage": "post",
+      "question": "Why might a leaderboard separate score acceptance from score publication?",
+      "options": [
+        "Validation or anti-cheat checks may delay visibility for some updates without blocking everything else.",
+        "Publication is only needed for archived seasonal data.",
+        "Accepted scores are already guaranteed to be displayed in every scope immediately.",
+        "Separation removes the need to support corrections later."
+      ],
+      "correct": 0,
+      "explanation": "Separating these states lets the system stay responsive while still enforcing policy."
+    },
+    {
+      "stage": "post",
+      "question": "Which signal best reveals that segmented leaderboards are causing a memory problem?",
+      "options": [
+        "Per-scope set size, cache churn, and total active segment count rising faster than hot-read demand.",
+        "The number of users who view the help page for the game.",
+        "Average TLS certificate age across the company.",
+        "The count of leaderboard API endpoints in the source tree."
+      ],
+      "correct": 0,
+      "explanation": "Memory pressure shows up in segment footprint and churn, not random platform signals."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off comes with approximate around-me rank?",
+      "options": [
+        "It improves latency and cost at the price of less exact user positioning.",
+        "It guarantees better correctness than exact ranking.",
+        "It removes the need for tie-break rules entirely.",
+        "It makes score corrections impossible to apply."
+      ],
+      "correct": 0,
+      "explanation": "Approximation is a latency-cost trade, not a free win."
+    },
+    {
+      "stage": "post",
+      "question": "Why should score corrections be part of the initial design?",
+      "options": [
+        "Because fraud, moderation, and delayed verification can reorder rankings after initial acceptance.",
+        "Because leaderboards only accept decreasing scores in production.",
+        "Because sorted structures cannot support immutable events.",
+        "Because correction logic belongs only in analytics warehouses."
+      ],
+      "correct": 0,
+      "explanation": "Real systems need a plan for reversing or adjusting prior published state."
+    },
+    {
+      "stage": "post",
+      "question": "What is the most credible mitigation for one player becoming a hot write key?",
+      "options": [
+        "Aggregate or batch updates locally and add per-key throttles before ranking-state mutation.",
+        "Recompute the entire leaderboard after every score event.",
+        "Disable tie-breaks and publish only once per day.",
+        "Move all reads to the write leader database."
+      ],
+      "correct": 0,
+      "explanation": "Hot entities need bounded update work, not more global recomputation."
+    },
+    {
+      "stage": "post",
+      "question": "Which redesign is most likely if regional leaderboards matter far more than global top-100?",
+      "options": [
+        "Invest more in scoped materialization and local caches rather than optimizing only one global ranking.",
+        "Stop segmenting entirely and keep one worldwide sorted set.",
+        "Treat anti-cheat as optional for regional scopes.",
+        "Replace all score events with periodic CSV imports."
+      ],
+      "correct": 0,
+      "explanation": "The hottest product scopes should drive the storage and caching strategy."
+    }
+  ]
+}

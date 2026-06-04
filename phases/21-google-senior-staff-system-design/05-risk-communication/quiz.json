@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why does rollout discussion matter in a senior design answer?",
+      "options": [
+        "Because ownership includes how the system is introduced, monitored, and safely backed out when reality disagrees with the plan.",
+        "Because rollout replaces the need for architecture quality.",
+        "Because every design should launch globally on day one.",
+        "Because fallback is mainly a frontend concern."
+      ],
+      "correct": 0,
+      "explanation": "A strong design answer includes not just steady state but safe adoption and incident response."
+    },
+    {
+      "stage": "pre",
+      "question": "What is the main purpose of a fallback mode?",
+      "options": [
+        "To preserve the most important guarantee even if some functionality, latency, or freshness gets worse.",
+        "To guarantee the new path always stays enabled.",
+        "To remove the need for canaries and health gates.",
+        "To eliminate operational cost during migration."
+      ],
+      "correct": 0,
+      "explanation": "Fallback is about safe degradation, not pretending nothing changed."
+    },
+    {
+      "stage": "post",
+      "question": "Which rollout plan is strongest?",
+      "options": [
+        "A staged rollout with clear health gates, pause conditions, and a defined rollback or fallback action.",
+        "A full cutover at midnight to minimize migration complexity.",
+        "A rollout based only on whether the deployment command succeeded.",
+        "A rollout that expands automatically whenever traffic is low."
+      ],
+      "correct": 0,
+      "explanation": "Progressive delivery is safer because it learns while limiting blast radius."
+    },
+    {
+      "stage": "post",
+      "question": "What is the biggest risk of saying 'we can monitor it' without detail?",
+      "options": [
+        "The answer gives no concrete signal that would actually stop a bad rollout before it spreads.",
+        "It guarantees the interviewer will ask only storage questions.",
+        "It makes latency irrelevant.",
+        "It means the system cannot use canaries."
+      ],
+      "correct": 0,
+      "explanation": "Monitoring only helps if it is connected to actionable gates and preserved guarantees."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off often comes with a safe dual-run migration?",
+      "options": [
+        "Higher temporary cost and more reconciliation logic in exchange for stronger confidence and easier rollback decisions.",
+        "Perfect rollout safety with no extra operational burden.",
+        "Lower latency on both old and new paths automatically.",
+        "The removal of all data validation requirements."
+      ],
+      "correct": 0,
+      "explanation": "Running two paths at once is safer but adds real cost and operational work."
+    },
+    {
+      "stage": "post",
+      "question": "Which signal is most useful as a rollout gate for a new serving path?",
+      "options": [
+        "A comparison of new-path latency, error rate, and correctness outcomes versus the old path for the current canary slice.",
+        "The number of meetings held during the rollout week.",
+        "Only total traffic volume across the entire fleet.",
+        "Whether the architecture diagram still looks accurate."
+      ],
+      "correct": 0,
+      "explanation": "Rollout gates should compare the new behavior to the preserved guarantee."
+    },
+    {
+      "stage": "post",
+      "question": "If rollback is hard because writes are not reversible, what should the design discussion include?",
+      "options": [
+        "A stronger focus on staged exposure, shadow validation, and fallback modes that limit new writes before full promotion.",
+        "An assumption that no bugs will reach production.",
+        "A decision to ignore rollback and rely only on logging.",
+        "A claim that this problem exists only for databases."
+      ],
+      "correct": 0,
+      "explanation": "Irreversible writes raise the value of pre-promotion validation and conservative rollout scope."
+    },
+    {
+      "stage": "post",
+      "question": "What most clearly distinguishes rollback from fallback?",
+      "options": [
+        "Rollback returns to an older version or path, while fallback keeps the system running in a simpler degraded mode that preserves the top guarantee.",
+        "Rollback is for reads and fallback is for writes only.",
+        "Fallback is always cheaper than rollback.",
+        "There is no meaningful distinction in system design interviews."
+      ],
+      "correct": 0,
+      "explanation": "The two concepts solve different operational problems and should not be conflated."
+    }
+  ]
+}

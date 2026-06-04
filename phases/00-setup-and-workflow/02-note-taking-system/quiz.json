@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What is the biggest weakness of taking system design notes as a full transcript?",
+      "options": [
+        "They are harder to skim later for assumptions, numbers, and trade-offs that actually matter.",
+        "They cannot be stored in markdown files.",
+        "They prevent the use of architecture diagrams entirely.",
+        "They make it impossible to discuss failure modes."
+      ],
+      "correct": 0,
+      "explanation": "Transcript-style notes preserve chronology, but not reusable reasoning."
+    },
+    {
+      "stage": "pre",
+      "question": "Which section should appear before architecture in good design notes?",
+      "options": [
+        "A long glossary of distributed systems terms.",
+        "A capacity model with assumptions and rough sizing.",
+        "An appendix of rejected databases.",
+        "A transcript of interviewer interruptions."
+      ],
+      "correct": 1,
+      "explanation": "Sizing should anchor later design decisions."
+    },
+    {
+      "stage": "post",
+      "question": "Why is a fixed note template valuable across many lessons?",
+      "options": [
+        "It makes later comparison and retrieval faster, even when the prompts differ.",
+        "It guarantees that every design answer is correct.",
+        "It removes the need for trade-off discussion.",
+        "It allows the same architecture diagram to be reused unchanged."
+      ],
+      "correct": 0,
+      "explanation": "Stable structure reduces cognitive load and exposes recurring gaps."
+    },
+    {
+      "stage": "post",
+      "question": "Which note section most directly prevents polished but shallow write-ups?",
+      "options": [
+        "A dedicated trade-off and what-I-missed section.",
+        "An emoji legend for urgency.",
+        "A count of how many services appeared in the diagram.",
+        "A list of every technology the candidate has used before."
+      ],
+      "correct": 0,
+      "explanation": "Explicitly recording trade-offs and misses preserves reasoning quality rather than only outcomes."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off comes with keeping notes short and bullet-heavy?",
+      "options": [
+        "They are faster to review, but nuanced reasoning may need careful rewriting to avoid ambiguity.",
+        "They increase storage cost substantially over narrative notes.",
+        "They make diagrams impossible to include.",
+        "They remove the need for a debrief section."
+      ],
+      "correct": 0,
+      "explanation": "Concise notes are useful, but they still need enough specificity to remain interpretable."
+    },
+    {
+      "stage": "post",
+      "question": "Which signal best shows that a note-taking system is healthy?",
+      "options": [
+        "Most notes contain explicit assumptions, sizing, and at least one trade-off that can be skimmed quickly.",
+        "The notes use the longest possible markdown documents.",
+        "Every note includes a complete production rollout plan.",
+        "The learner rewrites old notes from scratch every week."
+      ],
+      "correct": 0,
+      "explanation": "The healthy signal is reusable reasoning density, not document length."
+    },
+    {
+      "stage": "post",
+      "question": "If a mock partner needs to pick up your old design note cold, what matters most?",
+      "options": [
+        "The note should reveal scope, assumptions, key numbers, and why major decisions were made.",
+        "The note should preserve every sentence spoken during the session.",
+        "The note should rank database products by popularity.",
+        "The note should omit unresolved questions to appear polished."
+      ],
+      "correct": 0,
+      "explanation": "Portable notes need enough context for another person to continue the reasoning."
+    },
+    {
+      "stage": "post",
+      "question": "Why is a separate debrief block useful in the same note template?",
+      "options": [
+        "It keeps hindsight, mistakes, and next actions distinct from the original design reasoning.",
+        "It replaces the need for a progress tracker.",
+        "It guarantees the next prompt will be easier.",
+        "It allows architecture sections to ignore failure modes."
+      ],
+      "correct": 0,
+      "explanation": "Separating debrief content preserves both the answer and the learning loop."
+    }
+  ]
+}

@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What makes a deep dive valuable in a senior system design interview?",
+      "options": [
+        "It explores the subsystem most tied to scale, correctness, or operational risk.",
+        "It covers whichever component has the most implementation detail available.",
+        "It avoids discussing trade-offs so the design feels cleaner.",
+        "It focuses on the subsystem the candidate used at their last job."
+      ],
+      "correct": 0,
+      "explanation": "The best deep dive is driven by system risk, not familiarity."
+    },
+    {
+      "stage": "pre",
+      "question": "Why is familiarity a weak reason to choose a deep-dive topic?",
+      "options": [
+        "Because the interviewer only wants brand-new technologies.",
+        "Because the easiest subsystem to explain may not be the one that matters most.",
+        "Because familiar components cannot scale.",
+        "Because deep dives should always avoid storage systems."
+      ],
+      "correct": 1,
+      "explanation": "A familiar topic can still be wrong if it is not central to the prompt's constraints."
+    },
+    {
+      "stage": "post",
+      "question": "Which subsystem is usually the strongest deep-dive choice?",
+      "options": [
+        "The component with the highest combined correctness, scale, or blast-radius pressure.",
+        "The first box you drew in the diagram.",
+        "The subsystem with the shortest API spec.",
+        "The least important background service, because it is easier to finish."
+      ],
+      "correct": 0,
+      "explanation": "The deep dive should illuminate the hardest or most consequential design area."
+    },
+    {
+      "stage": "post",
+      "question": "What should you do if two deep-dive options seem equally strong?",
+      "options": [
+        "Skip both and keep the answer broad.",
+        "Choose the one that better exposes the prompt's dominant trade-off and mention the other as a secondary area.",
+        "Ask the interviewer to choose without giving a recommendation.",
+        "Merge both into one long implementation walkthrough."
+      ],
+      "correct": 1,
+      "explanation": "Comparing them against the dominant constraint is the best tie-breaker."
+    },
+    {
+      "stage": "post",
+      "question": "Which signal best shows that a deep dive was poorly selected?",
+      "options": [
+        "The detail discussion does not affect the system's main bottleneck or failure mode.",
+        "The candidate uses a whiteboard marker instead of a keyboard.",
+        "The architecture includes a cache and a queue together.",
+        "The interviewer asks for one more API example."
+      ],
+      "correct": 0,
+      "explanation": "If the detail does not change the important system decisions, it was probably the wrong target."
+    },
+    {
+      "stage": "post",
+      "question": "What is the main trade-off of choosing one primary deep dive?",
+      "options": [
+        "You gain focus and depth, but cover fewer subsystems broadly.",
+        "You improve latency, but reduce storage durability.",
+        "You eliminate the need for sizing and scope clarification.",
+        "You make the system easier to shard automatically."
+      ],
+      "correct": 0,
+      "explanation": "Focus is valuable, but it means consciously sacrificing breadth."
+    },
+    {
+      "stage": "post",
+      "question": "For an edge-heavy Cloudflare-style prompt, which topic is often a better deep dive than generic CRUD APIs?",
+      "options": [
+        "Configuration propagation, rollback behavior, or origin protection.",
+        "The admin dashboard theme and layout choices.",
+        "A second relational schema for audit exports.",
+        "A generic user-profile cache with no edge semantics."
+      ],
+      "correct": 0,
+      "explanation": "Edge systems often derive more signal from propagation, consistency windows, and safety controls."
+    },
+    {
+      "stage": "post",
+      "question": "What observability practice helps improve deep-dive selection over time?",
+      "options": [
+        "Tracking whether the chosen deep dive matched the top system risk in practice drills.",
+        "Counting how many services were mentioned before the deep dive started.",
+        "Tracking the exact color used for critical-path arrows.",
+        "Recording every acronym used during the answer."
+      ],
+      "correct": 0,
+      "explanation": "Retrospecting on whether the deep dive matched the core risk is the most useful feedback loop."
+    }
+  ]
+}

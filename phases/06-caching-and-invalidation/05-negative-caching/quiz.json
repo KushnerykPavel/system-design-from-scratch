@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What is negative caching mainly trying to save?",
+      "options": [
+        "Repeated backend work for stable misses such as absent keys or objects.",
+        "Only storage space inside the cache cluster.",
+        "TLS handshake time at the load balancer.",
+        "The need for all observability."
+      ],
+      "correct": 0,
+      "explanation": "Negative caching is mainly about avoiding repeated miss traffic for the same absent result."
+    },
+    {
+      "stage": "pre",
+      "question": "Why should `404` and `500` usually be treated differently in cache policy?",
+      "options": [
+        "A missing object may be a stable truth, while a server error is often transient and dangerous to make sticky.",
+        "Because 500 responses are always cheaper to serve.",
+        "Because 404 responses cannot be cached at all.",
+        "Because only browsers can understand 500."
+      ],
+      "correct": 0,
+      "explanation": "Stable absence and temporary failure have different semantics and should rarely share the same TTL."
+    },
+    {
+      "stage": "post",
+      "question": "What is the biggest danger of caching transient upstream errors for too long?",
+      "options": [
+        "A short outage can become a prolonged user-visible stale failure even after recovery.",
+        "It makes the cache use less memory.",
+        "It prevents all negative hits.",
+        "It guarantees higher freshness."
+      ],
+      "correct": 0,
+      "explanation": "Sticky error caching can extend incidents beyond the real backend failure."
+    },
+    {
+      "stage": "post",
+      "question": "Which event most clearly should invalidate a cached `404`?",
+      "options": [
+        "Creation of the previously absent object or user.",
+        "A dashboard theme change.",
+        "A log rotation on the cache node.",
+        "A temporary spike in CPU usage elsewhere."
+      ],
+      "correct": 0,
+      "explanation": "Once the object exists, the negative answer is no longer true and must be removed or expire quickly."
+    },
+    {
+      "stage": "post",
+      "question": "What metric best reveals negative-cache correctness risk?",
+      "options": [
+        "Create-after-negative-cache conflict or stale-not-found incidents.",
+        "Only total cache node count.",
+        "Average font size in docs.",
+        "The number of public endpoints."
+      ],
+      "correct": 0,
+      "explanation": "Conflicts after creation show that the negative cache is outliving the truth."
+    },
+    {
+      "stage": "post",
+      "question": "When might caching `403 denied` be reasonable?",
+      "options": [
+        "When policy changes are infrequent, key context is unambiguous, and invalidation or versioning keeps stale denials bounded.",
+        "Whenever any user is denied once.",
+        "Only if 404 is also cached permanently.",
+        "Never under any circumstances."
+      ],
+      "correct": 0,
+      "explanation": "Deny caching can help, but stale-denial blast radius must be tightly controlled."
+    },
+    {
+      "stage": "post",
+      "question": "Which interview answer is strongest?",
+      "options": [
+        "I would cache every non-200 response for the same TTL to keep policy simple.",
+        "I would distinguish stable absence from transient failure and choose separate TTL and invalidation rules by response class.",
+        "I would avoid talking about misses because they are edge cases.",
+        "I would turn all misses into 500 responses so the cache can handle them uniformly."
+      ],
+      "correct": 1,
+      "explanation": "Strong answers separate semantics by status class instead of flattening them."
+    },
+    {
+      "stage": "post",
+      "question": "What hidden trade-off often appears when negative caching is too aggressive?",
+      "options": [
+        "Better backend protection, but higher risk of stale absences or stale denials after state changes.",
+        "Lower memory use with no downside.",
+        "Automatic elimination of abusive traffic.",
+        "Perfect read-after-write correctness."
+      ],
+      "correct": 0,
+      "explanation": "Aggressive negative caching helps load, but it can make newly valid states invisible for too long."
+    }
+  ]
+}

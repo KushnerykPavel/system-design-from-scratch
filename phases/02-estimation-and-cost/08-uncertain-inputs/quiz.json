@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What is the best first move when an interviewer gives incomplete sizing inputs?",
+      "options": [
+        "Choose a plausible base case, bound it with a range, and state the assumption clearly.",
+        "Stop until exact production data is provided.",
+        "Pretend the missing number does not matter.",
+        "Use the highest possible number for every variable."
+      ],
+      "correct": 0,
+      "explanation": "Strong candidates keep moving while making assumptions explicit."
+    },
+    {
+      "stage": "pre",
+      "question": "Why are low/base/high estimates useful?",
+      "options": [
+        "They show uncertainty honestly and help reveal which assumptions would change the architecture.",
+        "They guarantee the final answer is exact.",
+        "They eliminate the need for trade-off discussion.",
+        "They matter only for storage problems."
+      ],
+      "correct": 0,
+      "explanation": "Ranges are a decision tool, not just a hedge."
+    },
+    {
+      "stage": "post",
+      "question": "What is the main benefit of identifying an architectural breakpoint under uncertainty?",
+      "options": [
+        "You show when the current design stops being appropriate and what would need to change next.",
+        "You prove the current design is perfect at every scale.",
+        "You avoid estimating any cost numbers.",
+        "You remove the need for observability."
+      ],
+      "correct": 0,
+      "explanation": "Threshold thinking is the senior move under incomplete data."
+    },
+    {
+      "stage": "post",
+      "question": "Why is varying every uncertain input at once usually a bad interview move?",
+      "options": [
+        "It makes the discussion hard to reason about and hides which factor matters most.",
+        "It automatically overestimates storage only.",
+        "It guarantees the cheapest design wins.",
+        "It is fine because complexity always impresses interviewers."
+      ],
+      "correct": 0,
+      "explanation": "Too many simultaneous ranges reduce clarity instead of increasing rigor."
+    },
+    {
+      "stage": "post",
+      "question": "Which follow-up best demonstrates mature uncertainty handling?",
+      "options": [
+        "Explain which assumption has the highest leverage and how you would validate it later.",
+        "Refuse to continue until analytics data is exact.",
+        "Quote a single number and never revisit it.",
+        "Use worst-case values for every dimension and stop there."
+      ],
+      "correct": 0,
+      "explanation": "Sensitivity plus validation planning is the right combination."
+    },
+    {
+      "stage": "post",
+      "question": "Which observability signal best checks whether your range assumptions were too optimistic?",
+      "options": [
+        "Actual workload values approaching or exceeding the predicted breakpoint",
+        "The number of architecture slides in a review deck",
+        "The count of product managers on the project",
+        "The total number of source files"
+      ],
+      "correct": 0,
+      "explanation": "You want to know when real behavior is leaving the planned envelope."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off comes with choosing the base case as the initial optimization target?",
+      "options": [
+        "You move faster and stay pragmatic, but you must clearly name how the design changes at the high end.",
+        "You guarantee the high case will need no redesign.",
+        "You minimize every possible cost automatically.",
+        "You eliminate the need to prioritize requirements."
+      ],
+      "correct": 0,
+      "explanation": "Base-case optimization is reasonable only if breakpoints are explicit."
+    },
+    {
+      "stage": "post",
+      "question": "When is a simpler v1 architecture especially defensible under uncertainty?",
+      "options": [
+        "When the low or base case fits comfortably and the threshold for a more complex design is still distant and observable.",
+        "When multi-region complexity is always mandatory.",
+        "When the interviewer has not asked any questions yet.",
+        "When exact costs are unknown."
+      ],
+      "correct": 0,
+      "explanation": "A simple start is strong when the future trigger for change is visible and manageable."
+    }
+  ]
+}

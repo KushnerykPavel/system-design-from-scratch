@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why is durability better described as a tiered promise than a single yes-or-no property?",
+      "options": [
+        "Because different data classes justify different replication, coding, and repair-time guarantees.",
+        "Because durable systems never need repair jobs.",
+        "Because storage vendors are required to expose at least three pricing plans.",
+        "Because one replica in memory is enough for all archival data."
+      ],
+      "correct": 0,
+      "explanation": "Durability depends on how valuable the data is and what failures you are protecting against."
+    },
+    {
+      "stage": "pre",
+      "question": "What makes a 'three copies' durability claim misleading by itself?",
+      "options": [
+        "Replica count is meaningless unless placement and repair assumptions are also clear.",
+        "Three is an unlucky number in distributed systems.",
+        "It always means the system uses synchronous cross-region writes.",
+        "It prevents erasure coding in all cases."
+      ],
+      "correct": 0,
+      "explanation": "Copies in the wrong places or repaired too slowly can still leave weak durability."
+    },
+    {
+      "stage": "post",
+      "question": "Why might a hot tier choose full replicas instead of erasure coding?",
+      "options": [
+        "To keep reads simple and repairs faster for latency-sensitive serving paths.",
+        "Because erasure coding is impossible above one terabyte.",
+        "Because replicated data never needs audits.",
+        "To avoid documenting repair objectives."
+      ],
+      "correct": 0,
+      "explanation": "Latency and repair simplicity can matter more than raw storage efficiency on hot paths."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric best shows whether durability promises are being restored quickly enough?",
+      "options": [
+        "Objects below target durability by tier and age.",
+        "Average markdown file size.",
+        "Only total object count.",
+        "The number of pull requests merged this week."
+      ],
+      "correct": 0,
+      "explanation": "Aging degraded objects directly measure vulnerability window."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off comes with offering many durability tiers to customers?",
+      "options": [
+        "Better fit for business needs, but more policy, support, and migration complexity.",
+        "Guaranteed lower cost with no operational impact.",
+        "No need for safe defaults anymore.",
+        "Repair logic becomes unnecessary."
+      ],
+      "correct": 0,
+      "explanation": "Flexibility helps, but it raises explanation and policy-management costs."
+    },
+    {
+      "stage": "post",
+      "question": "Why can slow repair be a bigger durability risk than an occasionally failed disk?",
+      "options": [
+        "Because it leaves the system exposed for longer, increasing the chance that another failure causes actual loss.",
+        "Because disks never fail twice.",
+        "Because repair speed only affects cost and not safety.",
+        "Because replication disables all correlated failure modes."
+      ],
+      "correct": 0,
+      "explanation": "Durability is partly about how long you remain degraded after the first failure."
+    },
+    {
+      "stage": "post",
+      "question": "What is the best reason to test a geo-redundant tier with real restore drills?",
+      "options": [
+        "To verify that independence and recovery work in practice rather than only in placement diagrams.",
+        "To decrease object checksum size.",
+        "To remove the need for replication policies.",
+        "To make every tier equally cheap."
+      ],
+      "correct": 0,
+      "explanation": "Regional restore is an operational property that must be proven."
+    },
+    {
+      "stage": "post",
+      "question": "Which follow-up most changes the durability design?",
+      "options": [
+        "Customers can now move objects between standard and compliance tiers without downtime.",
+        "The team wants different font choices in internal docs.",
+        "The bucket names should be shorter.",
+        "One chart should use thicker lines."
+      ],
+      "correct": 0,
+      "explanation": "Tier migration introduces policy, state, and repair workflow changes."
+    }
+  ]
+}

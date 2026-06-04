@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why is it risky to describe a distributed KV store as simply 'eventually consistent' and stop there?",
+      "options": [
+        "Because storage systems are required to expose SQL joins for every key.",
+        "Because clients still need to know what anomalies are possible and what write durability was actually acknowledged.",
+        "Because eventual consistency means reads can never return fresh data.",
+        "Because all distributed KV stores must elect a global leader."
+      ],
+      "correct": 1,
+      "explanation": "A useful answer names the real contract, not just a broad label."
+    },
+    {
+      "stage": "pre",
+      "question": "What makes hot keys dangerous in a partitioned KV store?",
+      "options": [
+        "They concentrate work on one shard or replica set even when average fleet load looks healthy.",
+        "They prevent replication from writing to disk at all.",
+        "They force every client to use synchronous cross-region writes.",
+        "They only matter when values exceed the maximum object size."
+      ],
+      "correct": 0,
+      "explanation": "Skewed keys can overwhelm one owner set long before total cluster capacity is exhausted."
+    },
+    {
+      "stage": "post",
+      "question": "Why is replica placement across racks or AZs more important than just replica count?",
+      "options": [
+        "Because three replicas on one host protect against all correlated failures.",
+        "Because durability depends on independence of failure domains, not only on the raw number of copies.",
+        "Because replica placement only affects read latency and not safety.",
+        "Because quorum math stops working once replicas span more than one rack."
+      ],
+      "correct": 1,
+      "explanation": "Copies in the same failure domain can disappear together."
+    },
+    {
+      "stage": "post",
+      "question": "What is the clearest role of anti-entropy in a leaderless KV store?",
+      "options": [
+        "It permanently replaces write-ahead logging on every replica.",
+        "It reconciles missed or divergent updates after failures or temporary partitions.",
+        "It guarantees zero-latency reads during failover.",
+        "It removes the need for partition maps."
+      ],
+      "correct": 1,
+      "explanation": "Background repair is what makes temporary divergence heal over time."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric best reveals that repair debt is becoming a serving risk?",
+      "options": [
+        "Average HTTP response body size.",
+        "Replica divergence age or repair backlog bytes.",
+        "Only total logical key count.",
+        "The number of code deploys this week."
+      ],
+      "correct": 1,
+      "explanation": "Repair lag directly measures how long inconsistency can persist."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off comes with exposing multiple consistency levels to clients?",
+      "options": [
+        "It lets clients pay for freshness when needed, but pushes more semantic complexity onto application teams.",
+        "It guarantees all reads are both cheapest and freshest.",
+        "It removes the need for replica repair entirely.",
+        "It prevents the service from supporting deletes."
+      ],
+      "correct": 0,
+      "explanation": "Flexibility is useful, but it increases the chance of misuse."
+    },
+    {
+      "stage": "post",
+      "question": "Why do LSM-based engines fit many distributed KV stores well?",
+      "options": [
+        "They make compaction unnecessary once data is replicated.",
+        "They favor high write throughput by turning random writes into sequential flush and compaction work.",
+        "They enforce strong serializable transactions for every partition.",
+        "They require no read amplification under any workload."
+      ],
+      "correct": 1,
+      "explanation": "LSM trees are a common fit for write-heavy replicated storage, with compaction as the cost."
+    },
+    {
+      "stage": "post",
+      "question": "Which design change most directly helps when a single configuration key becomes globally hot?",
+      "options": [
+        "Increase value size so clients request it less often.",
+        "Add replication-aware read fan-out or an external cache for that key rather than relying on one owner path.",
+        "Disable observability to reduce overhead.",
+        "Move all writes to a weekly batch job."
+      ],
+      "correct": 1,
+      "explanation": "The right fix targets read concentration, not unrelated parts of the system."
+    }
+  ]
+}

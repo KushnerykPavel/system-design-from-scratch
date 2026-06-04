@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What should come before saying 'use a transaction' in a strong design answer?",
+      "options": [
+        "Define the invariant and the anomaly that must be prevented, then choose the smallest boundary that protects it.",
+        "Choose the strictest isolation level available by default.",
+        "Assume distributed transactions are safer because they touch more services.",
+        "Avoid talking about hotspots until production."
+      ],
+      "correct": 0,
+      "explanation": "Transactions are a tool for protecting a specific invariant, not a goal by themselves."
+    },
+    {
+      "stage": "pre",
+      "question": "Why do hotspots matter in transaction design?",
+      "options": [
+        "Because a small set of heavily contended rows or keys can serialize the workload and dominate latency.",
+        "Because hotspots only affect read-only systems.",
+        "Because they remove the need for isolation choices.",
+        "Because caches always smooth them out."
+      ],
+      "correct": 0,
+      "explanation": "Contention often becomes the real scaling limit for transactional systems."
+    },
+    {
+      "stage": "post",
+      "question": "What is the hidden cost of stronger isolation?",
+      "options": [
+        "You often pay with more coordination, lock waits, retries, and lower concurrency under contention.",
+        "You eliminate the need for invariant thinking.",
+        "You make hot rows harmless.",
+        "You automatically avoid every cross-service failure."
+      ],
+      "correct": 0,
+      "explanation": "Stronger isolation protects correctness but spends concurrency and latency."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric best reveals a transactional hotspot?",
+      "options": [
+        "Lock wait or conflict rate concentrated on a small set of keys or rows.",
+        "The number of headers in the lesson document.",
+        "Total count of background workers only.",
+        "Average length of commit messages."
+      ],
+      "correct": 0,
+      "explanation": "Hotspots show up as concentrated contention, not just high overall volume."
+    },
+    {
+      "stage": "post",
+      "question": "When is shrinking the transaction boundary usually a good move?",
+      "options": [
+        "When only one narrow invariant truly needs atomic protection and the rest can be coordinated asynchronously.",
+        "When every downstream service must commit in the same round trip.",
+        "When lock contention is already zero everywhere.",
+        "When durability is not required for any path."
+      ],
+      "correct": 0,
+      "explanation": "Narrow boundaries reduce blast radius and coordination cost."
+    },
+    {
+      "stage": "post",
+      "question": "Why is the outbox pattern often mentioned next to transactions?",
+      "options": [
+        "Because it lets one local transaction protect state change plus durable event intent without stretching one transaction across services.",
+        "Because it makes isolation levels irrelevant.",
+        "Because it prevents every duplicate forever by itself.",
+        "Because it replaces the need for retry policies."
+      ],
+      "correct": 0,
+      "explanation": "Outbox narrows the synchronous correctness boundary while preserving async delivery intent."
+    },
+    {
+      "stage": "post",
+      "question": "What is a strong reason to use optimistic concurrency instead of heavier locking?",
+      "options": [
+        "Conflicts are relatively rare and version checks can safely reject the small subset of colliding updates.",
+        "The workload is dominated by one extremely hot key.",
+        "The system cannot tolerate retries of any kind.",
+        "The invariant spans many remote services."
+      ],
+      "correct": 0,
+      "explanation": "Optimistic approaches work best when conflicts are uncommon."
+    },
+    {
+      "stage": "post",
+      "question": "What makes a transaction answer sound senior?",
+      "options": [
+        "It names the invariant, the anomaly to avoid, the contention risk, and where the transaction boundary should stop.",
+        "It says every payment-like flow must be serializable end to end.",
+        "It ignores lock behavior because correctness is all that matters.",
+        "It uses ACID as a substitute for architecture."
+      ],
+      "correct": 0,
+      "explanation": "Senior answers connect correctness to scale and blast-radius decisions."
+    }
+  ]
+}

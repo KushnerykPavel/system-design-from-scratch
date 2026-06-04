@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What is the clearest success metric for an alert routing system?",
+      "options": [
+        "The right responder is reached quickly with minimal duplicate interruption.",
+        "The platform emits the highest possible number of notifications.",
+        "Every alert is sent to every engineer for safety.",
+        "No alert is ever grouped with another alert."
+      ],
+      "correct": 0,
+      "explanation": "Signal quality and correct human routing are the real goals."
+    },
+    {
+      "stage": "pre",
+      "question": "Why is deduplication important in paging systems?",
+      "options": [
+        "It reduces repeated pages for the same underlying issue.",
+        "It removes the need for escalation policies.",
+        "It guarantees all incidents are resolved faster.",
+        "It replaces ownership metadata."
+      ],
+      "correct": 0,
+      "explanation": "Dedup protects responders from noisy duplicates."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric best exposes poor on-call signal quality?",
+      "options": [
+        "Escalation rate and acknowledgement time by severity and team.",
+        "Average keyboard brand used by responders.",
+        "The number of emojis in chat channels.",
+        "Median length of runbook URLs."
+      ],
+      "correct": 0,
+      "explanation": "Escalation and ack behavior reveal whether routing is working."
+    },
+    {
+      "stage": "post",
+      "question": "Why should ownership metadata be mandatory for production services?",
+      "options": [
+        "Because sev-1 routing fails badly when no clear team owns the service.",
+        "Because it lowers CPU usage on notification providers.",
+        "Because it makes maintenance windows unnecessary.",
+        "Because it eliminates duplicate alerts."
+      ],
+      "correct": 0,
+      "explanation": "Unowned services are dangerous during incidents."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off comes with aggressive grouping rules?",
+      "options": [
+        "Fewer pages reach humans, but unrelated failures may be merged too broadly.",
+        "Guaranteed perfect root-cause detection.",
+        "No need for acknowledgement tracking.",
+        "Lower need for provider redundancy."
+      ],
+      "correct": 0,
+      "explanation": "Grouping reduces noise but can hide distinction."
+    },
+    {
+      "stage": "post",
+      "question": "Which failure is most directly mitigated by multi-provider notification support?",
+      "options": [
+        "One paging vendor or channel failing to deliver notifications.",
+        "An engineer forgetting a command-line flag.",
+        "A dashboard taking too long to load.",
+        "A metric name changing case."
+      ],
+      "correct": 0,
+      "explanation": "Provider diversity reduces notification delivery risk."
+    },
+    {
+      "stage": "post",
+      "question": "Why is cached last-good schedule data useful?",
+      "options": [
+        "It lets routing continue if the source-of-truth schedule system is slow or temporarily unavailable.",
+        "It guarantees schedules are always perfectly current.",
+        "It removes the need for incident suppression.",
+        "It prevents alert storms at the source."
+      ],
+      "correct": 0,
+      "explanation": "Routing needs resilience against schedule-system issues."
+    },
+    {
+      "stage": "post",
+      "question": "What is the better fallback when a sev-1 alert cannot be matched to an owner?",
+      "options": [
+        "Route to a defined central fallback path and record the ownership failure loudly.",
+        "Drop the alert because the policy was incomplete.",
+        "Wait for the next business day to ask around.",
+        "Notify every employee by default."
+      ],
+      "correct": 0,
+      "explanation": "Fallback routing plus auditability is safer than silent failure."
+    }
+  ]
+}

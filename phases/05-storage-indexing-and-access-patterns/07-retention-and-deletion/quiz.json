@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why is data deletion in distributed systems usually more than a single database operation?",
+      "options": [
+        "Because data often exists in caches, indexes, archives, and workflows beyond the primary record.",
+        "Because storage engines do not support delete statements.",
+        "Because deletion only matters for legal teams and not architecture.",
+        "Because replicas automatically delete data before primaries do."
+      ],
+      "correct": 0,
+      "explanation": "Real deletion semantics must cover every place the data is represented or served."
+    },
+    {
+      "stage": "pre",
+      "question": "What is a tombstone in deletion workflows?",
+      "options": [
+        "A permanent backup of deleted bytes kept forever.",
+        "A marker that records deletion state and helps downstream systems propagate or verify removal.",
+        "A checksum mismatch discovered during replication.",
+        "A legal contract attached to a storage class."
+      ],
+      "correct": 1,
+      "explanation": "Tombstones preserve workflow state so deletion can propagate safely before physical purge."
+    },
+    {
+      "stage": "post",
+      "question": "What is the biggest risk of deleting only the primary record and ignoring derived systems?",
+      "options": [
+        "The storage bill drops too quickly.",
+        "Search, cache, or archive paths may continue serving supposedly deleted data.",
+        "Write amplification decreases unexpectedly.",
+        "The primary key becomes invalid for new inserts."
+      ],
+      "correct": 1,
+      "explanation": "Deletion semantics fail if stale derived paths still expose the data."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric best shows whether deletion workflows are healthy operationally?",
+      "options": [
+        "Deletion completion latency and downstream propagation lag.",
+        "Only total number of application deployments.",
+        "Average blob size after compression.",
+        "Daily number of documentation edits."
+      ],
+      "correct": 0,
+      "explanation": "You need to know both how long deletes take and where they are stuck."
+    },
+    {
+      "stage": "post",
+      "question": "Why are retention classes useful?",
+      "options": [
+        "They align policy, cost, and compliance expectations across different data types.",
+        "They guarantee every query becomes faster over time.",
+        "They remove the need for audit logs.",
+        "They make backups unnecessary."
+      ],
+      "correct": 0,
+      "explanation": "Different data needs different retention and purge behavior, and classes make that explicit."
+    },
+    {
+      "stage": "post",
+      "question": "What is the key trade-off of tombstone-first deletion?",
+      "options": [
+        "It is safer and more auditable, but adds workflow complexity and temporary storage overhead.",
+        "It eliminates all asynchronous work immediately.",
+        "It makes legal holds impossible to implement.",
+        "It guarantees no cache will ever serve stale data."
+      ],
+      "correct": 0,
+      "explanation": "Tombstones improve safety, but they require state tracking and cleanup."
+    },
+    {
+      "stage": "post",
+      "question": "How should a strong design handle legal hold?",
+      "options": [
+        "Treat it as a centralized policy gate that can block or delay normal purge behavior.",
+        "Ignore it because it is outside the storage layer.",
+        "Apply it only after the physical purge is complete.",
+        "Use it only for relational databases."
+      ],
+      "correct": 0,
+      "explanation": "Legal hold must influence deletion decisions before destructive actions happen."
+    },
+    {
+      "stage": "post",
+      "question": "Which interview answer sounds most senior?",
+      "options": [
+        "We will run a nightly cron job to clean old rows and assume the rest catches up.",
+        "We will treat delete as a tracked workflow with policy checks, propagation, verification, and audit evidence.",
+        "We will keep deleted data indefinitely in search so restores are easier.",
+        "We will not discuss deletion because it is not on the critical path."
+      ],
+      "correct": 1,
+      "explanation": "Senior answers frame deletion as a correctness and compliance workflow, not background cleanup."
+    }
+  ]
+}

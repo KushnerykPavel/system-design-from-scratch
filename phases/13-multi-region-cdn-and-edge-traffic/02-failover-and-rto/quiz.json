@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What does RTO primarily describe in a regional failure plan?",
+      "options": [
+        "How long it takes to restore service after the outage begins.",
+        "How much data each request may store.",
+        "How many regions the company can afford.",
+        "How many engineers are on call."
+      ],
+      "correct": 0,
+      "explanation": "RTO is the recovery time objective: the time budget to restore service."
+    },
+    {
+      "stage": "pre",
+      "question": "Why is RPO a separate design concern from RTO?",
+      "options": [
+        "Because you can restore service quickly while still losing more recent data than the business accepts.",
+        "Because RPO only matters for logging systems.",
+        "Because low RTO automatically guarantees zero data loss.",
+        "Because RPO replaces the need for replication."
+      ],
+      "correct": 0,
+      "explanation": "Time to recover and acceptable data loss are related but distinct promises."
+    },
+    {
+      "stage": "post",
+      "question": "What usually sets a lower bound on real-world RTO?",
+      "options": [
+        "Detection, classification, traffic cutover, and target-region readiness work.",
+        "Only the syntax of the health-check endpoint.",
+        "The number of dashboards in the NOC.",
+        "Whether the service uses JSON or protobuf."
+      ],
+      "correct": 0,
+      "explanation": "Recovery time includes more than a routing change."
+    },
+    {
+      "stage": "post",
+      "question": "Why is failover flapping dangerous?",
+      "options": [
+        "Repeated cutovers can amplify instability and make a partial incident much worse.",
+        "It permanently lowers storage cost.",
+        "It improves user cache locality automatically.",
+        "It only affects testing environments."
+      ],
+      "correct": 0,
+      "explanation": "Oscillating cutovers can compound outages and create inconsistent state."
+    },
+    {
+      "stage": "post",
+      "question": "Which signal is most important before promoting a new write region?",
+      "options": [
+        "Replication freshness and confidence that the target region can accept authoritative writes.",
+        "Whether the region name is alphabetically first.",
+        "Whether CDN cache hit ratio is above 90 percent.",
+        "Whether operators recently rotated passwords."
+      ],
+      "correct": 0,
+      "explanation": "Promotion safety depends on the target region's data readiness."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off comes with degraded read-only mode during recovery?",
+      "options": [
+        "It preserves partial availability but delays full write functionality.",
+        "It increases write throughput immediately.",
+        "It removes the need for replication metrics.",
+        "It guarantees zero customer impact."
+      ],
+      "correct": 0,
+      "explanation": "Read-only mode is a deliberate compromise to shorten recovery."
+    },
+    {
+      "stage": "post",
+      "question": "Which observability signal best verifies the recovery plan itself?",
+      "options": [
+        "Measured drill RTO and RPO compared with the stated objectives.",
+        "Only a monthly count of deploys.",
+        "Average HTML payload size.",
+        "Whether a wiki page exists."
+      ],
+      "correct": 0,
+      "explanation": "Drills prove whether the plan meets the promise."
+    },
+    {
+      "stage": "post",
+      "question": "What is the strongest interview answer when asked about failover automation?",
+      "options": [
+        "Use automation with guardrails, explicit promotion gates, and a limited manual emergency path.",
+        "Automate everything with no rollback path.",
+        "Keep everything manual so humans stay in the loop for every decision.",
+        "Avoid documenting who is allowed to trigger failover."
+      ],
+      "correct": 0,
+      "explanation": "The best answers balance speed with safety and auditable control."
+    }
+  ]
+}

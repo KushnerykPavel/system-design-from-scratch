@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What should you clarify first in a financial-consistency interview prompt?",
+      "options": [
+        "The core invariant and source of truth before choosing components.",
+        "The exact cloud vendor region names.",
+        "The color palette for dashboard charts.",
+        "The preferred programming language for the payment API."
+      ],
+      "correct": 0,
+      "explanation": "A strong answer starts with what must never be violated."
+    },
+    {
+      "stage": "pre",
+      "question": "Why is retry amplification important in sizing financial systems?",
+      "options": [
+        "Because incidents can multiply write and callback volume beyond steady-state assumptions.",
+        "Because retries only affect frontend page views.",
+        "Because retries make ledgers eventually disappear.",
+        "Because retry volume is always lower than normal traffic."
+      ],
+      "correct": 0,
+      "explanation": "Financial systems often fail under incident-time fanout, not just baseline load."
+    },
+    {
+      "stage": "post",
+      "question": "What is the strongest reason to choose one deliberate deep dive in the interview?",
+      "options": [
+        "It demonstrates senior judgment and lets you defend a critical correctness boundary in detail.",
+        "It avoids having to size the system at all.",
+        "It guarantees the interviewer will skip follow-ups.",
+        "It replaces the need to mention trade-offs."
+      ],
+      "correct": 0,
+      "explanation": "Depth is where the answer becomes believable."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off comes with centering the answer on one invariant?",
+      "options": [
+        "The answer becomes more coherent, but you have less time to cover every adjacent subsystem.",
+        "You no longer need to discuss failures.",
+        "You can ignore observability because the invariant is obvious.",
+        "You remove all compliance concerns automatically."
+      ],
+      "correct": 0,
+      "explanation": "Focus improves quality, but it narrows breadth."
+    },
+    {
+      "stage": "post",
+      "question": "Which signal best shows that a candidate handled failure reasoning well?",
+      "options": [
+        "Each major failure mode includes a detection signal and a mitigation plan.",
+        "They listed many databases by name.",
+        "They used the phrase exactly-once several times.",
+        "They drew the largest possible architecture diagram."
+      ],
+      "correct": 0,
+      "explanation": "A good answer connects failure to observability and response."
+    },
+    {
+      "stage": "post",
+      "question": "What is the most credible response if the interviewer changes the design to multi-region writes?",
+      "options": [
+        "Explain which invariants remain strict, which views may become stale, and what new coordination cost appears.",
+        "Say the design stays identical because cloud providers handle it.",
+        "Remove idempotency because regions provide uniqueness.",
+        "Stop discussing audits because global scale matters more."
+      ],
+      "correct": 0,
+      "explanation": "Redesign should surface concrete consequences, not magical continuity."
+    },
+    {
+      "stage": "post",
+      "question": "Why should operator workflows still appear in a drill answer?",
+      "options": [
+        "Because financial systems need safe recovery when automation cannot resolve ambiguity.",
+        "Because operators should replace all automated compensation logic.",
+        "Because operator steps eliminate the need for logs.",
+        "Because manual recovery makes scaling easier."
+      ],
+      "correct": 0,
+      "explanation": "Operations are part of correctness for rare but costly failures."
+    },
+    {
+      "stage": "post",
+      "question": "What is the cleanest sign that an answer stayed too generic?",
+      "options": [
+        "It never clearly names the authoritative record, state machine, or idempotency boundary.",
+        "It mentions both Google and Cloudflare.",
+        "It uses an ASCII diagram.",
+        "It estimates storage growth."
+      ],
+      "correct": 0,
+      "explanation": "Without a concrete authority boundary, the design lacks teeth."
+    }
+  ]
+}

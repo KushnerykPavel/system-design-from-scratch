@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What is the strongest starting point for a redesign after an incident?",
+      "options": [
+        "Identify the hidden assumption that failed and the path that amplified the incident.",
+        "Replace every dependency used in the original system.",
+        "Assume the outage was just bad luck.",
+        "Skip detection details and focus only on final architecture."
+      ],
+      "correct": 0,
+      "explanation": "A useful redesign starts from the mechanism that made the failure possible and severe."
+    },
+    {
+      "stage": "pre",
+      "question": "Why is blast-radius analysis central to post-incident redesign?",
+      "options": [
+        "Because the redesign should ideally stop the same failure from spreading as far next time.",
+        "Because blast radius matters only for compliance reviews.",
+        "Because large outages mean capacity planning was the only issue.",
+        "Because blast radius is unrelated to retries or propagation."
+      ],
+      "correct": 0,
+      "explanation": "Containment is often the clearest measure of whether the redesign helped."
+    },
+    {
+      "stage": "post",
+      "question": "Why is fixing only the final symptom usually insufficient?",
+      "options": [
+        "Because the same broken assumption or amplification path can trigger a similar incident again through a different surface.",
+        "Because symptoms never matter operationally.",
+        "Because incidents should always lead to full rewrites.",
+        "Because postmortems should avoid architecture changes."
+      ],
+      "correct": 0,
+      "explanation": "Strong redesigns address the mechanism, not just the visible result."
+    },
+    {
+      "stage": "post",
+      "question": "Which signal best validates that a retry-storm redesign worked?",
+      "options": [
+        "Retry-budget consumption and downstream load under partial failure, paired with user-facing error behavior.",
+        "Only average code coverage percentage.",
+        "The number of dashboards created after the outage.",
+        "The size of the on-call rotation."
+      ],
+      "correct": 0,
+      "explanation": "You want evidence that overload amplification is now bounded."
+    },
+    {
+      "stage": "post",
+      "question": "What is the main trade-off of stronger rollout gates?",
+      "options": [
+        "They reduce unsafe propagation, but can slow convergence and add operational friction.",
+        "They eliminate the need for rollback plans.",
+        "They automatically improve every latency SLO.",
+        "They matter only for mobile clients."
+      ],
+      "correct": 0,
+      "explanation": "Safety mechanisms usually introduce some speed or complexity cost."
+    },
+    {
+      "stage": "post",
+      "question": "Why should operator visibility be part of the redesign?",
+      "options": [
+        "Because faster explanation and targeted rollback can be as valuable as the architecture change itself during the next incident.",
+        "Because operators only need visibility after the system is fully stable.",
+        "Because good operators make metrics unnecessary.",
+        "Because user-visible incidents are unrelated to explainability."
+      ],
+      "correct": 0,
+      "explanation": "Incidents are handled by humans, so explainability is part of system design."
+    },
+    {
+      "stage": "post",
+      "question": "If the failure came from promoting lagging state during failover, what should a strong redesign emphasize?",
+      "options": [
+        "Promotion gates, freshness validation, and degraded behavior when a clean failover target is unavailable.",
+        "Disabling all failover permanently.",
+        "Only increasing storage retention.",
+        "Removing observability to simplify the system."
+      ],
+      "correct": 0,
+      "explanation": "Failover safety depends on validating the new authority, not just switching faster."
+    },
+    {
+      "stage": "post",
+      "question": "Why should a post-incident redesign name what got worse after the fix?",
+      "options": [
+        "Because stronger containment or validation often adds cost, latency, or workflow friction, and senior answers state that openly.",
+        "Because every redesign should avoid all new costs.",
+        "Because trade-offs are not relevant after outages.",
+        "Because the interviewer mainly wants optimistic outcomes."
+      ],
+      "correct": 0,
+      "explanation": "Credible redesigns explain both the benefit and the new tax."
+    }
+  ]
+}

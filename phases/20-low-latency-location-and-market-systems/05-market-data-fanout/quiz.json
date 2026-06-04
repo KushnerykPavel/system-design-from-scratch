@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why should market-data fanout be separated from the matching engine core?",
+      "options": [
+        "Because downstream subscriber lag and replay demand should not directly slow execution latency.",
+        "Because market data never needs durability once sent.",
+        "Because subscribers can always tolerate stale data equally.",
+        "Because filtering is impossible in asynchronous systems."
+      ],
+      "correct": 0,
+      "explanation": "The fanout layer is a major source of variable downstream pressure."
+    },
+    {
+      "stage": "pre",
+      "question": "What is the main reason to define subscriber tiers explicitly?",
+      "options": [
+        "Different subscribers have different latency, replay, and cost expectations that should shape policy.",
+        "Tiering automatically removes the need for quota enforcement.",
+        "All subscribers can be served from one identical backlog budget safely.",
+        "Tiering is only a billing decision and not an architecture concern."
+      ],
+      "correct": 0,
+      "explanation": "Tiering is operational policy, not only pricing."
+    },
+    {
+      "stage": "post",
+      "question": "What signal best shows that one subscriber is becoming a shared-cost problem?",
+      "options": [
+        "Its lag, retained-by-subscriber bytes, and replay traffic relative to its tier budget.",
+        "The age of the subscriber's account manager's laptop.",
+        "The count of markdown files in the team runbook directory.",
+        "The average CPU temperature on developer workstations."
+      ],
+      "correct": 0,
+      "explanation": "Lag and retained state reveal the real shared-platform pressure."
+    },
+    {
+      "stage": "post",
+      "question": "Why isolate replay traffic from live delivery lanes?",
+      "options": [
+        "Replay is bursty and can otherwise starve low-latency live fanout.",
+        "Replay must always be globally ordered with execution across all symbols.",
+        "Live feeds do not require storage once relays are running.",
+        "Isolation guarantees every subscriber sees identical delay."
+      ],
+      "correct": 0,
+      "explanation": "Replay and live traffic have very different latency profiles and resource shapes."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off comes with precomputing common symbol bundles for subscribers?",
+      "options": [
+        "It lowers per-request filter cost but adds maintenance and storage complexity.",
+        "It eliminates the need for relay failover.",
+        "It makes tier-specific quotas impossible to enforce.",
+        "It guarantees zero lag for all replay requests."
+      ],
+      "correct": 0,
+      "explanation": "Precomputation saves CPU later by paying complexity earlier."
+    },
+    {
+      "stage": "post",
+      "question": "What is the most credible response to a regional relay outage followed by mass reconnects?",
+      "options": [
+        "Stagger reconnects with jitter and allow multi-relay failover instead of accepting an instant reconnect storm.",
+        "Force every client to reconnect simultaneously to rebuild order faster.",
+        "Disable quotas until all sessions are back.",
+        "Drop all replay support permanently for every tier."
+      ],
+      "correct": 0,
+      "explanation": "Reconnect storms need admission shaping, not a thundering herd."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric best reveals a filtering bottleneck?",
+      "options": [
+        "Filter CPU cost and per-product delivery lag rising faster than raw feed ingress.",
+        "The number of market holidays in the current quarter.",
+        "The ratio of mobile to desktop clients in the corporate intranet.",
+        "The count of feed documentation PDFs downloaded last month."
+      ],
+      "correct": 0,
+      "explanation": "Filtering cost should be measured directly on the delivery plane."
+    },
+    {
+      "stage": "post",
+      "question": "Which redesign is most likely if premium subscribers demand much larger symbol sets than planned?",
+      "options": [
+        "Revisit filter placement, bundle popular symbol groups, and tighten quota or pricing around extreme fanout cost.",
+        "Move live distribution back into the matching process.",
+        "Stop tracking subscriber lag so the problem stays invisible.",
+        "Replace regional relays with one central feed server."
+      ],
+      "correct": 0,
+      "explanation": "Extreme symbol fanout changes both the technical and product policy shape."
+    }
+  ]
+}

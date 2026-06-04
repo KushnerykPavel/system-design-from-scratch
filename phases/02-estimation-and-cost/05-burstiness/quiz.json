@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why is average throughput a weak guide for queueing risk?",
+      "options": [
+        "Because short periods where arrivals exceed service capacity create backlog even if the daily average looks safe.",
+        "Because queues only matter for storage systems.",
+        "Because average throughput is always higher than peak throughput.",
+        "Because service rate cannot be measured directly."
+      ],
+      "correct": 0,
+      "explanation": "Burst windows, not steady-state averages, drive queue build-up."
+    },
+    {
+      "stage": "pre",
+      "question": "What is the first quantity to compute during a burst?",
+      "options": [
+        "The number of regions in the fleet",
+        "Arrival rate minus service rate",
+        "The total storage retention window",
+        "The number of dashboards available"
+      ],
+      "correct": 1,
+      "explanation": "Backlog growth starts with how much demand exceeds processing."
+    },
+    {
+      "stage": "post",
+      "question": "If arrivals are 60K/s, service is 40K/s, and the burst lasts 10 minutes, what backlog forms?",
+      "options": [
+        "200K items",
+        "2M items",
+        "12M items",
+        "24M items"
+      ],
+      "correct": 2,
+      "explanation": "Backlog growth is 20K/s for 600 seconds, which is 12M items."
+    },
+    {
+      "stage": "post",
+      "question": "What additional number is required to estimate recovery time after a burst?",
+      "options": [
+        "Post-burst spare processing capacity",
+        "The number of engineers on call",
+        "The total number of API routes",
+        "The size of the primary database"
+      ],
+      "correct": 0,
+      "explanation": "Drain time depends on how much extra capacity is available once the burst ends."
+    },
+    {
+      "stage": "post",
+      "question": "Which hidden factor often turns an expected burst into a much worse incident?",
+      "options": [
+        "Client retries that amplify effective arrival rate",
+        "Warm storage tiering",
+        "Schema versioning",
+        "Smaller response payloads"
+      ],
+      "correct": 0,
+      "explanation": "Retries can create multiplicative overload during incidents."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric best validates whether queueing assumptions are failing in production?",
+      "options": [
+        "Queue depth and age percentiles",
+        "Number of code review comments",
+        "Count of storage tables",
+        "Average build duration"
+      ],
+      "correct": 0,
+      "explanation": "Depth and age directly show backlog health."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off comes with buffering instead of shedding?",
+      "options": [
+        "Better short-term acceptance, but higher tail latency and possible stale work.",
+        "Lower latency with no extra memory use.",
+        "Stronger consistency at lower cost.",
+        "Reduced capacity needs during bursts."
+      ],
+      "correct": 0,
+      "explanation": "Buffers absorb spikes by accepting delayed completion."
+    },
+    {
+      "stage": "post",
+      "question": "When is dropping work often better than queueing it?",
+      "options": [
+        "When the work loses value quickly and long backlog age would make it useless.",
+        "When average utilization is below 10%.",
+        "When the service has exactly one region.",
+        "When the interviewer asks for a durable system."
+      ],
+      "correct": 0,
+      "explanation": "Some work is more valuable to reject early than to complete too late."
+    }
+  ]
+}

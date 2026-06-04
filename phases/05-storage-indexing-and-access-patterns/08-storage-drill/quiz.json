@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What should come first in a storage deep-dive answer?",
+      "options": [
+        "Naming a database technology that sounds scalable.",
+        "Clarifying the main access patterns and correctness needs.",
+        "Listing every possible index the system might need.",
+        "Estimating backup storage before discussing reads."
+      ],
+      "correct": 1,
+      "explanation": "The storage model only makes sense after the workload and invariants are clear."
+    },
+    {
+      "stage": "pre",
+      "question": "Why is a storage drill valuable after learning individual concepts?",
+      "options": [
+        "It forces the learner to combine model choice, indexing, lifecycle, and trade-offs under time pressure.",
+        "It replaces the need for any future mock interviews.",
+        "It proves one storage system fits every prompt.",
+        "It lets the learner avoid capacity modeling."
+      ],
+      "correct": 0,
+      "explanation": "The drill tests synthesis, prioritization, and communication, not isolated recall."
+    },
+    {
+      "stage": "post",
+      "question": "What is the strongest reason to name some query shapes as out of scope for the primary path?",
+      "options": [
+        "It keeps the core model optimized for the high-value workload instead of pretending every query is cheap.",
+        "It guarantees those queries will never be requested later.",
+        "It eliminates the need for observability.",
+        "It makes data deletion optional."
+      ],
+      "correct": 0,
+      "explanation": "Senior answers are explicit about what the primary store is not designed to do well."
+    },
+    {
+      "stage": "post",
+      "question": "Which rubric dimension best distinguishes a mature storage answer from a generic one?",
+      "options": [
+        "Whether the answer includes at least three database product names.",
+        "Whether it ties model choice, indexes, lifecycle, and failure handling back to the workload.",
+        "Whether the diagram uses many arrows and boxes.",
+        "Whether the answer avoids mentioning retention."
+      ],
+      "correct": 1,
+      "explanation": "The quality signal is coherence and trade-off reasoning, not vocabulary volume."
+    },
+    {
+      "stage": "post",
+      "question": "What is the main risk of treating a derived search or analytics index like the source of truth?",
+      "options": [
+        "Stale or lagging derived data may quietly become the basis for correctness decisions.",
+        "It always makes writes cheaper.",
+        "It guarantees better deletion semantics.",
+        "It prevents partitioning by tenant."
+      ],
+      "correct": 0,
+      "explanation": "Derived systems are valuable, but correctness should still anchor to a canonical record."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric is most useful across almost every storage drill scenario?",
+      "options": [
+        "Latency and volume broken down by named access pattern.",
+        "Only total number of lines of code in the service.",
+        "The ratio of markdown files to Go files in the repository.",
+        "Average laptop battery usage during design sessions."
+      ],
+      "correct": 0,
+      "explanation": "Pattern-level observability shows whether the design matches real workload behavior."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off most often appears when adding derived systems to a storage answer?",
+      "options": [
+        "You gain specialized query support, but accept more moving parts and some consistency lag.",
+        "You eliminate all delete workflows immediately.",
+        "You make the primary store unnecessary.",
+        "You avoid ever thinking about cost again."
+      ],
+      "correct": 0,
+      "explanation": "Derived systems add power, but they also add operational and consistency complexity."
+    },
+    {
+      "stage": "post",
+      "question": "What closing move makes a storage drill answer feel senior?",
+      "options": [
+        "Summarizing the chosen hot path, the intentionally weak paths, and the main operational risks.",
+        "Adding a new storage engine in the last minute to show breadth.",
+        "Skipping deletion and observability to save time.",
+        "Rewriting the entire architecture around a different database at the end."
+      ],
+      "correct": 0,
+      "explanation": "Senior wrap-ups make the trade-offs legible and show deliberate prioritization."
+    }
+  ]
+}

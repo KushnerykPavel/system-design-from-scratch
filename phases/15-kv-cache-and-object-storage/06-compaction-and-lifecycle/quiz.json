@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why is compaction considered part of the architecture rather than a minor background detail?",
+      "options": [
+        "Because if it falls behind, read amplification, latency, and storage debt can become production problems.",
+        "Because compaction only matters for document formatting.",
+        "Because storage systems can serve reads without touching disk once compaction starts.",
+        "Because all deletes are applied synchronously and never need cleanup."
+      ],
+      "correct": 0,
+      "explanation": "Maintenance debt directly affects serving quality and cost."
+    },
+    {
+      "stage": "pre",
+      "question": "What is the main purpose of a GC grace period for tombstones?",
+      "options": [
+        "To avoid reclaiming deleted data before lagging replicas or repair processes have safely observed the deletion.",
+        "To make storage usage grow forever.",
+        "To reduce the need for checksums.",
+        "To guarantee zero write amplification."
+      ],
+      "correct": 0,
+      "explanation": "Grace periods protect correctness under lag and repair."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric best reveals that an LSM-backed store is falling behind on maintenance?",
+      "options": [
+        "Compaction debt bytes or read amplification.",
+        "The number of markdown headings in docs.",
+        "Only total key count.",
+        "Daily office badge swipes."
+      ],
+      "correct": 0,
+      "explanation": "Debt and amplification show real pressure from incomplete maintenance."
+    },
+    {
+      "stage": "post",
+      "question": "Why should destructive lifecycle rules usually support a dry-run mode?",
+      "options": [
+        "To preview impact and catch dangerous retention mistakes before real deletion occurs.",
+        "To make all policies permanent immediately.",
+        "To avoid writing audit logs.",
+        "To remove the need for staged rollout."
+      ],
+      "correct": 0,
+      "explanation": "Dry-run reduces the chance of accidental large-scale deletion."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off comes with aggressive compaction settings?",
+      "options": [
+        "They reduce read debt faster, but consume more immediate IO and can hurt foreground latency.",
+        "They eliminate the need for replication.",
+        "They make lifecycle policies obsolete.",
+        "They always lower total cost without risk."
+      ],
+      "correct": 0,
+      "explanation": "Aggressive cleanup helps performance later by spending more resources now."
+    },
+    {
+      "stage": "post",
+      "question": "What is the real danger of deleting tombstones too early?",
+      "options": [
+        "Lagging replicas may resurrect deleted data or miss the delete altogether.",
+        "The cache hit rate becomes too high.",
+        "Multipart uploads stop working.",
+        "Object IDs lose uniqueness."
+      ],
+      "correct": 0,
+      "explanation": "Early reclamation can break delete correctness."
+    },
+    {
+      "stage": "post",
+      "question": "Which operational control is most helpful when background work starts hurting the serving path?",
+      "options": [
+        "Adaptive throttling or bandwidth caps for compaction, repair, and lifecycle workers.",
+        "Renaming all buckets.",
+        "Deleting observability dashboards.",
+        "Disabling checksum verification."
+      ],
+      "correct": 0,
+      "explanation": "Resource isolation is how you keep maintenance from becoming an outage."
+    },
+    {
+      "stage": "post",
+      "question": "Which follow-up most changes the maintenance design?",
+      "options": [
+        "Customers shorten retention dramatically, creating a surge in deletion and transition work.",
+        "One dashboard needs a new title.",
+        "Object names should allow dashes.",
+        "The team wants fewer README lines."
+      ],
+      "correct": 0,
+      "explanation": "Large retention changes alter backlog, bandwidth needs, and safety rollout steps."
+    }
+  ]
+}
