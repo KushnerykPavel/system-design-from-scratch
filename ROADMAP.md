@@ -1,6 +1,6 @@
 # Roadmap — System Design from Scratch
 
-24 phases · 180 planned lessons · ~248 hours.
+26 phases · 196 planned lessons · ~272 hours.
 
 > Status legend: ✅ done · 🚧 in progress · ⬚ planned
 
@@ -32,6 +32,8 @@
 | 21 | [Google Senior/Staff System Design](phases/21-google-senior-staff-system-design) | ~12h |
 | 22 | [Cloudflare Edge & Platform Design](phases/22-cloudflare-edge-platform-design) | ~12h |
 | 23 | [Mixed Mocks & Redesign Drills](phases/23-mixed-mocks-and-redesign-drills) | ~12h |
+| 24 | [Netflix Streaming & Platform Design](phases/24-netflix-streaming-platform-design) | ~14h |
+| 25 | [Common Interview Gaps](phases/25-common-interview-gaps) | ~10h |
 
 ## Phase detail
 
@@ -334,3 +336,29 @@
 | 05 | [Lightning Capacity Rounds](phases/23-mixed-mocks-and-redesign-drills/05-lightning-capacity-rounds) | ⬚ | ~60 min |
 | 06 | [Lightning Trade-off Rounds](phases/23-mixed-mocks-and-redesign-drills/06-lightning-tradeoffs) | ⬚ | ~60 min |
 | 07 | [Final Capstone Review Panel](phases/23-mixed-mocks-and-redesign-drills/07-final-capstone-review) | ⬚ | ~90 min |
+
+### Phase 24 — Netflix Streaming & Platform Design (~14 hours)
+
+| #  | Lesson | Status | Time |
+|----|--------|--------|------|
+| 01 | [Netflix Interview Rubric & Strong Signals](phases/24-netflix-streaming-platform-design/01-netflix-rubric) | ⬚ | ~75 min |
+| 02 | [Video Streaming Pipeline — Encoding, Chunking, ABR](phases/24-netflix-streaming-platform-design/02-video-streaming-pipeline) | ⬚ | ~90 min |
+| 03 | [Open Connect CDN — Cache Hierarchy & POP Design](phases/24-netflix-streaming-platform-design/03-open-connect-cdn) | ⬚ | ~90 min |
+| 04 | [Recommendation Engine at Streaming Scale](phases/24-netflix-streaming-platform-design/04-recommendation-engine) | ⬚ | ~90 min |
+| 05 | [Chaos Engineering — Resilience by Design](phases/24-netflix-streaming-platform-design/05-chaos-engineering) | ⬚ | ~75 min |
+| 06 | [A/B Testing & Experimentation Platform](phases/24-netflix-streaming-platform-design/06-ab-testing-platform) | ⬚ | ~75 min |
+| 07 | [Real-Time Analytics Pipeline — Kafka, Flink, Druid](phases/24-netflix-streaming-platform-design/07-realtime-data-pipeline) | ⬚ | ~75 min |
+| 08 | [Netflix Full Mock Loop](phases/24-netflix-streaming-platform-design/08-netflix-full-mock) | ⬚ | ~90 min |
+
+### Phase 25 — Common Interview Gaps (~10 hours)
+
+| #  | Lesson | Status | Time |
+|----|--------|--------|------|
+| 01 | [File Sync Service (Dropbox/Drive)](phases/25-common-interview-gaps/01-file-sync-service) | ⬚ | ~90 min |
+| 02 | [Ad Click Aggregation Pipeline](phases/25-common-interview-gaps/02-ad-click-aggregation) | ⬚ | ~75 min |
+| 03 | [Ride-Sharing Dispatch System](phases/25-common-interview-gaps/03-ride-sharing-dispatch) | ⬚ | ~90 min |
+| 04 | [Live Streaming Platform (Twitch-style)](phases/25-common-interview-gaps/04-live-streaming) | ⬚ | ~90 min |
+| 05 | [Hotel/Flight Booking & Seat Reservation](phases/25-common-interview-gaps/05-booking-and-reservation) | ⬚ | ~75 min |
+| 06 | [Code Deployment Pipeline](phases/25-common-interview-gaps/06-code-deployment-pipeline) | ⬚ | ~75 min |
+| 07 | [Feature Flag Service](phases/25-common-interview-gaps/07-feature-flag-service) | ⬚ | ~60 min |
+| 08 | [Gap Scenarios Drill](phases/25-common-interview-gaps/08-gap-scenarios-drill) | ⬚ | ~90 min |

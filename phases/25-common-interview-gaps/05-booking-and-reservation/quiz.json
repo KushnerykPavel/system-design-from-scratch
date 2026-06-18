@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why is the check-then-book pattern (check availability, then charge card, then write reservation) broken under concurrency?",
+      "options": [
+        "Two users can both pass the availability check, both be charged, and both attempt to write a reservation for the same seat — the second write must fail but the payment has already gone through.",
+        "Database writes are not atomic, so the reservation can partially succeed.",
+        "Payment processors do not support concurrent charges from the same merchant.",
+        "Availability checks are cached and always return stale data."
+      ],
+      "correct": 0,
+      "explanation": "Without atomic seat locking before payment, concurrent users can race through the availability check and both reach the payment step, resulting in double-charges or double-bookings."
+    },
+    {
+      "stage": "pre",
+      "question": "What is the purpose of a time-limited seat hold in a booking system?",
+      "options": [
+        "It reserves the seat for a specific user while they complete payment, preventing other buyers from taking it, but releases it automatically if payment is not completed within the timeout.",
+        "It prevents the database from being overloaded by too many concurrent reservation writes.",
+        "It gives the airline time to manually review the booking before confirming it.",
+        "It ensures the payment processor has enough time to verify the card details."
+      ],
+      "correct": 0,
+      "explanation": "A time-limited hold separates seat reservation from payment timing. The seat is unavailable to others during checkout but released if the buyer abandons the purchase."
+    },
+    {
+      "stage": "post",
+      "question": "A payment service times out after 30 seconds while a seat hold is active. The payment status is unknown. What is the correct recovery action?",
+      "options": [
+        "Implement a saga: poll the payment service for final status; confirm the reservation if payment succeeded, or release the hold if payment failed or the timeout expired.",
+        "Automatically refund the payment and release the hold immediately after timeout.",
+        "Keep the hold active indefinitely until the payment processor responds.",
+        "Confirm the reservation optimistically and issue a refund if the payment later fails."
+      ],
+      "correct": 0,
+      "explanation": "An unknown payment status requires an explicit query (saga compensation). Confirming or releasing without knowing the payment outcome would cause either a free seat or a charge without a seat."
+    },
+    {
+      "stage": "post",
+      "question": "An airline wants to oversell a 200-seat flight by 10%. How does the reservation system enforce the overbooking limit atomically?",
+      "options": [
+        "At confirmation time, atomically increment the confirmed_count and reject the transaction if it would exceed capacity × (1 + overbooking_limit).",
+        "Allow any number of reservations and rely on check-in staff to turn away excess passengers.",
+        "Set the seat count to 220 in the database and allow normal booking without overbooking logic.",
+        "Apply overbooking only after all physical seats are sold by adding 20 virtual seats."
+      ],
+      "correct": 0,
+      "explanation": "The overbooking count must be checked atomically at confirmation — typically with a database transaction or a CAS — to prevent concurrent confirmations from collectively exceeding the limit."
+    },
+    {
+      "stage": "post",
+      "question": "1000 users simultaneously try to hold the last available seat on a popular flight. What happens with pessimistic row-level locking?",
+      "options": [
+        "The first transaction acquires the row lock, holds the seat, and commits. The remaining 999 receive a lock timeout or wait, find the seat taken, and must select a different seat.",
+        "All 1000 transactions succeed and 1000 holds are created for the single seat.",
+        "The database crashes because 1000 concurrent lock requests exceed its capacity.",
+        "All 1000 users are placed in a queue and served in order without any lock contention."
+      ],
+      "correct": 0,
+      "explanation": "Pessimistic row locking serializes concurrent access. One user wins the lock; the rest queue or time out and receive a conflict response, which is correct behavior even if the UX is suboptimal."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric is the best indicator that seat hold contention is causing user-visible booking failures on popular flights?",
+      "options": [
+        "Seat hold creation latency p99 — rising lock wait times indicate high contention on hot rows.",
+        "Total number of seats available across all flights in the system.",
+        "The average time from hold creation to payment confirmation.",
+        "The number of waitlisted users per flight."
+      ],
+      "correct": 0,
+      "explanation": "P99 latency for hold creation captures lock wait time. Rising P99 on a specific flight_id indicates high row-level contention on that flight's seat rows."
+    },
+    {
+      "stage": "post",
+      "question": "A flight is cancelled. 200 confirmed reservations must be refunded and 50 waitlisted users must be notified. What design ensures this completes reliably even if the process crashes mid-way?",
+      "options": [
+        "A durable saga or workflow engine that records each refund and notification as a step, allows restart from the last completed step, and ensures idempotency so repeated steps do not double-refund.",
+        "A single database transaction that refunds all 200 customers and notifies all 50 waitlisted users atomically.",
+        "A cron job that runs every hour and checks for cancelled flights to process.",
+        "Manual processing by a customer service team who are notified by email when a flight is cancelled."
+      ],
+      "correct": 0,
+      "explanation": "Batch compensation (200 refunds + 50 notifications) is too long for a single transaction and too risky to run without durability. A saga/workflow with checkpoints handles partial failures safely."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off does a time-limited hold introduce that does not exist in a pure optimistic concurrency model?",
+      "options": [
+        "Expired holds must be detected and released by a background job; if this job fails, seats appear unavailable to new buyers longer than intended.",
+        "Holds require a distributed transaction that spans the seat database and the payment service.",
+        "Time-limited holds prevent waitlisted users from being notified when seats become available.",
+        "Hold expiry requires the CDN to be invalidated to show updated seat availability."
+      ],
+      "correct": 0,
+      "explanation": "The hold expiry background job is a new operational dependency. If it fails, seats are locked beyond their intended window, reducing available inventory without a corresponding confirmed booking."
+    }
+  ]
+}

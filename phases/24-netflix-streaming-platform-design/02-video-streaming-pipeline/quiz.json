@@ -1,0 +1,88 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why does a longer HLS segment duration hurt seek latency?",
+      "options": [
+        "When the user seeks to a position mid-segment, the player must download from the segment start or wait for the correct segment boundary, adding delay proportional to segment length.",
+        "Longer segments require a different codec that does not support random access.",
+        "The CDN cannot cache segments longer than 4 seconds.",
+        "Longer segments force the client to use a lower bitrate profile."
+      ],
+      "correct": 0,
+      "explanation": "Seeking in HLS-style streaming lands on a segment boundary. Longer segments mean the nearest boundary is farther from the requested position, increasing seek time."
+    },
+    {
+      "stage": "pre",
+      "question": "What is the main purpose of per-title encoding at Netflix?",
+      "options": [
+        "To use lower bitrates for simpler content while maintaining the same perceived quality, reducing storage and bandwidth without a visible quality change.",
+        "To add more bitrate levels to the encoding ladder for every title uniformly.",
+        "To support a wider range of devices by adding more codec variants.",
+        "To encrypt each title with a unique DRM key at the codec level."
+      ],
+      "correct": 0,
+      "explanation": "Per-title encoding adapts the bitrate-quality trade-off to the specific complexity of each title. A nature documentary needs more bits than a static talking-head interview at the same quality."
+    },
+    {
+      "stage": "post",
+      "question": "Why should ABR algorithms switch down aggressively but switch up conservatively?",
+      "options": [
+        "A sudden quality drop mid-scene is more disruptive to the viewer than a delayed upgrade to higher quality.",
+        "Switching up is more expensive computationally for the client player.",
+        "CDNs penalize frequent upward switches with higher latency.",
+        "Switching down is a no-op and does not require a new segment request."
+      ],
+      "correct": 0,
+      "explanation": "Users notice quality drops far more than they notice quality not improving immediately. Conservative upward switching also prevents thrashing between bitrates during brief bandwidth spikes."
+    },
+    {
+      "stage": "post",
+      "question": "What is the safest way to prevent a corrupt encode from reaching subscribers?",
+      "options": [
+        "Validate segment existence and playback integrity before publishing the manifest, and never publish a manifest that references unvalidated segments.",
+        "Rely on CDN cache TTLs to expire the corrupt segment within minutes.",
+        "Accept the corrupt encode but flag it in the database for later replacement.",
+        "Route only 1% of traffic to a new encode before full rollout."
+      ],
+      "correct": 0,
+      "explanation": "The manifest is the gate. Once it is published, clients will request segments. Validating before manifest publication is the only reliable pre-subscriber gate."
+    },
+    {
+      "stage": "post",
+      "question": "Which failure mode is unique to DRM packaging compared to plain encoding?",
+      "options": [
+        "The key service is a critical external dependency — if it is unavailable, packaging cannot complete and segments must not be published unencrypted.",
+        "DRM packaging always doubles the storage requirement for every segment.",
+        "DRM errors only affect mobile devices, not smart TVs.",
+        "The codec must be re-selected when the key service is unavailable."
+      ],
+      "correct": 0,
+      "explanation": "DRM packaging depends on a key service at packaging time. If the key service is down, the correct mitigation is to queue and retry — never to publish unencrypted content."
+    },
+    {
+      "stage": "post",
+      "question": "How does parallelizing encoding across many workers affect the encoding pipeline design?",
+      "options": [
+        "Work must be split into independently encodable units (segments or GOP groups), results must be reassembled, and the scheduler must handle worker failures without re-encoding the whole title.",
+        "Parallel encoding requires all workers to share a single encoding state in memory.",
+        "Parallelism only helps for 4K content; lower resolutions encode fast enough sequentially.",
+        "The encoding ladder must be reduced to one codec to enable parallelism."
+      ],
+      "correct": 0,
+      "explanation": "Parallel encoding is only efficient if work units are independent. Segments or GOP groups satisfy this. The scheduler must track which segments are done and reassemble the output without full-title retries."
+    },
+    {
+      "stage": "post",
+      "question": "What is the strongest argument for using versioned manifest URLs instead of cache-busting headers?",
+      "options": [
+        "Versioned URLs let CDN caches retain old manifests for in-progress sessions while new sessions immediately receive the updated manifest, preventing disruption to current viewers.",
+        "Versioned URLs are required by the HLS specification for VOD content.",
+        "Cache-busting headers are not supported by the Open Connect CDN layer.",
+        "Versioned URLs automatically expire old segments from the CDN cache."
+      ],
+      "correct": 0,
+      "explanation": "CDN cache-busting invalidates for everyone. Versioned URLs let existing sessions continue on the old manifest while new sessions pick up the new one — a much safer rollout."
+    }
+  ]
+}

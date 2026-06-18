@@ -1,0 +1,88 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What is the difference between a circuit breaker and a bulkhead?",
+      "options": [
+        "A circuit breaker stops calls to a failing dependency when error rates exceed a threshold; a bulkhead isolates thread pools so one slow dependency cannot exhaust resources for all other dependencies.",
+        "A circuit breaker is a hardware component; a bulkhead is a software pattern.",
+        "Bulkheads prevent calls to failing services; circuit breakers limit concurrent requests.",
+        "They are the same pattern with different names in different frameworks."
+      ],
+      "correct": 0,
+      "explanation": "Both protect against cascading failures but at different levels. Circuit breakers cut traffic to a failing service. Bulkheads ensure that even if a service is slow, it only consumes its allocated resources."
+    },
+    {
+      "stage": "pre",
+      "question": "Why does Netflix run chaos experiments in production rather than only in staging?",
+      "options": [
+        "Staging environments never fully replicate production traffic patterns, data volumes, and service interactions — only production reveals real failure modes.",
+        "Staging environments are too expensive to run chaos experiments on.",
+        "Chaos experiments in staging are prohibited by AWS SLAs.",
+        "Production chaos experiments are cheaper because they require no additional infrastructure."
+      ],
+      "correct": 0,
+      "explanation": "The value of chaos engineering comes from testing the system that is actually serving subscribers. Staging approximates production but cannot replicate the emergent behavior of real scale and real traffic."
+    },
+    {
+      "stage": "post",
+      "question": "What is the steady-state hypothesis in a chaos experiment?",
+      "options": [
+        "A measurable definition of 'the system is healthy' — e.g., playback start success rate above 99.9% — used as the abort condition if the experiment degrades it.",
+        "A prediction of which service will fail first during the experiment.",
+        "The target load level at which the chaos experiment should run.",
+        "The maximum number of instances the experiment is allowed to terminate."
+      ],
+      "correct": 0,
+      "explanation": "Without a defined steady-state hypothesis, you cannot know whether your chaos experiment is causing harm. The hypothesis is both the health definition and the automatic abort trigger."
+    },
+    {
+      "stage": "post",
+      "question": "What does a Latency Monkey experiment specifically test that Chaos Monkey does not?",
+      "options": [
+        "Whether circuit breakers and fallbacks activate correctly under elevated latency — a service can be slow without being down, and slow dependencies cause different failure modes than dead ones.",
+        "Whether load balancers correctly distribute traffic across availability zones.",
+        "Whether service autoscaling responds to increased CPU utilization.",
+        "Whether DNS resolution still works when a service is overloaded."
+      ],
+      "correct": 0,
+      "explanation": "Slow-but-not-dead dependencies are some of the hardest failures to handle. Timeouts may not fire, circuit breakers may not open, and thread pools may fill up. Latency injection tests the 'gray zone' of failure."
+    },
+    {
+      "stage": "post",
+      "question": "What is the key safety requirement that must be in place before running a Chaos Kong experiment?",
+      "options": [
+        "Multi-region active-active or active-standby traffic routing must be verified independently, so that disabling one region does not simply cause a global outage.",
+        "All services must be running at least 3 replicas in the target region.",
+        "The experiment must be approved by the AWS support team.",
+        "All database writes must be paused for the duration of the experiment."
+      ],
+      "correct": 0,
+      "explanation": "Chaos Kong is a region kill. If traffic routing cannot shift to another region, Chaos Kong becomes a real outage. The failover mechanism must be tested at smaller blast radius first."
+    },
+    {
+      "stage": "post",
+      "question": "At what point in the system design process should fallback chains be designed?",
+      "options": [
+        "During initial service design — fallback chains should be specified as part of the service contract, not discovered reactively when chaos experiments expose gaps.",
+        "After the first production incident reveals which fallbacks are missing.",
+        "During the chaos experiment planning phase, just before running the first experiment.",
+        "Fallback chains are only needed for external dependencies, not internal services."
+      ],
+      "correct": 0,
+      "explanation": "Reactive fallback design always lags behind failures. Teams that define fallback chains proactively can verify them with FIT before chaos experiments, making experiments safer and more informative."
+    },
+    {
+      "stage": "post",
+      "question": "What is the correct design response if a Chaos Kong experiment reveals a single-region data dependency?",
+      "options": [
+        "Identify the dependency, replicate the data across regions, and re-run the experiment after verifying replication is working correctly under load.",
+        "Disable Chaos Kong for services that have single-region dependencies.",
+        "Accept the dependency and configure an alert to page on-call during real region failures.",
+        "Move all subscribers in that region to a different region permanently."
+      ],
+      "correct": 0,
+      "explanation": "Single-region data dependencies are architectural debts. The correct fix is to eliminate them, not to disable the experiment that found them."
+    }
+  ]
+}

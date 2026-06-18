@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why cannot a single origin server serve 50M concurrent video viewers directly, even with high bandwidth?",
+      "options": [
+        "A single server's network bandwidth and connection limits are orders of magnitude below what 50M concurrent streams require; CDN edge distribution is the only practical solution.",
+        "Copyright law requires video to be distributed from multiple jurisdictions.",
+        "Origin servers cannot generate HLS manifests fast enough to serve 50M viewers.",
+        "Video encoding requires GPU hardware that is only available at CDN edges."
+      ],
+      "correct": 0,
+      "explanation": "50M viewers × 2 Mbps = 100 Tbps of egress — far beyond any single server's capacity. Only a geographically distributed CDN can serve this."
+    },
+    {
+      "stage": "pre",
+      "question": "What fundamental difference makes live streaming harder to cache than on-demand video?",
+      "options": [
+        "Live segments do not exist until they are produced, so the CDN cannot pre-warm them; only the most recent N segments are cacheable.",
+        "Live video uses a proprietary codec that CDNs do not support.",
+        "On-demand video is served from a single region while live video must come from multiple ingest points.",
+        "Live streaming clients require WebSocket connections that bypass CDN caching layers."
+      ],
+      "correct": 0,
+      "explanation": "On-demand content is fully materialized before first playback; CDN can cache aggressively. Live segments arrive moments before viewers request them, leaving only a small window for cache warming."
+    },
+    {
+      "stage": "post",
+      "question": "A streamer's encoder crashes during a popular stream. What should the ingest service and HLS distribution layer do?",
+      "options": [
+        "Hold the last-known manifest segments, wait for reconnect within a timeout, and resume numbering from the next sequence when the streamer reconnects.",
+        "Delete the stream record immediately and notify all viewers that the stream has ended.",
+        "Replay the last 60 seconds of segments in a loop until the streamer reconnects.",
+        "Transcode a black frame video to keep the manifest active during the outage."
+      ],
+      "correct": 0,
+      "explanation": "Holding the manifest for a grace period allows normal encoder crashes and network drops to recover transparently. The sequence number continues forward to prevent CDN cache poisoning."
+    },
+    {
+      "stage": "post",
+      "question": "Why is GPU-accelerated transcoding necessary for a platform with 500K concurrent live streams?",
+      "options": [
+        "Real-time transcoding of 500K streams into 4 renditions each would require roughly 2M CPU cores at CPU-only throughput, while GPUs cut this by an order of magnitude.",
+        "GPU transcoding produces higher quality video than CPU transcoding at the same bitrate.",
+        "CDNs only accept video encoded on GPU hardware.",
+        "GPU transcoding eliminates the need for a separate transcode worker cluster."
+      ],
+      "correct": 0,
+      "explanation": "At 500K streams × 4 renditions, CPU transcoding requires enormous core counts. GPU acceleration makes real-time transcoding economically viable."
+    },
+    {
+      "stage": "post",
+      "question": "Chat fan-out for a stream with 1M concurrent viewers at 100 messages per second requires 100M deliveries per second. What architecture pattern handles this?",
+      "options": [
+        "Kafka topic per stream consumed by WebSocket gateway workers that each maintain a shard of viewer connections.",
+        "Direct HTTP push from the chat API server to each viewer's connection concurrently.",
+        "Polling the chat database from each viewer's client every 500ms.",
+        "A relational database trigger that writes one row per viewer per message."
+      ],
+      "correct": 0,
+      "explanation": "Kafka-based fan-out decouples message production from delivery and allows WebSocket gateway workers to scale horizontally, each handling a shard of the viewer connection pool."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric is the best indicator that live streaming quality is degraded for viewers before they report it?",
+      "options": [
+        "CDN cache hit rate per stream rendition — a drop means viewers are hitting origin directly, which cannot sustain the load.",
+        "Total number of active encoders connected to the ingest fleet.",
+        "Average segment file size across all active streams.",
+        "Number of unique stream keys created in the last 24 hours."
+      ],
+      "correct": 0,
+      "explanation": "CDN cache miss rate is the leading indicator of delivery degradation: when it drops, origin load spikes, segment fetch latency increases, and viewers experience rebuffering before they report issues."
+    },
+    {
+      "stage": "post",
+      "question": "What is the core trade-off between HLS-based streaming (10-30s latency) and WebRTC-based streaming (sub-1s latency)?",
+      "options": [
+        "HLS is CDN-cacheable and scales to millions of viewers per stream; WebRTC requires peer-to-peer or SFU relay that cannot economically scale past tens of thousands of viewers.",
+        "WebRTC produces higher video quality than HLS at the same bitrate.",
+        "HLS requires the streamer to have a professional encoder while WebRTC works from a browser.",
+        "WebRTC segments are smaller than HLS segments, which reduces CDN storage costs."
+      ],
+      "correct": 0,
+      "explanation": "WebRTC's real-time relay model (SFU) is economically impractical for 1M viewer streams. HLS's segment-based pull model is CDN-native and scales to any viewer count."
+    },
+    {
+      "stage": "post",
+      "question": "A live stream has 500K concurrent viewers and the CDN edge POPs serving a specific region are overloaded. What is the correct mitigation?",
+      "options": [
+        "The CDN load balancer redirects new viewer connections to alternative edge POPs in the same region, distributing load across the available capacity.",
+        "The platform stops accepting new viewers for the stream until the overloaded POPs recover.",
+        "The transcode pipeline reduces the number of rendition variants to reduce bandwidth.",
+        "Viewers in the overloaded region are automatically switched to lower-bitrate streams at the CDN layer."
+      ],
+      "correct": 0,
+      "explanation": "CDN load balancing across POPs is the standard mitigation: redirect overflow viewers to less-loaded edges without interrupting existing viewer sessions."
+    }
+  ]
+}

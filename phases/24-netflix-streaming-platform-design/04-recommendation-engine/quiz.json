@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why does the two-tower model enable faster serving than scoring every user-item pair at request time?",
+      "options": [
+        "The user embedding is computed once per request, then ANN search retrieves top-K candidates from the pre-indexed item embedding space in milliseconds — avoiding O(users × items) scoring.",
+        "The two-tower model runs on the client device, eliminating server round-trips.",
+        "The two-tower model requires fewer features than matrix factorization.",
+        "ANN search is only needed for cold start users, not for subscribers with history."
+      ],
+      "correct": 0,
+      "explanation": "Precomputing item embeddings offline and building an ANN index allows retrieval in single-digit milliseconds at request time. Full cross-product scoring at 270M users × 36,000 titles would be orders of magnitude too slow."
+    },
+    {
+      "stage": "pre",
+      "question": "What is the core weakness of pure collaborative filtering for a new title?",
+      "options": [
+        "A new title has no interaction history, so there are no co-watch signals to learn from — it will not appear in collaborative filtering results until enough subscribers have watched it.",
+        "Collaborative filtering requires a GPU cluster that is not available for new title ingestion.",
+        "New titles must be encoded in a specific codec before collaborative filtering can index them.",
+        "Collaborative filtering only works for returning subscribers, not new ones."
+      ],
+      "correct": 0,
+      "explanation": "This is the item cold start problem. Content-based filtering and editorial promotion are standard mitigations until a new title accumulates enough interaction data."
+    },
+    {
+      "stage": "post",
+      "question": "A subscriber's long-term genre affinity feature is updated daily, but their short-term watch history is updated every few minutes. Why is this split justified?",
+      "options": [
+        "Long-term preferences change slowly and are expensive to recompute; short-term signals change rapidly and directly impact the current session's relevance.",
+        "Long-term features are more accurate and should not be updated too frequently.",
+        "Short-term features are only used for cold start subscribers.",
+        "Daily updates for all features would overload the feature store with write traffic."
+      ],
+      "correct": 0,
+      "explanation": "A subscriber who just watched a horror movie should see related suggestions immediately. Their overall genre affinity changes over months. Different freshness requirements justify different update cadences."
+    },
+    {
+      "stage": "post",
+      "question": "What is the correct fallback when the recommendation API latency spikes above the SLA?",
+      "options": [
+        "Serve pre-computed recommendations from EVCache (Memcached) — they may be slightly stale but are always available at sub-millisecond latency.",
+        "Return an empty homepage so subscribers know the system is degraded.",
+        "Redirect subscribers to the search page until the API recovers.",
+        "Compute recommendations synchronously using a simpler model to meet the latency budget."
+      ],
+      "correct": 0,
+      "explanation": "Pre-computed recommendations in EVCache are the designed fallback path. Stale recommendations are far better than no recommendations or a blank homepage."
+    },
+    {
+      "stage": "post",
+      "question": "How does homepage row ranking differ from within-row title ranking?",
+      "options": [
+        "Row ranking decides which row types to show this subscriber and in what order; within-row ranking decides which titles to surface within each chosen row type.",
+        "Row ranking uses a larger neural network than within-row ranking.",
+        "Row ranking only applies to the cold start path; returning subscribers see fixed row types.",
+        "Within-row ranking is deterministic (alphabetical by title); only row order is personalized."
+      ],
+      "correct": 0,
+      "explanation": "These are two separate personalization decisions stacked on top of each other. A subscriber might see 20 rows out of 50 possible row types, then personalized titles within each."
+    },
+    {
+      "stage": "post",
+      "question": "What is the risk of rebuilding the ANN index during a model redeployment?",
+      "options": [
+        "There is a window where the new model weights are serving but the ANN index reflects the old embeddings, causing score mismatch and potentially poor recommendations.",
+        "ANN index rebuilds always take longer than 24 hours, making daily retraining impractical.",
+        "The ANN index must be rebuilt on every feature store update, not just on model updates.",
+        "ANN index rebuilds require all subscribers to log out and log back in."
+      ],
+      "correct": 0,
+      "explanation": "The mitigation is to keep the previous model's index hot and switch atomically — or to warm the new index before cutting traffic to it."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric best captures whether a recommendation improvement actually made subscribers happier?",
+      "options": [
+        "Long-term retention rate and completion rate per recommended title — whether subscribers actually watched and finished content the system recommended.",
+        "Homepage recommendation API latency — lower latency means better user experience.",
+        "Click-through rate alone, measured over a 1-hour window.",
+        "The number of recommendations that were shown, not clicked."
+      ],
+      "correct": 0,
+      "explanation": "Click-through rate captures engagement but not satisfaction. Completion rate and long-term retention are more reliable proxies for whether the recommendation was genuinely useful."
+    },
+    {
+      "stage": "post",
+      "question": "What is the most important cold start mitigation for a new subscriber's first session?",
+      "options": [
+        "Accelerate short-term signal updates so that after 3-5 plays, recommendations already reflect early preferences — bridging the gap until enough history accumulates for full personalization.",
+        "Show only the top-50 globally trending titles until the subscriber has watched 100 titles.",
+        "Disable recommendations entirely for the first 30 days and rely on search.",
+        "Ask subscribers to rate 50 titles before the homepage loads."
+      ],
+      "correct": 0,
+      "explanation": "The first session is the most critical for retention. Fast feedback loops on early signals — even from a single watched title — dramatically improve the first-session experience."
+    }
+  ]
+}

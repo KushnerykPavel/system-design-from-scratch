@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Which non-obvious constraint do mid-level candidates most commonly miss when designing a file sync service?",
+      "options": [
+        "Conflict resolution when two devices edit the same file concurrently, and block-level deduplication to avoid re-uploading unchanged data.",
+        "The need for a CDN to cache file metadata for read performance.",
+        "The requirement to support files larger than 4 GB on mobile devices.",
+        "The need for end-to-end encryption to be enforced by the server."
+      ],
+      "correct": 0,
+      "explanation": "Most candidates design 'upload to S3' and miss that concurrent edits require conflict detection and that block-level sync is essential for bandwidth efficiency at scale."
+    },
+    {
+      "stage": "pre",
+      "question": "What is the key non-obvious constraint in an ad click aggregation system that separates senior from mid-level designs?",
+      "options": [
+        "At-least-once delivery requires deduplication, and late-arriving events require delta corrections to already-reported windows — not just a Kafka consumer incrementing a counter.",
+        "Click events must be stored in a time-series database to support millisecond-level query performance.",
+        "Fraud scoring must be synchronous to ensure billing accuracy.",
+        "The aggregation pipeline must run in the same data center as the ad-serving system."
+      ],
+      "correct": 0,
+      "explanation": "Deduplication of at-least-once delivery and late-event correction are the two constraints that candidates who have only read about Kafka miss when designing click pipelines."
+    },
+    {
+      "stage": "post",
+      "question": "In a ride-sharing dispatch system, what mechanism prevents two match processes from assigning the same driver to two different riders?",
+      "options": [
+        "An atomic compare-and-swap on the driver's status field in Redis, transitioning it from 'available' to 'pending:{ride_id}' — only the winner of the CAS proceeds with dispatch.",
+        "A distributed read lock acquired by the matching service before querying driver availability.",
+        "A trip database unique constraint on (driver_id, status) that rejects the second assignment.",
+        "The driver app detects duplicate dispatch requests and self-selects the first rider."
+      ],
+      "correct": 0,
+      "explanation": "CAS on driver status is the correct atomic assignment mechanism — fast, no global lock, and the loser gets an immediate failure response rather than a queued wait."
+    },
+    {
+      "stage": "post",
+      "question": "A live streaming platform has 1M concurrent viewers on one stream. Chat delivers 100 messages per second. What architecture handles the 100M deliveries per second requirement?",
+      "options": [
+        "Kafka topic per stream consumed by sharded WebSocket gateway workers, each maintaining a shard of viewer connections.",
+        "HTTP push from a single chat API server to all 1M viewer connections concurrently.",
+        "Database polling from each viewer's client at 500ms intervals.",
+        "Fan-out via a CDN that caches each chat message as a short-lived edge object."
+      ],
+      "correct": 0,
+      "explanation": "Kafka decouples message production from delivery; sharded WebSocket gateways horizontally scale the connection fan-out. No other pattern sustains 100M deliveries/second efficiently."
+    },
+    {
+      "stage": "post",
+      "question": "In a hotel/flight booking system, why must the seat hold be created before payment is initiated, not after?",
+      "options": [
+        "Payment takes 1–10 seconds; without a prior hold, the seat remains bookable by other users during payment processing, risking a double-booking.",
+        "Payment processors require a reservation confirmation number before charging a card.",
+        "Creating the hold after payment triggers a double-charge in the payment system.",
+        "Regulatory requirements mandate that a seat be held before a payment attempt."
+      ],
+      "correct": 0,
+      "explanation": "The hold serializes seat access. Without a hold before payment, two users can both begin payment for the same seat and both succeed, resulting in a double-booking."
+    },
+    {
+      "stage": "post",
+      "question": "In a code deployment pipeline, what is the risk of using a mutable version tag (e.g., 'service:latest') for rollback?",
+      "options": [
+        "The 'latest' tag may have been reassigned to a newer artifact since the last deployment, so 'rollback to latest' is ambiguous and may not restore the previous version.",
+        "Mutable tags cannot be pulled by Kubernetes during rollout.",
+        "Mutable tags increase artifact storage costs because they are not deduplicated.",
+        "Rolling back to a mutable tag requires a distributed transaction in the artifact registry."
+      ],
+      "correct": 0,
+      "explanation": "Content-addressed artifacts (by digest) are immutable identities. Mutable tags break the 'rollback = known-good binary' guarantee that safe deployment pipelines require."
+    },
+    {
+      "stage": "post",
+      "question": "A feature flag kill switch is activated. Why should it propagate faster than normal flag changes?",
+      "options": [
+        "Kill switches are activated during active incidents where each additional second of exposure causes user harm; a separate priority delivery path reduces time-to-mitigation.",
+        "Kill switches are smaller payloads than normal flag updates and therefore propagate faster by default.",
+        "Kill switches only affect one service instance at a time, so they do not need broad propagation.",
+        "Normal flag changes are blocked until kill switches complete propagation."
+      ],
+      "correct": 0,
+      "explanation": "A kill switch is an incident response tool. The 10-second propagation target vs 30 seconds for normal flags requires a dedicated priority path that is not queued behind lower-urgency updates."
+    },
+    {
+      "stage": "post",
+      "question": "Across all seven scenarios in this phase, which design pattern appears most consistently as the mechanism that prevents a correctness violation under concurrency?",
+      "options": [
+        "Atomic compare-and-swap or SELECT FOR UPDATE to serialize concurrent access to shared mutable state — driver status, seat availability, block reference counts, and flag state updates all rely on this pattern.",
+        "Eventual consistency with conflict resolution at read time.",
+        "Sharding the shared state so each shard is owned by exactly one process.",
+        "Rate limiting concurrent access to prevent races from occurring at all."
+      ],
+      "correct": 0,
+      "explanation": "CAS and row-level locking are the recurring correctness mechanisms: driver assignment, seat hold, artifact version, and flag state all require atomic read-modify-write to prevent races."
+    }
+  ]
+}

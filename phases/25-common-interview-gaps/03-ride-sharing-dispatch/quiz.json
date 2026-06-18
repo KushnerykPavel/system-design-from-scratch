@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why is minimum-distance matching insufficient for ride-sharing dispatch, and what is the better objective?",
+      "options": [
+        "Minimum ETA accounts for road network, traffic, and direction of travel, making it a more accurate proxy for how long the rider waits.",
+        "Minimum distance leads to driver starvation in dense areas where all rides cluster in one zone.",
+        "Distance matching requires a sorted database index that cannot scale past 10K concurrent drivers.",
+        "Minimum distance ignores driver rating, which is required by law in most jurisdictions."
+      ],
+      "correct": 0,
+      "explanation": "A driver 500m away on the wrong side of a highway may have a higher ETA than one 800m away on the same block. ETA is the correct matching objective."
+    },
+    {
+      "stage": "pre",
+      "question": "Two matching service processes simultaneously select the same driver for two different riders. What mechanism prevents a double-assignment?",
+      "options": [
+        "An atomic compare-and-swap on the driver's status field ensures only one process can transition it from available to assigned.",
+        "The trip database's foreign key constraint rejects the second insert.",
+        "Driver apps detect duplicate dispatch requests and self-reassign to the second rider.",
+        "A distributed lock manager serializes all match operations globally."
+      ],
+      "correct": 0,
+      "explanation": "CAS (compare-and-swap) on the driver status in Redis provides a fast, atomic single-winner guarantee without a global lock."
+    },
+    {
+      "stage": "post",
+      "question": "Which design approach best handles driver location data freshness at 125K updates per second?",
+      "options": [
+        "In-memory geospatial index per city updated via pubsub from the location ingestion service.",
+        "A relational database with a geospatial index refreshed with each driver ping.",
+        "A batch job that rebuilds the driver location index every 60 seconds.",
+        "Client-side location caching with the rider app holding last-known driver positions."
+      ],
+      "correct": 0,
+      "explanation": "In-memory geospatial indexes per city support sub-millisecond lookups and can absorb 125K updates/s through pubsub fan-out, far outperforming relational DB geospatial queries."
+    },
+    {
+      "stage": "post",
+      "question": "A sudden sporting event ends and 10,000 riders in a small zone request rides simultaneously. How does surge pricing help the system?",
+      "options": [
+        "Higher prices attract idle drivers to move to the zone and suppress marginal demand, balancing supply and demand over the next few minutes.",
+        "Surge pricing locks the zone and prevents new ride requests until supply is restored.",
+        "Surge pricing reroutes riders to the nearest low-demand zone automatically.",
+        "Surge pricing has no effect on supply; it only increases platform revenue."
+      ],
+      "correct": 0,
+      "explanation": "Surge pricing is a market signal: it attracts supply (drivers repositioning) and suppresses demand (price-sensitive riders wait), restoring equilibrium."
+    },
+    {
+      "stage": "post",
+      "question": "A driver declines a dispatch request. The matching service must select a new candidate. What is the safest protocol?",
+      "options": [
+        "Maintain an ordered candidate list from the initial match query; release the declined driver's status back to available and attempt the next candidate within a time budget.",
+        "Start a new geospatial search from scratch and re-evaluate all drivers in the area.",
+        "Assign the ride to the driver who was second-closest in the original query without checking their current availability.",
+        "Cancel the ride request and ask the rider to re-request."
+      ],
+      "correct": 0,
+      "explanation": "Reusing the pre-computed candidate list avoids a full re-query, while releasing the declined driver's status keeps them available for other riders."
+    },
+    {
+      "stage": "post",
+      "question": "What observability signal is the earliest indicator that the matching pipeline is degraded in a specific city?",
+      "options": [
+        "Match latency p95 for that city rising above the SLO threshold.",
+        "Total number of active drivers in the city dropping below the daily average.",
+        "Surge multiplier for the city exceeding 2.0x.",
+        "Rider app crash rate increasing on the trip confirmation screen."
+      ],
+      "correct": 0,
+      "explanation": "Match latency p95 directly reflects the user-visible outcome and catches failures anywhere in the dispatch pipeline — location staleness, index issues, or CAS contention."
+    },
+    {
+      "stage": "post",
+      "question": "What is the risk of updating surge multipliers every 1 second instead of every 30 seconds?",
+      "options": [
+        "Multipliers oscillate rapidly as small demand and supply fluctuations trigger constant price changes, confusing drivers and riders.",
+        "Surge updates consume too much database write throughput at one update per second.",
+        "Riders would see different surge values on iOS vs Android due to cache TTL differences.",
+        "The matching service cannot read surge values fast enough at 1-second update intervals."
+      ],
+      "correct": 0,
+      "explanation": "High-frequency surge updates cause oscillation: a surge attracts drivers, which kills the surge, which disperses drivers, which restores the surge. Slower update intervals dampen this feedback loop."
+    },
+    {
+      "stage": "post",
+      "question": "The location store for a major city loses all driver positions. What is the correct degraded-mode behavior for the matching service?",
+      "options": [
+        "Serve last-known driver positions with a staleness flag, continue matching with degraded accuracy, and alert on-call while triggering a re-sync from driver apps.",
+        "Stop accepting ride requests for the affected city until the location store recovers.",
+        "Fallback to a city-level average position for all drivers and proceed with matching.",
+        "Route all ride requests from the affected city to the nearest operational city's dispatch node."
+      ],
+      "correct": 0,
+      "explanation": "Continuing with stale data is better than full outage. The staleness flag lets operators know quality is degraded, and re-sync from driver apps restores correctness without prolonged downtime."
+    }
+  ]
+}

@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why do file sync services split files into fixed-size blocks instead of uploading files whole?",
+      "options": [
+        "So that only the changed blocks need to be transferred on subsequent updates, saving bandwidth.",
+        "So that the metadata service can skip checksumming entirely.",
+        "Because object stores cannot accept files larger than 4 MB.",
+        "Because splitting enables cross-device locking on individual blocks."
+      ],
+      "correct": 0,
+      "explanation": "Block-level delta sync is the core bandwidth optimization: only changed blocks are uploaded, not the full file."
+    },
+    {
+      "stage": "pre",
+      "question": "What is the primary purpose of content-addressing (hashing blocks by content) in a file sync system?",
+      "options": [
+        "It enables deduplication: identical blocks stored by any user map to the same object, stored once.",
+        "It allows the client to skip authentication for block uploads.",
+        "It ensures block ordering is preserved during network reordering.",
+        "It allows the metadata service to avoid storing block lists."
+      ],
+      "correct": 0,
+      "explanation": "Content-addressing means the hash is both the key and the identity proof, enabling cross-user deduplication without extra bookkeeping."
+    },
+    {
+      "stage": "post",
+      "question": "Two devices edit the same file concurrently while one is offline. When the offline device reconnects and commits, what should the metadata service do?",
+      "options": [
+        "Silently overwrite the server version with the offline device's version.",
+        "Reject the offline device's commit and return an error with no conflict copy.",
+        "Detect the parent version mismatch and create a conflict copy, giving both devices both versions.",
+        "Merge the two file versions byte-by-byte automatically."
+      ],
+      "correct": 2,
+      "explanation": "Creating a conflict copy is the safe default for file sync: no data is lost, and the user can resolve the conflict manually."
+    },
+    {
+      "stage": "post",
+      "question": "Which design decision makes cross-user block deduplication impossible?",
+      "options": [
+        "Storing blocks in a separate object store from metadata.",
+        "End-to-end encryption where only the client holds the encryption key.",
+        "Using SHA-256 hashes as block identifiers.",
+        "Limiting file size to 5 GB."
+      ],
+      "correct": 1,
+      "explanation": "With client-side encryption, two users who have the same file produce different ciphertexts with different hashes, eliminating cross-user dedup."
+    },
+    {
+      "stage": "post",
+      "question": "A block garbage collector deletes blocks that have zero references. What race condition must you prevent?",
+      "options": [
+        "A new file version commits a block reference while GC is simultaneously deleting that block.",
+        "Two clients uploading the same block at the same time.",
+        "The CDN serving a stale block hash to the client.",
+        "The notification service delivering sync events out of order."
+      ],
+      "correct": 0,
+      "explanation": "The GC must use a tombstone or two-phase delete window to avoid deleting a block that a concurrent version commit is about to reference."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric is the best early warning that sync is falling behind for connected devices?",
+      "options": [
+        "The delta sync latency p95 from file save on one device to availability on another.",
+        "The total number of blocks stored in object storage.",
+        "The number of API server instances in the fleet.",
+        "The average file size across all users."
+      ],
+      "correct": 0,
+      "explanation": "End-to-end delta sync latency directly measures the user-visible outcome and catches problems anywhere in the pipeline."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off does a sync-cursor-based delta API offer compared to polling all file metadata on each sync?",
+      "options": [
+        "Cursors allow devices to fetch only events they have not yet seen, reducing server load and bandwidth per sync cycle.",
+        "Cursors guarantee exactly-once delivery without any client-side deduplication.",
+        "Cursors remove the need for block-level checksums.",
+        "Cursors allow the server to push blocks to devices without a pull request."
+      ],
+      "correct": 0,
+      "explanation": "Incremental cursor-based sync amortizes the cost of listing all changes; only the delta since the last known position is returned."
+    },
+    {
+      "stage": "post",
+      "question": "A user reconnects after two weeks offline. Their device has thousands of locally changed files. What server-side risk does this create and how do you mitigate it?",
+      "options": [
+        "The device sends a block-check batch for thousands of files simultaneously, potentially overloading the metadata service — mitigate with per-user rate limiting and staggered reconnect backoff.",
+        "The block storage runs out of space — mitigate by pre-allocating 1 TB per device.",
+        "The notification service cannot identify the device — mitigate by rotating device tokens weekly.",
+        "The CDN serves stale blocks — mitigate by purging the entire CDN on each reconnect."
+      ],
+      "correct": 0,
+      "explanation": "Mass reconnect creates a thundering-herd on metadata and block-check APIs; rate limiting and backoff protect the service."
+    }
+  ]
+}

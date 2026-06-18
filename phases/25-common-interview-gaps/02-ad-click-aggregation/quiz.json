@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why do ad click events arrive at-least-once rather than exactly-once at the ingestion service?",
+      "options": [
+        "Clients and edge nodes retry failed or timed-out requests, potentially delivering the same event multiple times.",
+        "Kafka guarantees at-least-once delivery to producers but not consumers.",
+        "Advertising clients intentionally duplicate clicks to inflate their reported reach.",
+        "Stream processors always re-emit events when they restart from a checkpoint."
+      ],
+      "correct": 0,
+      "explanation": "Network failures cause client retries, and edge buffering can result in the same click event arriving multiple times. Deduplication must compensate for this."
+    },
+    {
+      "stage": "pre",
+      "question": "Why is synchronous fraud scoring on the ingestion critical path problematic at 5 million clicks per second?",
+      "options": [
+        "Fraud scoring typically takes 50-200ms per batch, which would cap ingestion throughput far below the required rate.",
+        "Fraud scoring requires a distributed transaction that locks the billing database.",
+        "Fraud models must run on GPU hardware that cannot be co-located with ingestion APIs.",
+        "Synchronous fraud scoring is only problematic when deduplication is not active."
+      ],
+      "correct": 0,
+      "explanation": "Adding 50-200ms latency per batch to a 5M events/s ingestion path would require thousands of additional servers and would likely still cause backpressure. Async scoring decouples throughput from scoring speed."
+    },
+    {
+      "stage": "post",
+      "question": "A Bloom filter rejects a valid click with probability p = 0.001%. Which statement about this design decision is most accurate?",
+      "options": [
+        "It is an acceptable trade-off because exact deduplication at 5M events/s would require prohibitively expensive key-value lookups.",
+        "It is unacceptable because even one missed click invalidates the entire billing system.",
+        "It means all false positives must be recovered from a dead-letter queue before billing.",
+        "It only applies to first-party data and not to third-party click networks."
+      ],
+      "correct": 0,
+      "explanation": "At 5M events/s, exact KV-based dedup is expensive and slow. A 0.001% false positive rate on a bloom filter means <50 valid clicks lost per second, which is within billing tolerance when documented."
+    },
+    {
+      "stage": "post",
+      "question": "A click event arrives 45 minutes after its time-window closed. The window aggregate has already been reported. What should a correct pipeline do?",
+      "options": [
+        "Apply a delta correction to the stored aggregate and record it in the correction log for advertiser reconciliation.",
+        "Discard the event since the window is already closed and corrections are not possible.",
+        "Reprocess the entire day's events to recalculate all windows from scratch.",
+        "Add the click to the next open window as a substitute."
+      ],
+      "correct": 0,
+      "explanation": "Late-event correction with delta patches is the standard approach: update the existing aggregate incrementally and log the correction for audits, without full reprocessing."
+    },
+    {
+      "stage": "post",
+      "question": "The fraud service becomes unavailable for 10 minutes. What is the safest strategy for the aggregation pipeline?",
+      "options": [
+        "Mark events as fraud-pending and continue aggregating; backfill fraud scores and apply corrections when the service recovers.",
+        "Stop ingesting all clicks until the fraud service is restored to maintain billing accuracy.",
+        "Apply last-known fraud model weights locally on the stream processor nodes.",
+        "Forward all unscored events to the dead-letter queue and discard them after 1 hour."
+      ],
+      "correct": 0,
+      "explanation": "Stopping ingestion during a fraud service outage would lose real user clicks. Marking as fraud-pending and backfilling after recovery is the standard degraded-mode pattern."
+    },
+    {
+      "stage": "post",
+      "question": "Which observability signal best detects that the aggregation pipeline is falling behind in near-real-time?",
+      "options": [
+        "The lag between window close time and the time the final aggregate is available in the reporting store.",
+        "The total number of Kafka partitions in the raw-clicks topic.",
+        "The CPU utilization of the ingestion API servers.",
+        "The number of unique campaign IDs seen in the last hour."
+      ],
+      "correct": 0,
+      "explanation": "Pipeline lag from window close to reporting availability directly measures the user-visible SLO: whether advertisers can see their data within the promised 5 minutes."
+    },
+    {
+      "stage": "post",
+      "question": "An advertiser claims they were overbilled. You find a stream processor bug that double-counted clicks for a 2-hour window last week. What is the minimum data you need to issue a correction?",
+      "options": [
+        "The raw click events for the affected window (retained in Kafka or object storage) and the original aggregate for comparison.",
+        "Only the current aggregate in the reporting store, which can be halved for the affected window.",
+        "The fraud service logs for the affected window, which contain the full click inventory.",
+        "A bloom filter snapshot from the time of the incident to replay deduplication."
+      ],
+      "correct": 0,
+      "explanation": "Correcting a billing bug requires replaying raw events through the fixed pipeline to recompute the true aggregate and then issuing a delta correction against the stored (wrong) aggregate."
+    },
+    {
+      "stage": "post",
+      "question": "Why is partitioning the Kafka raw-clicks topic by campaign_id beneficial for windowed aggregation?",
+      "options": [
+        "Events for the same campaign land on the same partitions, so stream processor tasks can maintain per-campaign window state locally without cross-partition shuffles.",
+        "Partitioning by campaign_id enables Kafka to compress events for the same campaign together.",
+        "It ensures that the deduplication Bloom filter only needs to cover one campaign at a time.",
+        "It prevents any single consumer group from reading events from multiple campaigns simultaneously."
+      ],
+      "correct": 0,
+      "explanation": "Co-locating events by campaign_id on the same partition means a stream processor task can accumulate a window's counts in local state without expensive cross-node aggregation."
+    }
+  ]
+}

@@ -1,0 +1,88 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why is partitioning Kafka topics by user_id better than round-robin for Netflix's use case?",
+      "options": [
+        "All events for a given user land on the same partition, enabling stateful Flink processing (sessions, per-user aggregations) without expensive cross-partition shuffles.",
+        "User_id partitioning ensures equal load distribution across all partitions.",
+        "Round-robin partitioning causes duplicate events; user_id partitioning prevents them.",
+        "User_id partitioning reduces the number of Kafka brokers required."
+      ],
+      "correct": 0,
+      "explanation": "Session computation and per-user feature updates require seeing all events for a user in order. Partitioning by user_id guarantees co-location for stateful operators."
+    },
+    {
+      "stage": "pre",
+      "question": "What does a Flink watermark represent, and why does it matter for windowing?",
+      "options": [
+        "A watermark is a threshold of event time that tells Flink 'no events older than this will arrive' — it triggers window closure and final computation even when the stream is partially out of order.",
+        "A watermark marks the boundary between two Kafka partitions in a topic.",
+        "A watermark is a heartbeat message that prevents Flink job timeouts.",
+        "A watermark defines the maximum number of events that can be in a window simultaneously."
+      ],
+      "correct": 0,
+      "explanation": "Without watermarks, Flink cannot know when a time window is complete. The watermark is an approximation: events arriving before it are included in the window; later arrivals go to the late data path."
+    },
+    {
+      "stage": "post",
+      "question": "Why is 'at-least-once delivery + idempotent writes' a practical substitute for true exactly-once semantics?",
+      "options": [
+        "Processing the same event twice with an idempotent aggregation function (e.g., count distinct, replace-not-accumulate) produces the correct result, matching the behavior of true exactly-once at much lower complexity.",
+        "At-least-once delivery is always more reliable than exactly-once because it does not block on coordinator consensus.",
+        "Exactly-once semantics are only achievable in single-node systems, not distributed ones.",
+        "Idempotent writes require more storage but prevent data loss in all failure scenarios."
+      ],
+      "correct": 0,
+      "explanation": "True exactly-once requires two-phase commit across Kafka, Flink, and the sink — adding significant latency and complexity. Idempotent aggregations achieve the same result much more simply."
+    },
+    {
+      "stage": "post",
+      "question": "Which schema evolution change is backward-compatible in Avro?",
+      "options": [
+        "Adding an optional field with a default value — new consumers can read it, old consumers ignore it.",
+        "Renaming an existing field to a more descriptive name.",
+        "Changing a field type from int to string for better flexibility.",
+        "Removing a required field that is no longer needed."
+      ],
+      "correct": 0,
+      "explanation": "Backward compatibility means new readers can read old data and old readers can read new data. Optional fields with defaults satisfy both. Renaming, type changes, and removing required fields all break one or both."
+    },
+    {
+      "stage": "post",
+      "question": "What is the correct mitigation when a Flink job crashes mid-window?",
+      "options": [
+        "Restart from the last successful checkpoint — the job replays events since the checkpoint, recomputing in-progress window state without re-emitting already committed outputs.",
+        "Discard the in-progress window and start a new one from the crash time.",
+        "Switch to processing-time windows which do not require checkpointing.",
+        "Alert on-call and wait for manual restart to avoid data duplication."
+      ],
+      "correct": 0,
+      "explanation": "Flink checkpointing stores window state snapshots. On restart, the job recovers from the checkpoint and reprocesses only the events since the last checkpoint — limiting the gap to the checkpoint interval."
+    },
+    {
+      "stage": "post",
+      "question": "How do playback completion events translate into a recommendation signal?",
+      "options": [
+        "High completion rate (>80%) is a strong positive signal for the title's genre; low completion (<15%) is a negative signal — these update the subscriber's short-term feature profile in the feature store within minutes.",
+        "Completion events are stored in S3 and only processed during the next weekly model retrain.",
+        "The recommendation signal is derived solely from explicit star ratings, not playback completion.",
+        "Completion events trigger an immediate full model retrain on the GPU cluster."
+      ],
+      "correct": 0,
+      "explanation": "Implicit feedback (completion rate) is far more abundant than explicit ratings. Fast feature store updates from completion signals allow recommendations to reflect recent behavior within the same session."
+    },
+    {
+      "stage": "post",
+      "question": "What is the risk of growing Kafka consumer lag, and what is the correct first response?",
+      "options": [
+        "Growing lag means processing is slower than ingestion — the immediate response is to scale Flink task parallelism and deprioritize or temporarily drop low-value event types to protect high-priority paths.",
+        "Consumer lag is a cosmetic metric; the data is not lost and will be processed eventually without action.",
+        "Growing lag indicates a Kafka broker failure; the correct response is to add more brokers.",
+        "Consumer lag should trigger a Chaos Monkey experiment to test resilience."
+      ],
+      "correct": 0,
+      "explanation": "Sustained lag means the real-time path is failing its latency SLA. The system degrades gracefully by scaling and prioritizing, not by waiting for lag to self-resolve."
+    }
+  ]
+}

@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What should happen in the first 5 minutes of a Netflix system design interview?",
+      "options": [
+        "Ask targeted clarifying questions, provide rough capacity numbers (subscribers, concurrent streams, CDN bandwidth), and scope the problem before drawing anything.",
+        "Draw the highest-level architecture diagram immediately to show breadth.",
+        "Ask the interviewer which subsystem to focus on and then deep-dive only into that.",
+        "List all Netflix products and ask which one the question is about."
+      ],
+      "correct": 0,
+      "explanation": "Interviewers evaluate your process, not just your output. Starting with clarification and numbers demonstrates engineering calibration and prevents wasted design time on the wrong problem."
+    },
+    {
+      "stage": "pre",
+      "question": "Which of these is the strongest clarifying question for a 'Design Netflix streaming' prompt?",
+      "options": [
+        "'Is this VOD only, or does it include live streaming? They have very different latency, CDN fill, and segment-size requirements.'",
+        "'How many engineers will be working on this system?'",
+        "'What programming language should the backend services use?'",
+        "'Should we use AWS or build our own data centers?'"
+      ],
+      "correct": 0,
+      "explanation": "VOD vs live is a fundamental constraint that changes segment duration, prefill strategy, ABR parameters, and redundancy requirements. It is exactly the kind of clarification that shapes the entire design."
+    },
+    {
+      "stage": "post",
+      "question": "When a Netflix interviewer pivots to 'live streaming changes?', what is the most important single change to mention?",
+      "options": [
+        "Segment duration drops to ~2 seconds, proactive prefill is impossible (content is being created in real time), and the origin is a live encoder rather than S3.",
+        "Live streaming requires a completely different CDN architecture with no relationship to Open Connect.",
+        "The main change is that subscribers need lower-latency devices such as satellite receivers.",
+        "Live streaming removes the need for an encoding ladder because all subscribers must receive the same quality."
+      ],
+      "correct": 0,
+      "explanation": "Short segments and real-time origin are the defining constraints of live streaming. They cascade into ABR changes, DVR design, and multi-CDN redundancy requirements."
+    },
+    {
+      "stage": "post",
+      "question": "A candidate spends 40 of 45 minutes on the encoding pipeline and never discusses delivery or recommendations. What does this signal to the interviewer?",
+      "options": [
+        "The candidate may have deep encoding knowledge but lacks the breadth to design a complete system — a risk for staff-level work where coordination across subsystems is expected.",
+        "This is ideal — depth is more valued than breadth at Netflix.",
+        "The candidate should be scored higher for demonstrating expert knowledge in one area.",
+        "This is acceptable if the encoding pipeline is the hardest part of the system."
+      ],
+      "correct": 0,
+      "explanation": "Netflix staff engineers are expected to design across system boundaries. A 45-minute interview that covers one subsystem signals a specialist who may struggle with cross-functional architecture work."
+    },
+    {
+      "stage": "post",
+      "question": "How should a candidate respond to an interviewer's deliberate design pivot?",
+      "options": [
+        "Acknowledge the constraint change, briefly state what needs to be updated in the existing design, and adjust without discarding the overall structure.",
+        "Start the design over from scratch to show flexibility.",
+        "Ask the interviewer to clarify why they are pivoting before answering.",
+        "Tell the interviewer that the pivot is out of scope for this design question."
+      ],
+      "correct": 0,
+      "explanation": "Pivots test design flexibility and structured thinking. A good candidate adapts the existing design rather than abandoning it. Starting over wastes the 25 minutes of work already done."
+    },
+    {
+      "stage": "post",
+      "question": "What does naming a trade-off with a rejected alternative demonstrate?",
+      "options": [
+        "That the candidate considered multiple approaches and made a deliberate choice — not that they only know one pattern and applied it by default.",
+        "That the candidate is familiar with multiple cloud providers.",
+        "That the candidate has read about the topic but may not have practical experience.",
+        "That the design is overly complex with unnecessary alternatives."
+      ],
+      "correct": 0,
+      "explanation": "The strongest candidates reason about the option space, not just the chosen option. 'I chose X over Y because Z, at the cost of W' is the trade-off communication pattern Netflix interviewers listen for."
+    },
+    {
+      "stage": "post",
+      "question": "At the 45-minute mark, what should a strong-hire candidate's closing look like?",
+      "options": [
+        "A brief summary of the top 2-3 trade-off decisions made and why, what they would instrument first, and one thing they would revisit with more time.",
+        "A complete list of every component mentioned during the interview.",
+        "A question to the interviewer about what Netflix actually uses in production.",
+        "A request to continue the design past the time limit to cover missed areas."
+      ],
+      "correct": 0,
+      "explanation": "Interviewers remember the closing disproportionately. A crisp summary that ties trade-offs together shows structured thinking and composure under time pressure."
+    },
+    {
+      "stage": "post",
+      "question": "Which score on the 16-point rubric indicates a clear hire recommendation at Netflix?",
+      "options": [
+        "14-16 points indicates strong hire; 10-13 indicates hire; below 10 indicates mixed or no-hire.",
+        "Any score above 8 is sufficient for a hire recommendation at Netflix.",
+        "The rubric score does not matter — only the interviewer's subjective impression counts.",
+        "A perfect 16 is required for a hire recommendation at Netflix's bar."
+      ],
+      "correct": 0,
+      "explanation": "The 16-point rubric in this lesson maps to three tiers. Strong hire requires demonstrating depth, breadth, failure thinking, trade-offs, Netflix vocabulary, and a clean summary."
+    }
+  ]
+}

@@ -1,0 +1,88 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What is the primary economic motivation for ISPs to host Netflix OCA servers for free?",
+      "options": [
+        "Netflix traffic can be 30%+ of an ISP's peak downstream traffic; hosting a server converts expensive transit bandwidth into free local delivery.",
+        "ISPs are legally required to provide free colocation to content providers above a certain traffic volume.",
+        "OCA servers generate revenue for ISPs through direct subscriber billing.",
+        "ISPs host OCA servers in exchange for Netflix providing free CDN services for the ISP's own content."
+      ],
+      "correct": 0,
+      "explanation": "The deal is economically mutual: Netflix gets free colocation, ISPs get traffic that was going to cost them upstream transit charges served locally instead."
+    },
+    {
+      "stage": "pre",
+      "question": "Why is ISP-local popularity ranking better than global popularity ranking for prefill decisions?",
+      "options": [
+        "Content demand varies significantly by geography; a title popular in Brazil may not be popular in Germany, so a global rank would fill the wrong content on local servers.",
+        "Global popularity computation is technically impossible at Netflix's scale.",
+        "ISP-local ranking reduces the number of variants that need to be encoded.",
+        "Global ranking requires all OCA servers to be synchronized in real time."
+      ],
+      "correct": 0,
+      "explanation": "Language, culture, and local trends mean that a global top-500 list would waste cache space on titles that local subscribers rarely watch. Per-ISP ranking maximizes local hit rates."
+    },
+    {
+      "stage": "post",
+      "question": "What is the correct escalation path when a subscriber's segment request misses the embedded OCA?",
+      "options": [
+        "OCA miss → nearest regional Netflix POP → Netflix cloud origin, with fill written back at each layer on the way to the subscriber.",
+        "OCA miss → subscriber device retries from a different OCA server automatically.",
+        "OCA miss → directly to Netflix cloud origin with no intermediate POP layer.",
+        "OCA miss → subscriber gets a quality downgrade to reduce origin load."
+      ],
+      "correct": 0,
+      "explanation": "The hierarchical fill path (OCA → POP → origin) keeps origin load low. Writing back at each layer means subsequent requests are served from a closer cache."
+    },
+    {
+      "stage": "post",
+      "question": "What is the strongest argument for proactive prefill over a pure reactive cache strategy?",
+      "options": [
+        "For the top N titles, proactive fill achieves near-100% hit rate from the first request; reactive fill causes origin load spikes during major title launches.",
+        "Proactive fill eliminates the need for content invalidation when titles are pulled.",
+        "Proactive fill is cheaper in terms of network bandwidth than reactive fill.",
+        "Proactive fill removes the requirement for a regional POP tier entirely."
+      ],
+      "correct": 0,
+      "explanation": "Major releases would overwhelm origins if every embedded server had a cold cache. Proactive fill ensures the cache is warm before subscribers arrive."
+    },
+    {
+      "stage": "post",
+      "question": "What is the right granularity for cache eviction on an OCA server and why?",
+      "options": [
+        "Title-level eviction keeps all variants of a title coherent; evicting one segment of a title while keeping others would leave a partially-cached, unserviceable asset.",
+        "Byte-level eviction maximizes storage utilization by reclaiming exact amounts needed.",
+        "Segment-level eviction is fine because the player can request missing segments from the POP transparently.",
+        "Eviction should only happen when a server reboots, not during normal operation."
+      ],
+      "correct": 0,
+      "explanation": "A title with some variants evicted and others retained creates a confusing partial cache state. Title-level eviction keeps storage accounting clean and predictable."
+    },
+    {
+      "stage": "post",
+      "question": "How should a content invalidation (e.g., DMCA takedown) propagate across thousands of OCA servers?",
+      "options": [
+        "A centralized invalidation message is sent to all OCAs with a deadline; each OCA deletes the specified content and confirms deletion, with a reconciliation pass for unreachable servers.",
+        "Invalidation is handled by CDN TTL expiry; content naturally disappears within 24 hours.",
+        "Netflix adds the removed title to a blocklist at the DNS layer, making OCA content unreachable without deleting it.",
+        "Only the regional POPs receive invalidation; embedded OCAs serve stale content until evicted naturally."
+      ],
+      "correct": 0,
+      "explanation": "Legal removals require a definitive delete, not TTL expiry. The push-plus-confirmation pattern with a reconciliation sweep ensures no OCA retains invalidated content past the deadline."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric is most directly useful for detecting that prefill is filling the wrong content for a region?",
+      "options": [
+        "Cache hit ratio broken down by ISP and title — a drop in hit rate for a specific ISP after a fill window indicates the fill chose the wrong titles.",
+        "Fill bandwidth consumed per nightly window.",
+        "OCA disk utilization percentage.",
+        "Regional POP cache hit rate."
+      ],
+      "correct": 0,
+      "explanation": "If prefill fills the wrong titles, the hit rate for that ISP's subscribers drops because their actual demand lands on misses. Granular hit-rate metrics per ISP are the earliest signal."
+    }
+  ]
+}

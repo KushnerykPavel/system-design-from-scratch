@@ -1,0 +1,88 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why does Netflix favor availability over consistency for most user-facing paths?",
+      "options": [
+        "A stale recommendation list or cached homepage is far better than a timeout that shows the user nothing.",
+        "Consistency is impossible to achieve at Netflix's scale regardless of design choices.",
+        "Netflix's database cannot support strong consistency at high throughput.",
+        "Consistency only matters for financial transactions, not streaming."
+      ],
+      "correct": 0,
+      "explanation": "For non-critical reads like recommendations, showing stale data is always preferable to blocking the user. This is an explicit trade-off Netflix makes, not a technical limitation."
+    },
+    {
+      "stage": "pre",
+      "question": "What makes Open Connect a stronger signal than mentioning a generic CDN?",
+      "options": [
+        "It shows you understand that Netflix embeds servers inside ISP networks and uses proactive prefill, not just reactive caching.",
+        "Open Connect is simply a newer version of Akamai and the terms are interchangeable.",
+        "It signals that you know Netflix streams over UDP instead of HTTP.",
+        "It demonstrates knowledge of TLS offloading at the edge."
+      ],
+      "correct": 0,
+      "explanation": "Open Connect is Netflix's own CDN physically co-located inside ISPs. Understanding it means understanding proactive fill, ISP peering economics, and why Netflix invested in owning that layer."
+    },
+    {
+      "stage": "post",
+      "question": "A strong-hire answer at the 15-minute mark looks like which of the following?",
+      "options": [
+        "A high-level sketch with named services and clear ownership boundaries, not just generic labeled boxes.",
+        "A completed deep-dive into a single subsystem with no mention of other components.",
+        "A list of technologies to use without discussing why each was chosen.",
+        "A fully detailed data model for every service in the system."
+      ],
+      "correct": 0,
+      "explanation": "By 15 minutes, interviewers expect breadth — a sketch of the major services and how they connect. Depth comes after the structure is agreed upon."
+    },
+    {
+      "stage": "post",
+      "question": "Which pattern is the clearest weak-hire signal in a Netflix interview?",
+      "options": [
+        "Treating 'add load balancers' or 'shard the database' as the default answer to every scaling question without discussing trade-offs.",
+        "Using Kafka for event ingestion when a queue would suffice.",
+        "Starting with a capacity estimate before drawing the architecture.",
+        "Naming specific failure modes and explicit fallback chains."
+      ],
+      "correct": 0,
+      "explanation": "Generic scaling answers show pattern-matching, not systems thinking. Netflix interviewers want to see that candidates understand the specific constraints driving each decision."
+    },
+    {
+      "stage": "post",
+      "question": "What is the correct role of experimentation in a Netflix-style design answer?",
+      "options": [
+        "It should be built into the design from the start — how will you measure whether this change is better?",
+        "Experimentation is a post-launch concern and belongs outside the initial system design.",
+        "A/B testing only applies to recommendation systems, not infrastructure decisions.",
+        "Experimentation adds complexity without value in a 45-minute interview context."
+      ],
+      "correct": 0,
+      "explanation": "Netflix makes almost every decision through controlled experiments. A design that cannot be tested incrementally is not a Netflix-style design."
+    },
+    {
+      "stage": "post",
+      "question": "Why does Netflix use explicit fallback chains rather than just circuit breakers?",
+      "options": [
+        "Circuit breakers fail open or closed but provide no degraded experience; fallback chains let the system serve something useful even when a dependency is down.",
+        "Circuit breakers are not compatible with Netflix's microservices architecture.",
+        "Fallback chains replace observability by hiding errors from operators.",
+        "Circuit breakers are only used in financial systems, not streaming platforms."
+      ],
+      "correct": 0,
+      "explanation": "A circuit breaker stops traffic. A fallback chain redirects it to something degraded but functional — e.g., trending content when personalization fails. Both are needed."
+    },
+    {
+      "stage": "post",
+      "question": "Which capacity dimension has the most direct impact on A/B testing platform design?",
+      "options": [
+        "The number of simultaneous experiments (1,000+) drives assignment service isolation and bucketing consistency requirements.",
+        "The number of encoded video variants stored in S3.",
+        "Peak concurrent stream count at the CDN layer.",
+        "The size of the microservices fleet running in AWS."
+      ],
+      "correct": 0,
+      "explanation": "Running 1,000+ concurrent experiments means every user could be in dozens of experiments simultaneously. Bucketing must be deterministic, isolated, and fast."
+    }
+  ]
+}

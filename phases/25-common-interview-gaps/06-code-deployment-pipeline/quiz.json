@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why does a progressive rollout (1% → 10% → 50% → 100%) reduce risk compared to a big-bang deployment?",
+      "options": [
+        "At each stage, only a fraction of production traffic is exposed to the new version; a regression is detected and rolled back before it affects all users.",
+        "Progressive rollouts guarantee zero downtime because traffic is never interrupted.",
+        "Big-bang deployments require a database migration that is too risky; progressive rollouts avoid this.",
+        "Progressive rollouts allow engineers to skip testing in staging environments."
+      ],
+      "correct": 0,
+      "explanation": "The key benefit is blast radius control: a bug caught at 1% of traffic affects only 1% of users before rollback, not 100%."
+    },
+    {
+      "stage": "pre",
+      "question": "Why should deployment artifacts be content-addressed (named by hash of content) rather than mutable tags like 'latest'?",
+      "options": [
+        "Content-addressed artifacts are immutable by definition, so 'rollback to v1.2.3' always means the exact same binary regardless of when you run it.",
+        "Mutable tags cannot be stored in object storage.",
+        "Content hashes enable faster artifact download from the registry.",
+        "Mutable tags are not supported by Kubernetes or container runtimes."
+      ],
+      "correct": 0,
+      "explanation": "Mutable tags can be reassigned, making 'rollback to previous tag' ambiguous. A content hash is an immutable identity that guarantees you get exactly what was deployed before."
+    },
+    {
+      "stage": "post",
+      "question": "A canary deployment at 1% traffic shows an error rate of 1.2% vs baseline 0.5%. Should you automatically roll back?",
+      "options": [
+        "Apply a statistical significance test (e.g., z-test or t-test) over the full bake window before deciding; a brief spike should not trigger rollback without sufficient sample size.",
+        "Roll back immediately because any error rate above baseline indicates a regression.",
+        "Wait for the error rate to exceed 5% before treating it as a regression.",
+        "Ask the engineer who initiated the deployment to manually inspect the logs."
+      ],
+      "correct": 0,
+      "explanation": "At 1% canary traffic, sample size is small and variance is high. A statistical test over the full bake window distinguishes real regressions from normal noise."
+    },
+    {
+      "stage": "post",
+      "question": "Service A (new version) is deployed to US-East and calls Service B (old version) still in US-East. The new version uses a response field that the old version does not return. What failure does this cause and how do you prevent it?",
+      "options": [
+        "Service A fails at runtime because it reads a field that is absent in Service B's response. Prevention: deploy backward-compatible changes first, requiring both versions to handle the old and new response format during the transition.",
+        "Service B's database schema becomes incompatible with Service A's queries.",
+        "The deployment controller prevents this automatically by locking both services during deployment.",
+        "Progressive rollout prevents this because both services advance through stages simultaneously."
+      ],
+      "correct": 0,
+      "explanation": "Cross-service API compatibility during progressive rollout requires both old and new code to handle the other's message format. Expand-contract (additive then remove old) is the standard pattern."
+    },
+    {
+      "stage": "post",
+      "question": "The deployment controller crashes during a rollout at the 10% traffic stage. How should the system behave?",
+      "options": [
+        "The deployment remains at 10% with the new version until the controller restarts and resumes from the current stage stored in the deployment database.",
+        "All traffic immediately rolls back to the previous version as a safety default.",
+        "The 10% canary instances are automatically terminated and traffic returns to 0%.",
+        "The deployment advances to 100% automatically since the controller is no longer applying health checks."
+      ],
+      "correct": 0,
+      "explanation": "The deployment DB is the source of truth. A stateless controller that restarts reads current stage from the DB and resumes — this is the correct crash-recovery pattern."
+    },
+    {
+      "stage": "post",
+      "question": "Which metric is the most actionable early indicator that a team's deployment process is deteriorating?",
+      "options": [
+        "Rising rollback rate per team — frequent rollbacks signal that regressions are escaping pre-production testing.",
+        "Increasing number of deployments per day — more frequent deploys are always a risk.",
+        "Total artifact storage consumed by the registry.",
+        "Average bake time before stage advancement."
+      ],
+      "correct": 0,
+      "explanation": "Rollback rate is a leading quality indicator: it means bugs are reaching production. Rising rollback rate without a corresponding rise in deployment volume signals a code or test quality problem."
+    },
+    {
+      "stage": "post",
+      "question": "A memory leak is only detectable after 15 minutes of traffic, but the bake window is set to 5 minutes per stage. What is the correct design response?",
+      "options": [
+        "Extend the bake window to at least 20 minutes, or add a memory growth rate metric to the health criteria evaluated over a longer window.",
+        "Accept that slow-manifesting regressions will reach 100% before detection.",
+        "Run load tests for 15 minutes in staging before every production deployment.",
+        "Reduce deployment frequency to ensure each deployment has more time to bake."
+      ],
+      "correct": 0,
+      "explanation": "Bake windows must be calibrated to the regression detection latency of the slowest-manifesting failure mode. Memory leaks require longer bake times or a dedicated metric trend check."
+    },
+    {
+      "stage": "post",
+      "question": "What trade-off does automatic rollback introduce compared to human-triggered rollback?",
+      "options": [
+        "Automatic rollback is faster (seconds vs minutes) but risks false positives where a temporary metric spike causes an unnecessary rollback of a healthy deployment.",
+        "Automatic rollback is slower because it must wait for human approval before executing.",
+        "Automatic rollback requires a distributed transaction across all regions.",
+        "Automatic rollback only works for stateless services; stateful services must use human rollback."
+      ],
+      "correct": 0,
+      "explanation": "The speed advantage of automatic rollback comes with false positive risk. Tuning the threshold and requiring statistical significance reduces false positives but increases detection latency."
+    }
+  ]
+}

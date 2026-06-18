@@ -1,0 +1,88 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why is deterministic hash-based assignment preferred over database-based assignment in the hot path?",
+      "options": [
+        "Hash assignment requires no database lookup — it computes the same bucket from user_id + experiment_id alone, enabling sub-millisecond assignment at any scale without adding a DB dependency to every page load.",
+        "Database assignment is less accurate because databases can have consistency issues.",
+        "Hash assignment avoids the need to store any experiment configuration.",
+        "Database-based assignment requires a separate data center for each experiment."
+      ],
+      "correct": 0,
+      "explanation": "The assignment service is in the critical path of every page load. Adding a database call would add latency and a new failure mode. Deterministic hashing trades dynamic reassignment flexibility for zero-latency, zero-dependency assignment."
+    },
+    {
+      "stage": "pre",
+      "question": "What is the peeking problem in A/B testing?",
+      "options": [
+        "Declaring statistical significance prematurely by checking results before the experiment has run long enough, which inflates false positive rates because the significance boundary is crossed by random fluctuation.",
+        "A bug where subscribers can see their treatment assignment in the UI.",
+        "A security issue where experiment parameters are visible in network traffic.",
+        "An encoding problem where different treatments receive different video quality."
+      ],
+      "correct": 0,
+      "explanation": "p-values are calibrated for a single check at the end of the experiment. Checking repeatedly inflates the type I error rate. The fix is sequential testing or minimum run duration enforcement."
+    },
+    {
+      "stage": "post",
+      "question": "How does including experiment_id in the hash key guarantee independent assignments across experiments?",
+      "options": [
+        "Different experiment_ids produce different hash values for the same user_id, so a subscriber's bucket in experiment A is independent of their bucket in experiment B.",
+        "Experiment IDs are allocated from a separate namespace that prevents bucket collisions.",
+        "The hash function uses experiment_id as a salt that is only known to the assignment service.",
+        "Including experiment_id ensures all subscribers get the same treatment across experiments."
+      ],
+      "correct": 0,
+      "explanation": "hash(user_id + experiment_A_id) and hash(user_id + experiment_B_id) are independent. The same subscriber may be in control for A and treatment for B — exactly the desired property."
+    },
+    {
+      "stage": "post",
+      "question": "What is the primary purpose of a global holdout group?",
+      "options": [
+        "To measure the cumulative long-term effect of all features shipped over a period, by comparing a permanently unexposed group to the rest of the subscriber base.",
+        "To provide a control group for each individual A/B experiment.",
+        "To exclude subscribers who have opted out of personalization.",
+        "To reduce the load on the assignment service by routing some subscribers away from experiments."
+      ],
+      "correct": 0,
+      "explanation": "Individual experiments measure incremental effects. The holdout group measures aggregate drift: is the product actually improving over 6 months when accounting for all shipped features combined?"
+    },
+    {
+      "stage": "post",
+      "question": "Why must experiments on the same UI surface be in a mutual exclusion group?",
+      "options": [
+        "If two UI experiments overlap on the same subscriber, it is impossible to attribute a metric change to either experiment — the effects are confounded and both results are invalid.",
+        "Mutual exclusion is required to stay within the 10,000-bucket limit of the assignment service.",
+        "Overlapping UI experiments cause rendering errors on the subscriber's device.",
+        "Mutual exclusion reduces the compute cost of the assignment service."
+      ],
+      "correct": 0,
+      "explanation": "Contaminated experiments produce uninterpretable results. Mutual exclusion ensures clean attribution."
+    },
+    {
+      "stage": "post",
+      "question": "What is the correct fallback behavior when the assignment service is temporarily unavailable?",
+      "options": [
+        "Serve the control treatment to all affected subscribers — never fail a page load because of an assignment service outage.",
+        "Block the page load until assignment service recovers.",
+        "Randomly assign subscribers to treatments without recording the assignment.",
+        "Route all traffic to the treatment group during the outage."
+      ],
+      "correct": 0,
+      "explanation": "The assignment service must never be in the critical failure path. Defaulting to control is safe, auditable, and preserves the subscriber experience."
+    },
+    {
+      "stage": "post",
+      "question": "Which challenge is unique to running 1,000+ simultaneous experiments at Netflix scale?",
+      "options": [
+        "A subscriber may be in dozens of experiments simultaneously — the assignment service must resolve all active experiments per request in under 5ms without any external calls.",
+        "More than 100 experiments require a distributed database that cannot fit on one server.",
+        "Statistical significance thresholds must be manually adjusted for each experiment.",
+        "The Kafka metrics pipeline becomes a bottleneck when more than 500 experiments are active."
+      ],
+      "correct": 0,
+      "explanation": "At 1,000+ experiments, the assignment service must load all experiment configs in-memory and compute bucket assignments for all of them in a single sub-5ms operation. This requires compact in-memory representation and efficient hashing."
+    }
+  ]
+}

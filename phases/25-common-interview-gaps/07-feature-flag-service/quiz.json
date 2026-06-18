@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why is a direct RPC call to a central flag service on every request usually the wrong architecture for flag evaluation?",
+      "options": [
+        "It adds 1-5ms of network latency to every request and makes the flag service a hard dependency on every service's hot path.",
+        "RPC calls cannot carry the user context needed for targeting rule evaluation.",
+        "Central flag services cannot handle more than 10K concurrent connections.",
+        "Flag evaluations require distributed transactions that are incompatible with RPC."
+      ],
+      "correct": 0,
+      "explanation": "At 250M evaluations/second platform-wide, any network call per evaluation is economically and latency-infeasible. In-process evaluation against a local state copy is the only viable approach."
+    },
+    {
+      "stage": "pre",
+      "question": "Why is consistent hashing (hash(flag_key + user_id)) preferred over random assignment for percentage rollouts?",
+      "options": [
+        "It ensures the same user always sees the same variant for the same flag, providing a stable user experience without needing a database lookup or sticky session.",
+        "It distributes users evenly across database shards, improving query performance.",
+        "It prevents any single user from being assigned to more than one experiment.",
+        "It makes it possible to target flags at specific geographic regions."
+      ],
+      "correct": 0,
+      "explanation": "Deterministic hashing gives stable assignments: the same (flag_key, user_id) pair always produces the same bucket, so a user's experience is consistent across requests and services."
+    },
+    {
+      "stage": "post",
+      "question": "The flag streaming service is unavailable for 5 minutes. What should SDK instances do during this outage?",
+      "options": [
+        "Continue evaluating flags using the last-known in-memory flag state; log staleness duration; alert if staleness exceeds the configured threshold.",
+        "Disable all flag-gated features and serve default behavior until the streaming service recovers.",
+        "Make direct database queries to the flag store for each evaluation during the outage.",
+        "Pause request processing until the flag streaming service is restored."
+      ],
+      "correct": 0,
+      "explanation": "Stale-but-working is the correct degraded mode. Disabling features or blocking requests during a flag service outage is worse than serving slightly stale flag state."
+    },
+    {
+      "stage": "post",
+      "question": "A propagation bus drops one flag_changed event. Flag state diverges across 50K SDK instances. What is the reconciliation mechanism?",
+      "options": [
+        "SDK instances periodically fetch a full flag snapshot from the control plane and compare it with local state, correcting any divergence.",
+        "The propagation bus replays all events in order every minute to ensure consistency.",
+        "The flag store sends a hash of its full state to all SDKs; any mismatch triggers a full reload.",
+        "Engineers manually restart SDK instances when flag divergence is detected."
+      ],
+      "correct": 0,
+      "explanation": "Periodic full snapshot reconciliation catches any missed events. The snapshot fetch interval (e.g., 5 minutes) is the upper bound on how long a missed update causes divergence."
+    },
+    {
+      "stage": "post",
+      "question": "A kill switch must propagate to all 50K SDK instances within 10 seconds. How does the system prioritize this over normal flag updates?",
+      "options": [
+        "Kill switch events are published to a dedicated high-priority topic and delivered via a priority path in the propagation bus that SDKs process before other pending updates.",
+        "Kill switches are applied by restarting all service instances, which forces them to reload flag state.",
+        "Kill switch propagation uses the same mechanism as normal flags but sets a shorter polling interval.",
+        "Kill switches are evaluated at the load balancer level, bypassing the SDK entirely."
+      ],
+      "correct": 0,
+      "explanation": "A dedicated priority path for kill switches ensures that the most urgent operational action is not queued behind low-priority flag changes in the propagation pipeline."
+    },
+    {
+      "stage": "post",
+      "question": "An engineer wants to target a flag at users whose current request comes from a specific country. Why is this harder than targeting by user_id?",
+      "options": [
+        "Country is a request-level attribute that changes per request and cannot be stored in the static user context baked into the local flag state; the SDK must accept it as a dynamic input.",
+        "Country targeting requires a database lookup that makes evaluation slower than the 1ms SLO.",
+        "Country attributes are not supported by consistent hashing, so percentage rollouts cannot be combined with country targeting.",
+        "Country detection requires geolocation APIs that cannot run in-process."
+      ],
+      "correct": 0,
+      "explanation": "User_id-based targeting is static; country-based targeting requires the request context to be passed into the evaluate call dynamically. The SDK must accept rich context, not just a user identifier."
+    },
+    {
+      "stage": "post",
+      "question": "Which observability signal best detects that flag state is silently stale on a subset of SDK instances?",
+      "options": [
+        "SDK instance staleness metric — time since last update received — reported as a histogram and alerted when p99 exceeds the propagation SLO.",
+        "Number of flag evaluations per second across all instances.",
+        "Total number of flags in the system.",
+        "Flag change audit log volume per hour."
+      ],
+      "correct": 0,
+      "explanation": "Per-instance staleness directly measures whether the propagation mechanism is keeping instances up to date. Global evaluation counts do not reveal divergence between instances."
+    },
+    {
+      "stage": "post",
+      "question": "What is the trade-off of using push-based propagation (WebSocket/SSE) compared to polling at a fixed interval?",
+      "options": [
+        "Push delivers flag changes with seconds of latency but requires maintaining 50K persistent connections; polling is simpler but guarantees staleness equal to the polling interval.",
+        "Push is less reliable than polling because WebSocket connections drop frequently.",
+        "Polling at 1-second intervals achieves the same latency as push with no additional infrastructure.",
+        "Push propagation requires a distributed transaction to ensure all instances update atomically."
+      ],
+      "correct": 0,
+      "explanation": "Push's low latency advantage comes with the operational cost of managing tens of thousands of persistent connections. Polling's simplicity comes at the cost of guaranteed staleness proportional to the poll interval."
+    }
+  ]
+}

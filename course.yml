@@ -66,8 +66,10 @@ phases:
   - { num: "21", slug: "google-senior-staff-system-design", name: "Google Senior/Staff System Design", hours: 12 }
   - { num: "22", slug: "cloudflare-edge-platform-design", name: "Cloudflare Edge & Platform Design", hours: 12 }
   - { num: "23", slug: "mixed-mocks-and-redesign-drills", name: "Mixed Mocks & Redesign Drills", hours: 12 }
+  - { num: "24", slug: "netflix-streaming-platform-design", name: "Netflix Streaming & Platform Design", hours: 14 }
+  - { num: "25", slug: "common-interview-gaps", name: "Common Interview Gaps", hours: 10 }
 
 totals:
-  phases: 24
-  lessons: 180
-  hours: 248
+  phases: 26
+  lessons: 196
+  hours: 272
