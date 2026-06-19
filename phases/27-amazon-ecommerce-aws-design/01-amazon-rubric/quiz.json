@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why does Amazon use DynamoDB instead of Aurora RDS for catalog item reads?",
+      "options": [
+        "DynamoDB delivers single-digit millisecond reads at any scale, matching Prime Day peak read throughput that relational read replicas cannot sustain cost-effectively.",
+        "Aurora does not support read operations at high throughput and is only used for writes.",
+        "DynamoDB automatically supports SQL joins, making ad-hoc reporting easier than Aurora.",
+        "Aurora is not available in AWS regions where Amazon operates fulfillment centers."
+      ],
+      "correct": 0,
+      "explanation": "DynamoDB's key-value and document model delivers consistent single-digit ms reads horizontally. Aurora can scale reads with replicas but the cost and operational complexity at Prime Day peak makes DynamoDB the right fit for high-volume single-item reads."
+    },
+    {
+      "stage": "pre",
+      "question": "What does 'working backwards' mean in the context of an Amazon system design interview?",
+      "options": [
+        "Starting with the customer experience and the customer promise, then deriving the technical requirements needed to fulfill that promise.",
+        "Beginning with the database schema and working up through the service layer to the UI.",
+        "Designing the system for the lowest scale first, then adding components as load increases.",
+        "Documenting the failure modes before describing the happy path architecture."
+      ],
+      "correct": 0,
+      "explanation": "Working Backwards is Amazon's core product development mechanism. In interviews it means: state what the customer experiences, what the customer promise is (e.g. order confirmation within 2 seconds), and then explain what technical decisions are required to deliver that."
+    },
+    {
+      "stage": "post",
+      "question": "Which Leadership Principle is most directly demonstrated by designing idempotent order handlers?",
+      "options": [
+        "Ownership — treating the system as yours means ensuring it behaves correctly even when infrastructure fails and messages are replayed.",
+        "Frugality — idempotency reduces the number of servers required to process orders.",
+        "Invent and Simplify — idempotency is a novel technique that simplifies distributed state.",
+        "Bias for Action — idempotency allows engineers to act quickly without worrying about correctness."
+      ],
+      "correct": 0,
+      "explanation": "Ownership in Amazon's sense means you are responsible for correctness end to end, including edge cases like duplicate message delivery. Idempotent handlers are how you ensure ownership over distributed reliability."
+    },
+    {
+      "stage": "post",
+      "question": "During a Prime Day peak of 100,000 orders per minute, inventory oversell is the most dangerous failure. What is the correct mitigation?",
+      "options": [
+        "Use DynamoDB conditional writes (optimistic locking) to reserve inventory atomically — the write succeeds only if the current count is above zero.",
+        "Use an eventually consistent DynamoDB read to check inventory before writing the order.",
+        "Store inventory in Aurora and use a SELECT FOR UPDATE query to lock the row during the checkout transaction.",
+        "Allow orders to be placed freely and reconcile oversell in a nightly batch job."
+      ],
+      "correct": 0,
+      "explanation": "DynamoDB conditional writes enforce atomic inventory decrements. Eventually consistent reads will show stale counts and cause oversell. Aurora SELECT FOR UPDATE works but cannot sustain 100K orders/min without severe contention. Batch reconciliation is too late for customer trust."
+    },
+    {
+      "stage": "post",
+      "question": "Why should SQS FIFO queues be sharded by order ID prefix at Prime Day scale?",
+      "options": [
+        "FIFO queues have a maximum throughput of 300 TPS per queue; sharding by order ID prefix distributes load across multiple queues while preserving per-order ordering.",
+        "FIFO queues do not support deduplication, so sharding by prefix enables client-side deduplication.",
+        "SQS Standard queues are unavailable at peak, so FIFO must be used exclusively for all message types.",
+        "Sharding by order ID prefix reduces SQS message visibility timeout, decreasing end-to-end latency."
+      ],
+      "correct": 0,
+      "explanation": "SQS FIFO hard-limits at 300 TPS. At 100K orders/min (~1,667 TPS), you need at least 6 FIFO queues. Sharding by order ID prefix ensures all events for one order stay in one queue (preserving ordering) while spreading total load."
+    },
+    {
+      "stage": "post",
+      "question": "What is the failure mode if you use a Lambda chain (no Step Functions) to orchestrate the fulfillment pipeline?",
+      "options": [
+        "If a Lambda invocation fails mid-pipeline, there is no durable state to resume from — the order can become stuck between PAYMENT_CONFIRMED and FULFILLMENT_ASSIGNED with no recovery path.",
+        "Lambda functions cannot invoke other Lambda functions, making chaining impossible at scale.",
+        "Lambda has a maximum execution duration of 15 seconds, which is too short for any fulfillment step.",
+        "Step Functions and Lambda use different IAM roles and cannot be used in the same AWS account."
+      ],
+      "correct": 0,
+      "explanation": "Lambda chains are stateless. If step 3 of 7 fails, you have no record of what succeeded. Step Functions maintains durable execution state, supports retry logic per step, and provides an audit trail — exactly what an order fulfillment pipeline requires."
+    },
+    {
+      "stage": "post",
+      "question": "Which observability signal most directly indicates a DynamoDB hot partition on a product listing?",
+      "options": [
+        "A spike in DynamoDB SuccessfulRequestLatency for a specific partition key combined with ThrottledRequests on that table.",
+        "An increase in CloudFront 404 errors for product image assets.",
+        "A rise in SQS ApproximateAgeOfOldestMessage for the order-events queue.",
+        "A drop in Lambda concurrent execution count for the catalog service."
+      ],
+      "correct": 0,
+      "explanation": "Hot partitions manifest as elevated latency and ThrottledRequests for requests targeting a specific partition key. CloudFront 404s, SQS queue age, and Lambda concurrency are unrelated to DynamoDB partitioning issues."
+    },
+    {
+      "stage": "post",
+      "question": "How does EventBridge differ from SNS for cross-service events in Amazon's architecture, and why does that matter at scale?",
+      "options": [
+        "EventBridge supports content-based filtering rules and a schema registry, allowing consumers to subscribe only to relevant event patterns without receiving the full firehose — SNS delivers all events to all subscribers.",
+        "EventBridge guarantees exactly-once delivery while SNS only provides at-most-once delivery semantics.",
+        "SNS is deprecated in favor of EventBridge and should not be used in new AWS architectures.",
+        "EventBridge has lower per-event cost than SNS, making it the frugal choice regardless of filtering needs."
+      ],
+      "correct": 0,
+      "explanation": "EventBridge's content-based filtering lets a pricing service subscribe only to 'order.cancelled' events while a fulfillment service subscribes to 'order.confirmed' events. Without filtering, every consumer receives every event type and must discard irrelevant ones, wasting compute and creating tight coupling."
+    }
+  ]
+}

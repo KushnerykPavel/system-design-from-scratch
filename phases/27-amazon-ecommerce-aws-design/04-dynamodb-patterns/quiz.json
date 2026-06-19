@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What is the fundamental modeling difference between DynamoDB and a relational database?",
+      "options": [
+        "DynamoDB requires you to define all access patterns before designing the schema, while relational databases let you query any column after the fact with SQL.",
+        "DynamoDB stores data in rows and columns while relational databases store data in key-value pairs.",
+        "DynamoDB automatically creates indexes for every attribute, making schema design unnecessary.",
+        "Relational databases cannot scale horizontally, so DynamoDB is always faster at any workload."
+      ],
+      "correct": 0,
+      "explanation": "NoSQL modeling is access-pattern-first. You decide how data will be read, then choose partition and sort keys to serve those patterns in O(1) or bounded range scans. SQL lets you compose queries on the fly against a normalized schema — impossible in DynamoDB without a full scan."
+    },
+    {
+      "stage": "pre",
+      "question": "What causes a hot partition in DynamoDB and why is it dangerous?",
+      "options": [
+        "A hot partition occurs when many requests target the same partition key, causing that partition to exceed its throughput limit and throttle all requests landing on it.",
+        "A hot partition is when a partition grows beyond 10 GB and DynamoDB automatically splits it, causing brief unavailability.",
+        "Hot partitions occur when GSI replication falls behind the base table, causing reads from the GSI to return stale data.",
+        "A hot partition is a read replica that receives more traffic than the primary partition and returns eventually consistent data."
+      ],
+      "correct": 0,
+      "explanation": "Each DynamoDB partition has a maximum throughput ceiling. If your partition key has low cardinality or skewed access patterns, one partition absorbs a disproportionate share of requests. When it hits its limit, DynamoDB returns ThrottledRequests — even if the overall table has spare capacity on other partitions."
+    },
+    {
+      "stage": "post",
+      "question": "In a single-table design for an e-commerce platform, what pattern stores both a USER entity and all their orders in one table and supports listing all orders for a user in a single query?",
+      "options": [
+        "Overloaded PK/SK: set PK=USER#<id> for the profile item and PK=USER#<id>, SK=ORDER#<order_id> for each order, then Query with PK=USER#<id> and SK begins_with ORDER#.",
+        "Store users and orders in separate GSIs so each entity type can be queried independently without key collision.",
+        "Use a composite attribute that concatenates USER#<id> and ORDER#<order_id> into a single string stored as the partition key for both entity types.",
+        "Create one table per user so that all queries for that user are isolated to a single partition with no key overlap."
+      ],
+      "correct": 0,
+      "explanation": "The overloaded PK/SK pattern uses a shared partition key to co-locate related entities. All records with PK=USER#<id> live in the same partition, so a single Query returns the profile and all orders ordered by SK. This eliminates cross-partition scatter-gather and avoids application-side joins."
+    },
+    {
+      "stage": "post",
+      "question": "Why can a GSI not be used for inventory reservation in Amazon's checkout path? (Failure mode question)",
+      "options": [
+        "GSIs replicate asynchronously, so the inventory count in a GSI may be seconds behind the base table — using it for reservation allows oversell because the read sees an outdated count.",
+        "GSIs do not support conditional writes, making atomic inventory decrement impossible when reading from a GSI.",
+        "GSIs have a maximum throughput of 300 RCU/s, which is insufficient for Prime Day inventory read volume.",
+        "DynamoDB does not allow conditional expressions on items returned from a GSI query result set."
+      ],
+      "correct": 0,
+      "explanation": "GSI reads are eventually consistent. An item updated in the base table may not yet be reflected in the GSI. If the checkout path reads an inventory count from a GSI, it may see a stale non-zero count and allow a reservation after the last unit was already taken. Inventory reservation must read from the base table with strong consistency and use a conditional write."
+    },
+    {
+      "stage": "post",
+      "question": "What is the trade-off between provisioned capacity mode and on-demand capacity mode for DynamoDB at Prime Day scale?",
+      "options": [
+        "Provisioned capacity is 2-3x cheaper at predictable steady-state load but throttles if you exceed provisioned limits; on-demand absorbs unexpected spikes automatically but costs 2-3x more per request at sustained throughput.",
+        "On-demand capacity guarantees zero throttling at any scale while provisioned capacity throttles under any load above the baseline.",
+        "Provisioned capacity mode supports strong consistency reads while on-demand mode only supports eventual consistency.",
+        "On-demand capacity is cheaper than provisioned capacity at all traffic levels because AWS dynamically consolidates unused capacity across customers."
+      ],
+      "correct": 0,
+      "explanation": "At steady, predictable load provisioned capacity wins on cost. On Prime Day or a viral product launch — where traffic spikes are sudden and hard to forecast — on-demand absorbs the spike without throttling, at a per-request premium. The correct strategy is provisioned for baseline, with a pre-event switch to on-demand for flash sales."
+    },
+    {
+      "stage": "post",
+      "question": "A product listing goes viral and a single DynamoDB partition begins returning ThrottledRequests. Adaptive capacity is enabled. Why does adaptive capacity not fully solve this problem?",
+      "options": [
+        "Adaptive capacity redistributes capacity on a minutes timescale and cannot react fast enough to a sub-minute viral spike where throttling begins within seconds of the traffic surge.",
+        "Adaptive capacity only applies to GSIs and does not affect hot partitions on the base table partition key.",
+        "Adaptive capacity requires a manual CloudWatch alarm trigger before it begins rebalancing capacity across partitions.",
+        "Adaptive capacity only works when on-demand mode is active and has no effect in provisioned capacity mode."
+      ],
+      "correct": 0,
+      "explanation": "Adaptive capacity is a reactive mechanism that detects imbalance and gradually shifts capacity toward hot partitions. Its reaction time is measured in minutes. A viral product or flash sale that spikes within seconds will experience throttling until adaptive capacity catches up. The correct defense is good partition key design upfront — not relying on adaptive capacity as a safety net."
+    },
+    {
+      "stage": "post",
+      "question": "When should you choose an LSI over a GSI for a secondary access pattern?",
+      "options": [
+        "Use an LSI when you need strongly consistent secondary reads within the same partition as the primary item and you can define the index at table creation time.",
+        "Use an LSI when you need to query across all partitions by a secondary attribute, because LSIs support cross-partition range scans unlike GSIs.",
+        "Use an LSI when you need the index to have independent provisioned throughput separate from the base table capacity.",
+        "LSIs should always be preferred over GSIs because they have lower replication lag and higher write throughput limits."
+      ],
+      "correct": 0,
+      "explanation": "LSIs share the base table's partition key, so they can serve strongly consistent reads. They are scoped to a single partition and must be defined at table creation — you cannot add them later. Use LSIs for range queries within an owner partition (e.g., orders by customer sorted by date) when strong consistency is required. GSIs are more flexible but eventually consistent."
+    },
+    {
+      "stage": "post",
+      "question": "DynamoDB Streams capture item-level changes for 24 hours. What is the correct use case for Streams vs Kinesis Data Streams for an order management system?",
+      "options": [
+        "Use DynamoDB Streams to trigger downstream CDC consumers (search index rebuild, analytics pipeline) on item changes; use Kinesis for high-throughput application-generated events (clickstream, order status broadcasts) that do not originate from DynamoDB writes.",
+        "Use DynamoDB Streams for all event-driven use cases because it has higher throughput than Kinesis and supports cross-account fan-out natively.",
+        "DynamoDB Streams and Kinesis are interchangeable; choose Kinesis when the retention period must exceed 24 hours and DynamoDB Streams otherwise.",
+        "Use Kinesis for CDC on DynamoDB because it supports multiple concurrent consumer groups, while DynamoDB Streams only supports a single Lambda trigger."
+      ],
+      "correct": 0,
+      "explanation": "DynamoDB Streams are tightly coupled to table writes — every item change appears automatically. They are the right choice for CDC patterns: rebuild search indexes, maintain materialized views, or audit logs. Kinesis is designed for high-volume application-level event streams where producers explicitly publish events. The two are complementary, not interchangeable."
+    }
+  ]
+}

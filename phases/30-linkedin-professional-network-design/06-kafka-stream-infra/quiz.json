@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What problem did LinkedIn build Kafka to solve?",
+      "options": [
+        "An O(N×M) point-to-point pipeline explosion where N services each needed direct integrations with M data sources.",
+        "The inability of relational databases to handle more than 1M writes per second.",
+        "A lack of real-time graph traversal algorithms for PYMK.",
+        "The absence of a key-value store that could serve feature vectors at low latency."
+      ],
+      "correct": 0,
+      "explanation": "With N producers and M consumers, point-to-point pipelines require N×M connections. Kafka's unified log reduces this to N+M: everyone publishes to or reads from the log."
+    },
+    {
+      "stage": "pre",
+      "question": "What does consumer lag measure in a Kafka consumer group?",
+      "options": [
+        "The difference between the latest offset produced to a partition and the offset the consumer has committed — i.e., how far behind the consumer is.",
+        "The total number of messages stored across all partitions in a topic.",
+        "The time since the consumer last restarted.",
+        "The number of messages the producer has sent but not yet received an ACK for."
+      ],
+      "correct": 0,
+      "explanation": "Lag = latest_offset − committed_offset. High lag means the consumer is falling behind and events are being processed with increasing delay."
+    },
+    {
+      "stage": "post",
+      "question": "Why does LinkedIn partition the member-activity topic by member_id rather than using random assignment?",
+      "options": [
+        "Because partitioning by member_id ensures all events for a given member arrive at the same partition in order, which is required for stateful processing like PYMK recomputation.",
+        "Because member_id hash produces better load balancing than any other key.",
+        "Because Kafka requires string keys to use random partitioning.",
+        "Because member_id partitioning avoids the need for a schema registry."
+      ],
+      "correct": 0,
+      "explanation": "Stateful stream processing that must track a member's event history requires that all events for that member arrive at the same partition — otherwise state would be split across multiple consumers."
+    },
+    {
+      "stage": "post",
+      "question": "A Kafka topic has 6 partitions and a consumer group with 4 consumers. How are partitions assigned?",
+      "options": [
+        "Some consumers handle 2 partitions and others handle 1; no partition is unassigned and no two consumers share a partition.",
+        "All 4 consumers each get 1 partition; 2 partitions are unprocessed.",
+        "Each consumer gets exactly 1.5 partitions on average, causing a rebalance error.",
+        "Kafka assigns all 6 partitions to the consumer with the most available memory."
+      ],
+      "correct": 0,
+      "explanation": "With 6 partitions and 4 consumers, Kafka assigns 2 partitions to 2 consumers and 1 partition each to the other 2. Every partition is assigned; no consumer is idle; no two consumers share a partition."
+    },
+    {
+      "stage": "post",
+      "question": "What is the role of Brooklin at LinkedIn?",
+      "options": [
+        "Change data capture — streaming database mutations from Espresso into Kafka topics so downstream consumers like Elasticsearch and Venice can react to data changes without polling the database.",
+        "A load balancer that distributes Kafka producer traffic across broker clusters.",
+        "A stream processing framework that replaces Samza for stateful computation.",
+        "A schema registry that validates Avro schemas for Kafka producers and consumers."
+      ],
+      "correct": 0,
+      "explanation": "Brooklin is LinkedIn's CDC platform. It captures Espresso mutations and publishes them to Kafka, enabling a reactive architecture where downstream systems (search index, feature store) update in near real-time."
+    },
+    {
+      "stage": "post",
+      "question": "What is Samza's key architectural advantage over a consumer that reads from Kafka and writes state to a remote Redis?",
+      "options": [
+        "Samza stores state in a local RocksDB instance on the same machine as the processing task, eliminating the network round-trip for state lookups and reducing latency to sub-millisecond.",
+        "Samza compresses Kafka messages before processing them, reducing storage costs.",
+        "Samza uses a global shared memory space that all processing tasks can access simultaneously.",
+        "Samza automatically scales the number of Kafka partitions based on consumer lag."
+      ],
+      "correct": 0,
+      "explanation": "Remote state access (Redis, DynamoDB) adds a network hop per state lookup. Local RocksDB on the same machine removes that hop. The trade-off: state is not directly accessible from other machines without Kafka changelog replay."
+    },
+    {
+      "stage": "post",
+      "question": "A Kafka broker disk fills up unexpectedly. What are the two root causes and the correct preventive measure?",
+      "options": [
+        "Retention not tuned to actual topic volume, or an unexpected traffic spike; prevent with 75% disk utilization alarms and automatic size-based retention enforcement.",
+        "Too many consumer groups reading the same topic simultaneously consuming extra disk.",
+        "Producers using acks=all causing duplicate writes that fill the disk.",
+        "Log compaction running too aggressively and creating large temporary files."
+      ],
+      "correct": 0,
+      "explanation": "Disk full is a classic Kafka production incident. Retention policies must account for both normal traffic and spikes. Proactive capacity alarms give time to react before the broker crashes."
+    },
+    {
+      "stage": "post",
+      "question": "LinkedIn uses separate consumer groups (feed-updater and pymk-recompute) reading the same member-activity topic. What is the operational advantage?",
+      "options": [
+        "Each consumer group maintains its own offset and can scale, fail, or fall behind independently — a slowdown in PYMK computation doesn't delay feed updates.",
+        "Using two consumer groups doubles the read throughput from the topic, making message delivery twice as fast.",
+        "Separate consumer groups prevent two consumers from reading the same message, ensuring exactly-once delivery.",
+        "Two consumer groups allow Kafka to compress each message twice, halving storage costs."
+      ],
+      "correct": 0,
+      "explanation": "Consumer group isolation is a fundamental Kafka design principle. Each group owns its own offset, so feed ranking and PYMK can evolve, scale, and recover independently without coupling."
+    }
+  ]
+}

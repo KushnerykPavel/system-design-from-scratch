@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What are the two primitive types TAO stores, and why are they separate?",
+      "options": [
+        "Objects (entities with an ID, like users and posts) and Associations (directed edges between objects, like friendships and likes) — separating them allows different TTLs, eviction policies, and access patterns.",
+        "Nodes (users) and Edges (all other content) — the separation is purely for naming clarity.",
+        "Reads and Writes — TAO separates read and write paths into different cache tiers.",
+        "Hot objects and cold objects — TAO separates frequently accessed data from archival data."
+      ],
+      "correct": 0,
+      "explanation": "TAO's object/association split mirrors the social graph's natural structure and enables different caching strategies: objects (user profiles) change rarely and cache long; associations (friend lists, likes) change frequently and need faster invalidation."
+    },
+    {
+      "stage": "pre",
+      "question": "Why is the TAO association query always keyed by (id1, atype) rather than by id2?",
+      "options": [
+        "The social graph read pattern is almost always 'give me all of Alice's friends' or 'give me all likes on this post' — both are keyed by the source node (id1) and relationship type (atype), making this the natural cache key.",
+        "Querying by id2 would require a full table scan across all MySQL shards.",
+        "TAO stores associations in a linked list indexed only on id2 for write efficiency.",
+        "id2-based queries are handled by a separate cache tier called TAO Reverse."
+      ],
+      "correct": 0,
+      "explanation": "Almost all social graph reads are 'all edges of type X from node Y' — fetching a user's friend list, a post's likers, or a user's group memberships. Keying by (id1, atype) makes this the primary cache hit path."
+    },
+    {
+      "stage": "post",
+      "question": "What is the correct read path for a TAO association query that misses the follower cache?",
+      "options": [
+        "Follower miss → query TAO leader → leader miss → query MySQL shard → leader caches result → follower caches result → return to app server.",
+        "Follower miss → query MySQL shard directly → populate follower cache on return.",
+        "Follower miss → query another follower in the same region → if all followers miss, return empty result.",
+        "Follower miss → TAO leader returns a stale result from its WAL without querying MySQL."
+      ],
+      "correct": 0,
+      "explanation": "The two-level cache ensures MySQL is only hit when both follower and leader miss. The leader acts as a second cache tier, absorbing most misses before they reach the database."
+    },
+    {
+      "stage": "post",
+      "question": "Why does TAO use eventual consistency rather than strong consistency for most social graph reads?",
+      "options": [
+        "Serving a stale friend list or like count for a few seconds is acceptable for the product, and eventual consistency allows the massive follower tier to serve reads without blocking on the leader.",
+        "Strong consistency is technically impossible across TAO's distributed cache architecture.",
+        "TAO leaders do not support synchronous invalidation, so eventual consistency is a technical limitation.",
+        "Eventual consistency is only used for association counts; object reads (user profiles) are always strongly consistent."
+      ],
+      "correct": 0,
+      "explanation": "Meta explicitly chose eventual consistency for social graph reads as a product decision. The alternative — requiring all reads to go through the leader — would eliminate the follower tier and make 50B QPS unachievable."
+    },
+    {
+      "stage": "post",
+      "question": "A celebrity account has 100M followers. What problem does this create in TAO, and what is the mitigation?",
+      "options": [
+        "The association list for (celebrity_id, follower) has 100M entries; caching the full list is impractical, and write fan-out for each new post overwhelms the leader shard. Mitigation: paginate association list reads and switch to pull-on-read for news feed fan-out above a follower threshold.",
+        "TAO cannot store association lists larger than 10M entries; celebrity accounts use a separate object storage tier.",
+        "The celebrity's TAO leader shard becomes a hotspot only on writes, not reads; mitigation is write sharding.",
+        "TAO handles large association lists by compressing them with Huffman encoding at the leader level."
+      ],
+      "correct": 0,
+      "explanation": "A 100M-entry association list breaks both caching (memory) and fan-out (write amplification). Meta handles this by paginating reads and using pull-on-read fan-out for news feed rather than pushing posts to all follower feed caches."
+    },
+    {
+      "stage": "post",
+      "question": "When a TAO leader receives a write (new friendship), in what order does it proceed?",
+      "options": [
+        "Write to MySQL shard synchronously, update leader cache, send invalidation messages to followers.",
+        "Send invalidation to followers first, then write to MySQL, then update leader cache.",
+        "Update leader cache immediately, send invalidation to followers, and write to MySQL asynchronously.",
+        "Write to a WAL first, send invalidation to followers, and apply to MySQL in the next batch."
+      ],
+      "correct": 0,
+      "explanation": "TAO writes to MySQL synchronously first to ensure durability. The leader cache is updated and follower invalidations are sent after the durable write completes."
+    },
+    {
+      "stage": "post",
+      "question": "How does TAO handle a MySQL shard hotspot caused by a high-traffic object?",
+      "options": [
+        "Add read replicas for the hot MySQL shard; increase the leader cache TTL for associations on that shard to reduce read miss rate.",
+        "Migrate the hot object to a separate in-memory database bypassing MySQL entirely.",
+        "Split the hot object across multiple shards using a composite key.",
+        "TAO automatically detects hotspots and reroutes reads to a different MySQL region."
+      ],
+      "correct": 0,
+      "explanation": "MySQL read replicas absorb read traffic while the primary handles writes. Longer TTLs at the TAO leader reduce the miss rate that generates MySQL reads. Both are standard hotspot mitigations in TAO's architecture."
+    },
+    {
+      "stage": "post",
+      "question": "What is the TAO follower's behavior when the TAO leader is temporarily unreachable?",
+      "options": [
+        "The follower can continue serving cached data up to a configured TTL, providing degraded but available reads; writes queue or fail until the leader recovers.",
+        "The follower immediately rejects all read requests and returns an error to the app server.",
+        "The follower promotes itself to a leader and accepts writes directly to MySQL.",
+        "The follower forwards read requests directly to MySQL, bypassing the leader entirely."
+      ],
+      "correct": 0,
+      "explanation": "TAO followers are designed to serve stale cached data when the leader is unreachable. This maintains availability for reads at the cost of increased staleness. Writes must wait for the leader to recover."
+    }
+  ]
+}

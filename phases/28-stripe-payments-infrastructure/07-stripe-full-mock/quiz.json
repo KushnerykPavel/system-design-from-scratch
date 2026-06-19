@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "In a Stripe Connect destination charge, who owns the funds immediately after the card is charged?",
+      "options": [
+        "The platform's Stripe account — the full charge amount lands in the platform's balance first, then Stripe creates a Transfer to the connected (seller) account.",
+        "The connected (seller) account — Stripe routes the seller's portion directly from the card network.",
+        "Stripe holds the funds in escrow until the platform explicitly releases them to the seller.",
+        "The funds are split at the card network level before reaching Stripe."
+      ],
+      "correct": 0,
+      "explanation": "In a destination charge, the full amount lands in the platform's balance. Stripe immediately creates a Transfer to the connected account for amount - application_fee. The platform never needs to explicitly trigger the transfer."
+    },
+    {
+      "stage": "pre",
+      "question": "What is the hard invariant for a split charge ledger in a Connect marketplace?",
+      "options": [
+        "application_fee_amount + destination_amount = total_charge_amount — the split must always equal the full charge; no funds can be created or destroyed.",
+        "platform_balance >= total_payout_amount — the platform must always have sufficient balance before paying out.",
+        "Each seller receives at least the minimum payout amount per transaction regardless of fee.",
+        "The platform fee cannot exceed 30% of the transaction amount."
+      ],
+      "correct": 0,
+      "explanation": "The ledger invariant ensures every dollar charged is accounted for: fee + destination = total. Violating this means money was created or destroyed — a catastrophic ledger error."
+    },
+    {
+      "stage": "post",
+      "question": "A buyer disputes a $200 charge split as $20 platform fee and $180 to the seller. Who gets debited for the chargeback?",
+      "options": [
+        "The platform's Stripe balance is debited the full $200 plus the dispute fee (~$15). The platform then decides whether to claw back the $180 from the seller's connected account balance.",
+        "The seller's connected account is debited $180 and the platform is debited $20, proportional to the split.",
+        "The card network absorbs the chargeback cost if the platform responds with evidence within 7 days.",
+        "Stripe absorbs the chargeback cost for the first dispute on any connected account as fraud insurance."
+      ],
+      "correct": 0,
+      "explanation": "Chargebacks always hit the platform first. The platform decides whether to pass the cost through to the seller — this is a business and contractual decision, not an automatic Stripe behavior."
+    },
+    {
+      "stage": "post",
+      "question": "Why must the Transfer to a connected account have its own idempotency key, separate from the PaymentIntent?",
+      "options": [
+        "Because the Transfer is a separate API call that can fail independently. If it times out and is retried without an idempotency key, the seller could receive funds twice.",
+        "Because Stripe's API requires a unique idempotency key for every API call regardless of the operation type.",
+        "Because the Transfer is processed by a different Stripe service that does not share the PaymentIntent's idempotency store.",
+        "Because idempotency keys on PaymentIntents only protect the charge authorization, not the fund routing."
+      ],
+      "correct": 0,
+      "explanation": "The Transfer is an independent operation. A timeout on the Transfer creation could leave you uncertain whether it succeeded. Retrying without an idempotency key risks double-transfer to the seller."
+    },
+    {
+      "stage": "post",
+      "question": "Why should a marketplace platform NOT build its own KYC (Know Your Customer) flow for onboarding sellers?",
+      "options": [
+        "Because Stripe holds the money transmission licenses that require KYC compliance — the platform would need its own licenses (complex, jurisdiction-specific) to operate its own KYC, and Stripe Connect Onboarding already handles this correctly.",
+        "Because building custom KYC is technically impossible without access to government identity databases.",
+        "Because Stripe prohibits custom KYC flows in its terms of service for all Connect platforms.",
+        "Because custom KYC would violate GDPR by storing identity documents on non-certified infrastructure."
+      ],
+      "correct": 0,
+      "explanation": "Money transmission licensing is the core reason. Stripe is licensed as a money transmitter; platforms that route funds need to operate under Stripe's license, which requires using Stripe's KYC compliance infrastructure."
+    },
+    {
+      "stage": "post",
+      "question": "A platform wants to delay payouts for new sellers for 7 days to reduce fraud risk. What is the correct design?",
+      "options": [
+        "Configure a 7-day payout delay on the connected account's payout schedule, or use manual payouts for new sellers and programmatically trigger payouts after the 7-day hold period.",
+        "Hold the funds in the platform's balance and create a Transfer to the connected account only after 7 days.",
+        "Add a 7-day delay to the Transfer creation after the charge, keeping funds in the platform balance during the hold period.",
+        "Use Stripe Radar to block all payouts from accounts under 7 days old and release them via the Radar review queue."
+      ],
+      "correct": 0,
+      "explanation": "Stripe supports configurable payout schedules on connected accounts, including manual mode where the platform controls payout timing. This is the standard pattern for fraud holds on new accounts."
+    },
+    {
+      "stage": "post",
+      "question": "Which four webhook events are critical to monitor for the full lifecycle of a destination charge in a marketplace?",
+      "options": [
+        "payment_intent.succeeded (charge confirmed), transfer.created (seller funded), payout.paid or payout.failed (seller paid out), charge.dispute.created (chargeback filed).",
+        "payment_intent.created, payment_intent.succeeded, transfer.reversed, payout.created.",
+        "charge.succeeded, account.updated, payout.in_transit, dispute.evidence_submitted.",
+        "payment_method.attached, payment_intent.processing, transfer.paid, payout.paid."
+      ],
+      "correct": 0,
+      "explanation": "These four events cover the complete money movement lifecycle: charge success, seller funding, seller payout outcome, and dispute notification. Missing any one of them leaves a gap in the platform's financial state machine."
+    },
+    {
+      "stage": "post",
+      "question": "What reconciliation check would you run to verify that the platform's ledger is consistent with Stripe's settlement records?",
+      "options": [
+        "Sum of (platform_balance + all_connected_account_balances + all_in_transit_payouts) should equal total_settled_from_card_networks — any discrepancy indicates a missing ledger posting or a Transfer error.",
+        "Compare the count of PaymentIntents to the count of Transfers — they should be equal for a 1:1 destination charge model.",
+        "Verify that every charge has a corresponding payout within the T+2 window — orphaned charges indicate a payout scheduling bug.",
+        "Match each charge amount to the seller invoice total — discrepancies indicate a pricing configuration error."
+      ],
+      "correct": 0,
+      "explanation": "This is the classic double-entry reconciliation check: total assets (all balances + in-transit) must equal total liabilities (settled card volume). Any drift surfaces missing postings or Transfer errors."
+    }
+  ]
+}

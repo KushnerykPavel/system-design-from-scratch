@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "In a 45-minute system design interview, when should you state capacity numbers?",
+      "options": [
+        "In the first 5 minutes, as part of requirements — they anchor every subsequent trade-off and demonstrate you know the scale you're designing for.",
+        "Only if the interviewer asks — volunteering numbers wastes time you could spend drawing diagrams.",
+        "At the 30-minute mark, after the architecture is complete, to validate your design choices retrospectively.",
+        "Capacity numbers are irrelevant for Uber; interviewers care only about component choices."
+      ],
+      "correct": 0,
+      "explanation": "Capacity numbers are the foundation. Saying '20M location events/sec' immediately justifies Kafka over REST polling, Redis over PostgreSQL, and 10K partitions. Without them, every component choice appears arbitrary."
+    },
+    {
+      "stage": "pre",
+      "question": "What is the weak-hire anti-pattern when asked about driver location storage?",
+      "options": [
+        "Suggesting a SQL database with a lat/lon BETWEEN query to find nearby drivers — this is an O(N) full table scan over 5 million rows per dispatch cycle.",
+        "Using Redis sorted sets with GEORADIUS — this is a valid but suboptimal approach compared to H3 cells.",
+        "Using Cassandra with a geospatial index — this demonstrates unfamiliarity with NoSQL.",
+        "Using a message queue to broadcast all driver locations to all dispatch workers."
+      ],
+      "correct": 0,
+      "explanation": "SQL proximity queries on millions of rows don't scale. The interviewer is looking for you to identify this problem and pivot to a geospatial indexing solution (H3 + Redis cell sets) that makes proximity search O(k-ring size) instead of O(N)."
+    },
+    {
+      "stage": "post",
+      "question": "What is the strongest signal in a Uber system design answer that separates a strong hire from a hire?",
+      "options": [
+        "Explicitly naming H3 geospatial indexing, explaining why hex cells outperform grid cells, and connecting it to the k-ring proximity query and polyfill geofencing — showing mastery of the geospatial layer.",
+        "Drawing the most detailed architecture diagram with every microservice labeled.",
+        "Mentioning Kubernetes for container orchestration and Prometheus for monitoring.",
+        "Describing a machine learning model for ETA prediction."
+      ],
+      "correct": 0,
+      "explanation": "H3 + k-ring + polyfill is the technical depth signal for this problem. It's non-obvious, it directly solves the proximity and geofencing challenges, and it demonstrates preparation beyond generic distributed systems knowledge."
+    },
+    {
+      "stage": "post",
+      "question": "A candidate says 'I'd use a database to store driver locations and query for nearby drivers every second.' What is wrong with this approach?",
+      "options": [
+        "It creates an O(N) query over 5M driver rows every second per dispatch request — at 300 trips/sec, that's 300 full table scans/second. No indexing strategy makes this scale.",
+        "Databases do not support geospatial coordinates; only specialized graph databases can store lat/lon.",
+        "Querying every second is too infrequent; the system needs sub-100ms polling to maintain <1s staleness.",
+        "Nothing is wrong — this is the correct approach for Uber's scale with proper read replicas."
+      ],
+      "correct": 0,
+      "explanation": "Even with a spatial index, a proximity query over 5M live drivers at 300 req/sec exceeds what any relational database can sustain. H3 + Redis cell sets reduce the query to 7 small set lookups regardless of total driver count."
+    },
+    {
+      "stage": "post",
+      "question": "You're at minute 25 in the interview and haven't discussed failure modes. The interviewer asks 'what happens when the surge worker crashes?' What is the correct response?",
+      "options": [
+        "Redis serves the last-known multiplier with a 120s TTL (last-known-good cache). The crash impact is at most one missed 60s update cycle. On recovery, the worker reprocesses from Kafka offsets and republishes current multipliers.",
+        "The system falls back to 1.0× immediately because Redis does not store multipliers persistently.",
+        "All trip requests in affected zones are queued until the worker recovers to avoid incorrect pricing.",
+        "The surge worker has no single point of failure because Kafka guarantees exactly-once delivery."
+      ],
+      "correct": 0,
+      "explanation": "This answer demonstrates knowledge of the TTL-as-last-known-good pattern, the 60s update cycle as the recovery horizon, and Kafka's offset replay for recovery. Each piece shows a different layer of the failure model."
+    },
+    {
+      "stage": "post",
+      "question": "Why is trip state management a scoring dimension in the Uber interview rubric?",
+      "options": [
+        "Because incorrect trip state handling causes billing errors, incorrect cancellation fees, and double-charge bugs that directly impact revenue and user trust — demonstrating awareness of this shows product engineering maturity.",
+        "Because state machines are rare in distributed systems and interviewers are always impressed by mentioning them.",
+        "Because Uber's engineering blog has several posts about Cadence, so mentioning it signals that you read engineering blogs.",
+        "Because the state machine is the only component in the system that requires a formal proof of correctness."
+      ],
+      "correct": 0,
+      "explanation": "State management failures have direct business consequences: double billing, ghost trips, incorrect refunds. An interviewer who weighted this dimension is testing whether you connect technical design decisions to real user impact."
+    },
+    {
+      "stage": "post",
+      "question": "A candidate scores well on geospatial design and location pipeline but mentions no observability metrics. What hire signal does this send?",
+      "options": [
+        "Weak Hire or No Hire — a system without observability cannot be operated in production. An engineer who designs without metrics is not thinking about how the system will be maintained after launch.",
+        "Strong Hire — observability is an SRE concern, not a system designer's concern.",
+        "Hire — the metrics are obvious and don't need to be stated explicitly.",
+        "No impact — interviewers don't score observability because it's identical for every system."
+      ],
+      "correct": 0,
+      "explanation": "At staff level, observability is a design requirement. The rubric allocates 15 points to it. Skipping it signals someone who can design systems but can't operate them — a meaningful gap for senior and staff roles."
+    },
+    {
+      "stage": "post",
+      "question": "What is the correct answer to the follow-up question: 'How do you prevent a driver from receiving duplicate trip offers?'",
+      "options": [
+        "Use a Redis key with SET NX (set if not exists) and a 15s TTL as a distributed lease on the driver. DISCO checks the key before sending an offer; only one dispatch worker can acquire it. On acceptance, decline, or timeout, the key is released.",
+        "Use PostgreSQL advisory locks on the driver_id row during offer dispatch.",
+        "Prevent duplicates by routing all offers for a given driver through a single dedicated dispatch worker using consistent hashing.",
+        "Duplicate offers are acceptable because drivers can only accept one; the system handles conflicts at acceptance time."
+      ],
+      "correct": 0,
+      "explanation": "Redis SET NX with TTL is the classic distributed compare-and-swap pattern for ephemeral leases. It's low latency, self-expiring (TTL handles the timeout automatically), and doesn't require coordination infrastructure beyond what's already in the system."
+    }
+  ]
+}

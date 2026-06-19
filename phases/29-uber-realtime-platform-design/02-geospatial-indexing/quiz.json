@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What is the key geometric property of hexagonal grids that makes them better than square grids for proximity search?",
+      "options": [
+        "All 6 neighbors of a hexagonal cell are equidistant from its center, eliminating the distance bias that diagonal neighbors create in square grids.",
+        "Hexagonal cells are larger than square cells at the same resolution, so fewer cells need to be queried.",
+        "Hexagonal grids can be stored more compactly in memory because each cell has a shorter ID.",
+        "Hexagonal cells never span multiple time zones, making coordinate arithmetic simpler."
+      ],
+      "correct": 0,
+      "explanation": "In a square grid, diagonal neighbors are ~41% farther than edge neighbors. Hexagons eliminate this bias, giving uniform coverage in all directions for a k-ring query."
+    },
+    {
+      "stage": "pre",
+      "question": "Why is Redis GEORADIUS insufficient for a system with 5 million concurrent driver locations?",
+      "options": [
+        "GEORADIUS stores all elements in a single sorted set; a radius query over that set is O(N+log M) and scans too much data when M is 5 million.",
+        "GEORADIUS does not support TTL-based expiry, so stale driver locations cannot be cleaned up automatically.",
+        "GEORADIUS requires coordinates in UTM projection, but driver GPS uses WGS84.",
+        "GEORADIUS is limited to 65,536 members per key by the Redis specification."
+      ],
+      "correct": 0,
+      "explanation": "Putting 5M drivers in one sorted set makes range queries expensive. H3 cells shard the problem: each cell set is small, and a k-ring query touches only 7 small sets."
+    },
+    {
+      "stage": "post",
+      "question": "A rider is at position P. Uber uses H3 res-9 cells and a k-ring(1) proximity query. How many cell IDs does the query produce?",
+      "options": [
+        "7 — the rider's own cell plus its 6 hexagonal neighbors.",
+        "6 — only the 6 neighbors, excluding the rider's own cell.",
+        "19 — k-ring(1) always returns 19 cells in the hexagonal grid.",
+        "4 — one cell per compass direction (N, S, E, W)."
+      ],
+      "correct": 0,
+      "explanation": "k-ring(k) returns all cells within k steps including the center. k-ring(1) = 1 center + 6 neighbors = 7 cells."
+    },
+    {
+      "stage": "post",
+      "question": "A driver moves from cell A to adjacent cell B. What Redis operations does the location update service execute?",
+      "options": [
+        "SREM h3cell:A driver_id, SADD h3cell:B driver_id, SET driver:{id}:cell B, EXPIRE h3cell:B 30.",
+        "DEL h3cell:A, SADD h3cell:B driver_id, SET driver:{id}:cell B.",
+        "ZADD h3cell:B score driver_id, ZREM h3cell:A driver_id.",
+        "HSET driver:{id} cell B — the cell set updates happen asynchronously via a background job."
+      ],
+      "correct": 0,
+      "explanation": "Both the cell membership sets and the driver's cell index must be updated atomically-ish. SREM removes from old, SADD adds to new, SET updates the driver index, EXPIRE prevents stale membership."
+    },
+    {
+      "stage": "post",
+      "question": "A driver's app crashes and stops sending GPS updates. What prevents this driver from appearing as available in dispatch queries 60 seconds later?",
+      "options": [
+        "A 30-second TTL on each cell set; if no EXPIRE refresh is received, Redis automatically removes the set, making the driver invisible.",
+        "A heartbeat table in PostgreSQL that the dispatch service checks before adding a driver to match candidates.",
+        "The Kafka consumer detects the missing partitions and publishes a driver-offline event.",
+        "Redis GEORADIUS automatically removes members that have not been updated within the geospatial TTL window."
+      ],
+      "correct": 0,
+      "explanation": "Each SADD is followed by an EXPIRE reset to 30s. When the driver stops sending, no EXPIRE refresh occurs and the cell set key disappears after TTL, removing the driver from all cell lookups."
+    },
+    {
+      "stage": "post",
+      "question": "How does Uber use H3 polyfill to implement O(1) geofence containment checks for surge zones?",
+      "options": [
+        "Polyfill converts a surge zone polygon into a set of H3 cell IDs; containment is then a SISMEMBER lookup — O(1) — rather than a polygon intersection test.",
+        "Polyfill pre-computes the centroid of the surge polygon; containment is a distance check from the centroid.",
+        "Polyfill generates a bounding box around the surge zone; containment is a lat/lon range query on that box.",
+        "Polyfill assigns a single representative cell to each surge zone regardless of its shape."
+      ],
+      "correct": 0,
+      "explanation": "By materializing the zone as a set of cells, you turn a geometric containment problem (expensive) into a hash-set membership test (O(1)) — a classic geospatial indexing pattern."
+    },
+    {
+      "stage": "post",
+      "question": "At 5 million active drivers, approximately how much Redis memory is needed to store the driver cell membership index?",
+      "options": [
+        "~650 MB — cell sets (~320 MB) plus the driver-to-cell index (~250 MB) plus overhead, fitting on a single large Redis instance.",
+        "~50 GB — each driver location requires a full GPS trace history stored in Redis.",
+        "~5 MB — H3 cell IDs are 8 bytes, so 5M × 8 bytes = 40 MB, ignoring all overhead.",
+        "~10 GB — Redis sorted sets for GEORADIUS require ~2 KB per member."
+      ],
+      "correct": 0,
+      "explanation": "Cell sets store driver IDs (~64 bytes per element with Redis overhead = 320 MB) plus a driver→cell index (~50 bytes × 5M = 250 MB). Total ~650 MB — easily fits in RAM."
+    },
+    {
+      "stage": "post",
+      "question": "A city block (H3 res-9 cell) becomes a popular pickup zone with 500 drivers waiting in it. What is the latency impact on SMEMBERS for that cell?",
+      "options": [
+        "SMEMBERS is O(N) where N is the set size; 500 members returns quickly, but if a cell routinely holds thousands of drivers, upgrading to res-10 cells reduces set sizes.",
+        "SMEMBERS is O(1) regardless of set size because Redis uses a hash table internally.",
+        "SMEMBERS blocks all other Redis clients while executing, so a 500-member set causes a 500ms outage.",
+        "SMEMBERS cannot return more than 128 members per call; a SCAN loop is required for larger sets."
+      ],
+      "correct": 0,
+      "explanation": "O(N) SMEMBERS on 500 elements is microseconds on modern Redis. However, at extreme density (tens of thousands per cell), switching to a finer resolution is the right design response."
+    }
+  ]
+}

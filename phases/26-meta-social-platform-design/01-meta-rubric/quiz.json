@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What does TAO stand for and why is it a strong signal in a Meta interview?",
+      "options": [
+        "The Associations and Objects graph cache — naming it shows you understand Meta serves the social graph from a two-level cache, not directly from MySQL.",
+        "TAO is Meta's time-series analytics platform, similar to Prometheus.",
+        "TAO is Meta's container orchestration system, equivalent to Kubernetes.",
+        "TAO stands for Traffic Aware Orchestration and routes API requests to the nearest datacenter."
+      ],
+      "correct": 0,
+      "explanation": "TAO (The Associations and Objects) is Meta's two-level distributed graph cache. Knowing it signals that you understand the social graph is not served from MySQL and that objects and associations are separate primitives with different access patterns."
+    },
+    {
+      "stage": "pre",
+      "question": "Why does Meta's news feed use a hybrid push/pull fanout strategy rather than pure push-on-write?",
+      "options": [
+        "Pure push-on-write would require writing a post to millions of feed caches for celebrity accounts, overwhelming the fanout pipeline.",
+        "Pull-on-read is always faster because it avoids the write amplification entirely.",
+        "Push-on-write is only used for paid promotional posts; organic posts always use pull-on-read.",
+        "The hybrid approach is only needed for video posts, not text or photo posts."
+      ],
+      "correct": 0,
+      "explanation": "A user with 50M followers triggers 50M cache writes on a single post. Above a follower threshold, Meta switches to pull-on-read so the feed is assembled on demand, avoiding the fanout storm."
+    },
+    {
+      "stage": "post",
+      "question": "Which pattern is the clearest weak-hire signal in a Meta interview?",
+      "options": [
+        "Applying push-on-write uniformly to all users including celebrities without mentioning the follower-count threshold problem.",
+        "Starting with a capacity estimate and naming graph edge count before drawing the architecture.",
+        "Mentioning TAO as the graph cache layer and distinguishing objects from associations.",
+        "Identifying privacy propagation as a synchronous constraint before fan-out begins."
+      ],
+      "correct": 0,
+      "explanation": "Ignoring the celebrity/high-follower write amplification problem shows the candidate has not thought about the real bottleneck in news feed fanout. It is the first scaling problem Meta engineers encounter."
+    },
+    {
+      "stage": "post",
+      "question": "A strong-hire answer at the 15-minute mark in a Meta interview looks like which of the following?",
+      "options": [
+        "An end-to-end sketch with named services (graph serving, fanout, ranking, privacy), plus a stated fanout strategy for normal vs. high-follower accounts.",
+        "A fully detailed data model for every service including MySQL schema and index definitions.",
+        "A list of Meta technologies to use without explaining the trade-off each one resolves.",
+        "A deep dive into the TAO cache eviction algorithm with no mention of other subsystems."
+      ],
+      "correct": 0,
+      "explanation": "By 15 minutes, the interviewer needs to see breadth: named services with clear ownership boundaries and the critical fanout strategy decision. Depth comes after the structure is agreed upon."
+    },
+    {
+      "stage": "post",
+      "question": "Why must privacy enforcement happen before fan-out begins, not at read time?",
+      "options": [
+        "If fan-out starts before the privacy change is confirmed, a post could propagate to feed caches of users outside the intended audience, creating an audit gap that is hard to close.",
+        "Read-time enforcement is computationally too expensive for Meta's scale.",
+        "Privacy enforcement at read time requires the TAO cache, which is only available for write operations.",
+        "Fan-out and privacy enforcement are handled by the same service, so order does not matter."
+      ],
+      "correct": 0,
+      "explanation": "Feed caches are populated asynchronously. If a post fans out before the audience restriction is applied, it can be visible to the wrong audience before the correction propagates. Blocking fan-out on privacy confirmation eliminates this window."
+    },
+    {
+      "stage": "post",
+      "question": "How does the TAO two-level cache architecture work for a social graph read?",
+      "options": [
+        "Clients read from TAO followers; on a miss, followers fetch from TAO leaders; on a leader miss, leaders fetch from MySQL shards. Writes go to leaders and propagate down.",
+        "TAO is a write-through cache: every read goes to MySQL, which populates TAO asynchronously.",
+        "TAO followers and leaders are identical replicas; the two levels exist only for geographic redundancy.",
+        "TAO leaders handle association queries; TAO followers handle object queries; MySQL is not involved in reads."
+      ],
+      "correct": 0,
+      "explanation": "TAO has two cache levels: followers (closer to app servers) and leaders (one per region). Reads start at followers, fall through to leaders on a miss, and finally hit MySQL shards if the leader also misses. Writes always go to the leader."
+    },
+    {
+      "stage": "post",
+      "question": "What is the correct role of ML ranking in a Meta-style news feed design?",
+      "options": [
+        "The ranking model consumes pre-computed features from a feature store and scores candidate posts; it must be designed as an independently deployable service so models can be updated and A/B tested without redeploying feed retrieval.",
+        "Ranking is applied at the CDN layer to avoid adding latency to the origin servers.",
+        "ML ranking only applies to ads, not organic feed content.",
+        "Ranking is embedded inline in the database query so the result set is pre-sorted before reaching the application."
+      ],
+      "correct": 0,
+      "explanation": "Feed ranking is a first-class service at Meta, separate from feed retrieval. Decoupling them allows independent model iteration, A/B testing, and failure isolation: if ranking is down, the feed can fall back to recency-sorted results."
+    },
+    {
+      "stage": "post",
+      "question": "Which failure mode is most likely to require immediate privacy-aware remediation rather than eventual consistency?",
+      "options": [
+        "A post's audience setting changes from public to friends-only: the new restriction must be enforced on the next read, not after a cache TTL expires.",
+        "A TAO follower diverges from its leader: the stale friend list can be served for a short window without harm.",
+        "A feed ranking model serves slightly stale engagement features: CTR impact is measurable but not a privacy violation.",
+        "A photo upload is delayed in the Haystack pipeline: eventual delivery is acceptable for non-real-time media."
+      ],
+      "correct": 0,
+      "explanation": "Audience restriction changes are a hard privacy requirement at Meta. Serving a post to the wrong audience — even briefly — is a data exposure incident. All other cases tolerate eventual consistency; privacy does not."
+    }
+  ]
+}

@@ -1,0 +1,117 @@
+{
+  "lesson": "02-product-catalog-search",
+  "questions": [
+    {
+      "id": "pre_01",
+      "phase": "pre",
+      "type": "mcq",
+      "question": "An inverted index maps:",
+      "options": [
+        "document IDs to their full content",
+        "terms to the list of documents containing them",
+        "product IDs to DynamoDB partition keys",
+        "user queries to cached result sets"
+      ],
+      "answer": 1,
+      "explanation": "An inverted index maps each term (word) to the list of documents (products) containing it — the core data structure enabling full-text search."
+    },
+    {
+      "id": "pre_02",
+      "phase": "pre",
+      "type": "mcq",
+      "question": "You have a product page that is read 50,000 times/sec but updated once per hour. Which caching strategy gives the best read scalability?",
+      "options": [
+        "Read-through cache with TTL matching update frequency",
+        "Write-through cache with synchronous invalidation",
+        "No cache — DynamoDB can handle 50K reads/sec natively",
+        "Cache only after the third read (lazy population with threshold)"
+      ],
+      "answer": 0,
+      "explanation": "Read-through with TTL ~1h means nearly all reads hit the cache. Write-through adds synchronous write latency. DynamoDB can handle it but at much higher cost."
+    },
+    {
+      "id": "post_01",
+      "phase": "post",
+      "type": "mcq",
+      "question": "Why is price NOT indexed in OpenSearch and instead served from a Redis cache with 5s TTL?",
+      "options": [
+        "OpenSearch does not support numeric fields",
+        "Price changes ~100K times/sec; re-indexing on every change would overwhelm the search cluster",
+        "Redis is strongly consistent while OpenSearch is eventually consistent",
+        "DynamoDB cannot store floating-point numbers for prices"
+      ],
+      "answer": 1,
+      "explanation": "Price updates at 100K/sec would require constant index writes. OpenSearch is optimized for reads, not high-frequency document mutations. Redis TTL 5s serves price reads cheaply while Aurora remains the source of truth."
+    },
+    {
+      "id": "post_02",
+      "phase": "post",
+      "type": "mcq",
+      "question": "What is the purpose of a blue/green index alias in OpenSearch?",
+      "options": [
+        "Route 50% of traffic to each index for A/B testing search algorithms",
+        "Build a new index in the background and atomically cut traffic over without downtime",
+        "Replicate the index across AWS regions for disaster recovery",
+        "Separate read and write operations to different index shards"
+      ],
+      "answer": 1,
+      "explanation": "A blue/green alias swap lets you build a fresh index (green) while the old one (blue) serves live traffic. Once the new index is ready, you update the alias pointer atomically — zero downtime reindex."
+    },
+    {
+      "id": "post_03",
+      "phase": "post",
+      "type": "mcq",
+      "question": "A new product has zero sales history. In Amazon's ranking system, what is the most appropriate initial ranking strategy?",
+      "options": [
+        "Assign rank 0 (bottom) until it has 100 sales",
+        "Use category-level average signals as a prior and apply a new-product boost for temporary visibility",
+        "Immediately rank it above all existing products to guarantee exposure",
+        "Do not index new products until they have at least one review"
+      ],
+      "answer": 1,
+      "explanation": "Cold-start products use category-level signals as a Bayesian prior. A temporary boost surfaces them to early buyers. Rank 0 guarantees failure; immediate top rank is unfair to established products."
+    },
+    {
+      "id": "post_04",
+      "phase": "post",
+      "type": "mcq",
+      "question": "Pre-computed facet counts in Redis are refreshed every 5 minutes. A customer filters by 'Prime only' and sees a count of 1,240 items, but clicking through shows 1,238. Why?",
+      "options": [
+        "Redis has a bug in its ZSET implementation",
+        "DynamoDB and OpenSearch are out of sync",
+        "The facet cache is slightly stale — counts reflect a 5-minute-old snapshot while the live index has changed",
+        "The customer's browser cached the old count"
+      ],
+      "answer": 2,
+      "explanation": "Pre-computed facets trade strict accuracy for performance. A 2-item discrepancy over 5 minutes is acceptable and far cheaper than running live aggregations at 500K QPS."
+    },
+    {
+      "id": "post_05",
+      "phase": "post",
+      "type": "mcq",
+      "question": "During Black Friday, 10,000 product cache entries all expire at exactly midnight (TTL was set uniformly). What failure mode does this cause and how do you prevent it?",
+      "options": [
+        "DynamoDB throttling — prevented by enabling DynamoDB Streams",
+        "Cache stampede — all servers simultaneously query the backend; prevented by jittered TTLs and probabilistic early expiration",
+        "OpenSearch index corruption — prevented by taking a snapshot before midnight",
+        "Redis OOM — prevented by increasing Redis memory before the event"
+      ],
+      "answer": 1,
+      "explanation": "Uniform TTL expiry causes a thundering herd (cache stampede). Jittered TTLs spread expirations over a time window. Probabilistic early expiration re-warms the cache before actual expiry."
+    },
+    {
+      "id": "post_06",
+      "phase": "post",
+      "type": "mcq",
+      "question": "You need to add full-text search in Japanese (which requires character-level tokenization, not space-based). What is the correct approach in OpenSearch?",
+      "options": [
+        "Store Japanese products in a separate DynamoDB table with a different partition key",
+        "Use a locale-specific analyzer (e.g., Kuromoji for Japanese) configured per index or per field",
+        "Transliterate all Japanese text to romaji before indexing",
+        "OpenSearch does not support non-Latin character sets"
+      ],
+      "answer": 1,
+      "explanation": "OpenSearch supports pluggable analyzers. Kuromoji is the standard Japanese morphological analyzer. Each locale needs its own analyzer — German needs a compound-word splitter, Arabic needs RTL handling, etc."
+    }
+  ]
+}

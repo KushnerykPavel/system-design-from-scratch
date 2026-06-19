@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why does Haystack store many photos in a single large flat file (volume) instead of one file per photo?",
+      "options": [
+        "Traditional filesystems require one disk seek per file metadata read (inode lookup), so storing 4 billion photos as individual files would make the inode table the bottleneck. Packing thousands of photos into one volume replaces per-file metadata with an in-memory directory.",
+        "Flat files are easier to back up because a single tar archive covers all photos.",
+        "Operating systems limit the number of files per directory to a few thousand, which would be exceeded quickly.",
+        "One file per photo would require more network round-trips to fetch from CDN."
+      ],
+      "correct": 0,
+      "explanation": "At 4 billion photos, per-file inode overhead dominates. Haystack eliminates this by using an append-only volume with an in-memory directory mapping photo_id → (volume_id, offset, size) — one seek directly to the data."
+    },
+    {
+      "stage": "pre",
+      "question": "What is the key advantage of content-addressed storage (like Everstore) over path-based storage for a social media platform?",
+      "options": [
+        "Identical photos uploaded by different users are stored only once automatically — the write path hashes the content and returns the existing URL if the hash already exists, eliminating duplicate storage without a separate deduplication service.",
+        "Content-addressed storage is faster to write because it skips checksum validation.",
+        "Content-addressed storage eliminates the need for a CDN because URLs are globally unique.",
+        "Content-addressed storage makes it easier to delete photos because the hash is the primary key."
+      ],
+      "correct": 0,
+      "explanation": "When two users upload the same viral photo or meme, content-addressing stores it once. The write path computes SHA-256, checks if it exists, and returns the existing URL. This is deduplication for free."
+    },
+    {
+      "stage": "post",
+      "question": "A Reels video is uploaded at 09:00 and goes viral by 09:05, driving 10 million views in 10 minutes. The CDN edge caches were cold. What is the correct sequence of events that prevents the origin from being overwhelmed?",
+      "options": [
+        "Early engagement signals (likes, shares) trigger the CDN proactive fill system, which pushes the video segments to edge PoPs. Subsequent viewers hit the edge cache; only the first few hundred viewers before the fill completes reach the origin.",
+        "The CDN automatically replicates every video to every edge PoP immediately after upload, so the origin is never reached.",
+        "The origin auto-scales to 10× capacity within 30 seconds, absorbing all cache-miss traffic without CDN fill.",
+        "The video is served directly from Kafka consumer offset storage during viral spikes to bypass the origin."
+      ],
+      "correct": 0,
+      "explanation": "Proactive fill uses engagement prediction: when early signals (share rate, repost velocity) exceed a threshold, a fill job pushes the video segments to all relevant edge PoPs. This race between viral spread and fill propagation is the core challenge."
+    },
+    {
+      "stage": "post",
+      "question": "Why does Meta transcode Reels videos to AV1 in addition to H.264 and VP9, given that AV1 encoding costs significantly more compute?",
+      "options": [
+        "AV1 achieves ~50% smaller file size at equivalent visual quality compared to H.264. At 140 billion plays per day, a 50% reduction in CDN bandwidth and storage cost dwarfs the one-time encoding cost.",
+        "AV1 is the only codec supported by Meta's CDN infrastructure.",
+        "AV1 allows videos to be stored without encryption, reducing overhead.",
+        "AV1 encoding is faster than H.264 for videos longer than 60 seconds."
+      ],
+      "correct": 0,
+      "explanation": "Encoding is a one-time cost. Serving happens billions of times per day. Halving the bits per view at 140B plays/day saves enormous CDN and storage costs. This is the correct trade-off reasoning."
+    },
+    {
+      "stage": "post",
+      "question": "What happens to Haystack needles when a user deletes a photo?",
+      "options": [
+        "The needle's delete flag is set in the in-memory directory and on disk. The bytes are not immediately reclaimed. A background compaction job periodically rewrites volumes, skipping deleted needles, to reclaim space.",
+        "The needle bytes are immediately overwritten with zeros to reclaim space and ensure the photo cannot be recovered.",
+        "The volume file containing the needle is deleted and rebuilt from scratch without the deleted photo.",
+        "Deleted photos are moved to a separate cold-tier volume for regulatory hold before permanent deletion."
+      ],
+      "correct": 0,
+      "explanation": "Haystack is append-only. Deletion sets a flag. Compaction is the offline process that rewrites volumes, dropping deleted needles. This avoids random I/O at delete time and simplifies write path consistency."
+    },
+    {
+      "stage": "post",
+      "question": "A transcoding worker crashes after downloading the original video but before finishing all 15 variants. How does the pipeline recover without re-encoding variants that already completed?",
+      "options": [
+        "Transcoding jobs track per-variant completion status. On retry, the worker checks which variants already exist in Everstore (by content-addressed hash) and skips those, only re-encoding missing variants.",
+        "The worker restarts the entire job from scratch because partial transcoding states cannot be trusted.",
+        "A supervisor process kills all incomplete variants and forces a clean re-run from the original.",
+        "The Kafka offset is not committed until all variants complete, so the next worker picks up the job and re-runs everything."
+      ],
+      "correct": 0,
+      "explanation": "Idempotency through content-addressed storage: a completed variant has a deterministic hash. The retry path checks existence before re-encoding. This makes the pipeline resilient to worker failures without duplicating work."
+    },
+    {
+      "stage": "post",
+      "question": "Why does Meta run both DASH and HLS manifests for the same Reels video?",
+      "options": [
+        "DASH is used for Android and web clients where Meta controls the player; HLS is required for iOS and Safari due to Apple's platform requirement that video streaming use HLS.",
+        "DASH and HLS use different segment sizes, and serving both allows clients to choose the more efficient one for their bandwidth.",
+        "DASH is used for short videos under 60 seconds; HLS is used for longer content.",
+        "HLS is the primary format; DASH is a fallback used only when HLS decoding fails on Android."
+      ],
+      "correct": 0,
+      "explanation": "Apple mandates HLS for iOS video playback. DASH is the open standard used on Android and web. Supporting both maximizes device coverage without maintaining separate video stores — both manifests reference the same underlying segment files."
+    },
+    {
+      "stage": "post",
+      "question": "A photo uploaded 3 years ago is stored in cold tier. A user opens their old album and views it. What is the correct behavior and the latency implication?",
+      "options": [
+        "The CDN cache miss propagates to the origin, which fetches from cold tier storage. Cold tier retrieval adds seconds of latency (re-warm step). The photo is promoted back to warm tier after access to reduce latency on subsequent views.",
+        "Cold tier photos return a 404 because they are no longer in active storage.",
+        "Cold tier photos are served instantly because the cold tier uses the same SSD infrastructure as hot tier, just with lower replication.",
+        "The user receives a notification that the photo requires 24 hours to retrieve from archival storage."
+      ],
+      "correct": 0,
+      "explanation": "Cold tier retrieval is not instant — it involves erasure code reconstruction or off-site fetch. The system can serve it but with higher latency. Promoting frequently re-accessed cold objects back to warm tier is the correct optimization."
+    }
+  ]
+}

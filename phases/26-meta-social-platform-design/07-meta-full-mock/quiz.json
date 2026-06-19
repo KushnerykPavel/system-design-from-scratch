@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "In a Meta system design interview, you are given the prompt: 'Design Instagram's News Feed.' What is the single most important first action?",
+      "options": [
+        "Ask clarifying questions to scope the problem: number of DAU, read/write ratio, latency target, whether the feed is ranked or chronological, and whether celebrity accounts are in scope.",
+        "Immediately start drawing a system diagram to show the interviewer you can think quickly.",
+        "Ask the interviewer which specific subsystem to focus on first.",
+        "Provide a complete solution and then ask if the interviewer wants to go deeper on any part."
+      ],
+      "correct": 0,
+      "explanation": "Starting with clarification signals structured thinking and avoids designing the wrong system. A strong candidate asks at least 3 targeted questions before touching the whiteboard. Numbers are expected within the first 5 minutes."
+    },
+    {
+      "stage": "pre",
+      "question": "Why is the push vs pull fanout decision the most important architectural choice in a News Feed design?",
+      "options": [
+        "Push fanout (write to all followers' caches at post time) creates a write amplification of follower_count × 1 write per post. For celebrity accounts with 10M followers, this becomes a 10M-write storm per post. Pull fanout (read from celebrity's post list at feed-load time) avoids this but increases read-path latency.",
+        "Push fanout requires stronger consistency guarantees than pull fanout, which is the main trade-off.",
+        "Pull fanout is always better because it uses less storage than push fanout.",
+        "The choice between push and pull fanout only matters for accounts with fewer than 1,000 followers."
+      ],
+      "correct": 0,
+      "explanation": "Fanout strategy determines write amplification, read latency, and cache architecture. The hybrid (push for normal users, pull for celebrities) is the standard answer — but you must justify where the threshold is and why."
+    },
+    {
+      "stage": "post",
+      "question": "You are 25 minutes into the mock and have covered the write path and feed retrieval. The interviewer says: 'Tell me about failure modes.' What should you cover first?",
+      "options": [
+        "Redis feed cache unavailability — fall back to direct TAO query. Then cover ranking model latency spike — fall back to lightweight scorer. Then cover fanout queue backup — feed may be slightly stale but always serves. Show that each component has a defined fallback.",
+        "Database replication lag, because that is the most common failure in distributed systems.",
+        "Network partition between data centers, because that is the hardest failure to handle.",
+        "Mention that the system uses retries and the interviewer should assume it is resilient."
+      ],
+      "correct": 0,
+      "explanation": "Strong candidates name component-specific failures with specific mitigations. 'We have retries' is a no-hire answer. The interviewer is testing whether you understand what breaks and how the system degrades gracefully."
+    },
+    {
+      "stage": "post",
+      "question": "The interviewer pivots: 'Now design the Stories feature — content that disappears after 24 hours.' What is the first architectural change to discuss?",
+      "options": [
+        "Stories require TTL-based storage — Redis keys with 24-hour expiry or a dedicated Ephemeral Post Service. Unlike feed posts, Stories must be purged reliably after 24 hours and must not be served after expiry, which affects CDN cache headers and requires TTL enforcement at every layer.",
+        "Stories require a separate database because they cannot be stored in TAO.",
+        "The main change is that Stories use video instead of photos, requiring a new transcoding pipeline.",
+        "Stories are identical to feed posts but with a different UI; the backend design does not change."
+      ],
+      "correct": 0,
+      "explanation": "TTL enforcement is the key architectural differentiator for ephemeral content. Stories also differ in access pattern (viewed once by each follower, then marked seen) and fanout (simpler — fewer Stories items per tray vs thousands of feed posts)."
+    },
+    {
+      "stage": "post",
+      "question": "What does the scoring rubric dimension 'Meta vocabulary' test, and which 4 terms are most important to use correctly?",
+      "options": [
+        "It tests whether you have studied Meta's actual systems. The 4 most important terms: TAO (social graph store, sharded MySQL + Memcached), Everstore (content-addressed object storage), FAISS (ANN similarity search for candidate retrieval), and the hybrid push/pull fanout model.",
+        "It tests whether you can use technical jargon from any distributed systems context.",
+        "It tests whether you can name AWS services that Meta uses, such as S3 and CloudFront.",
+        "It tests whether you have read Meta's engineering blog in the last 6 months."
+      ],
+      "correct": 0,
+      "explanation": "Using Meta-specific vocabulary signals preparation and distinguishes you from candidates who give the same answer for Google, Amazon, and Meta. TAO, Everstore, FAISS, and the fanout hybrid are the core Meta-specific concepts for News Feed design."
+    },
+    {
+      "stage": "post",
+      "question": "What is the correct 45-minute closing move to distinguish a strong hire from a hire?",
+      "options": [
+        "Summarize your top 3 trade-off decisions and why you made them (e.g., push vs pull fanout threshold, async vs sync transcoding, three-stage ranking funnel). Name the first metric to instrument and one thing you would do differently with 2× the time.",
+        "Ask the interviewer if they have any questions about your design.",
+        "List every component you covered to show completeness.",
+        "Apologize for not covering every subsystem in depth and offer to continue offline."
+      ],
+      "correct": 0,
+      "explanation": "A crisp closing demonstrates meta-awareness — you understand which decisions were hardest and why. Naming metrics shows engineering calibration. Naming what you would do differently shows intellectual honesty and growth mindset. This is one of the highest signal behaviors in the last 5 minutes."
+    },
+    {
+      "stage": "post",
+      "question": "A power user follows 10,000 accounts. The standard feed-load path reads from Redis feed list and merges celebrity pull-fanout posts. Why is this problematic at 10,000 follows, and what is the correct optimization?",
+      "options": [
+        "Fetching post IDs from 10,000 followed accounts at read time creates a fan-in problem — up to 10,000 TAO queries per feed load. Optimization: pre-compute a merged feed for power users during off-peak hours, cache it with a short TTL (5 minutes), and serve from cache on feed load. Alternatively, sample from the follow graph using the ranking model to select the 100 most relevant accounts to query.",
+        "The feed list in Redis can only hold 1,000 post IDs, so the problem is a storage limit rather than a query fan-in.",
+        "Power users should be rate-limited to following a maximum of 1,000 accounts to avoid this problem.",
+        "The issue is resolved by sharding the Redis cluster by user_id — the power user's feed list is served from a dedicated shard."
+      ],
+      "correct": 0,
+      "explanation": "10,000 follow-queries at read time is a fan-in amplification problem. Pre-computed feeds and follow-graph sampling are the two standard mitigations. Both trade freshness (stale by 5 minutes or incomplete) for read latency, which is an acceptable trade-off."
+    },
+    {
+      "stage": "post",
+      "question": "What is the difference between the 'Architecture' dimension (20 points) and the 'Deep-dive' dimension (20 points) in the rubric, and how should you allocate time between them?",
+      "options": [
+        "Architecture (minutes 5–15) is breadth: cover all major layers with correct data flow and Meta-specific components at a high level. Deep-dive (minutes 15–35) is depth: pick 1–2 subsystems and explain internals, data model, failure modes, and trade-offs. Spending 40 minutes on breadth and never going deep is a common miss.",
+        "Architecture and deep-dive are the same dimension scored twice to give it more weight.",
+        "Architecture covers the write path; deep-dive covers the read path.",
+        "Architecture is for senior engineers; deep-dive questions are only asked of staff-level candidates."
+      ],
+      "correct": 0,
+      "explanation": "Breadth without depth scores in the hire range at best. Strong hires demonstrate both: they cover all layers quickly (15 minutes) and then go genuinely deep on 1–2 subsystems — data structures, failure scenarios, why a specific Meta system was chosen over an alternative."
+    }
+  ]
+}

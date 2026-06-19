@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What problem does an explicit state machine with defined valid transitions solve that a simple status field in a database does not?",
+      "options": [
+        "It prevents illegal state jumps — without defined transitions, any worker can write any status, enabling bugs like billing firing on a CANCELLED trip or a trip jumping from REQUESTED to COMPLETED.",
+        "State machines provide automatic distributed locking, which a plain database field cannot.",
+        "A state machine stores the full history of all states, whereas a status field can only store the current state.",
+        "State machines prevent the billing worker from running more than once per day."
+      ],
+      "correct": 0,
+      "explanation": "The discipline of 'only these transitions are valid' is the state machine's primary value. Without it, any code path can corrupt the status field, leading to incorrect billing, ghost trips, and double cancellations."
+    },
+    {
+      "stage": "pre",
+      "question": "Why must state transitions be idempotent in a distributed trip system?",
+      "options": [
+        "Network failures cause retries; a driver app may send 'trip ended' twice. If the second transition triggers billing again, the rider is double-charged. Idempotency ensures the second call is a no-op.",
+        "Idempotency is required by Kafka's exactly-once delivery guarantee.",
+        "Temporal/Cadence workflows require idempotent transitions to checkpoint state between activities.",
+        "Idempotency prevents the dispatch service from assigning two drivers to the same rider simultaneously."
+      ],
+      "correct": 0,
+      "explanation": "At-least-once delivery is the default in distributed systems. Any transition that has side effects (billing, notifications) must be safe to receive twice. Idempotency turns the second call into a no-op rather than a duplicate action."
+    },
+    {
+      "stage": "post",
+      "question": "A driver's app crashes while a trip is IN_PROGRESS. The server detects no GPS heartbeat for 11 minutes. What should the system do?",
+      "options": [
+        "Transition the trip to CANCELLED_BY_SYSTEM after a grace period for driver reconnection, triggering partial billing based on the last known GPS position.",
+        "Keep the trip IN_PROGRESS indefinitely, waiting for the driver to reconnect.",
+        "Immediately transition to COMPLETED and charge the full estimated fare.",
+        "Transition to DRIVER_ASSIGNED and re-dispatch a new driver to the rider's current location."
+      ],
+      "correct": 0,
+      "explanation": "Dead trip detection fires at 10 minutes. A grace notification goes to the driver. If no reconnection within 2 minutes, CANCELLED_BY_SYSTEM is the correct terminal state. Billing uses the GPS trace up to the last known point."
+    },
+    {
+      "stage": "post",
+      "question": "The billing worker receives a COMPLETED event for trip_123, charges the rider, then crashes before writing to the payout ledger. On recovery, it re-processes the same event. What prevents a double charge?",
+      "options": [
+        "The payment processor call uses trip_123 as an idempotency key; the second call returns the already-processed transaction result without creating a new charge.",
+        "The billing worker checks a processed_trips table in PostgreSQL before charging; if trip_123 is found, it skips.",
+        "Kafka's exactly-once semantics guarantee the COMPLETED event is delivered only once.",
+        "The driver app prevents duplicate COMPLETED events by locking the UI after the first submission."
+      ],
+      "correct": 0,
+      "explanation": "Idempotency keys on payment processor calls are the standard pattern. The key (typically the trip or order ID) allows the processor to deduplicate retries transparently, regardless of how many times the billing worker re-sends the request."
+    },
+    {
+      "stage": "post",
+      "question": "A rider cancels 3 minutes after the driver was assigned. The trip is in DRIVER_EN_ROUTE state. Should a cancellation fee apply?",
+      "options": [
+        "Yes — the free cancellation window is 2 minutes from DRIVER_ASSIGNED. At 3 minutes, the window has closed regardless of the current sub-state (EN_ROUTE vs ASSIGNED).",
+        "No — cancellation fees only apply in the IN_PROGRESS state, not during DRIVER_EN_ROUTE.",
+        "Yes — but only if the driver is within 500 meters of the pickup point.",
+        "No — the rider is always entitled to free cancellation before the driver arrives."
+      ],
+      "correct": 0,
+      "explanation": "The cancellation window is measured from the server-side DRIVER_ASSIGNED timestamp, not from the current sub-state. 3 minutes after assignment exceeds the 2-minute free window, so a fee applies even in EN_ROUTE."
+    },
+    {
+      "stage": "post",
+      "question": "How does optimistic locking on the trip document prevent two concurrent workers from both applying a transition?",
+      "options": [
+        "Each worker reads the document with a version number, writes only if the version is unchanged, and retries on conflict. If Worker A and B both try to transition simultaneously, only the first write succeeds; the second gets a conflict, re-reads the already-transitioned state, and treats it as idempotent.",
+        "Optimistic locking acquires a distributed mutex on the trip ID before reading the document, serializing all workers.",
+        "The trip document is sharded by trip ID across database nodes; only one node can write to a given trip at a time.",
+        "Optimistic locking is not used; Docstore uses last-write-wins semantics, so the latest timestamp always wins."
+      ],
+      "correct": 0,
+      "explanation": "Optimistic locking avoids the overhead of distributed locks. The version number acts as a guard: conflicts are detected at write time rather than coordinated at read time. Combined with idempotency checks, conflicting transitions resolve correctly without data corruption."
+    },
+    {
+      "stage": "post",
+      "question": "After a trip completes, the server shows IN_PROGRESS but the driver app shows COMPLETED. What is the most reliable way to resolve this state split?",
+      "options": [
+        "A reconciliation job fetches the GPS trace from Cassandra, confirms the trip ended (driver returned to base), and transitions the server to COMPLETED using the GPS end time as the authoritative timestamp.",
+        "The driver app sends a force-complete API call that overrides any server state.",
+        "The system waits for the rider to rate the trip; a rating event automatically transitions the server to COMPLETED.",
+        "An on-call engineer manually updates the trip document in Docstore after reviewing the support ticket."
+      ],
+      "correct": 0,
+      "explanation": "The GPS trace in Cassandra is the ground truth for where and when the trip actually ended. Automated reconciliation using physical evidence is more reliable than manual intervention or driver-initiated overrides."
+    },
+    {
+      "stage": "post",
+      "question": "Why is Temporal/Cadence used as the trip workflow engine rather than storing trip state only in Docstore?",
+      "options": [
+        "Temporal persists each workflow activity as a durable checkpoint; if the server crashes mid-trip, the workflow resumes from the last checkpoint without replaying already-completed activities like billing.",
+        "Temporal provides built-in GPS parsing and H3 cell computation that Docstore lacks.",
+        "Docstore cannot store more than 10KB per document, making it unsuitable for trip state with GPS traces.",
+        "Temporal enforces state machine transitions at the database level, which Docstore cannot do."
+      ],
+      "correct": 0,
+      "explanation": "Temporal's core value is durable execution — the workflow's progress survives process crashes. Without it, a server restart mid-trip requires re-processing from the beginning or complex manual recovery. Temporal's activity checkpointing makes trips resilient by default."
+    }
+  ]
+}

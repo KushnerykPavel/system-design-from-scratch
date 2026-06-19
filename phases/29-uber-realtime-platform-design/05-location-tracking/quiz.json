@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why is Kafka partitioned by driver_id rather than by geographic zone for the driver location stream?",
+      "options": [
+        "Partitioning by driver_id guarantees that all events from one driver arrive in order to a single consumer, preventing position jumps from out-of-order events.",
+        "Partitioning by geographic zone reduces the number of partitions needed, lowering Kafka operational cost.",
+        "Partitioning by driver_id allows Kafka to deduplicate events from the same driver automatically.",
+        "Driver IDs are shorter than zone IDs, making partition key hashing faster."
+      ],
+      "correct": 0,
+      "explanation": "Location processing requires per-driver ordering to detect cell transitions and compute velocity correctly. Partitioning by zone would mix events from many drivers into one partition, losing per-driver order guarantees."
+    },
+    {
+      "stage": "pre",
+      "question": "A driver's Redis location key has a 30-second TTL. The driver goes offline. What happens to dispatch 35 seconds later?",
+      "options": [
+        "The Redis key has expired; the dispatch service gets a cache miss on the driver's position and marks the driver UNREACHABLE, excluding them from match candidates.",
+        "Dispatch continues to use the last known position until the driver explicitly sends an offline signal.",
+        "The expired key causes a Redis cluster crash because dispatch polls it every second.",
+        "The driver appears as AVAILABLE in dispatch indefinitely until a background cleanup job runs hourly."
+      ],
+      "correct": 0,
+      "explanation": "TTL-based expiry is the self-cleaning mechanism. No manual deletion or heartbeat protocol is needed — the absence of the Redis key IS the offline signal."
+    },
+    {
+      "stage": "post",
+      "question": "A location event has AccuracyMeters = 80. What should the location worker do?",
+      "options": [
+        "Drop the event — accuracy above 50m is too imprecise for dispatch matching and could assign a driver to the wrong H3 cell.",
+        "Accept the event but store it in a low-confidence bucket in Redis for use only as a fallback.",
+        "Accept the event and increase the k-ring search radius from 1 to 3 to compensate for reduced precision.",
+        "Accept the event and flag it for the fraud detection pipeline."
+      ],
+      "correct": 0,
+      "explanation": "The 50m accuracy threshold ensures H3 cell assignments are reliable. An 80m accuracy reading could place a driver in an adjacent cell, causing incorrect dispatch or surge zone assignments."
+    },
+    {
+      "stage": "post",
+      "question": "A location event arrives with a timestamp 8 seconds older than the server's current time. What does the staleness filter do and why?",
+      "options": [
+        "Drops the event — events older than 5 seconds may represent a reconnection replay of stale data, causing position jumps backward in time if accepted.",
+        "Accepts the event but adjusts the timestamp to the server arrival time before writing to Redis.",
+        "Accepts the event because network latency can legitimately cause 8-second delays on mobile networks.",
+        "Drops the event and blocks all future events from that driver for 30 seconds."
+      ],
+      "correct": 0,
+      "explanation": "Device-clock-stamped events older than 5s typically indicate buffered replay after a reconnection. Accepting them would write an old position over a newer one, causing the driver to appear to move backward."
+    },
+    {
+      "stage": "post",
+      "question": "A driver sends two consecutive location events: one at lat/lon A, then one at lat/lon B, with a 2-second gap. The implied speed is 450 km/h. What does the location worker do?",
+      "options": [
+        "Drops the second event as a teleportation detection hit — 450 km/h exceeds the 300 km/h maximum vehicle speed threshold and indicates a GPS glitch or spoofing attempt.",
+        "Accepts both events and flags the driver for manual review after accepting.",
+        "Drops both events and removes the driver from Redis pending human investigation.",
+        "Accepts the second event and overwrites the Redis position because newer events always win."
+      ],
+      "correct": 0,
+      "explanation": "The velocity filter protects against GPS jumps and spoofing. The first event is valid; only the second is suspicious. Dropping the suspicious event preserves the last known good position."
+    },
+    {
+      "stage": "post",
+      "question": "Why does the location worker batch 100ms of events before flushing to Redis rather than writing each event immediately?",
+      "options": [
+        "Batching 200 events per 100ms window reduces Redis round-trips by ~100×, dramatically improving throughput at the cost of at most 100ms additional staleness.",
+        "Redis cannot accept more than one write per second per key, so batching is required to avoid rate limiting.",
+        "Batching allows the worker to deduplicate events from the same driver within the 100ms window, halving storage costs.",
+        "Redis pipeline writes are only supported for batch sizes of exactly 100 events due to protocol constraints."
+      ],
+      "correct": 0,
+      "explanation": "Each Redis write has network round-trip overhead. Batching turns 200 individual writes into one pipeline call. The 100ms staleness budget is acceptable since the dispatch system tolerates <1s position age."
+    },
+    {
+      "stage": "post",
+      "question": "Why is Cassandra used for historical location trails instead of PostgreSQL?",
+      "options": [
+        "Cassandra's wide-row model (driver_id partition key, timestamp clustering key) makes per-driver time range queries efficient at scale, while PostgreSQL would require B-tree index scans over billions of rows.",
+        "Cassandra supports geospatial queries natively via the GEORADIUS command, unlike PostgreSQL.",
+        "PostgreSQL does not support TTL-based row expiry, making 90-day retention impossible without a cron job.",
+        "Cassandra is cheaper to run on AWS than PostgreSQL for write-heavy workloads."
+      ],
+      "correct": 0,
+      "explanation": "The access pattern is always 'give me all events for driver D between time T1 and T2'. Cassandra's partition-then-cluster model makes this a single-partition range scan. At billions of rows, this is far more efficient than a secondary index on a relational table."
+    },
+    {
+      "stage": "post",
+      "question": "How does Uber achieve O(1) geofence containment checks for airport zones using H3?",
+      "options": [
+        "The airport polygon is pre-converted to a set of H3 cells via polyfill; containment becomes a Redis SISMEMBER lookup — O(1) — rather than a polygon intersection computation.",
+        "H3 cells have built-in airport flags set by Uber's map team; a single bit check determines containment.",
+        "Uber stores geofences as bounding boxes; containment is a lat/lon range comparison, which is O(1).",
+        "Airport zones are always exactly one H3 res-9 cell, so containment is a single CellID equality check."
+      ],
+      "correct": 0,
+      "explanation": "H3 polyfill converts any polygon into a set of covering cells. Once materialized in a Redis set, containment is a constant-time SISMEMBER call rather than a point-in-polygon computation that scales with polygon complexity."
+    }
+  ]
+}

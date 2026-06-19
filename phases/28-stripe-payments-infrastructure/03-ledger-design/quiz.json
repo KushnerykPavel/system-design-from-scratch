@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What is the core invariant of double-entry bookkeeping?",
+      "options": [
+        "For every transaction, the sum of debits equals the sum of credits.",
+        "Every account must have at least one credit entry before any debit is allowed.",
+        "Debit entries must be recorded before credit entries within the same transaction.",
+        "The balance column must be updated atomically with every ledger insert."
+      ],
+      "correct": 0,
+      "explanation": "The double-entry invariant — debits equal credits — ensures the ledger is self-consistent and enables reconciliation."
+    },
+    {
+      "stage": "pre",
+      "question": "Why are ledger entries immutable (append-only)?",
+      "options": [
+        "Immutability creates an unforgeable audit trail; corrections are made via new reversing entries, not by overwriting history.",
+        "Because relational databases do not support UPDATE on financial tables.",
+        "Because immutable entries allow the database to skip write-ahead logging.",
+        "Because card networks require immutable transaction records for dispute resolution."
+      ],
+      "correct": 0,
+      "explanation": "Append-only ledgers are auditable by design — every change is visible in the history, satisfying regulatory requirements."
+    },
+    {
+      "stage": "post",
+      "question": "A merchant's account shows a $10 balance discrepancy after a busy weekend. What is the first step in diagnosing the issue?",
+      "options": [
+        "Run a reconciliation query comparing ledger entry sums to the cached balance row, then check the settlement file for unmatched entries.",
+        "Restore the account_balances table from last night's backup.",
+        "Reprocess all weekend transactions to recompute the balance from scratch.",
+        "Contact the card network to request a corrected settlement file."
+      ],
+      "correct": 0,
+      "explanation": "Reconciliation between the immutable ledger (source of truth) and the cached balance identifies where the drift occurred before taking corrective action."
+    },
+    {
+      "stage": "post",
+      "question": "Why does the ledger store amount_cents as always-positive with a separate direction column, rather than using negative values for debits?",
+      "options": [
+        "To prevent accidental sign errors in application code from silently corrupting the ledger, and to make SQL aggregations explicit.",
+        "Because BIGINT in PostgreSQL cannot store negative values.",
+        "Because negative amounts would fail the CHECK constraint required by PCI DSS.",
+        "To allow the same entry to be reclassified between debit and credit without schema changes."
+      ],
+      "correct": 0,
+      "explanation": "Separating magnitude from direction makes the schema self-documenting and prevents bugs where a sign flip could turn a debit into a credit."
+    },
+    {
+      "stage": "post",
+      "question": "Two concurrent processes both read a balance of $100, then both apply a $50 debit. The final balance is $50 instead of $0. What is the fix?",
+      "options": [
+        "Use serializable isolation or optimistic locking on the account_balances row to ensure only one update succeeds per read.",
+        "Use a distributed lock across all application servers before reading any balance.",
+        "Switch to eventual consistency — the balance will correct itself after reconciliation.",
+        "Store the balance as a computed column on the ledger_entries table."
+      ],
+      "correct": 0,
+      "explanation": "This is a classic lost-update problem. Optimistic locking (WHERE version = $old) or serializable isolation prevents both updates from applying against the same stale read."
+    },
+    {
+      "stage": "post",
+      "question": "The nightly reconciliation job flags 200 transactions as MISSING_EXTERNAL — they are in the internal ledger but not in the bank settlement file. What is the most likely cause?",
+      "options": [
+        "A timezone mismatch — transactions processed late in the day may fall into the next settlement cycle in the bank's local time.",
+        "The transactions were reversed before settlement and should be deleted from the ledger.",
+        "The bank settlement file was truncated and the missing transactions will never settle.",
+        "The ledger entries were inserted with incorrect transaction IDs."
+      ],
+      "correct": 0,
+      "explanation": "Settlement files use local bank time while internal ledgers use UTC. End-of-day transactions often appear in the next settlement cycle — use date windows, not exact timestamps."
+    },
+    {
+      "stage": "post",
+      "question": "A Stripe account operates in USD and EUR. A merchant converts $1000 USD to EUR. How should this be recorded in the ledger?",
+      "options": [
+        "Three entries: debit USD account $1000, credit EUR account (equivalent), debit/credit a FX-spread account for the conversion fee.",
+        "One entry updating the USD balance field and a trigger to update the EUR balance field.",
+        "Two entries: debit USD account $1000 and credit EUR account the exact USD equivalent at today's rate.",
+        "One entry on a shared multi-currency account row with both USD and EUR balance columns."
+      ],
+      "correct": 0,
+      "explanation": "Explicit FX entries make the conversion revenue visible in the ledger and ensure the double-entry invariant holds across currencies."
+    },
+    {
+      "stage": "post",
+      "question": "What is the trade-off between computing balance from ledger entries on every read versus maintaining a cached balance row?",
+      "options": [
+        "Computed balance is always correct but O(n) in entries; cached balance is O(1) but requires careful consistency management to prevent drift from the ledger.",
+        "Computed balance is faster because the database can parallelize the aggregation.",
+        "Cached balance is always more accurate because it avoids floating-point rounding in aggregation.",
+        "There is no trade-off — both approaches produce identical performance and correctness guarantees."
+      ],
+      "correct": 0,
+      "explanation": "Stripe uses cached balances for fast reads but treats the immutable ledger as the authoritative source for reconciliation and auditability."
+    }
+  ]
+}

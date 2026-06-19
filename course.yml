@@ -68,8 +68,13 @@ phases:
   - { num: "23", slug: "mixed-mocks-and-redesign-drills", name: "Mixed Mocks & Redesign Drills", hours: 12 }
   - { num: "24", slug: "netflix-streaming-platform-design", name: "Netflix Streaming & Platform Design", hours: 14 }
   - { num: "25", slug: "common-interview-gaps", name: "Common Interview Gaps", hours: 10 }
+  - { num: "26", slug: "meta-social-platform-design", name: "Meta Social Platform Design", hours: 12 }
+  - { num: "27", slug: "amazon-ecommerce-aws-design", name: "Amazon E-Commerce & AWS Systems Design", hours: 12 }
+  - { num: "28", slug: "stripe-payments-infrastructure", name: "Stripe Payments Infrastructure", hours: 12 }
+  - { num: "29", slug: "uber-realtime-platform-design", name: "Uber Real-Time Platform Design", hours: 12 }
+  - { num: "30", slug: "linkedin-professional-network-design", name: "LinkedIn Professional Network Design", hours: 12 }
 
 totals:
-  phases: 26
-  lessons: 196
-  hours: 272
+  phases: 31
+  lessons: 231
+  hours: 332

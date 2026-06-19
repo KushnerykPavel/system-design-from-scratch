@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What is the difference between RTO and RPO in disaster recovery planning?",
+      "options": [
+        "RTO (Recovery Time Objective) is how long the system can be unavailable after a failure; RPO (Recovery Point Objective) is how much data loss (measured in time) is acceptable.",
+        "RPO is how long recovery takes; RTO is how much compute capacity must be reserved in the standby region to handle failover traffic.",
+        "RTO measures network latency between regions; RPO measures the time it takes to replicate a database backup to the DR region.",
+        "RTO and RPO are synonyms for the same metric — the maximum downtime acceptable per year expressed as a percentage of uptime."
+      ],
+      "correct": 0,
+      "explanation": "RTO answers: 'how quickly must we be back online?' It measures the maximum tolerable outage duration. RPO answers: 'how much data can we lose?' It measures the maximum tolerable gap between the last recovered state and the time of failure. A system with RTO=5min and RPO=1min must be back in 5 minutes and must not lose more than 1 minute of writes."
+    },
+    {
+      "stage": "pre",
+      "question": "What distinguishes active-active multi-region from active-passive multi-region architecture?",
+      "options": [
+        "Active-active serves live traffic from all regions simultaneously, so any region can absorb full load immediately; active-passive has one primary region serving traffic and a standby that requires promotion before it handles load.",
+        "Active-active replicates data synchronously while active-passive uses asynchronous replication with potential data loss.",
+        "Active-passive provides lower latency than active-active because all traffic is concentrated in one region, reducing cross-region hops.",
+        "Active-active requires manual intervention on failover while active-passive fails over automatically without operator involvement."
+      ],
+      "correct": 0,
+      "explanation": "In active-active, every region is serving production traffic at all times. If one region fails, the other regions already have capacity and state to absorb the load — RTO approaches zero. In active-passive, the passive region is idle or lightly loaded. Failover requires either manual promotion or automated runbook execution, and the passive region's cache is cold, causing a latency spike even after failover completes."
+    },
+    {
+      "stage": "post",
+      "question": "DynamoDB Global Tables uses last-writer-wins (LWW) conflict resolution. In what scenario is this dangerous for Amazon's order system? (Failure mode question)",
+      "options": [
+        "If two regions concurrently decrement the same inventory count during a split-brain event, LWW discards the lower-timestamp write — one decrement is silently lost, allowing oversell of a product that had only one unit remaining.",
+        "LWW is dangerous because it causes both conflicting writes to be applied, resulting in double-counting of inventory decrements.",
+        "LWW causes DynamoDB to throw a ConditionalCheckFailedException when two regions write to the same item simultaneously, blocking both writes.",
+        "LWW is only dangerous when strong consistency reads are enabled, because eventual consistency reads automatically resolve conflicts by returning the most recent value."
+      ],
+      "correct": 0,
+      "explanation": "LWW silently discards the 'loser' write. For inventory: region A writes count=0 (last unit sold) and region B writes count=0 (same item, different buyer, 50ms earlier). A's write wins and is propagated. B's write is discarded. Both customers received an order confirmation, but only one decrement survived — oversell. This is why inventory hard reservation must use single-region strong-consistency conditional writes, not Global Tables."
+    },
+    {
+      "stage": "post",
+      "question": "Why does AWS Global Accelerator provide faster failover than Route53 alone? (Trade-off question)",
+      "options": [
+        "Global Accelerator uses anycast IPs that resolve at the network layer — traffic shifts to healthy endpoints without waiting for DNS TTL expiry or client DNS cache refresh, enabling 30–60 second failover vs potentially minutes for DNS-based failover.",
+        "Global Accelerator bypasses all health checks and routes traffic based on pure latency, so failover is instant because there is no health-check interval delay.",
+        "Route53 failover requires manual operator confirmation before shifting traffic, while Global Accelerator fails over automatically without any confirmation step.",
+        "Global Accelerator maintains active TCP sessions to all endpoints and replays in-flight requests on failover, ensuring zero request loss during a region outage."
+      ],
+      "correct": 0,
+      "explanation": "DNS-based failover is limited by TTL: even if Route53 updates its records in seconds, clients cache the old IP until their DNS TTL expires (minimum 60 s, often longer in practice). Global Accelerator's anycast IPs are static — clients always connect to the same IP. Failover happens at the routing layer on the AWS backbone, not at DNS, so it completes in 30–60 s without any client-side cache invalidation needed."
+    },
+    {
+      "stage": "post",
+      "question": "Aurora Global Database replicates to secondary regions in < 1 second but requires manual failover to promote a secondary to primary. What is the correct architecture to meet a 3-minute RTO for Aurora?",
+      "options": [
+        "Automate the promotion via a CloudWatch alarm that triggers a Lambda function to call the Aurora promote-read-replica API when the primary region's health check fails for 60 consecutive seconds.",
+        "Use Aurora Multi-AZ instead of Aurora Global Database, as Multi-AZ provides automatic failover within 60 seconds without any manual steps.",
+        "Accept that Aurora cannot meet a 3-minute RTO and use DynamoDB Global Tables for all data that requires sub-3-minute recovery.",
+        "Configure Aurora Global Database in active-active mode so both regions accept writes simultaneously, eliminating the need for promotion."
+      ],
+      "correct": 0,
+      "explanation": "Aurora Global Database does not auto-promote on region failure — that is a manual API call. To meet a 3-minute RTO you automate it: a CloudWatch alarm fires when the primary endpoint health check fails for N consecutive periods; a Lambda function calls the Aurora DB cluster promote API. Aurora Multi-AZ is within-region HA (protects against AZ failure, not region failure). Aurora Global Database does not support multi-master writes."
+    },
+    {
+      "stage": "post",
+      "question": "A customer in Tokyo is routed to ap-northeast-1 via Route53 latency-based routing. us-east-1 just failed. What is the customer impact and what must be true for zero-downtime failover?",
+      "options": [
+        "If the customer is already routed to ap-northeast-1, they see no impact. Zero-downtime requires that ap-northeast-1 has current replicated state (DynamoDB Global Tables lag < 1 s) and sufficient capacity to absorb us-east-1's traffic share without scaling delays.",
+        "All customers experience 30–60 seconds of downtime while Route53 health checks propagate the us-east-1 failure and update DNS records globally.",
+        "Tokyo customers are unaffected regardless of replication state because Route53 latency routing ensures each user is always served from their nearest region with locally authoritative data.",
+        "Zero-downtime failover requires that ap-northeast-1 is a read-only replica — write traffic must be halted globally until a new primary is elected."
+      ],
+      "correct": 0,
+      "explanation": "A Tokyo customer routed to ap-northeast-1 by latency policy is unaffected by a us-east-1 failure — they never touch us-east-1. But us-east-1 customers must be rerouted, and those customers' requests will now land in ap-northeast-1 or eu-west-1. Zero-downtime requires: (1) the receiving region has capacity, (2) DynamoDB Global Tables replication is current, and (3) Route53 or Global Accelerator reroutes within the health-check window."
+    },
+    {
+      "stage": "post",
+      "question": "Which DR tier should you select for an internal analytics pipeline with RTO = 4 hours and RPO = 2 hours?",
+      "options": [
+        "BACKUP_RESTORE — the RTO of 4 hours and RPO of 2 hours both exceed 60 minutes, so the cheapest tier (S3 backup + restore on demand) meets the requirement without running idle standby infrastructure.",
+        "WARM_STANDBY — analytics pipelines always require a pre-scaled standby environment to meet any RTO under 8 hours.",
+        "PILOT_LIGHT — all AWS workloads require at least a pilot light configuration to comply with AWS shared responsibility model SLAs.",
+        "MULTI_ACTIVE — analytics pipelines must always use multi-active because data loss of any kind is unacceptable for compliance."
+      ],
+      "correct": 0,
+      "explanation": "BACKUP_RESTORE covers RTO > 60 min and RPO > 60 min. At RTO=4h and RPO=2h, you only need to be able to restore from a backup within 4 hours and accept losing 2 hours of data. Running a warm standby or pilot light for analytics would cost 2–4× more with no benefit — the SLA does not require it. Match the DR tier to the actual requirement, not the most expensive option."
+    },
+    {
+      "stage": "post",
+      "question": "S3 Cross-Region Replication is configured from us-east-1 to eu-west-1 for product images. A content team uploads a new image in us-east-1. A European customer requests the image 3 seconds later from eu-west-1. What is the risk and how do you mitigate it?",
+      "options": [
+        "CRR is asynchronous with seconds-to-minutes lag, so eu-west-1 may return a 404 or stale image version. Mitigation: serve images via CloudFront with an origin in us-east-1 as primary; eu-west-1 bucket as secondary; TTL-based cache ensures eventual consistency without 404s.",
+        "S3 CRR replicates synchronously, so all regions always have the same objects within 100 ms of the upload completing in the source region.",
+        "The customer receives the image from us-east-1 via latency routing because S3 CRR does not change DNS routing — it only copies objects as a backup.",
+        "There is no risk because CloudFront caches all S3 objects globally at edge locations within 1 second of upload, making CRR lag irrelevant for content delivery."
+      ],
+      "correct": 0,
+      "explanation": "S3 CRR is asynchronous. The replication queue is eventually consistent — lag varies from seconds to minutes depending on object size and network conditions. A customer in Europe hitting the eu-west-1 bucket directly may get a 404 if the object hasn't arrived yet. CloudFront with a single-origin in us-east-1 (or origin failover configuration) ensures all customers get the image from the authoritative source while CRR populates the EU bucket for future regional traffic."
+    }
+  ]
+}

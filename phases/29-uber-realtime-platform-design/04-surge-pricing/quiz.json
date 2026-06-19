@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What is the primary economic purpose of surge pricing in a ride-sharing platform?",
+      "options": [
+        "To rebalance supply and demand by attracting more drivers to high-demand zones and reducing excess trip requests.",
+        "To increase Uber's revenue margin during peak hours when operational costs are highest.",
+        "To penalize riders who book trips during concerts or sporting events.",
+        "To reduce the number of trips per day so the platform operates within infrastructure capacity."
+      ],
+      "correct": 0,
+      "explanation": "Surge pricing is a market signal. Higher prices simultaneously suppress some demand and attract additional supply, moving the system toward equilibrium."
+    },
+    {
+      "stage": "pre",
+      "question": "Why does Uber aggregate H3 res-9 cells into res-6 zones for surge computation rather than computing surge per res-9 cell?",
+      "options": [
+        "Individual res-9 cells can be empty by chance; aggregating to res-6 smooths noise, reduces the number of zones to track, and prevents false surge signals in sparse areas.",
+        "H3 res-9 cells don't support arithmetic operations; only res-6 cells can be used in ratio calculations.",
+        "Res-6 zones are required by Uber's regulatory agreements with city governments.",
+        "Res-9 cells are too large to represent neighborhood-level demand; res-6 cells are smaller and more precise."
+      ],
+      "correct": 0,
+      "explanation": "Aggregation trades granularity for statistical stability. A single res-9 cell with 0 drivers doesn't mean there's no supply nearby; the res-6 view captures the broader neighborhood supply."
+    },
+    {
+      "stage": "post",
+      "question": "A surge zone has 8 open trip requests and 4 available drivers. What multiplier should the system apply?",
+      "options": [
+        "2.0× — the ratio is 8/4 = 2.0, which maps to the 1.5–2.0 bucket, yielding a 2.0× multiplier.",
+        "1.5× — ratio 2.0 maps to the 1.25–1.5 tier.",
+        "4.0× — any ratio above 1.5 triggers the 4× tier.",
+        "1.0× — the system only applies surge when requests exceed 10."
+      ],
+      "correct": 0,
+      "explanation": "Ratio 2.0 falls in the boundary between the 1.5–2.0 and 2.0–4.0 buckets. The threshold table maps ratio exactly 2.0 to the 2.0× multiplier since it does not exceed 2.0."
+    },
+    {
+      "stage": "post",
+      "question": "A zone has 0 available drivers and 5 open requests. What does the surge worker use as the denominator to avoid division by zero?",
+      "options": [
+        "1 — the worker uses max(AvailableDrivers, 1) as the denominator, yielding a ratio of 5.0 and an 8.0× cap.",
+        "5 — the worker uses the request count as both numerator and denominator, always producing ratio 1.0.",
+        "0.5 — the worker uses a fractional sentinel value representing partial driver availability.",
+        "The worker skips computation for zones with zero drivers and publishes no event."
+      ],
+      "correct": 0,
+      "explanation": "Using max(supply, 1) prevents division by zero and produces the highest possible ratio when there are literally no drivers, which is the correct signal: extreme scarcity should produce the maximum multiplier."
+    },
+    {
+      "stage": "post",
+      "question": "Why does Uber lock the surge multiplier at trip request time rather than applying the live multiplier at trip completion?",
+      "options": [
+        "Locking provides price certainty that builds rider trust — the rider knows the exact cost before confirming, which reduces post-trip billing disputes and support contacts.",
+        "Locking is required because the Kafka surge-zones topic is append-only and cannot be read at trip completion.",
+        "Locking prevents drivers from gaming the system by staying offline until surge rises, then going online.",
+        "Locking is only applied when the multiplier is above 4× for regulatory compliance."
+      ],
+      "correct": 0,
+      "explanation": "Upfront pricing is a trust mechanism. Riders who see a price before confirming are less likely to dispute charges. The locked multiplier is stored on the trip document and is authoritative for billing."
+    },
+    {
+      "stage": "post",
+      "question": "The surge worker crashes while a zone is at 3.5× multiplier. What happens to riders requesting trips in that zone over the next 2 minutes?",
+      "options": [
+        "Redis serves the last-known 3.5× multiplier for up to 120 seconds (the TTL), after which the key expires and the system falls back to 1.0× until the worker recovers.",
+        "All trip requests in the zone are rejected with an error because surge pricing is required for routing.",
+        "The multiplier immediately drops to 1.0× because the worker is not refreshing it every 60 seconds.",
+        "Riders see a 'surge unavailable' message and are asked to retry after 5 minutes."
+      ],
+      "correct": 0,
+      "explanation": "The Redis TTL of 120s provides a last-known-good window that covers brief worker outages. For a 60s update cycle, a crash recovers within one missed cycle with no rider impact."
+    },
+    {
+      "stage": "post",
+      "question": "A city declares a state of emergency. How does Uber's system cap surge at 1.0× without deploying new code?",
+      "options": [
+        "An on-call engineer sets an emergency flag in a configuration store that the surge worker reads before publishing; zones in the flagged region emit multiplier 1.0× regardless of the computed ratio.",
+        "The surge worker automatically detects the emergency by monitoring 911 call volume via a public API.",
+        "Emergency capping is impossible without a code deploy; Uber requires 24 hours of regulatory notice.",
+        "The driver app broadcasts a 1.0× override signal that overrides the surge worker output for all nearby riders."
+      ],
+      "correct": 0,
+      "explanation": "Emergency pricing caps are a runtime configuration override, not a code path. The surge worker checks a geo-fenced config flag at compute time and substitutes 1.0× when the flag is active."
+    },
+    {
+      "stage": "post",
+      "question": "Why does Uber require explicit rider confirmation when the surge multiplier is ≥ 2.0× but not at 1.5×?",
+      "options": [
+        "The 2.0× threshold represents a meaningful price increase (doubling) that riders are unlikely to notice passively; explicit confirmation prevents accidental high-price trip bookings and reduces dispute volume.",
+        "The 2.0× threshold is required by the Payment Card Industry (PCI) standard for transactions above $20.",
+        "At 1.5×, Uber's insurance policy allows automatic booking; at 2.0× a manual approval signature is required by law.",
+        "Confirmation dialogs at 1.5× caused too many rider app crashes in A/B testing."
+      ],
+      "correct": 0,
+      "explanation": "The confirmation dialog is a deliberate UX friction layer. At 2× the price doubles — riders in a hurry may tap confirm without reading. The dialog ensures informed consent, reducing post-trip disputes and support tickets."
+    }
+  ]
+}

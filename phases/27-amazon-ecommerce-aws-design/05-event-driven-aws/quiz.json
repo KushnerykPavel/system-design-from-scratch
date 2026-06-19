@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What is the fundamental difference between a message queue (SQS) and a message stream (Kinesis)?",
+      "options": [
+        "In a queue, a message is consumed and deleted by one consumer; in a stream, the record persists and multiple independent consumer groups can read it at their own position.",
+        "A queue guarantees strict ordering of all messages while a stream delivers messages in random order to improve throughput.",
+        "SQS supports fan-out to multiple subscribers while Kinesis only allows a single consumer per stream.",
+        "Streams are used for commands (do something) and queues are used for events (something happened)."
+      ],
+      "correct": 0,
+      "explanation": "The defining difference is consumption semantics. SQS removes a message once a consumer successfully deletes it — no other consumer sees it. Kinesis retains records for the configured retention period (24h–365d) and each consumer group tracks its own read position independently, enabling replay and multiple simultaneous consumers."
+    },
+    {
+      "stage": "pre",
+      "question": "Why must every SQS production queue have a Dead Letter Queue (DLQ) configured?",
+      "options": [
+        "Without a DLQ, a malformed message that causes the consumer to fail on every attempt will be retried indefinitely, blocking the queue and preventing all subsequent valid messages from being processed.",
+        "AWS requires a DLQ on all SQS queues for compliance; queues without a DLQ are automatically deleted after 24 hours.",
+        "A DLQ increases SQS throughput by offloading failed messages to a separate queue and freeing the primary queue for new writes.",
+        "SQS only guarantees at-least-once delivery when a DLQ is configured; without one, messages may be silently dropped."
+      ],
+      "correct": 0,
+      "explanation": "A poison pill message — one that reliably causes consumer failure — will be retried up to maxReceiveCount times and then dropped unless a DLQ is configured. Without a DLQ, the message is deleted after max retries with no record. With a DLQ, the message is preserved for inspection and replay. More importantly, the DLQ alarm gives you immediate visibility when something is broken."
+    },
+    {
+      "stage": "post",
+      "question": "You need to broadcast an order.placed event to 8 downstream services, each processing independently at their own pace. Which architecture is correct?",
+      "options": [
+        "SNS topic with 8 SQS queue subscriptions — each service reads from its own queue, providing fan-out with per-consumer buffering and backpressure isolation.",
+        "8 separate SQS queues written to directly by the order service — one write per event multiplied by the number of consumers.",
+        "A single SQS Standard queue shared by all 8 consumers, relying on SQS visibility timeout to ensure each service processes every message.",
+        "Direct Lambda invocations from the order service to each of the 8 downstream service handlers in parallel."
+      ],
+      "correct": 0,
+      "explanation": "SNS → SQS fan-out is the canonical AWS pattern. The order service publishes once to SNS. SNS delivers to all 8 SQS queues simultaneously. Each service consumes from its dedicated queue at its own rate. Backpressure is isolated — a slow analytics consumer does not affect the fast fulfillment consumer. Direct writes to 8 queues couple the order service to every downstream service."
+    },
+    {
+      "stage": "post",
+      "question": "When should you choose EventBridge over SNS for cross-service event routing? (Trade-off question)",
+      "options": [
+        "Use EventBridge when consumers only need a subset of event types — EventBridge rules filter events server-side before delivery, avoiding unnecessary compute in consumers that would otherwise receive and discard irrelevant events.",
+        "Use EventBridge when you need higher throughput than SNS, because EventBridge handles 10x more events per second than an SNS topic.",
+        "Use EventBridge instead of SNS whenever the event payload exceeds 256 KB, because SNS has a strict 256 KB message size limit.",
+        "EventBridge should replace SNS for all use cases because SNS is deprecated in favor of EventBridge in all new AWS architectures."
+      ],
+      "correct": 0,
+      "explanation": "EventBridge adds content-based filtering: a rule evaluates each event's payload and delivers it only to targets whose filter pattern matches. This saves downstream compute and reduces coupling — the fulfillment service does not receive order.cancelled events it would have to discard. SNS has filter policies but they are coarser; EventBridge also adds a schema registry and cross-account routing that SNS lacks."
+    },
+    {
+      "stage": "post",
+      "question": "Why use Step Functions Standard workflow instead of a Lambda chain for Amazon's 7-step order fulfillment pipeline? (Failure mode question)",
+      "options": [
+        "If step 4 of 7 fails in a Lambda chain, there is no durable record of which steps succeeded — the entire pipeline must restart from step 1. Step Functions stores state durably between steps and resumes from the failed step after retry.",
+        "Lambda chains cannot call DynamoDB or SQS, so Step Functions is required to integrate with other AWS services in a multi-step workflow.",
+        "Lambda functions have a maximum timeout of 15 seconds while a Step Functions state can wait indefinitely, making Lambda chains impossible for workflows longer than 15 seconds.",
+        "Step Functions is cheaper than Lambda for workflows with 7 steps because Step Functions does not charge for compute time, only for state transitions."
+      ],
+      "correct": 0,
+      "explanation": "Lambda chains are stateless. A crash at step 4 leaves no trace of steps 1–3. You either replay the whole pipeline (risking duplicate charges) or lose the order. Step Functions writes durable execution history before and after each state. A failure at step 4 is recoverable: you see exactly which step failed, what the input was, and you can retry from that step without re-executing earlier ones."
+    },
+    {
+      "stage": "post",
+      "question": "SQS FIFO queues guarantee ordering within a message group and support deduplication. What is their throughput ceiling and why does this matter for Prime Day?",
+      "options": [
+        "300 TPS per queue (3,000 TPS with high-throughput mode). At Prime Day's 100K orders/min (~1,667 TPS), a single FIFO queue would be saturated — you must shard across multiple queues by order ID prefix to distribute load while preserving per-order ordering.",
+        "10,000 TPS per queue, which is sufficient for Prime Day peak without any sharding.",
+        "FIFO queues have no throughput limit because AWS dynamically adds queue capacity as load increases.",
+        "300 messages per second, but this limit applies only to the deduplication check — the queue can otherwise process unlimited messages per second."
+      ],
+      "correct": 0,
+      "explanation": "SQS FIFO is hard-limited at 300 TPS (standard) or 3,000 TPS (high-throughput mode). Prime Day's 100K orders/min is ~1,667 TPS — exceeding the standard limit. Sharding by order ID prefix (e.g., first hex character of UUID → 16 queues) distributes load while keeping all events for one order in the same queue, preserving per-order ordering."
+    },
+    {
+      "stage": "post",
+      "question": "A new regulatory requirement needs 7 days of order event replay for compliance audits. Which service supports this and why can SQS not serve this requirement?",
+      "options": [
+        "Kinesis Data Streams with retention extended to 7 days. SQS has a maximum retention of 14 days but deletes messages once consumed — replaying to a new consumer is impossible because the messages no longer exist.",
+        "SQS Standard with a 7-day visibility timeout set on every message, preventing deletion until the audit consumer has read each message.",
+        "SNS with message archiving enabled, which stores all published messages for up to 30 days for replay.",
+        "EventBridge with an event archive configured, which can replay any event to any rule from the last 7 days."
+      ],
+      "correct": 0,
+      "explanation": "SQS messages are deleted after successful consumption. A second consumer cannot re-read an already-consumed SQS message. Kinesis retains records at the configured retention period regardless of consumer reads; each consumer group tracks its own iterator position independently. Note: EventBridge archives are also a valid AWS option for replay, but Kinesis is the more scalable choice for high-volume event streams."
+    },
+    {
+      "stage": "post",
+      "question": "When should you use Step Functions Express workflow instead of Standard workflow?",
+      "options": [
+        "Use Express for high-volume short-lived workflows (under 5 minutes, thousands per second) where at-least-once execution semantics are acceptable — Express is ~40x cheaper per transition than Standard but does not guarantee exactly-once state execution.",
+        "Use Express whenever the workflow has more than 10 steps, because Standard workflow has a maximum of 10 state transitions per execution.",
+        "Use Express for workflows that require human approval steps, because Standard does not support .waitForTaskToken callback patterns.",
+        "Express should always be preferred because it offers the same guarantees as Standard at lower cost, with no trade-offs."
+      ],
+      "correct": 0,
+      "explanation": "Express workflows cost $1.00/million transitions vs Standard's $25.00/million. For high-volume, short-lived automations (e.g., per-click event processing, micro-batch transforms) Express is far cheaper. The trade-off: Express is at-least-once (a step may execute more than once on retry) and the audit trail lives only in CloudWatch Logs. Standard is exactly-once per state with full console history — required for financial workflows like order fulfillment."
+    }
+  ]
+}

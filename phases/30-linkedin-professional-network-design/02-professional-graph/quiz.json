@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why does LinkedIn store the professional graph as adjacency lists in Espresso rather than in a native graph database like Neo4j?",
+      "options": [
+        "No commercial graph database can handle 950M nodes and 475B+ edges at LinkedIn's required read QPS; an adjacency list in a horizontally scalable document store allows each member's connections to be fetched in O(1) with consistent hashing.",
+        "Neo4j would be faster for BFS traversal, but LinkedIn chose Espresso because Neo4j does not support GDPR deletion workflows.",
+        "Graph databases are only suitable for directed graphs; LinkedIn's professional graph has bidirectional CONNECTED edges, which graph databases cannot represent.",
+        "Espresso provides native BFS query support that Neo4j lacks, making depth-2 traversals faster in Espresso."
+      ],
+      "correct": 0,
+      "explanation": "At 950M nodes and 475B+ edges, no commercial graph database provides the throughput LinkedIn needs. LinkedIn's PYMK only requires depth-2 traversal — an adjacency list with application-level BFS is sufficient. Espresso's horizontal scaling via consistent hashing allows each member's full adjacency list to be fetched in a single O(1) key lookup, while native graph databases would saturate on a single node at this scale."
+    },
+    {
+      "stage": "pre",
+      "question": "What is the correct approach for implementing LinkedIn's PYMK 2nd-degree BFS, and why is real-time BFS insufficient at full scale?",
+      "options": [
+        "Batch precompute 2nd-degree candidates offline using Spark (run daily), store top-100 candidates per member in Espresso, then apply a real-time 1st-degree exclusion filter at query time. Real-time BFS is infeasible because 30M DAU × 500 connections × 500 2nd-degree = 7.5T operations/day.",
+        "Real-time BFS is the correct approach because modern hardware can handle 250K 2nd-degree lookups per query in under 100ms using parallel Espresso reads.",
+        "Use a graph database with native BFS support; native graph traversal is always faster than application-level BFS over an adjacency list.",
+        "Precompute 2nd-degree candidates at write time (when a new connection is formed) and store them in a separate index; real-time BFS is only needed as a fallback."
+      ],
+      "correct": 0,
+      "explanation": "At 30M DAU, if each PYMK query does a real-time 2nd-degree BFS (500 × 500 = 250K reads), the system needs 7.5 trillion Espresso reads per day. This is computationally infeasible. The correct approach: Spark computes 2nd-degree candidates in batch overnight, stores top-100 per member. The PYMK API fetches precomputed candidates (<10ms) and applies a real-time 1st-degree exclusion filter to remove recently-connected members."
+    },
+    {
+      "stage": "post",
+      "question": "LinkedIn stores CONNECTED edges bidirectionally: member A's adjacency list contains member B, and member B's list contains member A. What is the primary benefit and cost of this design?",
+      "options": [
+        "Benefit: O(1) connection lookup from either side without a join; Cost: 2× storage for symmetric edges and a two-document atomic write when a connection is formed.",
+        "Benefit: reduces Espresso shard count by consolidating edges; Cost: requires a graph join at query time to find all connections for a given member.",
+        "Benefit: enables range queries on connection_time across all member pairs; Cost: requires a secondary index on peer_id for reverse lookups.",
+        "Benefit: simplifies GDPR deletion since only one document needs to be updated per edge; Cost: requires a distributed transaction to maintain consistency."
+      ],
+      "correct": 0,
+      "explanation": "Bidirectional storage means fetching A's connections and fetching B's connections both hit a single Espresso document with one key lookup. The cost is 2× storage (acceptable given the 5KB per member document size) and the requirement for a two-document atomic write when a connection is formed or deleted. The alternative — single-direction with cross-shard joins at read time — would add latency to every 1st-degree lookup."
+    },
+    {
+      "stage": "post",
+      "question": "A member with 30K connections (a super-connector) requests their PYMK list. What is the correct system behavior?",
+      "options": [
+        "The PYMK API returns precomputed batch candidates from Espresso (since real-time BFS would fan out to 30K × 500 = 15M reads), applies a real-time 1st-degree exclusion filter, and caps the result at 10K to bound latency.",
+        "The PYMK API performs a real-time 2nd-degree BFS capped at the first 10K candidates discovered, returning them without scoring since precomputation is not feasible for high-degree members.",
+        "Super-connectors are excluded from PYMK altogether because their 2nd-degree candidate set is too large to be meaningful.",
+        "The system routes super-connector PYMK requests to a dedicated graph database cluster that handles high-degree node traversal natively."
+      ],
+      "correct": 0,
+      "explanation": "For super-connectors, real-time BFS (30K × 500 = 15M Espresso reads) would take seconds. The correct approach uses the same batch precomputation pipeline but the batch job is careful to cap at 10K candidates. The PYMK API fetches precomputed candidates from the PYMK Espresso keyspace and applies a real-time 1st-degree exclusion filter. A read-only replica of the super-connector's large adjacency list document mitigates the hot shard problem."
+    },
+    {
+      "stage": "post",
+      "question": "How must the privacy enforcement for blocked members interact with the PYMK traversal pipeline?",
+      "options": [
+        "The block_flag is checked at real-time query time (not stored in the batch precomputed candidates), so blocked members are excluded from every PYMK result regardless of when the block was placed relative to the last batch run.",
+        "Blocked members are excluded from the batch Spark job, so they never appear in precomputed candidate lists; no real-time check is needed.",
+        "Block enforcement is eventually consistent: blocked members may appear in PYMK for up to 24 hours until the next batch job excludes them.",
+        "Blocks only apply to InMail and messaging, not to PYMK traversal, because PYMK uses aggregated graph data rather than individual member data."
+      ],
+      "correct": 0,
+      "explanation": "Block enforcement must be hard and immediate. Batch precomputed candidates may have been generated before a block was placed. The correct design applies the block_flag check at real-time query time — when the PYMK API fetches candidates and applies the 1st-degree exclusion filter, it also excludes any candidate with block_flag=true. This ensures block enforcement is always current regardless of batch job staleness."
+    },
+    {
+      "stage": "post",
+      "question": "What is the PYMK scoring formula that LinkedIn's batch pipeline uses to rank 2nd-degree candidates?",
+      "options": [
+        "Candidates are scored by shared_connections_count (strong signal), same_company overlap, and same_school overlap; candidates with more mutual connections rank higher because mutual connections are the strongest predictor of a meaningful professional relationship.",
+        "Candidates are scored purely by recency: the most recently active 2nd-degree connections rank highest because active members are more likely to engage with a new connection.",
+        "Candidates are ranked randomly to ensure fairness and avoid reinforcing existing network clusters.",
+        "Candidates are ranked by the size of their own network (degree centrality), so connecting with highly-connected people maximizes the viewer's reach."
+      ],
+      "correct": 0,
+      "explanation": "LinkedIn's PYMK scoring weights shared connections count heavily (each shared connection is a social proof signal), followed by same_company (professional context overlap) and same_school (alumni network signal). The formula is approximately: score = shared_connections × 3 + same_company × 5 + same_school × 4. This is precomputed in the batch Spark job using Venice features, then re-scored online with real-time signals at query time."
+    },
+    {
+      "stage": "post",
+      "question": "The Azkaban PYMK batch Spark job fails at 3AM. What is the correct fallback strategy?",
+      "options": [
+        "Alert on-call, serve stale precomputed candidates from the previous successful batch run (up to 48h old), and apply the real-time 1st-degree exclusion filter; fall back to real-time BFS only for members with no precomputed candidates.",
+        "Disable PYMK entirely until the batch job succeeds to prevent showing stale suggestions.",
+        "Switch all PYMK requests to real-time BFS immediately; the increased latency is acceptable during the outage window.",
+        "Serve an empty PYMK list to all members; PYMK is a non-critical feature and an empty list is preferable to stale suggestions."
+      ],
+      "correct": 0,
+      "explanation": "The correct fallback is to serve the previous batch run's precomputed candidates. Stale-by-48h PYMK suggestions are far better than no suggestions or a complete feature outage. The real-time 1st-degree exclusion filter still catches recently-connected members, which is the most important freshness requirement. Falling back to full real-time BFS would overwhelm Espresso at 30M DAU scale. An alert fires so the on-call engineer can investigate and rerun the Spark job."
+    },
+    {
+      "stage": "post",
+      "question": "How does LinkedIn implement the 'X and 5 of your connections work at Acme Corp' social proof query efficiently?",
+      "options": [
+        "Precompute a member's 1st-degree connections' current employers (from WORKED_AT edges, end_year=null) in a Venice feature; at display time, intersect the viewer's 1st-degree set with company members for the social proof count.",
+        "Issue a real-time BFS from the viewer to all Acme Corp employee nodes, counting paths of length 2; this runs in <10ms because company membership is indexed by company_id.",
+        "Store the social proof count directly in the company's Espresso document and update it atomically on every new connection event.",
+        "Use Pinot to run a real-time aggregation query joining the viewer's connections with the company's employee list at query time; Pinot's sub-second OLAP queries make this feasible."
+      ],
+      "correct": 0,
+      "explanation": "The correct design precomputes the mapping of 1st-degree connections to their current employers using WORKED_AT edges with end_year=null (current employment). This data is stored as a Venice feature (member_id → set of current employers among connections). At profile/job display time, the social proof is computed by intersecting the viewer's precomputed 1st-degree employer feature with the company being viewed. This avoids a real-time graph traversal and runs in microseconds."
+    }
+  ]
+}

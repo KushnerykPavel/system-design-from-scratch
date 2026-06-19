@@ -1,6 +1,6 @@
 # Roadmap — System Design from Scratch
 
-26 phases · 196 planned lessons · ~272 hours.
+31 phases · 231 planned lessons · ~332 hours.
 
 > Status legend: ✅ done · 🚧 in progress · ⬚ planned
 
@@ -34,6 +34,11 @@
 | 23 | [Mixed Mocks & Redesign Drills](phases/23-mixed-mocks-and-redesign-drills) | ~12h |
 | 24 | [Netflix Streaming & Platform Design](phases/24-netflix-streaming-platform-design) | ~14h |
 | 25 | [Common Interview Gaps](phases/25-common-interview-gaps) | ~10h |
+| 26 | [Meta Social Platform Design](phases/26-meta-social-platform-design) | ~12h |
+| 27 | [Amazon E-Commerce & AWS Systems Design](phases/27-amazon-ecommerce-aws-design) | ~12h |
+| 28 | [Stripe Payments Infrastructure](phases/28-stripe-payments-infrastructure) | ~12h |
+| 29 | [Uber Real-Time Platform Design](phases/29-uber-realtime-platform-design) | ~12h |
+| 30 | [LinkedIn Professional Network Design](phases/30-linkedin-professional-network-design) | ~12h |
 
 ## Phase detail
 
@@ -362,3 +367,63 @@
 | 06 | [Code Deployment Pipeline](phases/25-common-interview-gaps/06-code-deployment-pipeline) | ⬚ | ~75 min |
 | 07 | [Feature Flag Service](phases/25-common-interview-gaps/07-feature-flag-service) | ⬚ | ~60 min |
 | 08 | [Gap Scenarios Drill](phases/25-common-interview-gaps/08-gap-scenarios-drill) | ⬚ | ~90 min |
+
+### Phase 26 — Meta Social Platform Design (~12 hours)
+
+| #  | Lesson | Status | Time |
+|----|--------|--------|------|
+| 01 | [Meta Interview Rubric & Strong Signals](phases/26-meta-social-platform-design/01-meta-rubric) | ⬚ | ~75 min |
+| 02 | [Social Graph — TAO Cache & Graph Serving](phases/26-meta-social-platform-design/02-social-graph-tao) | ⬚ | ~90 min |
+| 03 | [News Feed Fanout at 3 Billion Scale](phases/26-meta-social-platform-design/03-news-feed-fanout) | ⬚ | ~90 min |
+| 04 | [Real-Time Messaging — WhatsApp & Messenger](phases/26-meta-social-platform-design/04-real-time-messaging) | ⬚ | ~90 min |
+| 05 | [Media Pipeline — Photos, Videos & CDN](phases/26-meta-social-platform-design/05-media-pipeline) | ⬚ | ~75 min |
+| 06 | [Ranking & ML Feature Serving at Feed Scale](phases/26-meta-social-platform-design/06-ranking-ml-serving) | ⬚ | ~75 min |
+| 07 | [Meta Full Mock Loop](phases/26-meta-social-platform-design/07-meta-full-mock) | ⬚ | ~90 min |
+
+### Phase 27 — Amazon E-Commerce & AWS Systems Design (~12 hours)
+
+| #  | Lesson | Status | Time |
+|----|--------|--------|------|
+| 01 | [Amazon Interview Rubric & Strong Signals](phases/27-amazon-ecommerce-aws-design/01-amazon-rubric) | ⬚ | ~75 min |
+| 02 | [Product Catalog & Search at E-Commerce Scale](phases/27-amazon-ecommerce-aws-design/02-product-catalog-search) | ⬚ | ~90 min |
+| 03 | [Order Management & Fulfillment Pipeline](phases/27-amazon-ecommerce-aws-design/03-order-fulfillment) | ⬚ | ~90 min |
+| 04 | [DynamoDB Internals & NoSQL Access Patterns](phases/27-amazon-ecommerce-aws-design/04-dynamodb-patterns) | ⬚ | ~75 min |
+| 05 | [Event-Driven Architecture on AWS](phases/27-amazon-ecommerce-aws-design/05-event-driven-aws) | ⬚ | ~75 min |
+| 06 | [Multi-Region Reliability on AWS](phases/27-amazon-ecommerce-aws-design/06-aws-multi-region) | ⬚ | ~75 min |
+| 07 | [Amazon Full Mock Loop](phases/27-amazon-ecommerce-aws-design/07-amazon-full-mock) | ⬚ | ~90 min |
+
+### Phase 28 — Stripe Payments Infrastructure (~12 hours)
+
+| #  | Lesson | Status | Time |
+|----|--------|--------|------|
+| 01 | [Stripe Interview Rubric & Strong Signals](phases/28-stripe-payments-infrastructure/01-stripe-rubric) | ⬚ | ~75 min |
+| 02 | [Payment Processing & Idempotency](phases/28-stripe-payments-infrastructure/02-payment-processing) | ⬚ | ~90 min |
+| 03 | [Ledger Design & Reconciliation](phases/28-stripe-payments-infrastructure/03-ledger-design) | ⬚ | ~90 min |
+| 04 | [Fraud Detection Pipeline](phases/28-stripe-payments-infrastructure/04-fraud-detection) | ⬚ | ~75 min |
+| 05 | [Global Money Movement & Multi-Currency](phases/28-stripe-payments-infrastructure/05-global-money-movement) | ⬚ | ~75 min |
+| 06 | [Developer API Design — Webhooks & Versioning](phases/28-stripe-payments-infrastructure/06-developer-api-design) | ⬚ | ~75 min |
+| 07 | [Stripe Full Mock Loop](phases/28-stripe-payments-infrastructure/07-stripe-full-mock) | ⬚ | ~90 min |
+
+### Phase 29 — Uber Real-Time Platform Design (~12 hours)
+
+| #  | Lesson | Status | Time |
+|----|--------|--------|------|
+| 01 | [Uber Interview Rubric & Strong Signals](phases/29-uber-realtime-platform-design/01-uber-rubric) | ⬚ | ~75 min |
+| 02 | [Real-Time Geospatial — H3 Indexing & Proximity Search](phases/29-uber-realtime-platform-design/02-geospatial-indexing) | ⬚ | ~90 min |
+| 03 | [Ride Dispatch & Matching Engine](phases/29-uber-realtime-platform-design/03-dispatch-matching) | ⬚ | ~90 min |
+| 04 | [Surge Pricing & Dynamic Pricing Pipeline](phases/29-uber-realtime-platform-design/04-surge-pricing) | ⬚ | ~75 min |
+| 05 | [Real-Time GPS Ingestion & Driver Tracking](phases/29-uber-realtime-platform-design/05-location-tracking) | ⬚ | ~75 min |
+| 06 | [Trip State Machine & Recovery](phases/29-uber-realtime-platform-design/06-trip-state-machine) | ⬚ | ~75 min |
+| 07 | [Uber Full Mock Loop](phases/29-uber-realtime-platform-design/07-uber-full-mock) | ⬚ | ~90 min |
+
+### Phase 30 — LinkedIn Professional Network Design (~12 hours)
+
+| #  | Lesson | Status | Time |
+|----|--------|--------|------|
+| 01 | [LinkedIn Interview Rubric & Strong Signals](phases/30-linkedin-professional-network-design/01-linkedin-rubric) | ⬚ | ~75 min |
+| 02 | [Professional Graph — Connections & Degree Traversal](phases/30-linkedin-professional-network-design/02-professional-graph) | ⬚ | ~90 min |
+| 03 | [Feed Ranking & Content Distribution](phases/30-linkedin-professional-network-design/03-feed-ranking) | ⬚ | ~90 min |
+| 04 | [Job Matching — Search & Skills Graph](phases/30-linkedin-professional-network-design/04-job-matching) | ⬚ | ~75 min |
+| 05 | [InMail & Messaging Platform](phases/30-linkedin-professional-network-design/05-inmail-messaging) | ⬚ | ~75 min |
+| 06 | [Kafka Architecture — Stream Processing & Events](phases/30-linkedin-professional-network-design/06-kafka-stream-infra) | ⬚ | ~75 min |
+| 07 | [LinkedIn Full Mock Loop](phases/30-linkedin-professional-network-design/07-linkedin-full-mock) | ⬚ | ~90 min |

@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "LinkedIn invented which foundational open-source technology that is now an industry standard for event streaming?",
+      "options": [
+        "Kafka — LinkedIn built it in 2011 as a unified log for activity data, feed updates, and operational metrics before open-sourcing it.",
+        "Flink — LinkedIn created Apache Flink to handle real-time stream processing on their activity data pipeline.",
+        "Spark — LinkedIn invented Apache Spark to replace Hadoop MapReduce for batch PYMK computation.",
+        "Zookeeper — LinkedIn invented Apache Zookeeper to manage distributed coordination across their microservices."
+      ],
+      "correct": 0,
+      "explanation": "LinkedIn invented Apache Kafka in 2011. It was designed as a unified log to decouple data producers (activity tracking, feed updates, metrics) from consumers (PYMK pipeline, search indexing, analytics). Knowing this in an interview signals that you understand Kafka is not just a queue — it is a persistent, replayable, partitioned log."
+    },
+    {
+      "stage": "pre",
+      "question": "Why is real-time BFS (breadth-first search) insufficient for LinkedIn's PYMK (People You May Know) at production scale?",
+      "options": [
+        "A 2nd-degree BFS for a member with 500 connections reads up to 250K 2nd-degree candidates, requiring 125M edge lookups at 30M DAU — this is computationally infeasible in real time.",
+        "BFS is too slow for 1st-degree lookups; LinkedIn uses depth-first search instead for better cache locality.",
+        "BFS only works on tree structures; LinkedIn's professional graph contains cycles that cause BFS to loop infinitely.",
+        "BFS is limited to graphs with fewer than 1M nodes; LinkedIn uses a proprietary algorithm for larger graphs."
+      ],
+      "correct": 0,
+      "explanation": "A single member with 500 connections generates up to 500 × 500 = 250K 2nd-degree candidates in one BFS pass. At 30M daily active users, real-time BFS would require trillions of edge reads per day. LinkedIn precomputes PYMK candidates in batch Spark jobs and stores results per member, performing only a fast online scoring and 1st-degree exclusion filter at query time."
+    },
+    {
+      "stage": "post",
+      "question": "What is the clearest weak-hire signal when a candidate designs LinkedIn's PYMK pipeline?",
+      "options": [
+        "Proposing real-time BFS to depth 2 for all members without acknowledging that 250K 2nd-degree traversals at 30M DAU is computationally infeasible — batch precomputation is required.",
+        "Choosing Espresso (document store) over a native graph database for adjacency list storage.",
+        "Using Kafka to stream connection events from the graph store to the PYMK pipeline.",
+        "Adding a 1st-degree exclusion filter at query time to prevent suggesting already-connected members."
+      ],
+      "correct": 0,
+      "explanation": "Proposing real-time BFS to depth 2 without recognizing the scale problem shows the candidate has not reasoned about the actual cost. The correct approach precomputes 2nd-degree candidates in batch (Spark daily) and only filters/scores online. The other options are all correct design choices."
+    },
+    {
+      "stage": "post",
+      "question": "What does Venice serve in LinkedIn's architecture, and why is it a strong signal to name it?",
+      "options": [
+        "Venice is LinkedIn's feature store that serves precomputed offline features (member skills, engagement history, network proximity) to ranking models at microsecond latency.",
+        "Venice is LinkedIn's CDN that caches feed content at edge nodes to reduce feed read latency.",
+        "Venice is LinkedIn's graph database that stores the professional graph with native BFS query support.",
+        "Venice is LinkedIn's A/B testing framework that assigns members to experiment buckets for feed ranking models."
+      ],
+      "correct": 0,
+      "explanation": "Venice is LinkedIn's feature store. It serves precomputed features — member-level signals like job title, skills, industry, and engagement history — to ML ranking models at microsecond latency. Naming it shows you understand that online feature computation is too slow for feed ranking at LinkedIn's scale, and that features must be precomputed offline and served from a dedicated store."
+    },
+    {
+      "stage": "post",
+      "question": "A LinkedIn member files a GDPR right-to-be-forgotten request. Which design correctly handles the deletion pipeline?",
+      "options": [
+        "A dedicated deletion pipeline that propagates the removal to each store sequentially — Espresso (graph + profile), Kafka (compacted topic tombstone), Pinot (segment deletion), and search index — with per-store confirmation and audit log, enforcing a 30-day regulatory SLA.",
+        "Deleting the member's row from the main Espresso keyspace is sufficient; other stores will expire the data through their normal TTL mechanisms.",
+        "The deletion only needs to remove PII fields; anonymized activity data (post views, clicks) may be retained indefinitely.",
+        "GDPR deletion is handled by LinkedIn's data warehouse team, not the application design; the system designer does not need to account for it."
+      ],
+      "correct": 0,
+      "explanation": "GDPR right-to-be-forgotten is a hard regulatory requirement. A compliant deletion pipeline must trace and remove personal data from every store: Espresso (profile and graph), Kafka (write a tombstone to compacted topics), Pinot (purge segment data), and all search indexes. Each store requires explicit confirmation; an audit log proves compliance. Treating TTL as sufficient is non-compliant."
+    },
+    {
+      "stage": "post",
+      "question": "LinkedIn's feed generates ~1B updates per day. What is the correct role of Kafka in this pipeline?",
+      "options": [
+        "Kafka acts as the unified log backbone: member posts, likes, and connection events are written to Kafka partitioned by member ID, allowing feed fanout consumers, search indexers, and analytics pipelines to consume independently without coupling their release cycles.",
+        "Kafka is used only for real-time analytics; feed fanout is performed via direct RPC from the post service to each member's feed cache.",
+        "Kafka stores the ranked feed for each member as a compacted topic, serving feed reads directly to members without a separate feed cache.",
+        "Kafka is LinkedIn's primary storage for member profiles and graph edges because its log-structured storage provides better write throughput than Espresso."
+      ],
+      "correct": 0,
+      "explanation": "Kafka's role at LinkedIn is the unified log: all activity events flow through Kafka topics, allowing multiple independent consumer groups to process the same events at their own pace. The feed fanout consumer group reads post events and writes to member feed caches; the search indexer reads the same events to update the search index; analytics pipelines read the same events for Pinot ingestion. Decoupling these consumers from each other and from the producer is Kafka's core value."
+    },
+    {
+      "stage": "post",
+      "question": "How does LinkedIn's Espresso store the professional graph, and what is the primary trade-off of this choice?",
+      "options": [
+        "Espresso stores each member's adjacency list as a document (member_id → list of connection records); this scales horizontally via consistent hashing but requires BFS to be implemented in application code rather than in the database engine.",
+        "Espresso stores the graph as a native edge-table with a (source, destination, edge_type) schema and supports native BFS queries via its built-in graph traversal engine.",
+        "Espresso partitions the graph by edge type (CONNECTED, WORKED_AT, EDUCATED_AT) so that all edges of a given type are co-located for efficient relationship queries.",
+        "Espresso uses a columnar storage format to store the adjacency list, optimized for analytical queries like counting mutual connections across all member pairs."
+      ],
+      "correct": 0,
+      "explanation": "Espresso stores each member's adjacency list as a document keyed by member_id. This is a deliberate choice: it allows horizontal scaling (each member's connections are self-contained in one document) and consistent hashing across shards. The cost is that BFS traversal is application-level: the PYMK service must fetch document after document to traverse the graph. A native graph DB would make BFS easier but cannot scale to 950M nodes with LinkedIn's SLA requirements."
+    },
+    {
+      "stage": "post",
+      "question": "What metric is the most critical early-warning signal that LinkedIn's feed pipeline is falling behind?",
+      "options": [
+        "Kafka consumer lag on the feed fanout consumer group — a growing lag means feed caches are being populated slower than new events arrive, directly degrading feed freshness for members.",
+        "Espresso read latency p99 — if Espresso is slow, the PYMK pipeline will time out before completing 2nd-degree graph traversal.",
+        "Venice feature store cache hit rate — a low hit rate means the ranking model is falling back to default feature values, reducing personalization quality.",
+        "Pinot query latency p99 — if Pinot is slow, the feed analytics dashboard will not reflect real-time engagement data, preventing the ranking team from detecting model regressions."
+      ],
+      "correct": 0,
+      "explanation": "Kafka consumer lag is the most critical signal for feed pipeline health. Consumer lag (the difference between the latest offset produced and the offset last committed by the consumer group) directly measures how far behind the feed fanout pipeline is. A lag of 10 minutes means members are not seeing posts from 10 minutes ago. All other metrics matter, but lag is the most direct signal of pipeline throughput degradation."
+    }
+  ]
+}

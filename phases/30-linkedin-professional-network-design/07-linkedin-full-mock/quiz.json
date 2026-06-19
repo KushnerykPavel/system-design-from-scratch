@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "In a 45-minute LinkedIn PYMK system design interview, what is the single most common reason a candidate receives 'No Hire'?",
+      "options": [
+        "Jumping into design without clarifying scale, freshness, and privacy constraints, resulting in an architecture that doesn't address the actual problem.",
+        "Spending too much time on capacity estimation and not enough on the API design.",
+        "Choosing Kafka over RabbitMQ for the event pipeline.",
+        "Failing to draw a component diagram within the first 5 minutes."
+      ],
+      "correct": 0,
+      "explanation": "Interviewers report that most 'No Hire' outcomes begin in the first 5 minutes when candidates skip clarification and design a generic system that doesn't address PYMK's specific challenges (privacy, scale, freshness)."
+    },
+    {
+      "stage": "pre",
+      "question": "LinkedIn's professional graph has 950M members with an average of 500 connections each. Why is real-time 2nd-degree traversal at request time impractical?",
+      "options": [
+        "Each member has up to 250K 2nd-degree candidates (500 × 500), requiring hundreds of thousands of Espresso lookups per request — far exceeding a 500ms latency budget.",
+        "Espresso does not support graph traversal operations.",
+        "The 2nd-degree candidates change too frequently to cache reliably.",
+        "LinkedIn's data center network cannot route graph queries fast enough."
+      ],
+      "correct": 0,
+      "explanation": "250K lookups per member × 30M DAU = 7.5 trillion lookups per day at request time. Pre-computation via nightly Spark batch and storage in Espresso reduces request-time work to a single key lookup."
+    },
+    {
+      "stage": "post",
+      "question": "A candidate answers PYMK by designing only a real-time request-time graph traversal. Which rubric dimension is most penalized?",
+      "options": [
+        "Pipeline Architecture — they missed the batch vs. online distinction and designed a system that cannot meet the latency budget at scale.",
+        "Ranking/ML Design — they did not describe a ranking model.",
+        "Observability — they did not propose metrics.",
+        "Privacy/Compliance — they did not mention blocked members."
+      ],
+      "correct": 0,
+      "explanation": "The core architectural insight is separating batch candidate generation (Spark, nightly) from online re-ranking (Venice features, request time). Designing only real-time traversal fails the pipeline architecture dimension."
+    },
+    {
+      "stage": "post",
+      "question": "Under the PYMK scoring rubric, which dimension carries the same weight as Graph Design?",
+      "options": [
+        "Pipeline Architecture (both are 20 points) — because both are load-bearing technical decisions with no obvious fallback.",
+        "Privacy/Compliance (both are 20 points) — because GDPR is the primary constraint.",
+        "Observability (both are 20 points) — because metrics are the most overlooked area.",
+        "Ranking/ML Design (both are 20 points) — because the model is the hardest part to get right."
+      ],
+      "correct": 0,
+      "explanation": "Graph Design and Pipeline Architecture both carry 20 points because they are the structural core of the system. A correct ranking model or observability setup cannot compensate for a fundamentally broken graph design or pipeline."
+    },
+    {
+      "stage": "post",
+      "question": "When a PYMK candidate receives a GDPR right-to-be-forgotten request, what must the system do beyond deleting the member's Espresso node?",
+      "options": [
+        "Publish a Kafka deletion event that triggers an async cleanup job to remove the member from all other members' precomputed PYMK candidate lists in Espresso, completing within 30 days.",
+        "Invalidate the member's session tokens and remove them from the search index only.",
+        "Mark the member as inactive and stop generating recommendations for them without deleting their graph data.",
+        "Immediately rebuild the nightly Spark batch job to remove the member from all recommendations."
+      ],
+      "correct": 0,
+      "explanation": "GDPR Article 17 requires complete erasure. The member appears as a recommendation in many other members' precomputed lists. A Kafka-triggered async cleanup is the scalable approach, with a 30-day SLA."
+    },
+    {
+      "stage": "post",
+      "question": "A member with 50,000 connections (super-node) causes the nightly PYMK batch job to time out for their partition. What are two valid mitigations?",
+      "options": [
+        "Cap 2nd-degree traversal to the top-K connections by affinity score, or switch to approximate nearest-neighbor search on member embeddings for super-nodes.",
+        "Exclude super-nodes from PYMK recommendations entirely.",
+        "Run a dedicated Spark cluster exclusively for super-nodes on a separate nightly schedule.",
+        "Shard the super-node's connection list across 10 partitions so each processes 5,000 connections."
+      ],
+      "correct": 0,
+      "explanation": "Full traversal of 50K × 500 = 25M 2nd-degree candidates is too expensive per member. Capping at high-affinity connections reduces work while preserving recommendation quality. ANN on embeddings avoids graph traversal entirely."
+    },
+    {
+      "stage": "post",
+      "question": "Why is connection acceptance rate a better primary A/B metric for PYMK than click-through rate on the recommendation?",
+      "options": [
+        "Click-through rate measures curiosity; connection acceptance measures intent — someone clicking 'Connect' is a stronger signal that the recommendation was valuable.",
+        "Connection acceptance rate is easier to measure because it requires no client-side instrumentation.",
+        "Click-through rate is not recorded in LinkedIn's event pipeline.",
+        "Connection acceptance rate is required by LinkedIn's privacy policy for A/B testing."
+      ],
+      "correct": 0,
+      "explanation": "A model could maximize clicks by showing surprising or attention-grabbing profiles that members don't actually want to connect with. Acceptance rate is the outcome LinkedIn actually wants to drive."
+    },
+    {
+      "stage": "post",
+      "question": "A new member joins LinkedIn with 0 connections. What should PYMK show them?",
+      "options": [
+        "Fall back to non-graph signals: same company from their profile, same school, geographic proximity, and popular members in their industry vertical — computed without 2nd-degree graph traversal.",
+        "Show no recommendations until they make at least one connection.",
+        "Show the globally most-followed LinkedIn members as default recommendations.",
+        "Prompt the member to import their email contacts and use that graph instead."
+      ],
+      "correct": 0,
+      "explanation": "Cold-start members have no 2nd-degree graph. Profile signals (company, school, location) provide a non-graph fallback that remains relevant and personalized even without connection history."
+    }
+  ]
+}

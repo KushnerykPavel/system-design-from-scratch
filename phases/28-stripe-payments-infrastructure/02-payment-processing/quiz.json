@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why must the client generate the idempotency key before sending the request?",
+      "options": [
+        "So the key survives network failures — if the server generated it, a timeout on the first call would leave the client with no key to retry with.",
+        "Because the server has no access to a UUID generator.",
+        "Because PCI DSS mandates client-side key generation for payment operations.",
+        "To allow the key to be stored in the browser's local storage for reuse."
+      ],
+      "correct": 0,
+      "explanation": "The client must generate the key before sending so it can retry with the same key even if the first request times out and no response is received."
+    },
+    {
+      "stage": "pre",
+      "question": "What is the difference between payment authorization and payment capture?",
+      "options": [
+        "Authorization checks the card and holds funds; capture is the actual transfer of funds to the merchant.",
+        "Authorization transfers funds immediately; capture releases the hold after merchant confirmation.",
+        "Authorization is done by the merchant; capture is done by the card network.",
+        "Authorization and capture are always performed as a single atomic operation."
+      ],
+      "correct": 0,
+      "explanation": "Two-phase payments allow merchants to authorize (hold) funds at order time and capture (charge) only when goods ship, reducing disputes."
+    },
+    {
+      "stage": "post",
+      "question": "A client sends a charge request with idempotency key K and request body B1. The request times out. The client retries with key K and body B2 (different amount). What should the server return?",
+      "options": [
+        "422 Unprocessable Entity — the key K is already associated with body B1; reusing it for B2 is an error.",
+        "200 OK — return the cached result from the first request.",
+        "409 Conflict — the client must generate a new idempotency key.",
+        "Process the new request because the first request timed out."
+      ],
+      "correct": 0,
+      "explanation": "The server hashes the request body on storage. A retry with the same key but a different body indicates the client is misusing the key, which is a 422 error to prevent silent data corruption."
+    },
+    {
+      "stage": "post",
+      "question": "Why does Stripe use optimistic locking on Payment Intent status transitions?",
+      "options": [
+        "To prevent two concurrent processes from both advancing the intent state, which could cause a double-capture.",
+        "To improve read performance by avoiding SELECT FOR UPDATE locks.",
+        "Because PostgreSQL does not support pessimistic locking.",
+        "To allow rollback of a Payment Intent to a previous status if needed."
+      ],
+      "correct": 0,
+      "explanation": "Optimistic locking using a version column ensures that only one process can transition a Payment Intent state at a time, preventing concurrent double-captures."
+    },
+    {
+      "stage": "post",
+      "question": "Why does Stripe's Stripe.js tokenize card numbers in a hosted iframe rather than in the merchant's page JavaScript?",
+      "options": [
+        "To prevent the raw card number from entering the merchant's DOM, limiting PCI DSS scope to Stripe's Cardholder Data Environment only.",
+        "To enable Stripe to apply real-time fraud scoring before tokenization.",
+        "Because iframes load faster than inline JavaScript for payment forms.",
+        "To comply with GDPR by ensuring card data is processed in the EU."
+      ],
+      "correct": 0,
+      "explanation": "Hosting the input in a Stripe iframe ensures raw PANs never reach the merchant's JavaScript or servers, so merchants don't need PCI Level 1 certification."
+    },
+    {
+      "stage": "post",
+      "question": "A bank decline is received during a payment attempt. What is the correct system behavior?",
+      "options": [
+        "Return a terminal failure with the decline code — do not retry, as the bank's decision is final for this payment.",
+        "Retry the authorization three times before returning failure.",
+        "Route the payment to a different card network for a second authorization attempt.",
+        "Hold the payment in a pending state and retry after 1 hour."
+      ],
+      "correct": 0,
+      "explanation": "Bank declines (insufficient funds, card blocked, etc.) are terminal decisions. Retrying the same charge will produce the same result and may trigger fraud flags."
+    },
+    {
+      "stage": "post",
+      "question": "Stripe guarantees at-least-once webhook delivery. What does this require from merchant webhook handlers?",
+      "options": [
+        "Handlers must be idempotent — processing the same event twice must produce the same result as processing it once.",
+        "Handlers must respond within 5ms to prevent duplicate delivery.",
+        "Handlers must store all received events in a database and deduplicate on Stripe's behalf.",
+        "Handlers must send a confirmation back to Stripe after successful processing."
+      ],
+      "correct": 0,
+      "explanation": "At-least-once delivery means duplicates are possible. Idempotent handlers (e.g., checking event ID before acting) prevent double-processing."
+    },
+    {
+      "stage": "post",
+      "question": "Why does Stripe run Radar fraud scoring synchronously in the payment critical path rather than asynchronously?",
+      "options": [
+        "To enable real-time block or 3DS challenge decisions before the authorization request is sent to the card network.",
+        "Because asynchronous fraud scoring would require a separate API endpoint.",
+        "To reduce database load by batching fraud decisions.",
+        "Because card networks require fraud scores to be submitted with each authorization request."
+      ],
+      "correct": 0,
+      "explanation": "Synchronous Radar scoring allows Stripe to block high-risk transactions or trigger 3DS before the authorization even reaches the issuing bank, reducing fraud chargebacks."
+    }
+  ]
+}

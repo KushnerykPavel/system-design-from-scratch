@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why does a pure push fanout strategy break down for celebrity accounts?",
+      "options": [
+        "Because celebrity accounts post too infrequently to keep feeds fresh.",
+        "Because a single post triggers as many writes as the account has followers, creating catastrophic write amplification.",
+        "Because Memcached cannot store more than 10K items per key.",
+        "Because Kafka topics cannot handle more than 1M messages per second."
+      ],
+      "correct": 1,
+      "explanation": "A celebrity with 100M followers causes 100M Memcached writes per post. Pure push collapses under this write amplification."
+    },
+    {
+      "stage": "pre",
+      "question": "What is the core trade-off between push fanout and pull-on-read for news feeds?",
+      "options": [
+        "Push is cheap to read but expensive to write; pull is cheap to write but expensive to read.",
+        "Push always produces better ranking quality than pull.",
+        "Pull requires more storage than push because each post is copied to every follower.",
+        "Push is only suitable for accounts with fewer than 100 followers."
+      ],
+      "correct": 0,
+      "explanation": "Push precomputes feeds (expensive writes, cheap reads). Pull computes at read time (cheap writes, expensive reads). Hybrid routing balances both."
+    },
+    {
+      "stage": "post",
+      "question": "Facebook reportedly uses approximately what follower count as the threshold to switch from push to pull fanout?",
+      "options": [
+        "1,000 followers",
+        "10,000 followers",
+        "50,000 followers",
+        "1,000,000 followers"
+      ],
+      "correct": 2,
+      "explanation": "Facebook uses roughly 50K followers as the push/pull crossover. Below this threshold, push fanout is efficient; above it, the write amplification becomes unacceptable."
+    },
+    {
+      "stage": "post",
+      "question": "When a dormant user (offline for 30 days) reactivates, what happens to their Memcached feed in a hybrid push system?",
+      "options": [
+        "Their feed is fully populated from the fanout workers immediately upon login.",
+        "Their feed entry was likely evicted or never written because offline users are skipped during fanout; a cold-build from the post store is triggered.",
+        "They receive only celebrity posts because normal-user posts are never stored.",
+        "Their feed is frozen at the state it was in when they went offline."
+      ],
+      "correct": 1,
+      "explanation": "Hybrid systems skip offline users during fanout to save writes. On reactivation, the missing feed must be cold-built by querying followed accounts directly."
+    },
+    {
+      "stage": "post",
+      "question": "A celebrity post goes viral and your Memcached cluster is evicting entries under the write pressure. What is the safest immediate mitigation?",
+      "options": [
+        "Switch all celebrity posts to push fanout temporarily to fill MC caches.",
+        "Serve celebrity posts directly from the celebrity post store on MC miss, bypassing the cache write path.",
+        "Pause feed reads for all users until the viral storm subsides.",
+        "Increase Kafka partition count to reduce per-partition fanout load."
+      ],
+      "correct": 1,
+      "explanation": "When MC is under pressure, the read path can fall back to the celebrity post store directly. This avoids compounding the problem by adding more MC writes."
+    },
+    {
+      "stage": "post",
+      "question": "Your ML ranking model starts returning a score of 0 for all posts. What should the feed service do?",
+      "options": [
+        "Return an empty feed to the user.",
+        "Block feed reads until the ranking model recovers.",
+        "Fall back to a recency-sorted feed using post timestamps.",
+        "Only show posts from celebrity accounts since those have a separate score."
+      ],
+      "correct": 2,
+      "explanation": "Graceful degradation to chronological order ensures users still see content. A feed with recency sorting is far better than an error or empty state."
+    },
+    {
+      "stage": "post",
+      "question": "Why does the hybrid fanout system skip offline users when writing to Memcached feeds?",
+      "options": [
+        "Memcached does not support writes for keys associated with inactive sessions.",
+        "Writing to feeds of offline users wastes Memcached capacity and fanout worker throughput, with no immediate benefit since those users will not read the feed.",
+        "Offline users have a different Memcached cluster that requires a separate client.",
+        "It is a GDPR requirement to not store data for inactive users."
+      ],
+      "correct": 1,
+      "explanation": "Skipping offline users cuts fanout volume by 30–50% while wasting no user experience — dormant users will get a cold-built feed on their next login anyway."
+    },
+    {
+      "stage": "post",
+      "question": "A user requests GDPR deletion. How should the system propagate the removal from all materialized feed caches?",
+      "options": [
+        "Delete only the user's own post store; Memcached entries expire naturally via TTL.",
+        "Issue an immediate tombstone that blocks the deleted content at read time, then run an async job to remove it from all MC feed entries and backing stores.",
+        "Pause all fanout workers until the deletion is complete to prevent new copies from being created.",
+        "Remove the user from the TAO graph only; feed workers will automatically stop referencing deleted content."
+      ],
+      "correct": 1,
+      "explanation": "A tombstone provides immediate suppression at read time (within seconds). Async cleanup then removes the data from materialized caches and stores within the 72-hour GDPR window."
+    }
+  ]
+}

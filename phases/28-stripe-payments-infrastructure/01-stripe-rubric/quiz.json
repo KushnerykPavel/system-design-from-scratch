@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What is the most critical correctness property of a payment system?",
+      "options": [
+        "Idempotency — the same charge request produces the same result regardless of how many times it is retried.",
+        "Low latency — charges must complete in under 50ms to avoid customer frustration.",
+        "High availability — the system should never return an error to the caller.",
+        "Scalability — the system must handle 10x traffic spikes without configuration changes."
+      ],
+      "correct": 0,
+      "explanation": "Idempotency prevents double-charges on network retries, which is the most damaging correctness failure in payments."
+    },
+    {
+      "stage": "pre",
+      "question": "Why does Stripe prefer double-entry bookkeeping over a simple balance field?",
+      "options": [
+        "Because double-entry prevents any row from being updated, making the ledger append-only and auditable.",
+        "Because double-entry is required by all card networks.",
+        "Because a simple balance field cannot store negative values.",
+        "Because double-entry allows balance reads without any database queries."
+      ],
+      "correct": 0,
+      "explanation": "Double-entry creates an immutable audit trail where every balance change is a debit/credit pair, enabling reconciliation and regulatory compliance."
+    },
+    {
+      "stage": "post",
+      "question": "A payment request times out. The client retries with the same idempotency key. What should the server return?",
+      "options": [
+        "The result of the original request if it completed, or process the payment if it did not.",
+        "Always reject the retry to avoid any risk of double-charge.",
+        "Always process the payment again because the first attempt may have failed.",
+        "Return a 409 Conflict to force the client to use a new idempotency key."
+      ],
+      "correct": 0,
+      "explanation": "Idempotency keys allow safe retry: return cached result if already processed, execute once if not."
+    },
+    {
+      "stage": "post",
+      "question": "What is Stripe Radar's primary mechanism for fraud detection?",
+      "options": [
+        "ML-based risk scoring combining velocity signals, card BIN data, device fingerprint, and geo mismatch.",
+        "Manual review of every transaction above $100.",
+        "Blocking all transactions from countries with high fraud rates.",
+        "Requiring 3D Secure authentication for every transaction regardless of risk score."
+      ],
+      "correct": 0,
+      "explanation": "Radar uses ML on dozens of signals to score transaction risk, triggering 3DS or block only for high-risk transactions."
+    },
+    {
+      "stage": "post",
+      "question": "Which consistency model is appropriate for a payment ledger?",
+      "options": [
+        "Strong consistency — every read reflects the latest committed balance to prevent overdrafts.",
+        "Eventual consistency — a few seconds of lag is acceptable for financial data.",
+        "Read-your-writes consistency — only the account owner needs to see the latest balance.",
+        "Causal consistency — transactions must be visible in causal order only."
+      ],
+      "correct": 0,
+      "explanation": "Ledger reads for authorization decisions require strong consistency to prevent overdrafts from concurrent transactions."
+    },
+    {
+      "stage": "post",
+      "question": "What is the purpose of a reconciliation job in a payment system?",
+      "options": [
+        "To detect and resolve discrepancies between the internal ledger and external bank/card network settlement files.",
+        "To merge duplicate customer accounts created during a system migration.",
+        "To convert all transactions to a single currency for reporting.",
+        "To delete old transaction records to free up storage space."
+      ],
+      "correct": 0,
+      "explanation": "Reconciliation catches drift between internal records and external sources of truth (card networks, banks), which is a regulatory requirement."
+    },
+    {
+      "stage": "post",
+      "question": "A webhook delivery fails because the merchant's endpoint is down. What is the correct retry strategy?",
+      "options": [
+        "Exponential backoff with jitter over 72 hours, then move to dead-letter queue for manual review.",
+        "Retry every second for 10 minutes, then permanently discard the event.",
+        "Notify the merchant by email and do not retry automatically.",
+        "Retry immediately 10 times, then stop retrying."
+      ],
+      "correct": 0,
+      "explanation": "Webhooks require exponential backoff with jitter to avoid thundering herd on recovery, with a DLQ for events that exceed the retry window."
+    },
+    {
+      "stage": "post",
+      "question": "Why does Stripe use idempotency keys scoped to (customer, resource type) rather than globally unique keys?",
+      "options": [
+        "To allow the same operation to be safely retried by the same customer without affecting other customers' operations.",
+        "Because global keys would require a distributed lock across all data centers.",
+        "Because PCI DSS requires idempotency keys to be customer-scoped.",
+        "To enable key reuse after 24 hours without risk of collision."
+      ],
+      "correct": 0,
+      "explanation": "Customer-scoped keys ensure retry safety while preventing one customer's key from accidentally matching another's operation."
+    }
+  ]
+}

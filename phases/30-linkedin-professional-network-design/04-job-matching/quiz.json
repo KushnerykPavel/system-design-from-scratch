@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why can't LinkedIn score all 15M job listings against a member's profile for every recommendation request?",
+      "options": [
+        "Because full pairwise scoring at request time would take hundreds of seconds, so a fast candidate generation step is required first.",
+        "Because LinkedIn's database cannot store more than 1M listings at a time.",
+        "Because job listings are encrypted and cannot be read in bulk.",
+        "Because members are not allowed to see more than 100 listings per request."
+      ],
+      "correct": 0,
+      "explanation": "15M × 950M pairwise scores is computationally infeasible at request time. Candidate generation narrows the set to ~1,000 before the heavy ranker runs."
+    },
+    {
+      "stage": "pre",
+      "question": "What problem does the LinkedIn Skills Graph solve that a simple string-match approach cannot?",
+      "options": [
+        "It normalizes variant spellings and infers adjacent skills, so 'JS' and 'JavaScript' match the same listings and Python experience is credited toward ML roles.",
+        "It stores all job listings in a single sorted list by salary.",
+        "It prevents recruiters from posting duplicate listings.",
+        "It assigns a unique numeric ID to each member's skill endorsement."
+      ],
+      "correct": 0,
+      "explanation": "Skills Graph unifies synonyms (JS = JavaScript) and encodes adjacency (Python → ML), both of which are invisible to plain string matching."
+    },
+    {
+      "stage": "post",
+      "question": "A member has skills [Python, SQL]. A job requires [Python, SQL, Spark]. What is the SkillMatchScore?",
+      "options": [
+        "0.67 — two out of three required skills matched",
+        "1.0 — all member skills are present in the job",
+        "0.5 — only half the member's skills are required",
+        "0.0 — Spark is missing so the job is filtered out"
+      ],
+      "correct": 0,
+      "explanation": "SkillMatchScore = intersection / job required skills = 2/3 ≈ 0.67. The job has the final say on what is required."
+    },
+    {
+      "stage": "post",
+      "question": "A member is at seniority level 3. A job specifies SeniorityMin=4, SeniorityMax=5. What should the seniority fit score be?",
+      "options": [
+        "0.5 — the member is one level below the minimum, which counts as adjacent",
+        "1.0 — seniority is never used as a filter",
+        "0.0 — the member is outside the range and receives no credit",
+        "0.25 — partial credit for being close to the range"
+      ],
+      "correct": 0,
+      "explanation": "Level 3 is adjacent to the minimum of 4 (one step below). Adjacent seniority earns 0.5, but in this design out-of-range by one level earns 0.5, not 0.0."
+    },
+    {
+      "stage": "post",
+      "question": "Why does LinkedIn give a score bonus to jobs with the Easy Apply flag?",
+      "options": [
+        "Because Easy Apply listings historically receive 3x more applications, making them higher-quality signal for apply-rate metrics.",
+        "Because Easy Apply listings are always remote jobs.",
+        "Because Easy Apply bypasses the recruiter review step.",
+        "Because Easy Apply listings are always newer than 48 hours."
+      ],
+      "correct": 0,
+      "explanation": "Easy Apply removes friction — one-click apply increases conversion 3x. The platform incentivizes surfacing these listings higher to improve member engagement metrics."
+    },
+    {
+      "stage": "post",
+      "question": "What is the purpose of Pinot in LinkedIn's job matching infrastructure?",
+      "options": [
+        "Real-time OLAP analytics — e.g. 'top-applying jobs in your metro this week' — used for popularity signals and recruiter analytics dashboards.",
+        "Storing the primary job listing documents with full JSON payloads.",
+        "Serving precomputed member feature vectors at low latency.",
+        "Running the inverted-index candidate generation query."
+      ],
+      "correct": 0,
+      "explanation": "Pinot is LinkedIn's real-time OLAP store. It aggregates apply events to power popularity-based signals and recruiter analytics. Espresso stores the primary listing, Venice serves features, Elasticsearch does candidate generation."
+    },
+    {
+      "stage": "post",
+      "question": "A new JavaScript framework is released. Members start self-reporting it as a skill. How should the Skills Graph handle it before it accumulates enough data?",
+      "options": [
+        "Treat it as a synonym of its closest existing parent skill until it reaches a critical mass (e.g., 10K endorsements), preventing cold-start underscoring.",
+        "Block it from being added until the LinkedIn editorial team manually reviews and approves it.",
+        "Assign it a random adjacency score between 0 and 1.",
+        "Remove it from all member profiles until the official Skills Graph update cycle."
+      ],
+      "correct": 0,
+      "explanation": "Mapping a new skill to its nearest parent prevents members from being invisible to relevant job recommendations while the new skill's graph position is being established."
+    },
+    {
+      "stage": "post",
+      "question": "Why might using hire rate as a guardrail metric be more important than apply-through rate alone when evaluating a new ranking signal?",
+      "options": [
+        "A signal that increases applies but decreases hires is surfacing poor matches — it optimizes for engagement at the expense of actual member value.",
+        "Apply-through rate is not measurable in LinkedIn's A/B testing framework.",
+        "Hire rate is faster to measure than apply-through rate.",
+        "Members do not care about whether they get hired, only about discovering listings."
+      ],
+      "correct": 0,
+      "explanation": "LinkedIn's core value proposition is helping members get jobs, not just get clicks. A signal that maximizes applies but reduces hire probability is a local optimum that undermines the product."
+    }
+  ]
+}

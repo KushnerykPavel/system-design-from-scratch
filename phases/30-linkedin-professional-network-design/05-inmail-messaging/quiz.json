@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What is the key difference between LinkedIn InMail and LinkedIn direct messaging?",
+      "options": [
+        "InMail is paid cold outreach to non-connections using credits; direct messaging is free but requires both parties to be 1st-degree connections.",
+        "InMail is only available on mobile; direct messaging works everywhere.",
+        "InMail supports file attachments; direct messaging is text-only.",
+        "InMail is encrypted end-to-end; direct messaging is not."
+      ],
+      "correct": 0,
+      "explanation": "InMail lets you reach anyone regardless of connection status, but costs 1 credit per send. Direct messaging is free but limited to 1st-degree connections."
+    },
+    {
+      "stage": "pre",
+      "question": "Why does LinkedIn refund InMail credits when a recipient does not respond within 7 days?",
+      "options": [
+        "To incentivize senders to write high-quality, targeted messages rather than blasting mass InMails.",
+        "To comply with GDPR message retention limits.",
+        "Because credits expire automatically after 7 days regardless of use.",
+        "To prevent recruiters from sending follow-up messages."
+      ],
+      "correct": 0,
+      "explanation": "The credit refund policy aligns the recruiter's incentive with message quality — if no one replies, the message probably wasn't valuable, so the credit is returned."
+    },
+    {
+      "stage": "post",
+      "question": "A sender has a 5% response rate, a 12% report rate, and their account is 15 days old. What should the spam scoring system do?",
+      "options": [
+        "Flag this as high-risk: low response rate + high report rate + new account all point toward spam behavior.",
+        "Allow the send because the account is a paid recruiter account.",
+        "Block only if the message body contains a URL.",
+        "Request manual review before delivery."
+      ],
+      "correct": 0,
+      "explanation": "Three independent risk signals converge: low response rate, elevated report rate, and new account age. The system should assign a high SpamScore and block or throttle."
+    },
+    {
+      "stage": "post",
+      "question": "Why is Cassandra a better fit than a relational database for storing LinkedIn message threads?",
+      "options": [
+        "Cassandra's partition-per-thread model gives linear write scaling and fast ordered reads per thread, without complex sharding logic needed for 1B+ messages/month.",
+        "Cassandra supports full-text search across all message bodies, which relational databases cannot.",
+        "Cassandra provides ACID transactions for credit deduction operations.",
+        "Cassandra requires no schema definition, making it easier to store varied message formats."
+      ],
+      "correct": 0,
+      "explanation": "The access pattern is always per-thread (partition key) with time-ordered scans (clustering key). This maps exactly to Cassandra's strengths. The scale rules out unsharded relational databases."
+    },
+    {
+      "stage": "post",
+      "question": "What is the purpose of storing unread message counts in Redis rather than computing them from Cassandra on each request?",
+      "options": [
+        "Redis provides O(1) atomic INCR/DECREMENT operations, making badge-count updates fast and cheap without scanning the message log.",
+        "Cassandra cannot store integer counters.",
+        "Redis guarantees that counts are consistent across all data centers.",
+        "Unread counts must be persisted to disk, which Redis provides and Cassandra does not."
+      ],
+      "correct": 0,
+      "explanation": "Counting unread messages from Cassandra on every page load would require a full partition scan per thread. Redis counter is O(1) and serves the badge count in <1ms."
+    },
+    {
+      "stage": "post",
+      "question": "Why is spam scoring done synchronously (blocking the send) rather than asynchronously (after delivery)?",
+      "options": [
+        "Synchronous scoring ensures spam messages never reach the recipient's inbox, which protects trust. Async scoring would require a message recall mechanism.",
+        "Synchronous scoring is faster because it runs on the sender's device.",
+        "Async scoring would violate GDPR by storing the message before consent is verified.",
+        "Synchronous scoring is required because Kafka cannot handle spam classification events."
+      ],
+      "correct": 0,
+      "explanation": "If you deliver a spam message and then try to recall it, the damage is done — recipients already saw it. Blocking pre-delivery is the only trust-preserving approach."
+    },
+    {
+      "stage": "post",
+      "question": "How does LinkedIn prevent a race condition where a recruiter's credit is double-spent by two concurrent InMail sends?",
+      "options": [
+        "By using an optimistic lock or conditional write with a version check on the credit balance in Espresso, so only one concurrent write succeeds.",
+        "By using a Redis lock that expires after 5 seconds.",
+        "By serializing all credit operations through a single-threaded background worker.",
+        "By requiring the client to confirm the send twice before the credit is deducted."
+      ],
+      "correct": 0,
+      "explanation": "Optimistic locking (compare-and-swap with a version) is the standard approach for preventing double-spend without serializing all credit operations through a bottleneck."
+    },
+    {
+      "stage": "post",
+      "question": "A LinkedIn Groups message is sent to a group with 8,000 members. Which fan-out strategy should be used and why?",
+      "options": [
+        "Asynchronous Kafka-based fan-out: writing to 8,000 recipient threads synchronously would take too long and time out the sender's request.",
+        "Synchronous fan-out: 8,000 writes is fast enough to complete within a 500ms budget.",
+        "No fan-out needed: all members read from a single shared group message log.",
+        "Round-robin fan-out: messages are distributed to 10 shards, each serving 800 members."
+      ],
+      "correct": 0,
+      "explanation": "8,000 synchronous Cassandra writes in a single request path would easily exceed any acceptable latency budget. Kafka-based async fan-out decouples the sender's request from the delivery work."
+    }
+  ]
+}

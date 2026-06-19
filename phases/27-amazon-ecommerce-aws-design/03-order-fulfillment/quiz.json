@@ -1,0 +1,117 @@
+{
+  "lesson": "03-order-fulfillment",
+  "questions": [
+    {
+      "id": "pre_01",
+      "phase": "pre",
+      "type": "mcq",
+      "question": "A saga's compensating transaction is responsible for:",
+      "options": [
+        "Speeding up the forward transaction path",
+        "Undoing a previously committed local transaction when a later step fails",
+        "Replacing 2PC as a synchronous commit protocol",
+        "Caching intermediate results between microservices"
+      ],
+      "answer": 1,
+      "explanation": "A compensating transaction semantically reverses a committed local step. Because local transactions are already committed, you cannot roll them back — you must apply an inverse operation (e.g., refund after payment was captured)."
+    },
+    {
+      "id": "pre_02",
+      "phase": "pre",
+      "type": "mcq",
+      "question": "Why is Two-Phase Commit (2PC) generally avoided in microservice architectures?",
+      "options": [
+        "2PC is too slow for databases with more than 1M rows",
+        "2PC requires a coordinator that becomes a single point of failure and locks resources across services during the prepare phase",
+        "2PC only works with SQL databases, not NoSQL",
+        "2PC cannot handle network partitions between the same datacenter"
+      ],
+      "answer": 1,
+      "explanation": "2PC needs a coordinator to manage the prepare/commit phases. If the coordinator fails mid-protocol, resources remain locked. Across independently deployed microservices, this tight coupling breaks availability."
+    },
+    {
+      "id": "post_01",
+      "phase": "post",
+      "type": "mcq",
+      "question": "A customer's payment is captured (PAYMENT_CONFIRMED) but the inventory check finds the item is out of stock. What must happen next according to the saga?",
+      "options": [
+        "Leave the order in PAYMENT_CONFIRMED and wait for restock",
+        "Immediately cancel the order with no refund — inventory is the customer's risk",
+        "Trigger the compensating transaction: issue a refund and move the order to CANCELLED",
+        "Assign the order to a different fulfillment center automatically"
+      ],
+      "answer": 2,
+      "explanation": "Payment has been captured — money left the customer's account. The compensating transaction must reverse this: issue a refund via the payment service, then move the order to CANCELLED. Leaving the order open with no inventory is not acceptable."
+    },
+    {
+      "id": "post_02",
+      "phase": "post",
+      "type": "mcq",
+      "question": "DynamoDB's ConditionalCheckFailedException is thrown during inventory reservation. What does this mean in the order saga?",
+      "options": [
+        "The DynamoDB table is at capacity — increase provisioned throughput",
+        "Two customers tried to reserve the last unit simultaneously; one succeeded and the other's conditional update was rejected",
+        "The order's idempotency key already exists — this is a duplicate request",
+        "The AWS region is experiencing a partial outage"
+      ],
+      "answer": 1,
+      "explanation": "A conditional update (available >= qty) fails when available is zero. This is the optimistic locking signal: another reservation won the race. The losing order must trigger its compensation path (refund if payment was taken)."
+    },
+    {
+      "id": "post_03",
+      "phase": "post",
+      "type": "mcq",
+      "question": "An order is in SHIPPED state. The customer calls support asking to cancel. What is the correct response?",
+      "options": [
+        "Cancel immediately — update the state to CANCELLED in DynamoDB",
+        "Cancel cannot be processed once SHIPPED; the customer must wait for delivery and then initiate a return",
+        "Contact the carrier API to intercept the package and refund the customer",
+        "The system moves the order back to INVENTORY_RESERVED to restart fulfillment"
+      ],
+      "answer": 1,
+      "explanation": "SHIPPED is a terminal forward state — the physical package is with the carrier. CANCELLED is not a valid transition from SHIPPED. The correct path is delivery followed by a return request, which starts the reverse saga."
+    },
+    {
+      "id": "post_04",
+      "phase": "post",
+      "type": "mcq",
+      "question": "SQS delivers messages at-least-once. A fulfillment worker receives the same 'InventoryReserved' event twice. How does idempotency prevent double-picking?",
+      "options": [
+        "SQS automatically deduplicates messages within a 5-minute window using the MessageGroupId",
+        "The worker checks a stored idempotency key (order_id + step) in DynamoDB before acting; on the second delivery the key exists so the worker skips the operation",
+        "The Order Service uses exactly-once delivery via Kinesis instead of SQS",
+        "Workers use a distributed lock (Redis SETNX) that expires after 30 seconds"
+      ],
+      "answer": 1,
+      "explanation": "The canonical pattern: before executing a side effect, check if the idempotency key already exists in a durable store (DynamoDB). If present, return success immediately without re-executing. SQS deduplication is a secondary guard but has a limited 5-min window and only applies to FIFO queues."
+    },
+    {
+      "id": "post_05",
+      "phase": "post",
+      "type": "mcq",
+      "question": "An order has 3 items sourced from 3 different fulfillment centers. What is the correct modeling approach for the order state machine?",
+      "options": [
+        "The parent order stays in INVENTORY_RESERVED until all centers ship",
+        "Create child order records (sub-orders) per fulfillment center, each with its own state machine; the parent order reaches DELIVERED only when all children reach DELIVERED",
+        "Ship from the center with the most items and back-order the rest",
+        "Reject the order and ask the customer to split it manually"
+      ],
+      "answer": 1,
+      "explanation": "Split shipments require independent state tracking per shipment leg. Child order state machines allow each leg to progress independently (e.g., one DELIVERED while another is still SHIPPED) while the parent aggregates status."
+    },
+    {
+      "id": "post_06",
+      "phase": "post",
+      "type": "mcq",
+      "question": "Why is optimistic locking (DynamoDB conditional update) preferred over pessimistic locking (SELECT FOR UPDATE) for inventory reservation at Amazon's scale?",
+      "options": [
+        "DynamoDB does not support pessimistic locking at all",
+        "Pessimistic locking serializes all reservation writes, creating a bottleneck at high throughput; optimistic locking allows concurrent attempts and fails fast on conflict",
+        "Optimistic locking guarantees zero conflicts; pessimistic locking has a 0.1% conflict rate",
+        "Pessimistic locking only works on single-row transactions, not multi-item orders"
+      ],
+      "answer": 1,
+      "explanation": "Pessimistic locking holds a lock for the full duration of the transaction, serializing all concurrent reservations for that SKU. At 233 reservation ops/sec, this creates a severe bottleneck. Optimistic locking lets all attempts proceed concurrently — only the conflict case pays the cost."
+    }
+  ]
+}

@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What does 'Working Backwards' mean in an Amazon system design interview, and when should you use it?",
+      "options": [
+        "State the customer promise and the customer experience outcome before drawing any architecture — every technical decision is then justified by tracing back to that promise.",
+        "Start with the database schema and work backwards through the service layer to the UI, ensuring the data model supports all required queries before designing the API.",
+        "Begin with the failure modes and design backwards from recovery procedures to the happy path, ensuring resilience is built in from the start.",
+        "Work backwards from the most expensive AWS service to the cheapest, eliminating unnecessary components until you reach the minimum viable architecture."
+      ],
+      "correct": 0,
+      "explanation": "Working Backwards is Amazon's core product development mechanism originating from the Press Release / FAQ process. In interviews, it means: open with what the customer experiences and what you are promising them, then derive technical requirements. This demonstrates Customer Obsession and ensures your architecture choices stay connected to customer outcomes throughout the session."
+    },
+    {
+      "stage": "pre",
+      "question": "A candidate opens their Amazon mock interview with 'I'd use collaborative filtering with matrix factorization and store embeddings in Redis.' What LP signal is missing?",
+      "options": [
+        "Customer Obsession is missing — the candidate jumped directly to the solution without stating what customer outcome the recommendation engine is meant to deliver.",
+        "Frugality is missing — the candidate proposed an expensive Redis-based solution without first checking if a simpler key-value store would suffice.",
+        "Dive Deep is missing — the candidate should have started with a capacity estimate before naming any technologies.",
+        "Bias for Action is missing — the candidate should propose a simpler MVP before describing a full ML pipeline."
+      ],
+      "correct": 0,
+      "explanation": "Amazon interviewers are simultaneously evaluating technical depth and LP alignment. Opening with a technology choice before articulating the customer outcome is the classic 'weak-hire' pattern — it signals that the candidate thinks like a technologist, not like an Amazonian. The correct opening is a Working Backwards statement: 'Customers need to discover products they actually want, and recommendations must be relevant, fresh, and fast. Here's what that requires technically.'"
+    },
+    {
+      "stage": "post",
+      "question": "The scoring rubric assigns 15 points to 'LP Framing' and 15 points to 'Working Backwards' separately. What is the distinction between these two dimensions?",
+      "options": [
+        "LP Framing measures whether LPs are named with specific design decisions as evidence; Working Backwards measures whether the customer promise is stated before architecture and referenced throughout — two behaviors that often co-occur but can fail independently.",
+        "LP Framing and Working Backwards are identical dimensions scored twice to double-weight Amazon culture alignment relative to technical depth.",
+        "LP Framing measures the number of Leadership Principles mentioned by name; Working Backwards measures whether the candidate asked clarifying questions before designing.",
+        "Working Backwards scores only the opening statement; LP Framing scores only the closing summary where candidates connect each design decision to a Leadership Principle."
+      ],
+      "correct": 0,
+      "explanation": "A candidate can mention LP names throughout without ever connecting them to specific decisions (LP Framing fails, Working Backwards might pass). A candidate can start from the customer promise but then forget to trace decisions back to it as the interview progresses (Working Backwards partially fails, LP Framing might score if specific decisions are justified). The rubric separates them because interviewers evaluate them independently."
+    },
+    {
+      "stage": "post",
+      "question": "During the mock, the interviewer asks: 'Your Kinesis consumer is 10 minutes behind during Prime Day. What is the customer impact?' What does the ideal answer demonstrate?",
+      "options": [
+        "The ideal answer names the specific customer impact (recommendations revert to offline CF, losing session context), then describes graceful degradation — offline CF is still personalized and acceptable — followed by concrete mitigations: pre-scale Kinesis shards, alert on IteratorAgeMilliseconds, enhanced fan-out.",
+        "The ideal answer proposes switching from Kinesis to SQS FIFO for the real-time signal pipeline, eliminating lag by using a lower-throughput but more reliable queue.",
+        "The ideal answer explains that 10-minute consumer lag means all recommendation requests fail and return empty results, requiring an immediate rollback of the real-time recommendation feature.",
+        "The ideal answer focuses on the root cause analysis — identifying the exact Lambda function that is the bottleneck — before discussing any customer impact or mitigation."
+      ],
+      "correct": 0,
+      "explanation": "This question tests two things simultaneously: technical depth (do you know that IteratorAgeMilliseconds is the metric, that enhanced fan-out fixes shared-throughput bottleneck) and LP Ownership (do you think about graceful degradation so the customer experience degrades gracefully rather than failing hard). The best answers always state customer impact first, then mitigation — not root cause first."
+    },
+    {
+      "stage": "post",
+      "question": "The rubric weights Architecture at 20 points and Deep Dive at 20 points. How do candidates typically lose points in Deep Dive specifically?",
+      "options": [
+        "Candidates describe the three-layer architecture correctly but cannot explain the cold-start problem, do not break down the serving path latency budget per component, or cannot explain why pre-computed embeddings are necessary instead of on-demand inference.",
+        "Candidates lose Deep Dive points by naming too many AWS services — interviewers penalize candidates who appear to be listing services rather than designing a system.",
+        "Deep Dive points are lost when candidates spend more than 10 minutes on the architecture overview, leaving insufficient time for the deep dive section of the rubric.",
+        "Candidates lose Deep Dive points if they do not mention neural collaborative filtering or transformer-based embeddings, which are the expected industry-standard approaches."
+      ],
+      "correct": 0,
+      "explanation": "Deep Dive at Amazon measures whether you understand the system well enough to explain the second and third-order decisions. Cold-start is the canonical 'gotcha' for recommendation engines — candidates who haven't thought it through have no answer. The latency budget is the design constraint that justifies pre-computed embeddings: real-time inference on 350M × 300M matrices at < 100 ms is impossible, so you must pre-compute. Candidates who can't state these specifics are pattern-matching on 'recommendation system' rather than designing."
+    },
+    {
+      "stage": "post",
+      "question": "A candidate scores 60/100 on the scorecard (below the 70-point hire threshold) but demonstrates strong technical depth. Which dimension is most likely missing?",
+      "options": [
+        "LP Framing and Working Backwards together are worth 30 points — a technically strong candidate who never demonstrated LP alignment or customer-first framing loses up to 30% of the total score, making a no-hire even with perfect architecture and deep dive scores.",
+        "Observability is worth 5 points and Tradeoffs is worth 5 points — losing both of these is the most likely reason a technically strong candidate scores below 70.",
+        "Capacity modeling is worth 10 points — candidates who skip numbers in favor of architecture diagrams lose exactly the 10 points needed to fall below the hire threshold.",
+        "Failure Modes is worth 10 points — candidates who do not proactively discuss failure modes before being asked always score below the hire threshold."
+      ],
+      "correct": 0,
+      "explanation": "LP Framing (15) + Working Backwards (15) = 30 points, the largest combined dimension. A candidate who nails Architecture (20) + Deep Dive (20) + Capacity (10) scores 50 points and still fails. Amazon's bar for culture alignment is not decorative — it is weighted as heavily as technical depth. This is the single most common failure mode for technically strong candidates from non-Amazon backgrounds."
+    },
+    {
+      "stage": "post",
+      "question": "The follow-up question asks: 'How do you A/B test a new recommendation algorithm without harming revenue?' What makes the ideal answer stand out? (Trade-off question)",
+      "options": [
+        "The ideal answer proposes CTR as the primary metric and then immediately corrects it — CTR can be gamed by showing cheap items — and names revenue-per-session as the ground truth metric with CTR as a secondary signal. This demonstrates awareness that metric choice is an architectural decision with failure modes.",
+        "The ideal answer describes a shadow mode deployment where the new algorithm runs in parallel without serving results, validating offline metrics against the production algorithm before any live traffic exposure.",
+        "The ideal answer avoids A/B testing entirely, arguing that recommendation changes should be deployed using canary releases at 1% traffic to avoid the statistical complexity of experiment design.",
+        "The ideal answer proposes measuring only page load time as the guardrail metric because latency is the only recommendation engine metric that directly correlates with customer satisfaction."
+      ],
+      "correct": 0,
+      "explanation": "Choosing CTR as the optimization metric and then identifying its failure mode (it can be gamed, it does not equal revenue) demonstrates exactly the kind of second-order thinking Amazon rewards. An answer that proposes CTR without qualification gets partial credit. An answer that immediately catches the metric's failure mode and proposes revenue-per-session as ground truth — that is Dive Deep in action. It also demonstrates Ownership: you thought about what the metric incentivizes before committing to it."
+    },
+    {
+      "stage": "post",
+      "question": "At the 45-minute mark, the interviewer says: 'We're wrapping up. How would you summarize your design and what would you instrument first?' What is the ideal closing?",
+      "options": [
+        "Restate the customer promise, name the three architectural layers and their trade-offs in one sentence each, state two concrete SLOs (recommendation API < 100 ms at p99; model freshness < 24 h), and name the first metric to alarm on — Kinesis IteratorAgeMilliseconds — because real-time signal lag is the first place the customer experience degrades silently.",
+        "List every AWS service used in the design with a one-sentence justification for each, then state that the most important metric to instrument is cost per recommendation because Frugality is a core Leadership Principle.",
+        "Defer the closing summary and ask for an additional 5 minutes to address failure modes that were not covered during the session, demonstrating thoroughness.",
+        "Summarize the failure modes you identified during the session and defer SLO and metric discussion to a follow-up document you would share after the interview."
+      ],
+      "correct": 0,
+      "explanation": "The ideal closing has four components: (1) customer promise restated, (2) architecture summarized at the layer level, (3) concrete SLOs — without numbers, the design is incomplete, (4) the first metric to instrument, which signals what you think is the most fragile part of the system. Closing by asking for more time reads as poor time management. A list of AWS services is not a summary. Deferring SLOs to a follow-up document means you never stated them."
+    }
+  ]
+}

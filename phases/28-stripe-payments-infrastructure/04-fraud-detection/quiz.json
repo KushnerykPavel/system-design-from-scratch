@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why must Stripe's fraud scoring complete within ~100ms?",
+      "options": [
+        "Because the card network authorization window expires in approximately 100ms, after which the charge fails regardless of the fraud decision.",
+        "Because merchants require fraud decisions in under 100ms to avoid customer frustration.",
+        "Because Redis velocity counters expire after 100ms.",
+        "Because PCI DSS mandates a 100ms maximum for fraud scoring."
+      ],
+      "correct": 0,
+      "explanation": "The card network imposes an authorization timeout. Stripe's fraud scoring must fit inside that window or the charge fails regardless of risk score."
+    },
+    {
+      "stage": "pre",
+      "question": "What is 3D Secure (3DS) used for in fraud detection?",
+      "options": [
+        "To shift liability from the merchant to the card network by requiring the cardholder to authenticate directly with their issuing bank.",
+        "To block all transactions above a certain dollar amount.",
+        "To verify the merchant's identity before processing the charge.",
+        "To encrypt cardholder data in transit between Stripe and the card network."
+      ],
+      "correct": 0,
+      "explanation": "3DS authenticates the cardholder with their issuing bank. A successful 3DS authentication shifts fraud liability from the merchant to the card network."
+    },
+    {
+      "stage": "post",
+      "question": "A merchant reports unusually high block rates from Radar. Which signal category is most likely to reveal a card-testing attack where fraudsters probe card validity with small transactions?",
+      "options": [
+        "Velocity signals — high transaction count per card or device in a short rolling window indicates rapid probing.",
+        "BIN risk — prepaid card type correlates with card testing.",
+        "Geo mismatch — attackers always use VPNs from foreign countries.",
+        "Merchant history — the merchant's chargeback rate will rise immediately."
+      ],
+      "correct": 0,
+      "explanation": "Card testing attacks generate rapid low-value transactions. Velocity counters (transactions per device/IP/card in a rolling window) are the first signal to spike."
+    },
+    {
+      "stage": "post",
+      "question": "Why should the OFAC (US Treasury sanctions) list check be on the asynchronous enrichment path rather than the synchronous scoring path?",
+      "options": [
+        "OFAC lookups are too slow to fit inside the 100ms synchronous authorization window, so they are performed after the decision.",
+        "OFAC checks are optional and only required for transactions above $10,000.",
+        "OFAC checks are only required for international wire transfers, not card transactions.",
+        "OFAC lookups require human review and cannot be automated in real time."
+      ],
+      "correct": 0,
+      "explanation": "OFAC lookups involve external database queries that exceed the 100ms budget. They are performed asynchronously post-decision, creating a brief window before the check completes."
+    },
+    {
+      "stage": "post",
+      "question": "What is the correct fallback behavior when the ML model inference server exceeds its latency budget?",
+      "options": [
+        "Fall back to rules-only scoring using the merchant's configured rules and static thresholds.",
+        "Block all transactions until the ML model recovers to avoid unscored fraud.",
+        "Allow all transactions through to avoid false positives during the degraded period.",
+        "Queue transactions until the ML model recovers, then score them before completing."
+      ],
+      "correct": 0,
+      "explanation": "A circuit breaker triggers rules-only mode when the ML model is slow. Blocking all transactions destroys revenue; queuing transactions violates the authorization timeout."
+    },
+    {
+      "stage": "post",
+      "question": "How does Stripe's global network give Radar a signal advantage over a single-merchant fraud system?",
+      "options": [
+        "A card marked fraudulent at any Stripe merchant becomes a high-risk signal for all Stripe merchants, giving Radar cross-merchant visibility that no single merchant could achieve alone.",
+        "Stripe can share cardholder PAN data across merchants to enable better card matching.",
+        "Stripe processes higher transaction volume, making its ML model statistically more accurate.",
+        "Stripe's global network allows real-time communication with card-issuing banks for fraud confirmation."
+      ],
+      "correct": 0,
+      "explanation": "Global network signals are Stripe's unique advantage: a card fraudulently used at one merchant immediately raises its risk score across all 250M+ card profiles on the network."
+    },
+    {
+      "stage": "post",
+      "question": "What is the primary source of labeled training data for Radar's ML fraud models?",
+      "options": [
+        "Chargeback outcomes — disputed charges confirmed as fraudulent become negative labels, while successfully resolved disputes become positive labels.",
+        "Manual Stripe analyst review of every blocked transaction.",
+        "Synthetic fraud data generated by Stripe's red team.",
+        "Card network fraud flags shared in real time via the authorization response."
+      ],
+      "correct": 0,
+      "explanation": "Chargebacks with confirmed fraud verdicts are the ground truth labels for ML retraining. This feedback loop is what allows the model to improve over time."
+    },
+    {
+      "stage": "post",
+      "question": "A velocity counter Redis cluster fails over. What is the correct response for the fraud scoring pipeline?",
+      "options": [
+        "Temporarily disable velocity features and continue scoring using BIN, device, geo, and global network signals only — degraded but functional.",
+        "Block all transactions during the failover window to prevent unscored fraud.",
+        "Read velocity counts from PostgreSQL as a fallback, accepting higher latency.",
+        "Use the last known velocity counts from local memory cache, accepting stale data."
+      ],
+      "correct": 0,
+      "explanation": "Degrading gracefully by dropping velocity features preserves scoring functionality. Blocking all transactions during failover is too high a revenue impact."
+    }
+  ]
+}

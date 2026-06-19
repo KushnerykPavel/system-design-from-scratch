@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why does Meta's feed ranking use a three-stage funnel (retrieval → lightweight scoring → heavy ranking) instead of a single model that scores all candidates?",
+      "options": [
+        "A single heavy model scoring 10,000 candidates would require ~10,000 × 0.1ms = 1 second of model inference time, far exceeding the 200ms end-to-end budget. The funnel eliminates 99.5% of candidates cheaply, so the expensive model only runs on the top 500.",
+        "The three-stage funnel is required by EU DSA regulations to ensure fair candidate selection before ML ranking.",
+        "A single model cannot process more than 500 items at once due to GPU memory constraints.",
+        "The three-stage funnel is used to ensure that posts from paid advertisers are evaluated separately from organic content."
+      ],
+      "correct": 0,
+      "explanation": "Latency arithmetic drives the multi-stage design. If the heavy model takes 0.04ms per item and you have 10,000 candidates, that is 400ms just for inference — the entire budget blown before any network latency."
+    },
+    {
+      "stage": "pre",
+      "question": "What is the difference between online features and offline features in a feature store?",
+      "options": [
+        "Online features (stored in Redis/Memcached) are served in milliseconds at request time and include real-time signals like recent interactions. Offline features (in Hive/batch store) are computed over large datasets and updated daily, covering long-term patterns.",
+        "Online features are features from users who are currently active; offline features are from users who haven't logged in recently.",
+        "Online features require a GPU to compute; offline features can be computed on CPU.",
+        "Online features are user features; offline features are item features."
+      ],
+      "correct": 0,
+      "explanation": "The split is about latency and freshness. Online features must be retrieved in <5ms at ranking time, so they live in Redis. Offline features are computed by large Spark jobs that run daily and are too expensive to compute in real time."
+    },
+    {
+      "stage": "post",
+      "question": "A new user signs up and opens their feed for the first time. They have no engagement history, no follow graph, and no interest profile. What is the correct cold-start strategy?",
+      "options": [
+        "Fall back to interest graph signals from onboarding (if user selected interests), trending content in their region, and content from demographically similar new users. After 3–5 interactions, short-term features update in minutes and personalization kicks in quickly.",
+        "Show the user only content from Meta's official accounts until they have followed at least 10 people.",
+        "Disable ranking entirely for new users and show content in reverse chronological order until 30 days of history accumulate.",
+        "Assign the new user a random existing user's feature vector as a proxy until real history develops."
+      ],
+      "correct": 0,
+      "explanation": "Cold start is a sequence: onboarding signals → regional trending → fast feedback from first interactions. The key is that Flink updates short-term features within minutes, so even the first session's interactions rapidly improve the next ranking."
+    },
+    {
+      "stage": "post",
+      "question": "The heavy ranking model's p99 inference latency suddenly spikes from 18ms to 80ms during a model deployment. What is the correct system response?",
+      "options": [
+        "The circuit breaker trips: ranking falls back to the lightweight scorer's output as the final ranking result. Users see a slightly less accurate feed but the pipeline still returns within the 200ms SLA.",
+        "The system waits for the latency to recover, queuing ranking requests until the GPU cluster stabilizes.",
+        "Ranking is disabled entirely and feeds are served in reverse chronological order until the GPU cluster recovers.",
+        "The latency spike is logged but ignored because 80ms is still within the total 200ms budget."
+      ],
+      "correct": 0,
+      "explanation": "Graceful degradation through the circuit breaker pattern is the correct answer. The lightweight scorer result is already a reasonable ranking — it's worse than the heavy model but far better than chronological. Maintaining SLA matters more than perfect ranking accuracy."
+    },
+    {
+      "stage": "post",
+      "question": "After deploying a new ranking model, you observe that the recommendation diversity metric dropped 30% — users are seeing mostly the same creator repeatedly. What caused this and how do you fix it?",
+      "options": [
+        "The new model overfit to engagement signals during training, creating a positive feedback loop where already-popular creators get ranked higher, driving more engagement, which further reinforces their ranking. Fix: rollback the model, increase exploration injection rate, and add a diversity constraint in the post-ranking filter.",
+        "The diversity metric dropped because the new model is more accurate and users naturally prefer content from fewer creators.",
+        "The Redis feature store has stale creator score features that are inflating scores for a small set of creators.",
+        "The FAISS ANN index was not rebuilt after the model update, causing it to return candidates from the old embedding space."
+      ],
+      "correct": 0,
+      "explanation": "This is the feedback loop / filter bubble problem. The model optimizes for engagement, and engagement data is dominated by already-popular content. Without diversity constraints and exploration injection, the model amplifies homogeneity over time."
+    },
+    {
+      "stage": "post",
+      "question": "Why does Meta use FAISS for candidate retrieval instead of a standard database query?",
+      "options": [
+        "FAISS performs approximate nearest neighbor search over high-dimensional embeddings (128-dim interest vectors) across 1B+ posts in under 5ms. A standard SQL query cannot perform vector similarity search at this scale and latency.",
+        "FAISS is faster than SQL because it uses flash storage instead of disk-based storage.",
+        "FAISS is required because post embeddings cannot be represented as SQL columns.",
+        "FAISS eliminates the need for a follow graph because it ranks all posts globally by interest similarity."
+      ],
+      "correct": 0,
+      "explanation": "Vector similarity search is fundamentally different from key-value or range lookup. FAISS uses inverted file indexes with product quantization to approximate nearest neighbors in high-dimensional spaces — no SQL database does this efficiently at 1B items."
+    },
+    {
+      "stage": "post",
+      "question": "The EU Digital Services Act requires users to understand why a specific post appeared at the top of their feed. What does your design need to support this?",
+      "options": [
+        "Log the top-3 feature contributions (SHAP-style) for each ranking decision, store them in an audit log, and expose a user-facing explanation endpoint. Explanations are generated from the feature attribution data: 'Shown because you recently engaged with [creator] and this post has high engagement in your network.'",
+        "The model must be a simple decision tree so its reasoning is inherently interpretable.",
+        "Providing post-hoc explanations is sufficient — no changes to the ranking pipeline are needed, just a legal disclaimer.",
+        "Users must opt in to personalized ranking to comply with DSA; all opt-out users receive reverse chronological feed."
+      ],
+      "correct": 0,
+      "explanation": "DSA Article 27 requires recommender systems to disclose the 'main parameters' used in recommendations. SHAP-style attribution logged per decision enables both user-facing explanations and regulatory audits without changing the model architecture."
+    },
+    {
+      "stage": "post",
+      "question": "You want to A/B test two new ranking models (model A and model B) alongside the production model, each on 5% of traffic, without the experiment groups contaminating each other. What is the correct design?",
+      "options": [
+        "Use deterministic hashing of user_id to assign each user to exactly one bucket (control, model-A, model-B). Each user always gets the same model for the duration of the experiment. Enforce mutual exclusion: no user can be in two experiments that affect the same feed surface simultaneously.",
+        "Randomly assign each feed request to a model — the same user may get model A for one session and model B for the next, which is acceptable because the effects average out.",
+        "Run experiments sequentially: deploy model A for one week, then model B the next week, then compare metrics.",
+        "Route traffic by geography: model A for US users, model B for EU users, production for everyone else."
+      ],
+      "correct": 0,
+      "explanation": "User-level deterministic bucketing prevents the same user from seeing different models, which would pollute both experiment cohorts. Mutual exclusion prevents a user from being in overlapping experiments that would make attribution ambiguous. Time-based and geographic splits introduce confounds."
+    }
+  ]
+}

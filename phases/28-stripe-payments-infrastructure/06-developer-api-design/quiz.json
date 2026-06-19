@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What does Stripe use for API versioning, and how is the version assigned to a merchant?",
+      "options": [
+        "Date-based versions (e.g., 2023-10-16) pinned to each API key at creation time — the merchant's key always sees the API behavior from their creation date.",
+        "Semantic versions (v1, v2, v3) embedded in the URL path — merchants update their URL to migrate.",
+        "Header-based semver negotiation — the client sends Accept-Version and the server picks the best match.",
+        "Feature flags per merchant — Stripe enables new API features individually per account."
+      ],
+      "correct": 0,
+      "explanation": "Stripe pins each API key to the version active at key creation. The merchant's integration never breaks regardless of how the API evolves, unless they explicitly opt in to a newer version."
+    },
+    {
+      "stage": "pre",
+      "question": "What delivery guarantee does Stripe provide for webhook events?",
+      "options": [
+        "At-least-once — Stripe retries failed deliveries for up to 72 hours, so the merchant may receive the same event multiple times.",
+        "Exactly-once — Stripe uses a distributed lock to ensure each event is delivered precisely one time.",
+        "At-most-once — Stripe makes one delivery attempt; if it fails, the event is discarded.",
+        "Best-effort ordered — Stripe delivers events in the order they occurred, dropping events if the endpoint is slow."
+      ],
+      "correct": 0,
+      "explanation": "Stripe guarantees at-least-once delivery. Merchants must deduplicate on the event ID (evt_xxx). Exactly-once is impossible in distributed systems without prohibitive overhead."
+    },
+    {
+      "stage": "post",
+      "question": "Which of the following is a breaking change in Stripe's API versioning model?",
+      "options": [
+        "Removing a field from an API response — existing integrations that read that field will break.",
+        "Adding a new optional field to an API response — existing integrations that ignore unknown fields will not break.",
+        "Adding a new event type — existing integrations will receive the event only if they subscribed to it.",
+        "Adding a new error code variant — existing integrations handle unknown codes with a fallback."
+      ],
+      "correct": 0,
+      "explanation": "Removing a field is a breaking change because existing integrations that read the field will silently fail or crash. Adding fields is non-breaking and always allowed within a version."
+    },
+    {
+      "stage": "post",
+      "question": "How does Stripe's HMAC-SHA256 webhook signature protect against replay attacks?",
+      "options": [
+        "The Stripe-Signature header includes a timestamp (t=), and merchants reject payloads where the timestamp is more than 300 seconds from the current time.",
+        "Each webhook payload includes a nonce that the merchant must acknowledge before the next event is sent.",
+        "Stripe uses rotating signing keys refreshed every 5 minutes, so old signatures expire automatically.",
+        "Stripe embeds the event ID in the HMAC, and merchants maintain a seen-events cache to reject duplicates."
+      ],
+      "correct": 0,
+      "explanation": "The timestamp tolerance window (±300s) prevents an attacker from replaying a captured valid request hours later. Without this check, a valid signature alone is insufficient."
+    },
+    {
+      "stage": "post",
+      "question": "A merchant's webhook endpoint returns HTTP 500 for 4 consecutive days. What does Stripe do?",
+      "options": [
+        "After 72 hours (3 days) of failures, Stripe automatically disables the endpoint and notifies the merchant by email. Events are logged and accessible for 30 days.",
+        "After 4 days, Stripe permanently deletes all undelivered events and marks the account as non-compliant.",
+        "Stripe continues retrying indefinitely with exponential backoff until the endpoint recovers.",
+        "After 24 hours of failures, Stripe switches to email delivery of the events as a fallback."
+      ],
+      "correct": 0,
+      "explanation": "Stripe retries for up to 72 hours. After that window, the endpoint is disabled. Events are retained in the event log for 30 days for manual replay."
+    },
+    {
+      "stage": "post",
+      "question": "What is the purpose of the Idempotency-Key header on Stripe API POST requests?",
+      "options": [
+        "To allow clients to safely retry failed or timed-out requests — the server stores the original response for 24 hours and replays it on retry without re-executing the operation.",
+        "To prevent cross-site request forgery by requiring a client-generated token on every mutating request.",
+        "To enable request deduplication at the load balancer layer before the request reaches the API service.",
+        "To track API usage for billing purposes by assigning a unique key to each billable operation."
+      ],
+      "correct": 0,
+      "explanation": "Idempotency keys make POST requests safe to retry. The server records the first response and replays it on subsequent requests with the same key, preventing double-charges."
+    },
+    {
+      "stage": "post",
+      "question": "What does the expandable objects feature in Stripe's API accomplish?",
+      "options": [
+        "It allows merchants to request inline nested resource data in a single API call (e.g., expand[]=customer), avoiding N+1 HTTP requests to fetch related objects.",
+        "It enables Stripe to send larger payloads by compressing response objects when they exceed a size threshold.",
+        "It allows merchants to request a subset of fields in an API response to reduce bandwidth consumption.",
+        "It enables real-time streaming of resource updates over a long-lived HTTP connection."
+      ],
+      "correct": 0,
+      "explanation": "Expandable objects let merchants inline related resources in one call. Without it, fetching a PaymentIntent with its Customer and PaymentMethod would require 3 separate API calls."
+    },
+    {
+      "stage": "post",
+      "question": "Why does Stripe version webhook events separately from the API key version?",
+      "options": [
+        "Because merchants may have separate teams managing the API server and the webhook event consumer, and they need to migrate each independently without forcing a synchronized release.",
+        "Because webhook events follow a different schema evolution path that is incompatible with the REST API versioning calendar.",
+        "Because webhook events are delivered by a separate Stripe product team that maintains its own version schedule.",
+        "Because webhooks are stateless and do not need version pinning — the event schema is always the latest."
+      ],
+      "correct": 0,
+      "explanation": "Separating webhook versions from API key versions lets merchants migrate their event consumer code independently from their API server code — a real operational need for large integrations."
+    }
+  ]
+}

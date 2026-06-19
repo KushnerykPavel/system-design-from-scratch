@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What makes Uber's location ingest problem fundamentally different from a typical web API?",
+      "options": [
+        "5 million drivers each emit GPS updates at 4 Hz, producing ~20 million events per second — far beyond what a synchronous REST API can absorb.",
+        "Driver locations change very slowly, so the challenge is reducing storage cost rather than throughput.",
+        "GPS data is compressed, so the main challenge is decompression speed on the server side.",
+        "Each driver maintains a persistent WebSocket connection, making connection management the primary bottleneck."
+      ],
+      "correct": 0,
+      "explanation": "20M events/sec is a stream ingest problem. REST APIs would collapse under that load; Kafka partitioned by driver ID is the correct tool."
+    },
+    {
+      "stage": "pre",
+      "question": "Why do hexagonal grids like H3 outperform square grids for proximity search?",
+      "options": [
+        "In a hexagonal grid all 6 neighbors are equidistant from the center, whereas in a square grid diagonal neighbors are ~41% farther away than edge neighbors.",
+        "Hexagonal cells are smaller, so fewer drivers need to be scanned per lookup.",
+        "H3 cells support geofencing natively, while square grids do not.",
+        "Hexagonal grids require fewer bits to encode a cell ID than square grids at the same resolution."
+      ],
+      "correct": 0,
+      "explanation": "Equal distances to all neighbors means a k-ring search has uniform coverage and no edge-effect bias, giving more consistent proximity results."
+    },
+    {
+      "stage": "post",
+      "question": "Uber's DISCO uses batch matching with a 500ms window in dense cities. What is the primary benefit over greedy nearest-driver matching?",
+      "options": [
+        "Batch matching solves a bipartite assignment problem across all riders and drivers simultaneously, minimizing total system wait time rather than optimizing each match greedily.",
+        "Batch matching reduces the number of Kafka messages by grouping events into a single payload.",
+        "Greedy matching requires GPS data to be consistent before each match, which adds 500ms of lag anyway.",
+        "Batch matching avoids the need to compute ETAs because approximate distances are sufficient within a batch window."
+      ],
+      "correct": 0,
+      "explanation": "The Hungarian algorithm finds the globally optimal assignment. Greedy nearest may assign a close driver to a rider while a slightly farther driver would have reduced total system wait time."
+    },
+    {
+      "stage": "post",
+      "question": "A Redis shard holding H3 cell membership data crashes. What is the immediate effect on Uber's dispatch system?",
+      "options": [
+        "Drivers whose H3 cells map to the failed shard become invisible to the matching engine, causing a brief dispatch gap for those cells until the replica is promoted.",
+        "The entire dispatch system halts because driver availability cannot be determined for any cell.",
+        "Riders in all cells receive surge pricing until the shard recovers.",
+        "The matching engine falls back to querying the driver app directly via TChannel RPC."
+      ],
+      "correct": 0,
+      "explanation": "Only the cells on the failed shard are affected. Replica failover restores service; the impact is localized and time-bounded."
+    },
+    {
+      "stage": "post",
+      "question": "What Uber-specific workflow system is used to make trip state machines durable across process failures?",
+      "options": [
+        "Cadence (later open-sourced and rebranded as Temporal) — a workflow orchestration system that persists activity history so state is recoverable after any crash.",
+        "Ringpop — a consistent hashing ring that routes workflow events to the correct process.",
+        "TChannel — Uber's binary RPC protocol that retransmits workflow state on reconnect.",
+        "Docstore — Uber's document store that snapshots workflow state every 100ms."
+      ],
+      "correct": 0,
+      "explanation": "Cadence/Temporal records every workflow step event-sourced in a durable history, so a worker crash just replays the history on another worker."
+    },
+    {
+      "stage": "post",
+      "question": "Surge pricing is calculated per H3 cell rather than per city. Why does this granularity matter?",
+      "options": [
+        "Demand imbalances are hyper-local: one neighborhood may have a concert ending while another is quiet. Per-cell pricing sends drivers to the right block, not just the right city.",
+        "Per-city surge pricing requires a global lock that causes contention at 5M concurrent drivers.",
+        "H3 cells are the only geographic boundary recognized by local taxi regulations.",
+        "Per-cell pricing reduces fraud because surge zones are too small for coordinated manipulation."
+      ],
+      "correct": 0,
+      "explanation": "Granular surge creates granular driver incentives. A city-level multiplier might not move drivers to the specific neighborhood with shortage."
+    },
+    {
+      "stage": "post",
+      "question": "A driver's GPS app stops sending updates. After 30 seconds, what should Uber's dispatch system do?",
+      "options": [
+        "Remove the driver from all H3 cell membership sets (treat as OFFLINE) and re-dispatch any matched trip to another driver.",
+        "Keep the driver in cell sets but mark them as DEGRADED so the matching engine deprioritizes them.",
+        "Send a push notification to the driver and wait 5 minutes before taking any action.",
+        "Lock the driver's account until they manually reconnect through the driver app."
+      ],
+      "correct": 0,
+      "explanation": "A 30-second TTL on driver cell membership prevents stale drivers from blocking matches. Re-dispatch ensures the rider is not stranded."
+    },
+    {
+      "stage": "post",
+      "question": "Which Uber-specific metric would you alert on to detect degraded ETA model performance?",
+      "options": [
+        "ETA error rate: (|predicted_eta - actual_arrival_time| / actual_arrival_time) averaged over a rolling 5-minute window, alerting above 20%.",
+        "Kafka consumer lag exceeding 5 seconds, which indicates location data is stale.",
+        "Redis memory utilization exceeding 80%, which forces eviction of driver cell memberships.",
+        "Match rate dropping below 98%, which indicates the matching engine is overloaded."
+      ],
+      "correct": 0,
+      "explanation": "ETA error directly measures model quality and affects match scoring. Kafka lag and Redis memory are operational metrics, not ETA model health signals."
+    }
+  ]
+}

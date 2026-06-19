@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "What is the fundamental difference between LinkedIn's feed ranking and a typical social media feed ranking like Facebook or Twitter?",
+      "options": [
+        "LinkedIn ranks by professional relevance first — career milestone, job title match, and industry alignment — intentionally suppressing viral content, whereas social feeds optimize for engagement rate and virality.",
+        "LinkedIn uses a simpler ranking algorithm because its content volume is lower; social feeds require more complex ML because they process more content.",
+        "LinkedIn's feed is chronological by default and only applies ranking when a member explicitly opts into 'Best Match' mode.",
+        "LinkedIn ranks posts higher if they have more likes and comments, identical to other social feeds, but shows professional content categories preferentially."
+      ],
+      "correct": 0,
+      "explanation": "LinkedIn's fundamental design choice is to rank by professional relevance rather than raw engagement. A post about a career milestone or industry insight from a direct connection outranks a high-engagement meme. LinkedIn also actively suppresses viral content via anti-virality scoring, whereas Facebook and Twitter amplify viral content. This distinction is the first signal interviewers test for in LinkedIn feed design questions."
+    },
+    {
+      "stage": "pre",
+      "question": "Why does LinkedIn use a multi-stage ranking pipeline (fast ranker → slow ranker) rather than running a single heavy ML model on all candidates?",
+      "options": [
+        "Running a deep neural network on 2,000 candidates per request at 350 requests/sec would take >200ms and exceed the 200ms feed latency SLA; the fast ranker prunes to the top 500 in <5ms so the slow ranker only processes quality candidates.",
+        "Multi-stage ranking is required by GDPR because the slow ranker uses personal data; the fast ranker uses only public signals that do not require consent.",
+        "The slow ranker model is only licensed for 500 inferences per request; a contract limitation requires the fast ranker to reduce the input set.",
+        "LinkedIn's slow ranker is updated hourly and may be stale; the fast ranker provides a real-time fallback that is always current."
+      ],
+      "correct": 0,
+      "explanation": "At 350 feed requests/sec, running a deep neural network on 2,000 candidates per request means 700,000 inference calls/sec. The heavy model latency would push feed ranking well above 200ms. The fast ranker (gradient boosted tree, <5ms) eliminates low-quality candidates so the slow ranker (deep neural network, ~50ms) processes only 500 quality candidates. This brings end-to-end ranking latency to ~80ms, well within the SLA."
+    },
+    {
+      "stage": "post",
+      "question": "A post achieves a viral coefficient of 3.5 (being reshared 3.5× faster than average). What does LinkedIn's ranking system do, and why?",
+      "options": [
+        "The post receives a −0.2 score penalty in the diversity rules stage (anti-virality scoring), deprioritizing it without removal, because rapid spread may indicate engagement bait or misinformation rather than genuine professional value.",
+        "The post is immediately removed from all feeds pending human review, because any content spreading faster than 2.5× the average is classified as misinformation.",
+        "The post is boosted in rankings because viral content demonstrates high engagement and audience interest, which LinkedIn interprets as strong professional relevance.",
+        "The post receives no special treatment because viral coefficient is not a signal LinkedIn tracks; LinkedIn only uses explicit signals like likes and comments."
+      ],
+      "correct": 0,
+      "explanation": "LinkedIn applies a −0.2 score penalty (not removal) for posts with viral_coefficient > 2.5. This is anti-virality scoring: LinkedIn intentionally reduces the organic reach of unusually fast-spreading content because the most common cause is engagement bait ('Like if you agree...') or coordinated resharing rather than genuine professional insight. The post is not removed — it still appears in feeds of members with strong direct relevance, but its broad distribution is dampened. Posts with viral_coefficient > 5.0 also receive a human review flag."
+    },
+    {
+      "stage": "post",
+      "question": "Venice serves precomputed features to LinkedIn's feed ranking slow ranker. What problem does Venice solve that online feature computation cannot?",
+      "options": [
+        "Venice serves member profile embeddings and item content embeddings at microsecond latency; computing these features online at ranking time would add 100ms+ per request, breaking the 200ms feed latency SLA.",
+        "Venice stores features in encrypted form, enabling LinkedIn to comply with GDPR data processing requirements for ML inference.",
+        "Venice eliminates the need for A/B testing by precomputing the ranked feed for each member offline, so ranking at request time is not needed.",
+        "Venice caches the final ranked feed per member, so feed requests are served from Venice directly without invoking the ranking pipeline."
+      ],
+      "correct": 0,
+      "explanation": "Venice is a feature store, not a result cache. Computing a 64-dimensional job_title_embedding, running a topic classifier, and computing cross features like member-item relevance at ranking time for 500 candidates would add 100ms+ per request. Venice precomputes these features offline (member features daily, item features every ~5 minutes) and serves them at microsecond latency from an in-memory store. The slow ranker reads Venice features and runs inference in ~50ms total."
+    },
+    {
+      "stage": "post",
+      "question": "LinkedIn's slow ranker (ML model) goes down for 30 seconds during peak morning traffic. What is the correct system behavior?",
+      "options": [
+        "The system falls back to fast ranker output: serve the fast-ranked top-20 candidates without Venice features. Feed quality degrades slightly but latency stays within SLA and members still see relevant recent content.",
+        "The feed service returns an error response to all clients for 30 seconds until the slow ranker recovers, because serving an unranked feed would harm member trust.",
+        "The system falls back to a chronological feed (most recent posts first) because chronological ordering requires no ML inference.",
+        "The system serves the most recently cached ranked feed regardless of age, even if the cache is hours old, to avoid any ranking quality degradation."
+      ],
+      "correct": 0,
+      "explanation": "The correct fallback is to serve the fast ranker's output. The fast ranker runs in <5ms with no Venice dependency; its quality is lower than the slow ranker but significantly better than chronological. A 30-second slow ranker outage affecting 350 requests/sec means ~10,500 feed loads see slightly degraded quality — acceptable. Returning errors or serving chronological feeds would be worse experiences. Feed cache TTL (5 min) also means ~80% of requests hit cache and don't invoke the ranking pipeline at all during short outages."
+    },
+    {
+      "stage": "post",
+      "question": "How does LinkedIn's A/B testing framework ensure a member always sees the same ranking model version (control vs treatment) across multiple feed loads?",
+      "options": [
+        "The experiment bucket is computed as hash(member_id + experiment_id) % 100; since member_id and experiment_id are both stable, the same member always maps to the same bucket on every request, with no session state required.",
+        "LinkedIn stores each member's experiment assignment in a dedicated 'experiment assignment' database; the feed service reads this on every request to determine which model to use.",
+        "Members are randomly assigned to an experiment bucket on each feed load; the test relies on enough requests per member to statistically converge.",
+        "The A/B testing framework uses a cookie stored in the client browser to maintain experiment assignment; server-side assignment is not used."
+      ],
+      "correct": 0,
+      "explanation": "Using hash(member_id + experiment_id) % 100 is deterministic: the same inputs always produce the same bucket. This means no state is needed — every feed service instance independently assigns the same member to the same bucket without coordination. Adding experiment_id to the hash means the same member can be in different buckets for different experiments. Cookie-based assignment would break cross-device consistency; database-based assignment adds a read on every request."
+    },
+    {
+      "stage": "post",
+      "question": "A member reports that their feed shows posts from the same creator on almost every scroll. Which metric should an engineer check first to diagnose this?",
+      "options": [
+        "Creator reach per feed session — the count of distinct creator IDs in the top-20 feed items. A sharp drop in creator diversity indicates the frequency cap is not working or the creator's high engagement score is overwhelming the cap threshold.",
+        "Kafka consumer lag on the feed fanout consumer group — high lag means newer posts from other creators are not being ingested into the candidate pool.",
+        "Venice item feature freshness for the creator's posts — stale item features may cause the creator's posts to receive inflated scores compared to fresher posts from other creators.",
+        "Feed cache hit rate — a high cache hit rate means members are seeing the same cached feed repeatedly, which would naturally surface the same creator multiple times."
+      ],
+      "correct": 0,
+      "explanation": "Creator reach per feed session (the count of distinct creators in the member's top-20) is the most direct diagnostic signal for creator diversity issues. If a single creator consistently dominates, either the frequency cap (max 3× same creator in top 20) is not applying correctly, or the creator's score is so much higher than others that even with the cap they occupy the maximum 3 slots while other slots are filled by their other posts through a scoring bug. A feed cache hit rate problem would show a different symptom — the feed would be identical across page loads, not dominated by one creator."
+    },
+    {
+      "stage": "post",
+      "question": "What is the correct ranking signal taxonomy priority order for LinkedIn's feed, from highest to lowest weight?",
+      "options": [
+        "Professional relevance match (job_title × content alignment) and dwell time rank highest; explicit engagement (likes, comments) and freshness rank medium; viral coefficient is a penalty signal; spam score triggers removal before ranking.",
+        "Explicit engagement (likes, comments, shares) ranks highest because it represents direct member intent; professional relevance and dwell time rank medium; freshness ranks lowest.",
+        "Freshness ranks highest at LinkedIn because members want to see the latest news; professional relevance and engagement rank medium; dwell time is not tracked for privacy reasons.",
+        "Creator score ranks highest because highly-engaging creators produce the most relevant content; member-specific signals like job title match are secondary."
+      ],
+      "correct": 0,
+      "explanation": "LinkedIn's signal taxonomy places professional relevance (job_title_embedding × content_category_embedding) and dwell time at the top because they capture genuine professional interest without being gameable. Explicit signals like likes are medium weight — they can be gamed via engagement bait. Freshness is a medium-weight positive (content < 4h gets a +0.1 bonus). Viral coefficient is a penalty (not a neutral signal) applied after the fast ranker. Spam score is a hard filter applied before ranking begins."
+    }
+  ]
+}

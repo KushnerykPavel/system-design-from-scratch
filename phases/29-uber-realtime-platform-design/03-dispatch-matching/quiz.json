@@ -1,0 +1,100 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Why might the nearest available driver NOT be the optimal match for a rider request?",
+      "options": [
+        "A globally optimal assignment considers all active riders and drivers simultaneously; the nearest driver for one rider might be the only nearby driver for three other riders, making a slightly farther assignment better for total system wait time.",
+        "The nearest driver always has lower ratings than drivers slightly further away.",
+        "GPS coordinates are imprecise, so 'nearest' is not deterministic.",
+        "Uber charges more for shorter pickup distances, so nearest-driver matching would reduce revenue."
+      ],
+      "correct": 0,
+      "explanation": "Greedy nearest-driver is locally optimal but globally suboptimal. Batch matching with the Hungarian algorithm minimizes total system wait across all simultaneous riders and drivers."
+    },
+    {
+      "stage": "pre",
+      "question": "What is the primary advantage of a 500ms batch matching window over immediate per-request matching?",
+      "options": [
+        "Collecting requests into a batch allows solving a bipartite assignment problem that minimizes total wait time across all riders and drivers simultaneously, which individual greedy matching cannot achieve.",
+        "The 500ms window allows the ETA model to warm up its cache before computing distances.",
+        "Batching reduces the number of Kafka messages by grouping multiple trip requests into a single event.",
+        "The 500ms window gives drivers time to manually accept or decline before the algorithm assigns them."
+      ],
+      "correct": 0,
+      "explanation": "Batch matching reframes individual assignments into a global optimization problem. The 500ms window is invisible to riders but enables a fundamentally better algorithm."
+    },
+    {
+      "stage": "post",
+      "question": "DISCO sends a match offer to the top-3 drivers simultaneously rather than offering to each driver sequentially. Why?",
+      "options": [
+        "Sequential offering adds 15s × N latency for each declined offer; sending to top-3 simultaneously caps worst-case acceptance latency at one 15s window regardless of how many of the three decline.",
+        "Simultaneous offers are required by local transportation regulations in most cities.",
+        "The matching algorithm cannot rank drivers by ETA accurately enough to determine a single best driver.",
+        "Simultaneous offers prevent drivers from gaming the acceptance timer by waiting until the last second."
+      ],
+      "correct": 0,
+      "explanation": "Sequential waterfall adds N×15s of potential delay. Hedging with top-3 simultaneously means even if two decline, the rider's wait grows by at most one 15s window."
+    },
+    {
+      "stage": "post",
+      "question": "A dispatch matching worker crashes while processing a 500ms batch. How does Uber's system recover?",
+      "options": [
+        "The Kafka consumer offset was not committed for that batch, so a new worker re-consumes the same events and reprocesses the batch from scratch.",
+        "The Cadence workflow saves the batch state every 100ms, so the new worker resumes from the last checkpoint.",
+        "The Redis cell store caches the match results, and the new worker reads from there on restart.",
+        "The riders in the lost batch automatically retry their requests after a 30-second client timeout."
+      ],
+      "correct": 0,
+      "explanation": "Kafka's at-least-once delivery with uncommitted offsets guarantees the batch is re-consumed on worker restart. This is why matching workers must be idempotent — the same trip request may be processed twice."
+    },
+    {
+      "stage": "post",
+      "question": "Uber's ETA model reports 35% average error over the past 5 minutes. What should the dispatch system do?",
+      "options": [
+        "Fall back to map-only routing for ETA computation and alert on-call; the ML model's predictions are less accurate than the base routing engine at this error level.",
+        "Increase the batch matching window to 2 seconds to compensate for the degraded ETA quality.",
+        "Switch to greedy nearest-driver matching to avoid relying on ETA estimates entirely.",
+        "Halt all new trip matching until the ML model is retrained and redeployed."
+      ],
+      "correct": 0,
+      "explanation": "Map-only ETA is the fallback when the ML layer degrades. Halting dispatch is unacceptable; the system must degrade gracefully."
+    },
+    {
+      "stage": "post",
+      "question": "Why does Uber run separate matching pools for UberX, UberBlack, and UberXL instead of one unified pool?",
+      "options": [
+        "Each pool enforces hard vehicle-type filters, separate SLA targets, and independent scaling; merging them would require complex compatibility checks on every candidate and risk cross-pool contamination of SLA metrics.",
+        "Separate pools are required because the Hungarian algorithm cannot handle heterogeneous vehicle types in the cost matrix.",
+        "Separate pools reduce Kafka throughput by allowing each pool to use a dedicated topic with fewer partitions.",
+        "UberBlack drivers are contractually prohibited from appearing in the same dispatch queue as UberX drivers."
+      ],
+      "correct": 0,
+      "explanation": "Pool isolation enforces type contracts, allows pool-specific tuning (e.g., UberBlack has a longer acceptance window), and prevents a surge in UberX demand from degrading UberBlack SLAs."
+    },
+    {
+      "stage": "post",
+      "question": "What is the role of supply forecasting in DISCO's pre-positioning strategy?",
+      "options": [
+        "By predicting driver deficits in specific H3 cells 5-15 minutes ahead (e.g., a concert ending), DISCO increases surge pricing early to attract drivers before demand spikes — smoothing the supply-demand curve rather than reacting after the fact.",
+        "Supply forecasting determines the batch window size: more supply = shorter window, less supply = longer window.",
+        "Supply forecasting pre-caches ETA computations for predicted pickup locations to reduce match latency.",
+        "Supply forecasting identifies drivers who are likely to go offline soon and deprioritizes them in match scoring."
+      ],
+      "correct": 0,
+      "explanation": "Pre-positioning incentives based on forecasts smooth supply-demand curves. Reacting after a concert ends means riders wait; attracting drivers 10 minutes early means coverage is ready when demand hits."
+    },
+    {
+      "stage": "post",
+      "question": "A driver accepts a trip offer and immediately goes offline (GPS lost for 30 seconds). What does the dispatch system do?",
+      "options": [
+        "After the 30-second heartbeat timeout, the driver is removed from the active pool and the trip is re-dispatched to the next-best candidate; the driver may receive a penalty for the cancellation.",
+        "The trip remains matched to the offline driver indefinitely until they reconnect.",
+        "The rider is immediately notified to request a new trip because the match is invalidated.",
+        "The Cadence workflow retries the driver offer up to 5 times over 60 seconds before re-dispatching."
+      ],
+      "correct": 0,
+      "explanation": "A 30-second heartbeat SLA prevents riders from being stranded waiting for a driver who may never reconnect. Re-dispatch keeps the system moving; penalties discourage frivolous offline events."
+    }
+  ]
+}
