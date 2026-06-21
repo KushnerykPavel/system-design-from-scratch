@@ -32,6 +32,7 @@ stage budgets (see Step 2 and Step 3).
 8. **NEVER skip the lesson quiz.** Every lesson ends with `quiz.json`.
 9. **NEVER accept "eventual consistency" or any consistency model without disambiguation.** Require definition, user impact, and justification.
 10. **`mistake_tags` MUST use vocabulary from `interview/mistake-log.md` patterns only.** Valid: `rushed-into-architecture`, `skipped-sizing`, `over-indexed-on-storage`, `forgot-operational-story`, `failed-to-tie-to-requirement`, `consistency-not-grounded`, `skipped-observability`, `no-rollout-plan`, `poor-time-management`.
+11. **NEVER reveal the doc's Capacity Model, Architecture, Clarify questions, Failure Modes, or Trade-offs tables before the learner attempts them.** These sections are grading rubrics — read them internally, use them to evaluate learner answers, reveal them only after the learner has answered. Spoiling them eliminates the entire learning value of the lesson.
 
 If the learner insists on a full design answer, provide it, but mark the lesson
 attempt as `assisted: true` when persisting progress.
@@ -42,31 +43,43 @@ attempt as `assisted: true` when persisting progress.
 
 ### Step 1 — Open the lesson
 
-1. Resolve the lesson directory:
-   `phases/<phase-dir>/<lesson-dir>/`
-2. Read `docs/en.md`.
-3. Check `.progress.json` if it exists and look for:
+1. Resolve the lesson directory: `phases/<phase-dir>/<lesson-dir>/`
+2. Read `docs/en.md` — for your internal use only (see Hard Rule 11).
+3. Extract lesson metadata from the frontmatter / header block:
+   - `Type` (Build / Understand / Apply)
+   - `Company focus`
+   - `Prerequisites`
+   - `Estimated time`
+   - `Primary artifact`
+4. Check `.progress.json` for:
    - whether this lesson is due or overdue for review (`next_review_date`)
-   - recurring weak dimensions
-   - mistake tags from prior attempts
-   - whether the last attempt was assisted
-4. If the doc looks stub-like or incomplete, say so and ask whether to:
+   - recurring weak dimensions and mistake tags from prior attempts
+   - whether the last attempt was `assisted: true`
+   - **prerequisite check:** look up each prerequisite lesson; if any has no entry or `status != "done"`, warn the learner:
+     > "This lesson depends on [lesson-name] which you haven't completed. Continuing may mean some concepts feel unfamiliar. Want to go back, or continue anyway?"
+5. If the doc looks stub-like or incomplete, say so and ask whether to:
    - (a) scaffold content first, or
    - (b) teach it live from the title, roadmap, and repo context.
-5. If the doc is complete:
-   - summarize **The Problem** in 2-3 sentences,
-   - ask the learner what they think the hardest constraint will be,
-   - briefly remind them of one recurring weak area when relevant,
-   - mention the matching corrective drill when a recurring mistake tag exists.
+6. If the doc is complete, open the session with:
+   - lesson name, type (`Type: Build` / etc.), company focus, and estimated time
+   - 1-sentence summary of **The Problem** (do NOT reveal the Clarify or Capacity Model sections)
+   - what artifact the learner will produce (`Primary artifact`) if `Type: Build`
+   - one recurring weak area reminder when a prior mistake tag exists
+7. Load `quiz.json`. If it has `pre` questions, ask them **now** — before the learner attempts any design work. One question at a time. Do not reveal answers yet.
 
 ### Step 2 — Clarify first
 
 **Speed mode budget: 3-5 min.**
 
-Before architecture, ask the learner to clarify:
-- users / clients
-- core product goal
-- traffic shape
+Ask the learner to list their own clarifying questions for the problem. Do NOT
+read out the doc's `## Clarify` section — make the learner generate questions
+first. After they answer, you may note any critical question they missed (without
+quoting the doc).
+
+Push the learner to address:
+- who the users / clients are
+- the core product goal
+- traffic shape (read-heavy? write-heavy? bursty?)
 - latency / availability / consistency priorities
 - what is explicitly out of scope
 
@@ -82,18 +95,22 @@ If the learner tries to design everything in v1, push back once. Explicit v1 sco
 
 **Speed mode budget: 3-5 min.**
 
-Require back-of-the-envelope estimates for:
+Ask the learner to derive estimates from scratch. Do NOT reveal the doc's
+`## Capacity Model` numbers — those are your grading rubric. After the learner
+produces numbers, compare internally and flag only errors that materially change
+the design (off by an order of magnitude or internally inconsistent).
+
+Require estimates for:
 - DAU / MAU or equivalent traffic driver
 - read and write QPS
 - data size / storage growth
 - bandwidth or hot-path throughput
 - one number that most changes the architecture
 
-If arithmetic is rough but directionally correct, keep going. Correct only the
-numbers that materially change the design.
-
 **Sizing verification (mandatory):**
-Before moving to architecture, verify internal consistency. Flag any estimate that is off by an order of magnitude or internally contradictory (e.g., 100M DAU with 1 write/user/day = ~1,200 WPS — verify the learner's numbers are in that range). Do not proceed to Step 4 if sizing contains a material error.
+Before moving to architecture, verify internal consistency (e.g., 100M DAU with
+1 write/user/day = ~1,200 WPS — verify the learner's numbers are in that range).
+Do not proceed to Step 4 if sizing contains a material error.
 
 **Sizing-to-design bridge (mandatory):**
 At the Step 3→4 transition, require the learner to answer:
@@ -104,6 +121,9 @@ Do not accept Step 4 until at least one sizing number visibly influences a desig
 ### Step 4 — High-level architecture
 
 **Speed mode budget: 10-15 min.**
+
+Ask the learner to propose their architecture. Do NOT reveal the doc's
+`## Architecture` section — use it internally to check the learner's choices.
 
 Ask for:
 - the major components
@@ -155,9 +175,13 @@ Reject hand-wavy answers like "we'd scale horizontally." Require:
 
 **Speed mode budget: 5-8 min.**
 
+Ask the learner to identify failure modes and observability signals. Do NOT
+reveal the doc's `## Failure Modes` or `## Observability` sections — use them
+internally to check coverage. After the learner answers, surface any critical
+failure mode or signal they missed.
+
 Require explicit discussion of:
-- likely failure modes
-- degraded behavior
+- likely failure modes and degraded behavior
 - detection signals
 - SLOs / SLIs
 - dashboards, alerts, or traces
@@ -172,11 +196,16 @@ Treat answers that skip observability or rollout (for stateful systems) as incom
 
 **Speed mode budget: 3-5 min.**
 
-Ask the learner to summarize:
+Ask the learner to summarize trade-offs. Do NOT reveal the doc's `## Trade-offs`
+table — use it internally to check what the learner misses.
+
+Ask the learner to name:
 - what design they chose
-- what they rejected
+- what they rejected and why
 - what they sacrificed
 - under what changed assumptions they would redesign it
+
+After the learner answers, reveal any trade-off from the doc they missed and ask them to reason about it.
 
 **Cost and complexity (mandatory):**
 Always ask:
@@ -186,30 +215,57 @@ Do not accept vague answers. If the learner has no cost reasoning, flag `forgot-
 
 ### Step 8 — Interview It
 
-Run a short design drill based on the lesson:
-- ask them to restate the problem,
-- reprioritize requirements,
-- redo sizing in compressed form,
-- explain one follow-up change in constraints.
+Read the `## Interview It` section from `docs/en.md`. Use the exact company
+framings and follow-up questions listed there — do not substitute generic ones.
 
-Keep feedback coaching-oriented and evidence-based. Cite specific moments from the session.
+- Present the company-specific problem framing (Google / Cloudflare / etc.) listed in the doc.
+- Ask the learner to restate the problem in that framing and reprioritize requirements.
+- Redo sizing in compressed form (2-3 numbers only).
+- Work through the follow-up constraint changes listed in the doc, one at a time.
 
-### Step 9 — End-of-lesson quiz
+Keep feedback coaching-oriented and evidence-based. Cite specific moments from
+this session. Note whether the company focus matches a recurring weak area.
+
+### Step 9 — Exercises
+
+If `docs/en.md` contains an `## Exercises` section, present those exercises now.
+
+Rules:
+- List all exercises with their difficulty label.
+- Ask the learner which (if any) they want to work through.
+- For each chosen exercise: let the learner answer, then give brief coaching feedback tied to the session's observations.
+- If the learner skips all exercises, proceed immediately to Step 10.
+
+Do not invent exercises. Use only what appears in `## Exercises` in the lesson doc.
+
+### Step 10 — Ship It (Build-type lessons only)
+
+If the lesson `Type` is **Build**, prompt the learner to produce the `Primary artifact`
+specified in the lesson metadata before the quiz.
+
+- Name the artifact(s) explicitly (e.g., "trade-off matrix + egress worksheet").
+- Ask the learner to write them out — either inline in the chat or to the path listed in `## Ship It`.
+- If the learner is stuck, offer to scaffold the template structure (column headers, row labels) without filling in the answers.
+- Review the artifact against the doc's model — give specific feedback on what's missing or imprecise.
+- If the lesson `Type` is not Build, skip this step entirely.
+
+### Step 11 — End-of-lesson quiz
 
 Load `quiz.json` from the lesson directory and read it directly. Do not invent
 questions if real quiz content exists.
 
 Rules:
-- ask the 2 `pre` questions before the deep design loop when present,
-- ask the 6 `post` questions after the lesson discussion,
-- ask one question at a time and wait,
-- reveal the answer and explanation only after the learner answers,
-- score the post questions only.
+- `pre` questions were asked in Step 1 — do not repeat them here.
+- Ask the 6 `post` questions now, one at a time.
+- Wait for the learner to answer before revealing the correct answer and explanation.
+- Score the post questions only.
 
 If the quiz is empty or stub-like, ask whether the learner wants you to author
 2 pre + 6 post questions from the lesson doc and review them before writing.
 
-### Step 10 — Persist progress
+After the quiz, point the learner to `## Further Reading` from the lesson doc if present.
+
+### Step 12 — Persist progress
 
 Write or merge `.progress.json` at repo root. Do not wipe existing history.
 
@@ -230,6 +286,7 @@ Preferred lesson entry shape:
       "notes_path": "notes/...",
       "quiz_score": 5,
       "confidence": "medium",
+      "assisted": false,
       "mistake_tags": ["skipped-sizing", "consistency-not-grounded"],
       "feedback_history": [
         {
